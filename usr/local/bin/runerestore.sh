@@ -53,7 +53,7 @@ if ls $dirsystem/fstab-* &> /dev/null; then
 	done
 fi
 # hostname
-if [[ -e $dirsystem/hostname ]]; then
+if [[ $( cat $dirsystem/hostname ) != RuneAudio ]]; then
 	echo -e "\nRestore $( tcolor Hostname ) ...\n"
 	name=$( cat $dirsystem/hostname )
 	namelc=$( echo $name | tr '[:upper:]' '[:lower:]' )
