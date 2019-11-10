@@ -69,6 +69,7 @@ RuneOS - DIY RuneAudio+R e
 - USB drive
 	- Blank drive:
 		- `Unmount` > `Delete` all partitions (Caution: make sure it's the USB drive)
+		- Size: 4000MiB (the rest - another partition for storage)
 		- Format: `ext4`
 		- Label: `ROOT`
 	- Drive with existing data:
