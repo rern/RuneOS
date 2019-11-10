@@ -68,13 +68,15 @@ if [[ $( cat $dirsystem/hostname ) != RuneAudio ]]; then
 	sed -i "s/\(.*localdomain \).*/\1$namelc.local $namelc/" /etc/hosts
 fi
 # localbrowser
-if [[ -e /usr/bin/chromium && -e $dirsystem/localbrowser ]]; then
-	echo -e "\nRestore $( tcolor 'Browser on RPi' ) settings ...\n"
-	if [[ -e $dirsystem/localbrowser-cursor ]]; then
-		sed -i -e "s/\(-use_cursor \).*/\1$( cat $dirsystem/localbrowser-cursor ) \&/
-			 " -e "s/\(xset dpms 0 0 \).*/\1$( cat $dirsystem/localbrowser-screenoff ) \&/" /etc/X11/xinit/xinitrc
-		cp $dirsystem/localbrowser-rotatecontent /etc/X11/xorg.conf.d/99-raspi-rotate.conf
-		if [[ $( cat $dirsystem/localbrowser-overscan ) == 1 ]]; then
+file=$dirsystem/localbrowser
+if [[ -e /usr/bin/chromium && -e $file ]]; then
+	if [[ -e $file-cursor || -e $file-zoom || -e $file-screenoff || -e $file-rotate || -e $file-overscan ]]; then
+		echo -e "\nRestore $( tcolor 'Browser on RPi' ) settings ...\n"
+		[[ -e $file-cursor ]] && sed -i -e "s/\(-use_cursor \).*/\1$( cat $file-cursor ) \&/" /etc/X11/xinit/xinitrc
+		[[ -e $file-zoom ]] && sed -i "s/\(factor=.*\)/\1$( cat $file-zoom )/" /etc/X11/xinit/xinitrc
+		[[ -e $file-screenoff ]] && sed -i "s/\(xset dpms 0 0 \).*/\1$( cat $file-screenoff ) \&/" /etc/X11/xinit/xinitrc
+		[[ -e $file-rotate ]] && cp $file-rotate /etc/X11/xorg.conf.d/99-raspi-rotate.conf
+		if [[ $( cat $file-overscan ) == 1 ]]; then
 			sed -i '/^disable_overscan=1/ s/^#//' /boot/config.txt
 		else
 			sed -i '/^disable_overscan=1/ s/^/#/' /boot/config.txt
