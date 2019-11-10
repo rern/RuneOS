@@ -2,8 +2,7 @@
 
 version=e2
 
-cols=$( tput cols )
-hr() { printf "\e[36m%*s\e[m\n" $cols | tr ' ' -; }
+hr() { printf "\e[36m%*s\e[m\n" 80 | tr ' ' -; }
 
 hr
 echo -e "\n\e[36mRestore database and settings ...\e[m\n"
