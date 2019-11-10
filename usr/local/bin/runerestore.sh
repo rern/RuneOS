@@ -2,11 +2,9 @@
 
 version=e2
 
-hr() { printf "\e[36m%*s\e[m\n" 80 | tr ' ' -; }
+. /srv/http/addons-functions.sh
 
-hr
-echo -e "\n\e[36mRestore database and settings ...\e[m\n"
-hr
+title "$bar Restore database and settings ..."
 
 dirdata=/srv/http/data
 dirdisplay=$dirdata/display
@@ -190,5 +188,4 @@ echo $version > $dirsystem/version
 chown -R http:http "$dirdata"
 chown -R mpd:audio "$dirdata/mpd"
 
-echo -e "\n\e[36mDatabase and settings restored successfully.\e[m\n"
-hr
+title -nt "$bar Database and settings restored successfully."
