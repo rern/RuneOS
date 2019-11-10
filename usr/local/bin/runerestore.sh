@@ -18,7 +18,7 @@ rm /srv/http/data/addons/*
 echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
 
 # accesspoint
-if [[ -e $dirsystem/accesspoint && -e /etc/hostapd/hostapd.conf && -e $dirsystem/accesspoint-passphrase ]]; then
+if [[ -e /usr/bin/hostapd && -e $dirsystem/accesspoint && -e $dirsystem/accesspoint-passphrase ]]; then
 	echo -e "\nEnable and restore \e[36mRPi access point\e[m settings ...\n"
 	passphrase=$( cat $dirsystem/accesspoint-passphrase )
 	ip=$( cat $dirsystem/accesspoint-ip )
@@ -32,7 +32,7 @@ if [[ -e $dirsystem/accesspoint && -e /etc/hostapd/hostapd.conf && -e $dirsystem
 		 " /etc/dnsmasq.conf
 fi
 # airplay
-if [[ -e $dirsystem/airplay && -e /etc/shairport-sync.conf ]]; then
+if [[ -e /usr/bin/shairport-sync && -e $dirsystem/airplay ]]; then
 	echo -e "\nEnable \e[36mAirPlay\e[m ...\n"
 	systemctl enable shairport-sync
 else
@@ -71,7 +71,7 @@ if [[ -e $dirsystem/hostname ]]; then
 	sed -i "s/\(.*localdomain \).*/\1$namelc.local $namelc/" /etc/hosts
 fi
 # localbrowser
-if [[ -e $dirsystem/localbrowser && -e /usr/bin/chromium ]]; then
+if [[ -e /usr/bin/chromium && -e $dirsystem/localbrowser ]]; then
 	echo -e "\nRestore \e[36mBrowser on RPi\e[m settings ...\n"
 	if [[ -e $dirsystem/localbrowser-cursor ]]; then
 		sed -i -e "s/\(-use_cursor \).*/\1$( cat $dirsystem/localbrowser-cursor ) \&/
@@ -144,7 +144,7 @@ else
 	sed -i '/^#dtoverlay=pi3-disable-wifi/ s/^#//' /boot/config.txt
 fi
 # samba
-if [[ -e $dirsystem/samba && -e /etc/samba ]]; then
+if [[ -e /ust/bin/samba && -e $dirsystem/samba ]]; then
 	echo -e "\nEnable \e[36mFile sharing\e[m ...\n"
 	sed -i '/read only = no/ d' /etc/samba/smb.conf
 	[[ -e $dirsystem/samba-writesd ]] && sed -i '/path = .*USB/ a\tread only = no' /etc/samba/smb.conf
@@ -159,7 +159,7 @@ if [[ -e $dirsystem/timezone ]]; then
 	ln -sf /usr/share/zoneinfo/$( cat $dirsystem/timezone ) /etc/localtime
 fi
 # upnp
-if [[ -e $dirsystem/upnp && /etc/upmpdcli.conf ]]; then
+if [[ -e /usr/bin/upmpdcli && -e $dirsystem/upnp ]]; then
 	echo -e "\nRestore \e[36mUPnP\e[m settings ...\n"
 	setUpnp() {
 		user=( $( cat $dirsystem/upnp-$1user ) )
