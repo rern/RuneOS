@@ -16,7 +16,7 @@ echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /
 
 # accesspoint
 if [[ -e /usr/bin/hostapd && -e $dirsystem/accesspoint && -e $dirsystem/accesspoint-passphrase ]]; then
-	echo -e "\nEnable and restore $( tcolor 'RPi access point settings' ) ...\n"
+	echo -e "\nEnable and restore $( tcolor 'RPi access point' ) ...\n"
 	passphrase=$( cat $dirsystem/accesspoint-passphrase )
 	ip=$( cat $dirsystem/accesspoint-ip )
 	iprange=$( cat $dirsystem/accesspoint-iprange )
@@ -37,7 +37,7 @@ else
 fi
 # color
 if [[ -e $dirdisplay/color ]]; then
-	echo -e "$bar $( tcolor 'Restore color settings' ) ..."
+	echo -e "$bar $( tcolor 'Restore color' ) ..."
 	. /srv/http/addons-functions.sh
 	setColor
 fi
@@ -69,7 +69,7 @@ if [[ -e $dirsystem/hostname ]]; then
 fi
 # localbrowser
 if [[ -e /usr/bin/chromium && -e $dirsystem/localbrowser ]]; then
-	echo -e "\nRestore $( tcolor 'Browser on RPi settings' ) ...\n"
+	echo -e "\nRestore $( tcolor 'Browser on RPi' ) settings ...\n"
 	if [[ -e $dirsystem/localbrowser-cursor ]]; then
 		sed -i -e "s/\(-use_cursor \).*/\1$( cat $dirsystem/localbrowser-cursor ) \&/
 			 " -e "s/\(xset dpms 0 0 \).*/\1$( cat $dirsystem/localbrowser-screenoff ) \&/" /etc/X11/xinit/xinitrc
