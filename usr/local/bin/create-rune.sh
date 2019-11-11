@@ -147,9 +147,6 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 chmod -R 666 /var/lib/alsa  # fix permission
 sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit test rules
 
-# boot partition - fix dirty bits if any
-fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
-
 # bluetooth (skip if removed bluetooth)
 [[ -e /usr/bin/bluetoothctl ]] && sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
 
@@ -250,6 +247,9 @@ chown -R mpd:audio "$dirdata/mpd" /mnt/MPD
 # remove cache and files
 rm *.zip /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 rm -r /root/armv6h
+
+# boot partition - fix dirty bits if any
+fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
 
 dialog --colors \
 	--msgbox "\n      
