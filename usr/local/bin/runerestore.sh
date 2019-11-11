@@ -72,10 +72,17 @@ file=$dirsystem/localbrowser
 if [[ -e /usr/bin/chromium && -e $file ]]; then
 	if [[ -e $file-cursor || -e $file-zoom || -e $file-screenoff || -e $file-rotate || -e $file-overscan ]]; then
 		echo -e "\nRestore $( tcolor 'Browser on RPi' ) settings ...\n"
-		[[ -e $file-cursor ]] && sed -i -e "s/\(-use_cursor \).*/\1$( cat $file-cursor ) \&/" /etc/X11/xinit/xinitrc
-		[[ -e $file-zoom ]] && sed -i "s/\(factor=.*\)/\1$( cat $file-zoom )/" /etc/X11/xinit/xinitrc
-		[[ -e $file-screenoff ]] && sed -i "s/\(xset dpms 0 0 \).*/\1$( cat $file-screenoff ) \&/" /etc/X11/xinit/xinitrc
-		[[ -e $file-rotate ]] && cp $file-rotate /etc/X11/xorg.conf.d/99-raspi-rotate.conf
+		[[ -e $file-cursor ]] && cursor=yes || cursor=no
+		sed -i -e "s/\(-use_cursor \).*/\1$cursor \&/" /etc/X11/xinit/xinitrc
+		[[ -e $file-zoom ]] && zoom=$( cat $file-zoom ) || zoom=1
+		sed -i "s/\(factor=.*\)/\1$zoom/" /etc/X11/xinit/xinitrc
+		[[ -e $file-screenoff ]] && screenoff=$( cat $file-screenoff ) || screenoff=0
+		sed -i "s/\(xset dpms 0 0 \).*/\1$screenoff \&/" /etc/X11/xinit/xinitrc
+		if [[ -e $file-rotate ]]; then
+			cp $file-rotate /etc/X11/xorg.conf.d/99-raspi-rotate.conf
+		else
+			rm /etc/X11/xorg.conf.d/99-raspi-rotate.conf
+		fi
 		if [[ $( cat $file-overscan ) == 1 ]]; then
 			sed -i '/^disable_overscan=1/ s/^#//' /boot/config.txt
 		else
