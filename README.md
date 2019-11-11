@@ -3,8 +3,9 @@ RuneOS - DIY RuneAudio+R e
 - For all **Raspberry Pi**: Zero, 1, 2, 3 and 4 (3+: not yet tested but should work)
 - Create **RuneAudio+R e** from [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads) latest releases.
 - Interactive interface by [**Dialog**](https://invisible-island.net/dialog/)
-- With option to pre-configure Wi-Fi connection (headless mode)
-- With options to exclude features, it can be as light as possible in terms of build time and disk space.
+- Option to pre-configure Wi-Fi connection (headless mode)
+- Options to exclude features, it can be as light as possible in terms of build time and disk space.
+- Option to run `ROOT` partition on USB drive
 
 **Procedure**
 - Prepare partitions
@@ -43,7 +44,8 @@ RuneOS - DIY RuneAudio+R e
 - Optional: Micro SD card + USB drive (run RuneAudio+R from USB drive)
 	- Micro SD card: 100MB+ for `BOOT` partition only
 	- USB drive: 4GB+ for `ROOT` partition (or USB hard drive with existing data)
-	- For hard drives or faster-than-SD-card thumb drives
+	- For hard drives or faster-than-SD-card thumb drives.
+	- It takes less than 20 minutes for the whole process on: RPi 4 + solid state drive + decent download speed
 - Optional: Monitor/TV to see boot process
 ---
 
