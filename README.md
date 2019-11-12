@@ -34,7 +34,7 @@ RuneOS - DIY RuneAudio+R e
 
 **Need**
 - PC
-	- Linux
+	- Linux - any distro
 	- or Linux on USB e.g., [Manjaro](https://itsfoss.com/create-live-usb-manjaro-linux/) - Arch Linux
 	- or Linux in VirtualBox on Windows (with network set as `Bridge Adapter`)
 - Raspberry Pi
@@ -55,7 +55,7 @@ RuneOS - DIY RuneAudio+R e
 
 **Micro SD card only**
 - Insert micro SD card
-- Open **GParted** app
+- Open **GParted** app (Manjaro root password: `manjaro`)
 - `Unmount` > `Delete` all partitions (make sure it's the micro SD card)
 - Create partitions:
 
