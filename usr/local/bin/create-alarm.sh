@@ -6,7 +6,10 @@ if [[ -e /usr/bin/pacman ]]; then
 	[[ ! -e /usr/bin/dialog ]] && packages+='dialog '
 	[[ ! -e /usr/bin/nmap ]] && packages+='nmap '
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
-	[[ -n $packages ]] && pacman -S --noconfirm --needed $packages
+	if [[ -n $packages ]]; then
+		pacman-mirrors -f5 && sudo pacman -Syyu
+		pacman -S --noconfirm --needed $packages
+	fi
 else
 	[[ ! -e /usr/bin/bsdtar ]] && packages+='bsdtar '
 	[[ ! -e /usr/bin/dialog ]] && packages+='dialog '
