@@ -33,9 +33,10 @@ RuneOS - DIY RuneAudio+R e
 	- Set default settings
 
 **Need**
-- Linux PC (or Linux in VirtualBox on Windows with network set as `Bridge Adapter`)
-	- GParted and Files app (normally already installed)
-	- Basic skill of terminal command line
+- PC
+	- Linux
+	- or Linux on USB e.g., [Manjaro](https://itsfoss.com/create-live-usb-manjaro-linux/) - Arch Linux
+	- or Linux in VirtualBox on Windows (with network set as `Bridge Adapter`)
 - Raspberry Pi
 - Network connection to Raspberry Pi 
 	- Wired LAN
@@ -84,7 +85,9 @@ RuneOS - DIY RuneAudio+R e
 ### Create Arch Linux Arm
 - Open **Files** app 
 - Click `BOOT` and `ROOT` to mount
-- Hover mouse over `BOOT` and `ROOT` and note the paths
+- Note each path for next confirmation
+	- Manjaro - in location bar 
+	- Others - hover mouse over `BOOT` and `ROOT`
 ```sh
 # switch user to root
 su
