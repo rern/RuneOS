@@ -7,8 +7,8 @@ RuneOS - DIY RuneAudio+R e
 - Options to exclude features, it can be as light as possible in terms of build time and disk space.
 - Option to run `ROOT` partition on USB drive  
 - Note: NO SD card mode - run both `BOOT` and `ROOT` partitions on USB drive:
-	- Raspberry Pi 3 and 2 v1.2 only - with boot bit set (3+ already set)
-	- Browser on RPi not working
+	- Raspberry Pi: 3 and 2 v1.2 only - with boot bit set (3+ already set)
+	- Power supply: current rating must be enough (otherwise Browser on RPi will fail)
 
 **Procedure**
 - Prepare partitions
