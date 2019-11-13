@@ -279,7 +279,8 @@ if [[ $ans == 1 ]]; then
 fi
 
 # connect RPi
-rpiip=$( inputbox '\Z1Raspberry Pi IP:\Z0' $subip )
+rpiip=$( dialog --colors --output-fd 1 --extra-button --extra-label Rescan --inputbox '\n\Z1Raspberry Pi IP:\Z0' 0 0 $subip )
+[[ $? == 3 ]] && scanIP
 
 clear
 
