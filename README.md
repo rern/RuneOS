@@ -6,11 +6,11 @@ RuneOS - DIY RuneAudio+R e
 - Option to pre-configure Wi-Fi connection (headless mode)
 - Options to exclude features, it can be as light as possible in terms of build time and disk space.
 - Option to run `ROOT` partition on USB drive (good for hard drive)
+	- Not suitable for thumb drive
+	- Need powered USB hub for hard drive
 - USB only / no SD card issues: (run both `BOOT` and `ROOT` partitions on USB drive)
 	- Raspberry Pi: 3 and 2 v1.2 only - with boot bit set (3+ already set)
 	- Boot duration: 10+ seconds longer (detect no sd card > read boot loader into memory > boot)
-	- Not suitable for not-so-fast thumb drive
-	- Need powered USB hub for hard drive
 
 **Procedure**
 - Prepare partitions
