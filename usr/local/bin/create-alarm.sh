@@ -7,7 +7,7 @@ if [[ -e /usr/bin/pacman ]]; then
 	[[ ! -e /usr/bin/nmap ]] && packages+='nmap '
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
 	if [[ -n $packages ]]; then
-		pacman-mirrors -f5 && sudo pacman -Syyu
+		#pacman-mirrors -f5 && sudo pacman -Syyu
 		pacman -S --noconfirm --needed $packages
 	fi
 else
