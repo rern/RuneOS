@@ -8,6 +8,7 @@ RuneOS - DIY RuneAudio+R e
 - Option to run `ROOT` partition on USB drive  
 - Note: NO SD card mode - run both `BOOT` and `ROOT` partitions on USB drive:
 	- Raspberry Pi: 3 and 2 v1.2 only - with boot bit set (3+ already set)
+	- Boot duration: 10+ seconds longer (detect no sd card > read boot loader into memory > boot)
 	- Browser on RPi: failed most of the times
 
 **Procedure**
