@@ -10,8 +10,7 @@ RuneOS - DIY RuneAudio+R e
 	- Raspberry Pi: 3 and 2 v1.2 only - with boot bit set (3+ already set)
 	- Boot duration: 10+ seconds longer (detect no sd card > read boot loader into memory > boot)
 	- Not suitable for not-so-fast thumb drive
-	- Browser on RPi: failed most of the time
-	- `kworker` processes keep running all the time
+	- Need powered USB hub for hard drive
 
 **Procedure**
 - Prepare partitions
