@@ -8,7 +8,7 @@ if [[ -e /usr/bin/pacman ]]; then
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
 	if [[ -n $packages ]]; then
 		#pacman-mirrors -f5 && sudo pacman -Syyu
-		pacman -S --noconfirm --needed $packages
+		pacman -Sy --noconfirm --needed $packages
 	fi
 else
 	[[ ! -e /usr/bin/bsdtar ]] && packages+='bsdtar '
