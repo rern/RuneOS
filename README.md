@@ -10,6 +10,7 @@ RuneOS - DIY RuneAudio+R e
 	- May require powered USB hub for hard drive
 - Option for USB only - no SD card: (run both `BOOT` and `ROOT` partitions on USB drive)
 	- Raspberry Pi: 3 and 2 v1.2 only - with boot bit set (3+ already set)
+	- Raspberry Pi 4 not yet supported
 	- Boot duration: 10+ seconds longer (detect no sd card > read boot loader into memory > boot)
 	- May require powered USB hub for hard drive
 
