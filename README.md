@@ -7,10 +7,11 @@ RuneOS - DIY RuneAudio+R e
 - Options to exclude features, it can be as light as possible in terms of build time and disk space.
 - Option to run `ROOT` partition on USB drive (good for hard drive)
 	- Not suitable for thumb drive
-	- Need powered USB hub for hard drive
-- USB only / no SD card issues: (run both `BOOT` and `ROOT` partitions on USB drive)
+	- May require powered USB hub for hard drive
+- Option for USB only - no SD card: (run both `BOOT` and `ROOT` partitions on USB drive)
 	- Raspberry Pi: 3 and 2 v1.2 only - with boot bit set (3+ already set)
 	- Boot duration: 10+ seconds longer (detect no sd card > read boot loader into memory > boot)
+	- May require powered USB hub for hard drive
 
 **Procedure**
 - Prepare partitions
@@ -69,7 +70,7 @@ RuneOS - DIY RuneAudio+R e
 | #1  | 100MiB      | primary | fat32  | BOOT  |
 | #2  | (the rest)  | primary | ext4   | ROOT  |
 	
-**Optional: Micro SD card + USB drive**
+**Option 1: Micro SD card + USB drive**
 - Micro SD card
 	- `Unmount` > `Delete` all partitions (Caution: make sure it's the SD card)
 	- Format: `fat32`
@@ -86,7 +87,17 @@ RuneOS - DIY RuneAudio+R e
 		- Create a new partition in the new 4000MiB space
 			- Format: `ext4`
 			- Label: `ROOT`
+			
+**Option 2: USB drive only**
 
+| No. | Size        | Type    | Format | Label |
+|-----|-------------|---------|--------|-------|
+| #1  | 100MiB      | primary | fat32  | BOOT  |
+| #2  | 4000MiB     | primary | ext4   | ROOT  |
+| #3  | (the rest)  | primary | ext4   | (any) |
+
+- Drive with existing data must be resized and rearranged respectively.
+	
 ### Create Arch Linux Arm
 - Open **Files** app 
 - Click `BOOT` and `ROOT` to mount
