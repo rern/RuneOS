@@ -252,7 +252,7 @@ rm -r /root/armv6h
 fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
 
 # usb boot - set sd card probe only once
-! fdisk -l | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
+! fdisk -l | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,enable=off' >> /boot/config.txt
 
 dialog --colors \
 	--msgbox "\n      
