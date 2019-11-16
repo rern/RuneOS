@@ -9,8 +9,7 @@ RuneOS - DIY RuneAudio+R e
 	- Not suitable for thumb drive
 	- May require powered USB hub for hard drive
 - Option for USB only - no SD card: (run both `BOOT` and `ROOT` partitions on USB drive)
-	- Raspberry Pi: 3 and 2 v1.2 only - with boot bit set (3+ already set)
-	- Raspberry Pi 4 not yet supported
+	- Raspberry Pi: 3 and 2 v1.2 only (4 not yet supported)
 	- Boot duration: 10+ seconds longer (detect no sd card > read boot loader into memory > boot)
 	- May require powered USB hub for hard drive
 
@@ -91,13 +90,30 @@ RuneOS - DIY RuneAudio+R e
 			
 **Option 2: USB drive only**
 
+- Set boot bit on Raspberry Pi
+	- 3 and 2 v1.2 only
+	- 3+ already set
+	- 4 not yet supported
+- Micro SD card can still be used to boot if inserted.
+```sh
+# on RuneAudio
+echo program_usb_boot_mode=1 | sudo tee -a /boot/config.txt
+
+# reboot
+shutdown -r now
+
+# verify boot bit = 17:3020000a
+/opt/vc/bin/vcgencmd otp_dump | grep 17:
+```
+
+- Set partitions (Drive with existing data must be resized and rearranged respectively.)
+
 | No. | Size        | Type    | Format | Label |
 |-----|-------------|---------|--------|-------|
 | #1  | 100MiB      | primary | fat32  | BOOT  |
 | #2  | 3500MiB     | primary | ext4   | ROOT  |
 | #3  | (the rest)  | primary | ext4   | (any) |
 
-- Drive with existing data must be resized and rearranged respectively.
 	
 ### Create Arch Linux Arm
 - Open **Files** app 
