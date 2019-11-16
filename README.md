@@ -48,12 +48,12 @@ RuneOS - DIY RuneAudio+R e
 	- Wired LAN
 	- Optional: Wi-Fi (if necessary)
 - Micro SD card: 4GB+ for `BOOT` + `ROOT` partitions
-- Optional: Micro SD card + USB drive (run RuneAudio+R from USB drive)
+- Option 1: Micro SD card + USB drive (run RuneAudio+R from USB drive)
 	- Micro SD card: 100MB+ for `BOOT` partition only
 	- USB drive: 4GB+ for `ROOT` partition (or USB hard drive with existing data)
 	- For hard drives or faster-than-SD-card thumb drives.
 	- It takes less than 20 minutes for the whole process on: RPi 4 + solid state drive + decent download speed
-- Optional: Monitor/TV to see boot process
+- Option 2: USB drive only - no SD card (Boot from USB drive)
 ---
 
 ### Prepare partitions
