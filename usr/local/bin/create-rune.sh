@@ -251,6 +251,9 @@ rm -r /root/armv6h
 # boot partition - fix dirty bits if any
 fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
 
+# usb boot - set sd card probe only once
+! fdisk -l | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
+
 dialog --colors \
 	--msgbox "\n      
       \Z1RuneAudio+R $version\Z0 created successfully.\n\n
