@@ -83,8 +83,8 @@ RuneOS - DIY RuneAudio+R e
 		- Label: `ROOT`
 	- Drive with existing data:
 		- No need to reformat or change format of existing partition
-		- Resize the existing to get 4000MiB unallocated space (anywhere - at the end, middle or start of the disk)
-		- Create a new partition in the new 4000MiB space
+		- Resize the existing to get 3500MiB unallocated space (anywhere - at the end, middle or start of the disk)
+		- Create a new partition in the new 3500MiB space
 			- Format: `ext4`
 			- Label: `ROOT`
 			
