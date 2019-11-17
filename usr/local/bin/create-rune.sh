@@ -28,9 +28,10 @@ systemctl restart systemd-resolved
 # rank mirrorlist
 curl -LO https://github.com/rern/RuneAudio/raw/master/rankmirrors/rankmirrors.sh
 curl -LO https://github.com/rern/RuneOS/raw/master/srv/http/addons-functions.sh
-chmod +x rankmirrors.sh
+chmod +x *.sh
 . addons-functions.sh
 ./rankmirrors.sh
+rm *.sh
 
 # dialog package
 pacman -S --noconfirm --needed dialog
