@@ -73,20 +73,30 @@ RuneOS - DIY RuneAudio+R e
 **Option 1: Micro SD card + USB drive**
 - Micro SD card
 	- `Unmount` > `Delete` all partitions (Caution: make sure it's the SD card)
-	- Format: `fat32`
-	- Label: `BOOT`
+
+| No. | Size        | Type    | Format | Label |
+|-----|-------------|---------|--------|-------|
+| #1  | 100MiB      | primary | fat32  | BOOT  |
+
 - USB drive
 	- Blank drive:
 		- `Unmount` > `Delete` all partitions (Caution: make sure it's the USB drive)
-		- Size: 3500MiB (the rest - another partition for storage)
-		- Format: `ext4`
-		- Label: `ROOT`
+		- Create partitions
+	
+| No. | Size        | Type    | Format | Label |
+|-----|-------------|---------|--------|-------|
+| #1  | 3500MiB     | primary | ext4   | ROOT  |
+| #2  | (the rest)  | primary | ext4   | (any) |
+	
 	- Drive with existing data:
 		- No need to reformat or change format of existing partition
 		- Resize the existing to get 3500MiB unallocated space (anywhere - at the end, middle or start of the disk)
 		- Create a new partition in the new 3500MiB space
-			- Format: `ext4`
-			- Label: `ROOT`
+		
+| No. | Size        | Type    | Format | Label |
+|-----|-------------|---------|--------|-------|
+| #1  | (existing)  | primary | (any)  | (any) |
+| #2  | 3500MiB     | primary | ext4   | ROOT  |
 			
 **Option 2: USB drive only**
 
