@@ -257,13 +257,13 @@ rm -r /root/armv6h
 # usb boot - disable sd card polling
 ! fdisk -l | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
-# boot partition - fix dirty bits if any
-#fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
-
 dialog --colors \
 	--msgbox "\n      
       \Z1RuneAudio+R $version\Z0 created successfully.\n\n
             Press \Z1Enter\Z0 to reboot
 " 9 50
+
+# boot partition - fix dirty bits if any
+fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
 
 shutdown -r now
