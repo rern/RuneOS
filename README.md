@@ -7,7 +7,7 @@ RuneOS - DIY RuneAudio+R e
 - Interactive interface with [**Dialog**](https://invisible-island.net/dialog/)
 - Options:
 	- Run `ROOT` partition on USB drive
-	- Run on USB only - no SD card (boot from USB)
+	- Run on USB only - no SD card ([boot from USB](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md))
 	- Pre-configure Wi-Fi connection (headless mode)
 	- Exclude features (can be as light as possible in terms of build time and disk space)
 
