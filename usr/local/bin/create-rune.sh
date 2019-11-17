@@ -25,8 +25,15 @@ systemctl start systemd-random-seed
 echo DNSSEC=no >> /etc/systemd/resolved.conf
 systemctl restart systemd-resolved
 
+# rank mirrorlist
+wget -qN https://github.com/rern/RuneOS/raw/master/srv/http/addons-functions.sh
+wget -qN https://github.com/rern/RuneAudio/raw/master/rankmirrors/rankmirrors.sh
+chmod +x rankmirrors.sh
+. addons-functions.sh
+./rankmirrors.sh
+
 # dialog package
-pacman -Sy --noconfirm --needed dialog
+pacman -S --noconfirm --needed dialog
 
 #----------------------------------------------------------------------------
 title="Create RuneAudio+R $version"
