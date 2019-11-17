@@ -26,15 +26,15 @@ echo DNSSEC=no >> /etc/systemd/resolved.conf
 systemctl restart systemd-resolved
 
 # rank mirrorlist
-curl -sLO https://github.com/rern/RuneAudio/raw/master/rankmirrors/rankmirrors.sh
-curl -sLO https://github.com/rern/RuneOS/raw/master/srv/http/addons-functions.sh
-chmod +x *.sh
-. addons-functions.sh
-./rankmirrors.sh
-rm *.sh
+#curl -sLO https://github.com/rern/RuneAudio/raw/master/rankmirrors/rankmirrors.sh
+#curl -sLO https://github.com/rern/RuneOS/raw/master/srv/http/addons-functions.sh
+#chmod +x *.sh
+#. addons-functions.sh
+#./rankmirrors.sh
+#rm *.sh
 
 # dialog package
-pacman -S --noconfirm --needed dialog
+pacman -Sy --noconfirm --needed dialog
 
 #----------------------------------------------------------------------------
 title="Create RuneAudio+R $version"
