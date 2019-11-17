@@ -57,7 +57,7 @@ RuneOS - DIY RuneAudio+R e
 	- Note for USB drive:
 		- For hard drives or faster-than-SD-card thumb drives.
 		- It takes less than 20 minutes for the whole process with a decent download speed.
-		- May need a powered USB hub.
+		- Non-SSD need a powered USB hub to have it spin up before boot.
 ---
 
 ### Prepare partitions
