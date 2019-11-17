@@ -3,15 +3,11 @@ RuneOS - DIY RuneAudio+R e
 - For all **Raspberry Pi**: Zero, 1, 2, 3 and 4 (3+: not yet tested but should work)
 - Create **RuneAudio+R e** from [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads) latest releases.
 - Interactive interface by [**Dialog**](https://invisible-island.net/dialog/)
-- Option to pre-configure Wi-Fi connection (headless mode)
-- Options to exclude features, it can be as light as possible in terms of build time and disk space.
-- Option to run `ROOT` partition on USB drive (good for hard drive)
-	- Not suitable for thumb drive
-	- May require powered USB hub for hard drive
-- Option for USB only - no SD card: (run both `BOOT` and `ROOT` partitions on USB drive)
-	- Raspberry Pi: 3 and 2 v1.2 only (4 not yet supported)
-	- Boot duration: 10+ seconds longer (detect no sd card > read boot loader into memory > boot)
-	- May require powered USB hub for hard drive
+- Options:
+	- Run `ROOT` partition on USB drive
+	- Run on USB only - no SD card (boot from USB)
+	- Pre-configure Wi-Fi connection (headless mode)
+	- Exclude features (can be as light as possible in terms of build time and disk space)
 
 **Procedure**
 - Prepare partitions
@@ -53,13 +49,15 @@ RuneOS - DIY RuneAudio+R e
 		- Micro SD card: 100MB+ for `BOOT` partition only
 		- USB drive: 4GB+ for `ROOT` partition (or USB hard drive with existing data)
 	- Option 3: USB drive only - no SD card (Boot from USB drive)
+		- Raspberry Pi 3 and 2 v1.2 only (4 not yet supported)
 		- USB drive: 4GB+ for `BOOT` + `ROOT` partition
 	- Note for USB drive:
-		- For hard drives or faster-than-SD-card thumb drives.
+		- Suitable for hard drives or faster-than-SD-card thumb drives.
 		- It takes less than 20 minutes for the whole process with a decent download speed.
 		- Boot from USB drive:
 			- Suitable for solid state drives.
 			- Normal hard drive needs external power, e.g., powered USB hub, to have it spin up 5+ seconds before boot.
+			- Boot takes 10+ seconds longer (detect no sd card > read boot loader into memory > boot)
 ---
 
 ### Prepare partitions
@@ -105,11 +103,9 @@ RuneOS - DIY RuneAudio+R e
 			
 **Option 3: USB drive only**
 
-- Set boot bit on Raspberry Pi (if not done yet)
-	- 3 and 2 v1.2 only
-	- 3+ already set
-	- 4 not yet supported
-	- Micro SD card can still be used to boot if inserted.
+- Set boot bit on Raspberry Pi (if not already set)
+- 3+ already set
+- Micro SD card can still be used to boot if inserted.
 ```sh
 # on RuneAudio
 echo program_usb_boot_mode=1 | sudo tee -a /boot/config.txt
@@ -128,6 +124,7 @@ shutdown -r now
 | #1  | 100MiB      | primary | fat32  | BOOT  |
 | #2  | 3500MiB     | primary | ext4   | ROOT  |
 | #3  | (the rest)  | primary | ext4   | (any) |
+
 ---
 	
 ### Create Arch Linux Arm
