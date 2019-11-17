@@ -258,7 +258,7 @@ rm -r /root/armv6h
 ! fdisk -l | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
 # boot partition - fix dirty bits if any
-fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
+#fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
 
 dialog --colors \
 	--msgbox "\n      
