@@ -79,20 +79,19 @@ RuneOS - DIY RuneAudio+R e
 |-----|-------------|---------|--------|-------|
 | #1  | 100MiB      | primary | fat32  | BOOT  |
 
-- USB drive
-	- Blank drive:
-		- `Unmount` > `Delete` all partitions (Caution: make sure it's the USB drive)
-		- Create partitions:
+- USB drive - Blank:
+	- `Unmount` > `Delete` all partitions (Caution: make sure it's the USB drive)
+	- Create partitions:
 	
 | No. | Size        | Type    | Format | Label |
 |-----|-------------|---------|--------|-------|
 | #1  | 3500MiB     | primary | ext4   | ROOT  |
 | #2  | (the rest)  | primary | ext4   | (any) |
 	
-	- Drive with existing data:
-		- No need to reformat or change format of existing partition
-		- Resize the existing to get 3500MiB unallocated space (anywhere - at the end, middle or start of the disk)
-		- Create a partition in the space
+- or USB drive - with existing data:
+	- No need to reformat or change format of existing partition
+	- Resize the existing to get 3500MiB unallocated space (anywhere - at the end, middle or start of the disk)
+	- Create a partition in the space
 		
 | No.   | Size        | Type    | Format | Label |
 |-------|-------------|---------|--------|-------|
