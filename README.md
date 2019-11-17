@@ -103,20 +103,9 @@ RuneOS - DIY RuneAudio+R e
 			
 **Option 3: USB drive only**
 
-- Set boot bit on Raspberry Pi (if not already set)
+- Set boot bit on Raspberry Pi (if not already set): [Set boot bit](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md)
 - 3+ already set
 - Micro SD card can still be used to boot if inserted.
-```sh
-# on RuneAudio
-echo program_usb_boot_mode=1 | sudo tee -a /boot/config.txt
-
-# reboot
-shutdown -r now
-
-# verify boot bit = 17:3020000a
-/opt/vc/bin/vcgencmd otp_dump | grep 17:
-```
-
 - Create partitions: (Drive with existing data must be resized and rearranged respectively.)
 
 | No. | Size        | Type    | Format | Label |
