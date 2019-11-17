@@ -4,7 +4,7 @@ RuneOS - DIY RuneAudio+R e
 	- 3A+: reportedly succeeded when select RPi 3, not 3+
 	- 3B+: not yet tested but should work
 - Create **RuneAudio+R e** from [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads) latest releases.
-- Interactive interface by [**Dialog**](https://invisible-island.net/dialog/)
+- Interactive interface with [**Dialog**](https://invisible-island.net/dialog/)
 - Options:
 	- Run `ROOT` partition on USB drive
 	- Run on USB only - no SD card (boot from USB)
