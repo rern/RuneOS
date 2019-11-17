@@ -209,6 +209,10 @@ Key=$password
 	cd "$pwd"
 fi
 
+# get create-rune.sh
+wget -qN https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
+chmod 744 $ROOT/usr/local/bin/create-rune.sh
+
 msgbox "
         Arch Linux Arm for \Z1Raspberry Pi $rpi\Z0\n\
                created successfully.
@@ -216,13 +220,7 @@ msgbox "
 
 rm $0
 
-#[[ $1 == alarmonly ]] && exit
-
 #----------------------------------------------------------------------------
-# get create-rune.sh
-wget -qN https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
-chmod 744 $ROOT/usr/local/bin/create-rune.sh
-
 umount -l $BOOT
 umount -l $ROOT
 
