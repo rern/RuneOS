@@ -47,21 +47,21 @@ RuneOS - DIY RuneAudio+R e
 - Network connection to Raspberry Pi 
 	- Wired LAN
 	- Optional: Wi-Fi (if necessary)
-- Micro SD card: 4GB+ for `BOOT` + `ROOT` partitions
-- Option 1: Micro SD card + USB drive (run RuneAudio+R from USB drive)
-	- Micro SD card: 100MB+ for `BOOT` partition only
-	- USB drive: 4GB+ for `ROOT` partition (or USB hard drive with existing data)
-	- For hard drives or faster-than-SD-card thumb drives.
-	- It takes less than 20 minutes for the whole process on: RPi 4 + solid state drive + decent download speed
-- Option 2: USB drive only - no SD card (Boot from USB drive)
+- Media:
+	- Option 1: Micro SD card: 4GB+ for `BOOT` + `ROOT` partitions
+	- Option 2: Micro SD card + USB drive (run RuneAudio+R from USB drive)
+		- Micro SD card: 100MB+ for `BOOT` partition only
+		- USB drive: 4GB+ for `ROOT` partition (or USB hard drive with existing data)
+		- For hard drives or faster-than-SD-card thumb drives.
+		- It takes less than 20 minutes for the whole process on: RPi 4 + solid state drive + decent download speed
+	- Option 3: USB drive only - no SD card (Boot from USB drive)
 ---
 
 ### Prepare partitions
 - On Linux PC
-
-**Micro SD card only**
-- Insert micro SD card
 - Open **GParted** app (Manjaro root password: `manjaro`)
+
+**Option 1: Micro SD card only**
 - `Unmount` > `Delete` all partitions (make sure it's the micro SD card)
 - Create partitions:
 
@@ -70,7 +70,7 @@ RuneOS - DIY RuneAudio+R e
 | #1  | 100MiB      | primary | fat32  | BOOT  |
 | #2  | (the rest)  | primary | ext4   | ROOT  |
 	
-**Option 1: Micro SD card + USB drive**
+**Option 2: Micro SD card + USB drive**
 - Micro SD card
 	- `Unmount` > `Delete` all partitions (Caution: make sure it's the SD card)
 	- Create a partition:
@@ -91,20 +91,20 @@ RuneOS - DIY RuneAudio+R e
 - or USB drive - with existing data:
 	- No need to reformat or change format of existing partition
 	- Resize the existing to get 3500MiB unallocated space (anywhere - at the end, middle or start of the disk)
-	- Create a partition in the space
+	- Create a partition in the space:
 		
 | No.   | Size        | Type    | Format | Label |
 |-------|-------------|---------|--------|-------|
 | (any) | (existing)  | primary | (any)  | (any) |
 | (any) | 3500MiB     | primary | ext4   | ROOT  |
 			
-**Option 2: USB drive only**
+**Option 3: USB drive only**
 
-- Set boot bit on Raspberry Pi
+- Set boot bit on Raspberry Pi (if not done yet)
 	- 3 and 2 v1.2 only
 	- 3+ already set
 	- 4 not yet supported
-- Micro SD card can still be used to boot if inserted.
+	- Micro SD card can still be used to boot if inserted.
 ```sh
 # on RuneAudio
 echo program_usb_boot_mode=1 | sudo tee -a /boot/config.txt
@@ -116,14 +116,14 @@ shutdown -r now
 /opt/vc/bin/vcgencmd otp_dump | grep 17:
 ```
 
-- Set partitions (Drive with existing data must be resized and rearranged respectively.)
+- Create partitions: (Drive with existing data must be resized and rearranged respectively.)
 
 | No. | Size        | Type    | Format | Label |
 |-----|-------------|---------|--------|-------|
 | #1  | 100MiB      | primary | fat32  | BOOT  |
 | #2  | 3500MiB     | primary | ext4   | ROOT  |
 | #3  | (the rest)  | primary | ext4   | (any) |
-
+---
 	
 ### Create Arch Linux Arm
 - Open **Files** app 
@@ -141,6 +141,7 @@ wget -qN https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh
 - Errors or too slow download: press `Ctrl+C` and run `./create-alarm.sh` again
 - Follow instructions until PC to Raspberry Pi connection is up.
 - At connecting propmt: confirm `yes` and password `alarm`
+---
 
 ### Create RuneAudio+Re
 ```sh
