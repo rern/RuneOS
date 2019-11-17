@@ -130,9 +130,7 @@ shutdown -r now
 ### Create Arch Linux Arm
 - Open **Files** app 
 - Click `BOOT` and `ROOT` to mount
-- Note each path for next confirmation
-	- Manjaro - in location bar 
-	- Others - hover mouse over `BOOT` and `ROOT`
+- Note each path in location bar or hover mouse over `BOOT` and `ROOT` for confirmation
 ```sh
 # switch user to root
 su
