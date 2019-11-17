@@ -254,11 +254,11 @@ chown -R mpd:audio "$dirdata/mpd" /mnt/MPD
 rm *.zip /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 rm -r /root/armv6h
 
-# boot partition - fix dirty bits if any
-fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
-
 # usb boot - disable sd card polling
 ! fdisk -l | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
+
+# boot partition - fix dirty bits if any
+fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
 
 dialog --colors \
 	--msgbox "\n      
