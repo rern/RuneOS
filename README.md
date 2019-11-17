@@ -105,7 +105,7 @@ RuneOS - DIY RuneAudio+R e
 			
 **Option 3: USB drive only**
 
-- Enable boot from USB: [Set boot bit](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md) (Micro SD card can still be used to boot if inserted.)
+- Enable boot from USB: [Set boot bit](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md) (Micro SD card can still be used as usual if inserted.)
 - Create partitions: (Drive with existing data must be resized and rearranged respectively.)
 
 | No. | Size        | Type    | Format | Label |
