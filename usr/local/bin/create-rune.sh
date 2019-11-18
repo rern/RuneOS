@@ -255,7 +255,7 @@ rm *.zip /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 rm -r /root/armv6h
 
 # usb boot - disable sd card polling
-! fdisk -l | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
+! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
 dialog --colors \
 	--msgbox "\n      
@@ -264,6 +264,6 @@ dialog --colors \
 " 9 50
 
 # boot partition - fix dirty bits if any
-fsck.fat -trawl /dev/mmcblk0p1 | grep -i 'dirty bit'
+fsck.fat -trawl $( df | grep /boot$ | cut -d' ' -f1 ) | grep -i 'dirty bit'
 
 shutdown -r now
