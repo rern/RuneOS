@@ -64,7 +64,7 @@ $( '#list' ).on( 'click', 'li', function( e ) {
 				$.post( 'commands.php', { bash: [
 						  "sed -i '\\|"+ mountname +"| d' /etc/fstab"
 						, 'rmdir "'+ mountpoint +'" &> /dev/null'
-						, 'rm -f "'+ dirsystem +'/fstab-'+ mountpoint.split( '/' ).pop() +'"'
+						, 'rm -f "'+ dirsystem +'/fstab-'+ mountname.split( '/' ).pop() +'"'
 						, pstream( 'sources' )
 					] }, function() {
 					mountStatus();
