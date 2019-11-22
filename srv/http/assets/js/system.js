@@ -682,7 +682,7 @@ setInterval( function() {
 		$( '#cputemp' ).text( Math.round( data[ 3 ] / 1000 ) );
 		if ( Number( data[ 2 ] ) ) $( '#undervoltage' ).text( data[ 2 ] ).parent().removeClass( 'hide' );
 	}, 'json' );
-}, 1000 );
+}, 10000 );
 
 function getCheck( $this ) {
 	var O = {};
