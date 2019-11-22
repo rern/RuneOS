@@ -21,7 +21,7 @@ switch( substr( $hardwarecode, -6, 1 ) ) {
 	case 'c': $memory = '4 GB';
 }
 $rpiwireless = in_array( $hardwarecode, [ '0c', '08', '0e', '0d', '11' ] ); // rpi zero w, rpi3, rpi4
-$undervoltage = $data->undervoltage ? '<br>'.$data->undervoltage.' <a class="red">Under-voltage detected</a>' : '';
+$undervoltage = $data->undervoltage ? '<span id="undervoltage"><br>'.$data->undervoltage.' <a class="red">Under-voltage detected</a></span>' : '';
 date_default_timezone_set( $data->timezone );
 $timezonelist = timezone_identifiers_list();
 $selecttimezone = '<select id="timezone">';
@@ -77,7 +77,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<span id="uptime"><?=$data->uptime?></span><br>
 			<?=$data->since?><br>
 			<span id="cputemp"><?=( round( $data->cputemp / 1000 ) )?></span>°C
-			<?=$undervoltage?>
+			<span class="<?=( $data->undervoltage ? '' : 'hide' )?>"><br><span id="undervoltage"><?=$data->undervoltage?></span> <a class="red">Under-voltage detected</a></span>
 		</div>
 	<heading>Environment</heading>
 		<div class="col-l">Player name</div>
