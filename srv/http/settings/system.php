@@ -8,7 +8,7 @@ switch( substr( $hardwarecode, -3, 2 ) ) {
 	case '03': $cpu = '700 MHz';     break;
 	case '04': $cpu = '4 @ 900 MHz'; break;
 	case '09':
-	case '0c': $cpu = '1 GHz';   break;
+	case '0c': $cpu = '4 @ 1 GHz';   break;
 	case '08': $cpu = '4 @ 1.2 GHz'; break;
 	case '0e':
 	case '0d': $cpu = '4 @ 1.4 GHz'; break;
@@ -61,6 +61,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			Hardware<br>
 			CPU<br>
 			RAM<br>
+			Root partition<br>
 			Time<br>
 			Up time<br>
 			CPU Load<br>
@@ -73,6 +74,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<?=$data->hardware?><br>
 			<?=$cpu?><br>
 			<?=$memory?><br>
+			<?=$data->rootfs?><br>
 			<span id="date"><?=$data->date?></span><gr>&emsp;@ </gr><?=$zonestring?><br>
 			<span id="uptime"><?=$data->uptime?></span> <gr>since <?=$data->since?></gr><br>
 			<span id="cpuload"><?=( $data->cpuload * 100 )?></span>%<br>
