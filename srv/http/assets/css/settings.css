@@ -446,6 +446,7 @@ input:checked + .switchlabel:after {
 	float: left;
 	position: relative;
 	vertical-align: middle;
+	line-height: 21px;
 }
 .col-l {
 	display: inline-block;
