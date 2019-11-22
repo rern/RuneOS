@@ -60,7 +60,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			Kernel<br>
 			Hardware<br>
 			CPU<br>
-			Memory<br>
+			RAM<br>
 			Time<br>
 			Up time<br>
 			Since<br>
