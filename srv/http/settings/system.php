@@ -8,7 +8,7 @@ switch( substr( $hardwarecode, -3, 2 ) ) {
 	case '03': $cpu = '700 MHz';     break;
 	case '04': $cpu = '4 @ 900 MHz'; break;
 	case '09':
-	case '0c': $cpu = '4 @ 1 GHz';   break;
+	case '0c': $cpu = '1 GHz';   break;
 	case '08': $cpu = '4 @ 1.2 GHz'; break;
 	case '0e':
 	case '0d': $cpu = '4 @ 1.4 GHz'; break;
