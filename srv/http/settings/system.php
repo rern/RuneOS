@@ -61,6 +61,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			Hardware<br>
 			CPU<br>
 			RAM<br>
+			Root partition<br>
 			Time<br>
 			Up time<br>
 			CPU Load<br>
@@ -73,6 +74,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<?=$data->hardware?><br>
 			<?=$cpu?><br>
 			<?=$memory?><br>
+			<?=$data->rootfs?><br>
 			<span id="date"><?=$data->date?></span><gr>&emsp;@ </gr><?=$zonestring?><br>
 			<span id="uptime"><?=$data->uptime?></span> <gr>since <?=$data->since?></gr><br>
 			<span id="cpuload"><?=( $data->cpuload * 100 )?></span>%<br>
