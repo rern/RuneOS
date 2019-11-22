@@ -674,13 +674,11 @@ setInterval( function() {
 	$.post( 'commands.php', { bash:[
 		  "date +'%F<gr> &bull; </gr>%R'"
 		, "uptime -p | cut -d' ' -f2- | tr -d ','"
-		, "journalctl -b | grep -c 'Under-voltage'"
 		, 'cat /sys/class/thermal/thermal_zone0/temp'
 	] }, function( data ) {
 		$( '#date' ).html( data[ 0 ] );
 		$( '#uptime' ).text( data[ 1 ] );
-		$( '#cputemp' ).text( Math.round( data[ 3 ] / 1000 ) );
-		if ( Number( data[ 2 ] ) ) $( '#undervoltage' ).text( data[ 2 ] ).parent().removeClass( 'hide' );
+		$( '#cputemp' ).text( Math.round( data[ 2 ] / 1000 ) );
 	}, 'json' );
 }, 10000 );
 
