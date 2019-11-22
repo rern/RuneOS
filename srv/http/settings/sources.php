@@ -1,5 +1,5 @@
 <div class="container">
-	<headingnoline>USB and NAS&emsp;<i id="addnas" class="fa fa-plus-circle"></i></headingnoline>
+	<headingnoline>USB and NAS&emsp;<i id="addnas" class="fa fa-plus-circle"></i>&emsp;<i id="refreshing" class="fa fa-network blink hide"></i></headingnoline>
 	<ul id="list" class="entries" data-uid="<?=( exec( "$sudo/id -u mpd" ) )?>" data-gid="<?=( exec( "$sudo/id -g mpd" ) )?>"></ul>
 	<p class="brhalf"></p>
 	<span class="help-block hide">

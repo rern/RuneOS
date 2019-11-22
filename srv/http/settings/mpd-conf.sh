@@ -65,7 +65,7 @@ for line in "${lines[@]}"; do
 	mpdconf+='
 
 audio_output {
-	name              "'$name'"
+	name              "'$aplayname'"
 	device            "'$device'"
 	type              "alsa"
 	auto_resample     "no"
@@ -93,7 +93,13 @@ echo "$mpdconf" > $file
 
 systemctl restart mpd mpdidle
 
-[[ $1 == remove ]] && name=$audiooutput
+usbdacfile=/srv/http/data/system/usbdac
+if [[ $1 == remove ]]; then
+	name=$audiooutput
+	rm -f $usbdacfile
+else
+	echo $name > $usbdacfile
+fi
 
 # last one is new one
 curl -s -X POST 'http://127.0.0.1/pub?id=notify' -d '{ "title": "Audio Output Switched", "text": "'"$name"'", "icon": "output" }'

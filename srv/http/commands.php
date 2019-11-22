@@ -691,7 +691,7 @@ function search2array( $result, $playlist = '' ) { // directories or files
 	$lists = explode( "\n", rtrim( $result ) );
 	$genre = $composer = $albumartist = '';
 	foreach( $lists as $list ) {
-		$root = in_array( explode( '/', $list )[ 0 ], [ 'USB', 'NAS', 'LocalStorage' ] );
+		$root = in_array( explode( '/', $list )[ 0 ], [ 'USB', 'NAS', 'SD' ] );
 		if ( $root ) {
 			$ext = pathinfo( $list, PATHINFO_EXTENSION );
 			if ( in_array( $ext, [ 'cue', 'm3u', 'm3u8', 'pls' ] ) ) {

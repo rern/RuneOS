@@ -103,7 +103,7 @@ $counts = [
 // library home blocks
 $blocks = [ // 'id' => [ 'path', 'icon', 'name' ];
 	  'coverart'    => [ 'Coverart',     'coverart',     'CoverArt' ]
-	, 'sd'          => [ 'LocalStorage', 'microsd',      'SD' ]
+	, 'sd'          => [ 'SD', 'microsd',      'SD' ]
 	, 'usb'         => [ 'USB',          'usbdrive',     'USB' ]
 	, 'nas'         => [ 'NAS',          'network',      'Network' ]
 	, 'webradio'    => [ 'Webradio',     'webradio',     'Webradio' ]

@@ -316,8 +316,17 @@ code {
 .entries li:first-of-type {
 	border-top: 1px solid hsl(200,3%,20%)/*cd*/;
 }
+.entries li span {
+	float: left;
+	display: block;
+	width: calc( 100% - 40px );
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 .remove {
 	float: right;
+	margin-right: 0 !important;
 }
 .checkbox {
 	padding-top: 0 !important;

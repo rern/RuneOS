@@ -68,7 +68,7 @@ $( '#setting-ntp' ).click( function() {
 		}
 	} );
 } );
-$( '#timezone' ).change( function() {
+$( '#timezone' ).on( 'selectric-change', function() {
 	var timezone = $( this ).find( ':selected' ).val();
 	$.post( 'commands.php', { bash: [ 
 		  'timedatectl set-timezone '+ timezone
@@ -93,7 +93,7 @@ $( '#i2smodulesw' ).click( function() {
 		$( '#i2smodulesw' ).prop( 'checked', 0 );
 	}, 200 );
 } );
-$( '#i2smodule' ).change( function() {
+$( '#i2smodule' ).on( 'selectric-change', function() {
 	var $selected = $( this ).find( ':selected' );
 	var sysname = $selected.val();
 	var name = $selected.text();
@@ -245,11 +245,19 @@ $( '#airplay' ).click( function() {
 $( '#localbrowser' ).click( function() {
 	var O = getCheck( $( this ) );
 	local = 1;
-	$.post( 'commands.php', { bash: [
-		  'systemctl '+ O.enabledisable +' --now localbrowser'
-		, ( O.onezero ? 'echo 1 > '+ dirsystem +'/localbrowser' : 'rm -f '+ dirsystem +'/localbrowser' )
-		, pstream( 'system' )
-	] }, resetlocal );
+	if ( O.onezero ) {
+		var cmd = [
+			  "sed -i 's/\\(console=\\).*/\\1tty3 plymouth.enable=0 quiet loglevel=0 logo.nologo vt.global_cursor_default=0/' /boot/cmdline.txt"
+			, 'systemctl enable --now localbrowser'
+		];
+	} else {
+		var cmd = [
+			  "sed -i 's/\\(console=\\).*/\\1tty1/' /boot/cmdline.txt"
+			, 'systemctl disable --now localbrowser'
+		];
+	}
+	cmd.push( pstream( 'system' ) );
+	$.post( 'commands.php', { bash: cmd }, resetlocal );
 	$( '#setting-localbrowser' ).toggleClass( 'hide', !O.onezero );
 } );
 $( '#setting-localbrowser' ).click( function() {
@@ -301,20 +309,34 @@ $( '#setting-localbrowser' ).click( function() {
 		, buttonwidth : 1
 		, ok          : function() {
 			var screenoff = $( '#infoTextBox' ).val();
-			$( '#localbrowser' ).data( 'screenoff', screenoff );
 			var zoom = parseFloat( $( '#infoTextBox1' ).val() ) || 1;
 			zoom = zoom < 2 ? ( zoom < 0.5 ? 0.5 : zoom ) : 2;
-			$( '#localbrowser' ).data( 'zoom', zoom );
 			var cursor = $( '#infoCheckBox input:eq( 0 )' ).prop( 'checked' ) ? 1 : 0;
-			$( '#localbrowser' ).data( 'cursor', cursor );
 			var rotate = $( '#infoRadio input[ type=radio ]:checked' ).val();
-			$( '#localbrowser' ).data( 'rotate', rotate );
 			var overscan = $( '#infoCheckBox input:eq( 1 )' ).prop( 'checked' ) ? 1 : 0;
-			$( '#localbrowser' ).data( 'overscan', overscan );
-			$( '#localbrowser' ).data( 'zoom', zoom ).data( 'screenoff', screenoff ).data( 'cursor', cursor ).data( 'rotate', rotate );
-			var cmdzoomcursor = 'sed -i "s/-use_cursor.*/-use_cursor '+ ( cursor == 1 ? 'yes \\&' : 'no \\&' ) +'/; s/factor=.*/factor='+ zoom +'/"';
+			$( '#localbrowser' )
+				.data( 'zoom', zoom )
+				.data( 'screenoff', screenoff )
+				.data( 'cursor', cursor )
+				.data( 'rotate', rotate )
+				.data( 'overscan', overscan );
+			var localbrowser = dirsystem +'/localbrowser-';
+			var cmd = [];
+			cmd.push( ( zoom != 1 ? 'echo '+ zoom +' > ' : 'rm ' ) + localbrowser +'zoom' );
+			cmd.push( ( cursor ? 'echo 1 > ' : 'rm ' ) + localbrowser +'cursor' );
+			cmd.push( ( screenoff != 0 ? 'echo '+ ( screenoff * 60 ) +' > ' : 'rm ' ) + localbrowser +'screenoff' );
+			cmd.push( ( rotate !== 'NORMAL' ? 'echo '+ rotate +' > ' : 'rm ' ) + localbrowser +'rotate' );
+			cmd.push( ( overscan ? 'echo '+ overscan +' > ' : 'rm ' ) + localbrowser +'overscan' );
+			
+			cmd.push(
+				  'sed -i -e "s/-use_cursor.*/-use_cursor '+ ( cursor == 1 ? 'yes \\&' : 'no \\&' ) +'/'
+						+'" -e "s/factor=.*/factor='+ zoom +'/'
+				, 		+'" -e "s/xset dpms .*/xset dpms 0 0 '+ ( screenoff * 60 ) +' \\\&/" /etc/X11/xinit/xinitrc'
+				, 'ln -sf /srv/http/assets/img/'+ rotate +'.png /usr/share/bootsplash/start.png'
+			);
+			
 			if ( rotate === 'NORMAL' ) {
-				var cmdrotate = 'rm /etc/X11/xorg.conf.d/99-raspi-rotate.conf';
+				cmd.push( 'rm /etc/X11/xorg.conf.d/99-raspi-rotate.conf' );
 			} else {
 				var matrix = {
 					  CW     : '0 1 0 -1 0 1 0 0 1'
@@ -352,27 +374,23 @@ Section "ServerLayout"
 EndSection
 */ } );
 				rotatecontent = rotatecontent.replace( 'ROTATION_SETTING', rotate ).replace( 'MATRIX_SETTING', matrix[ rotate ] );
-				var cmdrotate = "echo '"+ rotatecontent +"' > /etc/X11/xorg.conf.d/99-raspi-rotate.conf";
+				cmd.push( "echo '"+ rotatecontent +"' > /etc/X11/xorg.conf.d/99-raspi-rotate.conf" );
 			}
+			cmd.push( 'ln -sf /srv/http/assets/img/'+ rotate +'.png /usr/share/bootsplash/start.png' );
+			
 			if ( overscan ) {
-				var cmdoverscan = "sed -i '/^disable_overscan=1/ s/^/#/' /boot/config.txt";
+				cmd.push( "sed -i '/^disable_overscan=1/ s/^/#/' /boot/config.txt" );
 			} else {
-				var cmdoverscan = "sed -i '/^#disable_overscan=1/ s/^#//' /boot/config.txt";
+				cmd.push( "sed -i '/^#disable_overscan=1/ s/^#//' /boot/config.txt" );
 			}
-			local = 1;
-			$.post( 'commands.php', { bash: [
-				  cmdzoomcursor +' /etc/X11/xinit/xinitrc'
-				, "sed -i 's/xset dpms .*/xset dpms 0 0 "+ ( screenoff * 60 ) +" \\\&/' /etc/X11/xinit/xinitrc"
-				, cmdrotate
-				, cmdoverscan
-				, 'ln -sf /srv/http/assets/img/'+ rotate +'.png /usr/share/bootsplash/start.png'
-				, 'systemctl try-restart localbrowser'
-				, 'echo '+ ( cursor ? 'yes' : 'no' ) +' > '+ dirsystem +'/localbrowser-cursor'
-				, 'echo '+ ( screenoff * 60 ) +' > '+ dirsystem +'/localbrowser-screenoff'
-				, 'echo '+ rotatecontent +' > '+ dirsystem +'/localbrowser-rotatecontent'
-				, 'echo '+ overscan +' > '+ dirsystem +'/localbrowser-overscan'
+			
+			cmd.push( 
+				  'systemctl try-restart localbrowser'
 				, pstream( 'system' )
-			] }, function() {
+			);
+			local = 1;
+			localbrowser = dirsystem +'/localbrowser-';
+			$.post( 'commands.php', { bash: cmd }, function() {
 				resetlocal();
 				bannerHide();
 			} );
@@ -428,7 +446,7 @@ $( '#samba' ).click( function() {
 	local = 1;
 	$.post( 'commands.php', { bash: [
 		  'systemctl '+ O.enabledisable +' --now nmb smb'
-		, ( O.onezero ? 'echo 1 > '+ dirsystem +'/samba' : 'rm -f ' + dirsystem +'/samba' )
+		, ( O.onezero ? 'echo 1 > ' : 'rm -f ' ) + dirsystem +'/samba'
 		, pstream( 'system' )
 	] }, resetlocal );
 	$( '#setting-samba' ).toggleClass( 'hide', !O.onezero );
@@ -479,7 +497,7 @@ $( '#upnp' ).click( function() {
 	local = 1;
 	$.post( 'commands.php', { bash: [
 		  'systemctl '+ O.enabledisable +' --now upmpdcli'
-		, ( O.onezero ? 'echo 1 > '+ dirsystem +'/upnp' : 'rm -f '+ dirsystem +'/upnp' )
+		, ( O.onezero ? 'echo 1 > ' : 'rm -f ' ) + dirsystem +'/upnp'
 		, pstream( 'system' )
 	] }, resetlocal );
 	$( '#setting-upnp' ).toggleClass( 'hide', !O.onezero );
@@ -629,6 +647,16 @@ $( '#setting-upnp' ).click( function() {
 		}
 	} );
 } );
+$( '#avahi' ).click( function() {
+	var O = getCheck( $( this ) );
+	local = 1;
+	$.post( 'commands.php', { bash: [
+		  'systemctl '+ O.enabledisable +' --now avahi-daemon'
+		, ( O.onezero ? 'echo 1 > ' : 'rm -f ' ) + dirsystem +'/avahi'
+		, pstream( 'system' )
+	] }, resetlocal );
+} );
+
 $( '#infoContent' ).on( 'click', '.infocheckbox', function() {
 	$( '#'+ this.id +'data' ).toggle();
 	if ( !$( 'input[name='+ this.id +'quality]:checked' ).length ) $( 'input[name='+ this.id +'quality]:eq( 0 )' ).prop( 'checked', true );

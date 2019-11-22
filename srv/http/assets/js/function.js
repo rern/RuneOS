@@ -1737,7 +1737,7 @@ function setButtonToggle() {
 }
 function setButtonUpdate() {
 	if ( GUI.status.updating_db ) {
-		$( '#tab-library i, #db-home i' ).addClass( 'blink' );
+		if ( !GUI.localhost ) $( '#tab-library i, #db-home i' ).addClass( 'blink' );
 		if ( GUI.playback && !GUI.bars ) {
 			if ( $( '#time-knob' ).is( ':hidden' ) ) {
 				$( '#posupdate' ).removeClass( 'hide' );
@@ -1748,7 +1748,7 @@ function setButtonUpdate() {
 			}
 		}
 	} else {
-		$( '#tab-library i, #db-home i, .db-icon' ).removeClass( 'blink' );
+		if ( !GUI.localhost ) $( '#tab-library i, #db-home i, .db-icon' ).removeClass( 'blink' );
 		$( '#posupdate, #iupdate' ).addClass( 'hide' );
 	}
 }

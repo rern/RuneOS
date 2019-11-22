@@ -1,19 +1,25 @@
 <?php
 $audiooutput = trim( @file_get_contents( '/srv/http/data/system/audiooutput' ) );
 $i2ssysname = trim( @file_get_contents( '/srv/http/data/system/i2ssysname' ) );
+$usbdac = trim( @file_get_contents( '/srv/http/data/system/usbdac' ) );
 $dop = file_exists( '/srv/http/data/system/dop' ) ? 'checked' : '';
 $autoplay = file_exists( '/srv/http/data/system/autoplay' ) ? 'checked' : '';
 $hardwarecode = exec( 'cat /proc/cpuinfo | grep Revision | tail -c 4 | cut -c 1-2' );
 
 exec( "mpc outputs | grep '^Output' | awk -F'[()]' '{print $2}'", $outputs );
-if ( $hardwarecode != 11 ) $outputs = array_diff( $outputs, [ 'bcm2835 ALSA_3' ] ); // remove 2nd hdmi
+if ( $hardwarecode != 11 ) $outputs = array_diff( $outputs, [ 'RaspberryPi HDMI Out 2' ] ); // RPi4 - remove 2nd hdmi
+if ( $hardwarecode === '09' || $hardwarecode === '0c' ) $outputs = array_diff( $outputs, [ 'RaspberryPi Analog Out' ] ); // RPi0 - remove 3.5mm out
 $htmlacards = '';
 foreach( $outputs as $output ) {
-	$index = exec( $sudo.'/aplay -l | grep "'.preg_replace( '/_.$/', '', $output ).'" | cut -c6' );
+	$index = strpos( $output, '_' ) ? preg_replace( '/^.*_/', '', $output ) : 0;
 	$extlabel = exec( "$sudo/grep extlabel \"/srv/http/settings/i2s/$output\" | cut -d: -f2" ) ?: $output;
 	$routecmd = exec( "$sudo/grep route_cmd \"/srv/http/settings/i2s/$output\" | cut -d: -f2" );
 	$dataroutecmd = $routecmd ? ' data-routecmd="'.$routecmd.'"' : '';
-	$selected = $output === $audiooutput || $output === $i2ssysname ? ' selected' : '';
+	if ( $usbdac ) {
+		$selected = $output === $usbdac ? ' selected' : '';
+	} else {
+		$selected = $output === $audiooutput || $output === $i2ssysname ? ' selected' : '';
+	}
 	$htmlacards.= '<option value="'.$output.'" data-index="'.$index.'"'.$dataroutecmd.$selected.'>'.$extlabel.'</option>';
 }
 $mixertype = exec( "$sudo/grep mixer_type /etc/mpd.conf | cut -d'\"' -f2" );
@@ -25,6 +31,7 @@ $autoupdate = exec( "$sudo/grep 'auto_update' /etc/mpd.conf | cut -d'\"' -f2" );
 $buffer = exec( "$sudo/grep 'audio_buffer_size' /etc/mpd.conf | cut -d'\"' -f2" );
 if ( file_exists( '/usr/bin/ffmpeg' ) ) $ffmpeg = exec( "$sudo/sed -n '/ffmpeg/ {n;p}' /etc/mpd.conf | cut -d'\"' -f2" ) === 'yes' ? 'checked' : '';
 ?>
+<input id="usbdac" type="hidden" value="<?=$usbdac?>">
 <div class="container">
 	<heading>Audio Output</heading>
 		<div class="col-l control-label">Inferface</div>
@@ -98,8 +105,8 @@ if ( file_exists( '/usr/bin/ffmpeg' ) ) $ffmpeg = exec( "$sudo/sed -n '/ffmpeg/ 
 		<div class="col-r">
 			<input id="ffmpeg" type="checkbox" <?=$ffmpeg?>>
 			<div class="switchlabel" for="ffmpeg"></div>
-			<span class="help-block hide">Disable if not used for faster database update.
-				<br>FFmpeg decoder for:
+			<span class="help-block hide">Should be disabled if not used for faster Sources update.
+				<br>Decoder for audio filetypes:
 				<br>16sv 3g2 3gp 4xm 8svx aa3 aac ac3 adx afc aif aifc aiff al alaw amr anim apc ape asf atrac au aud avi avm2 avs 
 				bap bfi c93 cak cin cmv cpk daud dct divx dts dv dvd dxa eac3 film flac flc fli fll flx flv g726 gsm gxf iss 
 				m1v m2v m2t m2ts m4a m4b m4v mad mj2 mjpeg mjpg mka mkv mlp mm mmf mov mp+ mp1 mp2 mp3 mp4 mpc mpeg mpg mpga mpp mpu mve mvi mxf 

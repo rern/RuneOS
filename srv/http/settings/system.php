@@ -1,7 +1,27 @@
 <?php
 $data = json_decode( shell_exec( '/srv/http/settings/system-data.sh' ) );
-$rpiwireless = in_array( $data->hardwarecode, [ '0c', '08', '0e', '0d', '11' ] ); // rpi zero w, rpi3, rpi4
-
+$hardwarecode = $data->hardwarecode;
+switch( substr( $hardwarecode, -3, 2 ) ) {
+	case '00':
+	case '01':
+	case '02':
+	case '03': $cpu = '700 MHz';     break;
+	case '04': $cpu = '4 @ 900 MHz'; break;
+	case '09':
+	case '0c': $cpu = '4 @ 1 GHz';   break;
+	case '08': $cpu = '4 @ 1.2 GHz'; break;
+	case '0e':
+	case '0d': $cpu = '4 @ 1.4 GHz'; break;
+	case '11': $cpu = '4 @ 1.5 GHz';
+}
+switch( substr( $hardwarecode, -6, 1 ) ) {
+	case '9': $memory = '512 KB'; break;
+	case 'a': $memory = '1 GB';   break;
+	case 'b': $memory = '2 GB';   break;
+	case 'c': $memory = '4 GB';
+}
+$rpiwireless = in_array( $hardwarecode, [ '0c', '08', '0e', '0d', '11' ] ); // rpi zero w, rpi3, rpi4
+$undervoltage = $data->undervoltage ? '<br>'.$data->undervoltage.' <a class="red">Under-voltage detected</a>' : '';
 date_default_timezone_set( $data->timezone );
 $timezonelist = timezone_identifiers_list();
 $selecttimezone = '<select id="timezone">';
@@ -39,18 +59,25 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			IP address<br>
 			Kernel<br>
 			Hardware<br>
+			CPU<br>
+			Memory<br>
 			Time<br>
 			Up time<br>
-			Since
+			Since<br>
+			Temperature
 		</div>
 		<div class="col-r text">
 			<i class="fa fa-addons gr"></i> <?=$data->version?><br>
 			<?=$data->ip?><br>
 			<?=$data->kernel?><br>
 			<?=$data->hardware?><br>
+			<?=$cpu?><br>
+			<?=$memory?><br>
 			<?=$data->date?><gr>&emsp;@ </gr><?=$zonestring?><br>
 			<?=$data->uptime?><br>
-			<?=$data->since?>
+			<?=$data->since?><br>
+			<?=( round( $data->cputemp / 1000 ) )?>°C
+			<?=$undervoltage?>
 		</div>
 	<heading>Environment</heading>
 		<div class="col-l">Player name</div>

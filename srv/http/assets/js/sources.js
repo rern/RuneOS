@@ -40,16 +40,16 @@ $( '#addnas' ).click( function() {
 $( '#infoContent' ).on( 'click', '#infoRadio', function() {
 	if ( $( this ).find( 'input:checked' ).val() === 'nfs' ) {
 		$( '#sharename' ).text( 'Share path' );
-		$( '.guest, #infoRadio1' ).addClass( 'hide' );
+		$( '.guest' ).addClass( 'hide' );
 	} else {
 		$( '#sharename' ).text( 'Share name' );
-		$( '.guest, #infoRadio1' ).removeClass( 'hide' );
+		$( '.guest' ).removeClass( 'hide' );
 	}
 } );
 $( '#list' ).on( 'click', 'li', function( e ) {
-	var mountpoint = $( this ).data( 'mountpoint' );
-	var mountname = mountpoint.replace( / /g, '\\040' );
-	var device = $( this ).data( 'device' );
+	var $this = $( this );
+	var mountpoint = $this.data( 'mountpoint' );
+	var mountname = mountpoint.replace( / /g, '\\\\040' );
 	var nas = mountpoint.slice( 9, 12 ) === 'NAS';
 	if ( $( e.target ).hasClass( 'remove' ) ) {  // remove
 		info( {
@@ -69,13 +69,15 @@ $( '#list' ).on( 'click', 'li', function( e ) {
 					] }, function() {
 					mountStatus();
 					resetlocal();
+					$( '#refreshing' ).addClass( 'hide' );
 				} );
+				$( '#refreshing' ).removeClass( 'hide' );
 			}
 		} );
 		return
 	}
 	
-	if ( !$( this ).data( 'unmounted' ) ) { // unmount
+	if ( !$this.data( 'unmounted' ) ) { // unmount
 		info( {
 			  icon    : nas ? 'network' : 'usbdrive'
 			, title   : 'Unmount '+ ( nas ? 'Network Share' : 'USB Drive' )
@@ -86,12 +88,14 @@ $( '#list' ).on( 'click', 'li', function( e ) {
 			, ok      : function() {
 				local = 1;
 				$.post( 'commands.php', { bash: [
-						  ( nas ? '' : 'udevil ' ) +'umount -l "'+ mountname +'"'
+						  ( nas ? '' : 'udevil ' ) +'umount -l "'+ mountpoint +'"'
 						, pstream( 'sources' )
 					] }, function() {
 					mountStatus();
 					resetlocal();
+					$( '#refreshing' ).addClass( 'hide' );
 				} );
+				$( '#refreshing' ).removeClass( 'hide' );
 			}
 		} );
 	} else { // remount
@@ -104,12 +108,14 @@ $( '#list' ).on( 'click', 'li', function( e ) {
 			, ok      : function() {
 				local = 1;
 				$.post( 'commands.php', { bash: [
-						  ( nas ? 'mount "'+ mountname +'"' : 'udevil mount '+ device )
+						  ( nas ? 'mount "'+ mountpoint +'"' : 'udevil mount '+ $this.data( 'source' ) )
 						, pstream( 'sources' )
 					] }, function() {
 					mountStatus();
 					resetlocal();
+					$( '#refreshing' ).addClass( 'hide' );
 				} );
+				$( '#refreshing' ).removeClass( 'hide' );
 			}
 		} );
 	}
@@ -148,34 +154,10 @@ $( '#listshare' ).on( 'click', 'li', function() {
 
 function mountStatus() {
 	$.post( 'commands.php', { bash: '/srv/http/settings/sources-status.sh' }, function( data ) {
-		if ( !data ) return
-		
-		var htmlnas = '';
-		var htmlusb = '';
-		var htmlunmount = '';
-		data.forEach( function( el ) {
-			var mountpoint = el.split( ' ' )[ 0 ].replace( /\/$/, '' );
-			if ( el.slice( 9, 12 ) === 'USB' ) {
-				htmlusb += '<li data-mountpoint="'+ mountpoint +'"><i class="fa fa-usbdrive"></i>'+ el +'</li>';
-			} else if ( el.slice( 9, 12 ) === 'NAS' ) {
-				htmlnas += '<li data-mountpoint="'+ mountpoint +'"><i class="fa fa-network"></i>'+ el +'</li>';
-			} else {
-				var devmount = el.split( '^^' );
-				var device = devmount[ 0 ];
-				if ( device.slice( 0, 4 ) === '/dev' ) {
-					var icon = 'usbdrive';
-					var removemount = '';
-				} else {
-					var icon = 'network';
-					var removemount = '<i class="fa fa-minus-circle remove"></i></li>';
-				}
-				var mountpoint = devmount[ 1 ].replace( /\/$/, '' );
-				htmlunmount += '<li data-mountpoint="'+ mountpoint +'" data-device="'+ device +'" data-unmounted="1"><i class="fa fa-'+ icon +'"></i><gr>'
-							  + mountpoint +'</gr><a class="red">&ensp;&bull;&ensp;</a>'+ device + removemount;
-			}
-		} );
-		$( '#list' ).html( htmlusb + htmlnas + htmlunmount );
+		if ( data ) $( '#list' ).html( data );
+		$( '#refreshing' ).addClass( 'hide' );
 	}, 'json' );
+	$( '#refreshing' ).removeClass( 'hide' );
 }
 function infoMount( formdata, cifs ) {
 	info( {
@@ -187,12 +169,17 @@ function infoMount( formdata, cifs ) {
 				$( '#infoRadio input' ).eq( 0 ).prop( 'checked', 1 );
 				$( '#infotextbox input:eq( 1 )' ).val( '192.168.1.' );
 			} else {
-				$( '#infoRadio input' ).eq( formdata.protocol === 'cifs' ? 0 : 1 ).prop( 'checked', 1 );
+				if ( formdata.protocol === 'cifs' ) {
+					$( '#infoRadio input' ).eq( 0 ).prop( 'checked', 1 );
+					$( '#infotextbox input:eq( 3 )' ).val( formdata.user );
+					$( '#infotextbox input:eq( 4 )' ).val( formdata.password );
+				} else {
+					$( '#infoRadio input' ).eq( 1 ).prop( 'checked', 1 );
+					$( '.guest' ).addClass( 'hide' );
+				}
 				$( '#infotextbox input:eq( 0 )' ).val( formdata.name );
 				$( '#infotextbox input:eq( 1 )' ).val( formdata.ip );
 				$( '#infotextbox input:eq( 2 )' ).val( formdata.directory );
-				$( '#infotextbox input:eq( 3 )' ).val( formdata.user );
-				$( '#infotextbox input:eq( 4 )' ).val( formdata.password );
 				$( '#infotextbox input:eq( 5 )' ).val( formdata.options );
 			}
 			if ( cifs ) $( '#infoRadio' ).hide();
@@ -239,7 +226,9 @@ function infoMount( formdata, cifs ) {
 					formdata = {}
 				}
 				resetlocal();
+				$( '#refreshing' ).addClass( 'hide' );
 			}, 'json' );
+			$( '#refreshing' ).removeClass( 'hide' );
 		}
 	} );
 }

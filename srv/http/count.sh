@@ -12,7 +12,7 @@ mpddb="$albumartist $composer $genre"
 nas=$( df | grep -c '/mnt/MPD/NAS' )
 usb=$( df | grep -c '/mnt/MPD/USB' )
 webradio=$( ls -U /srv/http/data/webradios/* 2> /dev/null | wc -l )
-sd=$( mpc listall LocalStorage 2> /dev/null | wc -l )
+sd=$( mpc listall SD 2> /dev/null | wc -l )
 
 echo $artist $album $song $mpddb $nas $usb $webradio $sd
 

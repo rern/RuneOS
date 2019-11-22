@@ -30,18 +30,21 @@ function setMixerType( mixer, reloadpage ) {
 		$( '#volume' ).removeClass( 'hide' );
 	}
 }
-$( '#audiooutput' ).change( function() {
+$( '#audiooutput' ).on( 'selectric-change', function() {
 	var $selected = $( this ).find( ':selected' );
 	var name = $selected.text();
 	var sysname = $selected.val();
 	var index = $selected.data( 'index' );
 	var cmd = [
 		  "sed -i 's/output_device = .*/output_device = \"hw:"+ index +"\";/' /etc/shairport-sync.conf"
-		, 'echo '+ name +' > '+ dirsystem +'/audiooutput'
-		, 'echo '+ sysname +' > '+ dirsystem +'/sysname'
 		, 'systemctl try-restart shairport-sync shairport-meta'
 		, pstream( 'mpd' )
 	];
+	// set only if not usbdac
+	if ( name !== $( '#usbdac' ).val() ) cmd.push(
+		  'echo '+ name +' > '+ dirsystem +'/audiooutput'
+		, 'echo '+ sysname +' > '+ dirsystem +'/sysname'
+	);
 	var routecmd = $selected.data( 'routecmd' );
 	if ( routecmd ) cmd.push( routecmd.replace( '*CARDID*', index ) );
 	local = 1;

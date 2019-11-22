@@ -5,14 +5,24 @@ $time = time();
 $sudo = '/usr/bin/sudo /usr/bin';
 $MiBused = exec( "df / | tail -n 1 | awk '{print $3 / 1024}'" );
 $MiBavail = exec( "df / | tail -n 1 | awk '{print $4 / 1024}'" );
-$MiBall = $MiBused + $MiBavail;
+$MiBunpart = exec( "$sudo/sfdisk -F /dev/mmcblk0 | head -n1 | awk '{print $6 / 1024 / 1024}'" );
+$MiBall = $MiBused + $MiBavail + $MiBunpart;
 
 $Wall = 170;
 $Wused = round( $MiBused / $MiBall * $Wall );
 $Wavail = round( $MiBavail / $MiBall * $Wall );
+$Wunpart = $Wall - $Wused - $Wavail;
 $htmlused = '<p id="diskused" class="disk" style="width: '.$Wused.'px;">&nbsp;</p>';
 $htmlavail = $Wavail ? '<p id="diskfree" class="disk" style="width: '.$Wavail.'px;">&nbsp;</p>' : '';
 $htmlfree = '<white>'.( $MiBavail < 1024 ? round( $MiBavail, 2 ).' MiB' : round( $MiBavail / 1024, 2 ).' GiB' ).'</white> free';
+if ( $MiBunpart < 10 ) {
+	file_put_contents( "$dirsettings/addons/expa", 1 );
+	$htmlunpart = '';
+	$expandable = '';
+} else {
+	$htmlunpart = '<p id="diskunpart" class="disk" style="width: '.$Wunpart.'px;">&nbsp;</p>';
+	$htmlfree.= ' ● <a>'.( $MiBunpart < 1024 ? $MiBunpart.' MiB' : round( $MiBunpart / 1024, 2 ).' GiB' ).'</a> expandable';
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,9 +54,8 @@ $htmlfree = '<white>'.( $MiBavail < 1024 ? round( $MiBavail, 2 ).' MiB' : round(
 		<i class="close-root fa fa-times"></i>
 	</h1>
 	<p class="bl"></p>
-	<?=$htmlused.$htmlavail ?>&nbsp;
+	<?=$htmlused.$htmlavail.$htmlunpart ?>&nbsp;
 	<p id="disktext" class="disk"><?=$htmlfree?></p>
-	</a>
 <?php
 // ------------------------------------------------------------------------------------
 $list = '';
@@ -61,10 +70,10 @@ $updatecount = 0;
 $arrayalias = array_keys( $addons );
 foreach( $arrayalias as $alias ) {
 	$addon = $addons[ $alias ];
-	$versioninstalled = trim( file_get_contents( "$dirsettings/addons/$alias" ) );
+	$versioninstalled = file_exists( "$dirsettings/addons/$alias" ) ? trim( file_get_contents( "$dirsettings/addons/$alias" ) ) : 1;
 	$update = 0;
 	// hide by conditions
-	if ( $addon[ 'hide' ] ) continue;
+	if ( isset( $addon[ 'hide' ] ) ) continue;
 	
 	if ( isset( $addon[ 'buttonlabel' ] ) ) {
 		$buttonlabel = $addon[ 'buttonlabel' ];
@@ -110,30 +119,26 @@ foreach( $arrayalias as $alias ) {
 			$dependaddon = file_exists( "$dirsettings/$depend" );
 			if ( !$dependaddon ) $attrdepend = ' depend="'.preg_replace( '/ *\**$/', '', $addons[ $depend ][ 'title' ] ).'"';
 		}
-		$btnin = '<a class="btn btn-primary" alias="'.$alias.'"'.$btninclass.$attrspace.$attrconflict.$attrdepend.'>'.$buttonlabel.'</a>';
+		$btnin = '<a class="btn btn-primary" alias="'.$alias.'"'.$attrspace.$attrconflict.$attrdepend.'>'.$buttonlabel.'</a>';
 		$btnun = '<a class="btn btn-default disabled"><i class="fa fa-minus-circle"></i>Uninstall</a>';
 	}
 	
 	// addon list ---------------------------------------------------------------
 	$title = $addon[ 'title' ];
-	if ( substr( $title, -1 ) === '*' ) {
-		$last = array_pop( explode( ' ', $title ) );
-		$listtitle = preg_replace( '/\**$/', '', $title );
-		$star = '&nbsp;<a>'.str_replace( '*', '★', $last ).'</a>';
-	} else {
-		$listtitle = $title;
-		$star = '';
-	}
-	if ( $update ) $listtitle = '<blue>'.$listtitle.'</blue>';
-	$list.= '<li alias="'.$alias.'" title="Go to this addon">'.$check.$listtitle.$star.'</li>';
+	if ( $update ) $title = '<blue>'.$title.'</blue>';
+	$list.= '<li alias="'.$alias.'" title="Go to this addon">'.$check.$title.'</li>';
 	// addon blocks -------------------------------------------------------------
 	$version = isset( $addon[ 'version' ] ) ? $addon[ 'version' ] : '';
 	$revisionclass = $version ? 'revision' : 'revisionnone';
-	$revision = str_replace( '\\', '', $addon[ 'revision' ] ); // remove escaped [ \" ] to [ " ]
-	$revision = '<li>'.str_replace( '<br>', '</li><li>', $revision ).'</li>';
+	if ( isset( $addon[ 'revision' ] ) ) {
+		$revision = str_replace( '\\', '', $addon[ 'revision' ] ); // remove escaped [ \" ] to [ " ]
+		$revision = '<ul class="detailtext" style="display: none;"><li>'.str_replace( '<br>', '</li><li>', $revision ).'</li></ul>';
+	} else {
+		$revision = '';
+	}
 	$description = str_replace( '\\', '', $addon[ 'description' ] );
 	$sourcecode = $addon[ 'sourcecode' ];
-	if ( $sourcecode && $addon[ 'buttonlabel' ] !== 'Link' ) {
+	if ( $sourcecode && ( isset( $addon[ 'buttonlabel' ] ) && $addon[ 'buttonlabel' ] !== 'Link' ) ) {
 		$detail = '<br><a href="'.$sourcecode.'" target="_blank" class="source">source <i class="fa fa-github"></i></a>';
 	} else {
 		$detail = '';
@@ -149,9 +154,7 @@ foreach( $arrayalias as $alias ) {
 				&emsp;<p><a class="'.$revisionclass.'">'.$version.( $version ? '&ensp;<i class="fa fa-chevron-down"></i>' : '' ).'</a>
 				</p><i class="fa fa-arrow-up"></i>
 			</legend>
-			<ul class="detailtext" style="display: none;">'
-				.$revision.'
-			</ul>
+			'.$revision.'
 			<form class="form-horizontal" alias="'.$alias.'">
 				<p class="detailtext">'.$description.$detail.'</p>';
 	if ( $alias !== 'addo' ) $blocks .= $version ? $btnin.' &nbsp; '.$btnun : $btnin;
@@ -167,7 +170,7 @@ foreach( $arrayalias as $alias ) {
 if ( $updatecount ) {
 	file_put_contents( "$dirsettings/addons/update", $updatecount );
 } else {
-	unlink( "$dirsettings/addons/update" );
+	@unlink( "$dirsettings/addons/update" );
 }
 
 // ------------------------------------------------------------------------------------
