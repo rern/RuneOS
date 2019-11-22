@@ -63,7 +63,6 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			RAM<br>
 			Time<br>
 			Up time<br>
-			Since<br>
 			CPU Load<br>
 			CPU Temperature
 		</div>
@@ -75,8 +74,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<?=$cpu?><br>
 			<?=$memory?><br>
 			<span id="date"><?=$data->date?></span><gr>&emsp;@ </gr><?=$zonestring?><br>
-			<span id="uptime"><?=$data->uptime?></span><br>
-			<?=$data->since?><br>
+			<span id="uptime"><?=( preg_replace( '/our.|inute./', '', $data->uptime ) )?></span> <gr>since <?=$data->since?></gr><br>
 			<span id="cpuload"><?=$data->cpuload?></span>%<br>
 			<span id="cputemp"><?=( round( $data->cputemp / 1000 ) )?></span>°C
 			<span class="<?=( $data->undervoltage ? '' : 'hide' )?>"><br><span id="undervoltage"><?=$data->undervoltage?></span> <a class="red">Under-voltage detected</a></span>
