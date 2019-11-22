@@ -73,10 +73,10 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<?=$data->hardware?><br>
 			<?=$cpu?><br>
 			<?=$memory?><br>
-			<?=$data->date?><gr>&emsp;@ </gr><?=$zonestring?><br>
-			<?=$data->uptime?><br>
+			<span id="date"><?=$data->date?></span><gr>&emsp;@ </gr><?=$zonestring?><br>
+			<span id="uptime"><?=$data->uptime?></span><br>
 			<?=$data->since?><br>
-			<?=( round( $data->cputemp / 1000 ) )?>°C
+			<span id="cputemp"><?=( round( $data->cputemp / 1000 ) )?></span>°C
 			<?=$undervoltage?>
 		</div>
 	<heading>Environment</heading>

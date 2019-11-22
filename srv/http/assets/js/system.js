@@ -670,6 +670,17 @@ $( '#infoContent' ).on( 'click', '.infocheckbox label', function() {
 		$( '#'+ $this.data( 'service' ) +'data' ).toggle( $this.find( 'input' ).prop( 'checked' ) ) 
 	}, 50 );
 } );
+setInterval( function() {
+	$.post( 'commands.php', { bash:[
+		  "date +'%F<gr> &bull; </gr>%R'"
+		, "uptime -p | cut -d' ' -f2- | tr -d ','"
+		, 'cat /sys/class/thermal/thermal_zone0/temp'
+	] }, function( data ) {
+		$( '#date' ).html( data[ 0 ] );
+		$( '#uptime' ).text( data[ 1 ] );
+		$( '#cputemp' ).text( Math.round( data[ 2 ] / 1000 ) );
+	}, 'json' );
+}, 10000 );
 
 function getCheck( $this ) {
 	var O = {};
