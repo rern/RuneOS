@@ -13,6 +13,7 @@ data+=',"airplay":"'$( systemctl -q is-active shairport-sync && echo checked )'"
 data+=',"audiooutput":"'$( < /srv/http/data/system/audiooutput )'"'
 data+=',"avahi":"'$( systemctl -q is-active avahi-daemon && echo checked )'"'
 data+=',"bluetooth":"'$bluetooth'"'
+data+=',"cpuload":"'$( top -b | head -3 | tail -1 | awk '{print $2}' )'"'
 data+=',"cputemp":"'$( < /sys/class/thermal/thermal_zone0/temp )'"'
 data+=',"cursor":"'$( grep -q 'cursor yes' $xinitrc && echo 1 || echo 0 )'"'
 data+=',"date":"'$( date +'%F<gr> &bull; </gr>%R' )'"'

@@ -674,11 +674,14 @@ setInterval( function() {
 	$.post( 'commands.php', { bash:[
 		  "date +'%F<gr> &bull; </gr>%R'"
 		, "uptime -p | cut -d' ' -f2- | tr -d ','"
+		, "top -b | head -3 | tail -1 | awk '{print $2}'"
 		, 'cat /sys/class/thermal/thermal_zone0/temp'
 	] }, function( data ) {
 		$( '#date' ).html( data[ 0 ] );
 		$( '#uptime' ).text( data[ 1 ] );
-		$( '#cputemp' ).text( Math.round( data[ 2 ] / 1000 ) );
+		$( '#cpuload' ).text( data[ 2 ] );
+		$( '#cputemp' ).text( Math.round( data[ 3 ] / 1000 ) );
+		
 	}, 'json' );
 }, 10000 );
 
