@@ -67,17 +67,18 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			CPU Temperature
 		</div>
 		<div class="col-r text">
-			<i class="fa fa-addons gr"></i> <?=$data->version?><br>
+			<i class="fa fa-addons gr" style="line-height: 20px;"></i> <?=$data->version?><br>
 			<?=$data->ip?><br>
 			<?=$data->kernel?><br>
 			<?=$data->hardware?><br>
 			<?=$cpu?><br>
 			<?=$memory?><br>
 			<span id="date"><?=$data->date?></span><gr>&emsp;@ </gr><?=$zonestring?><br>
-			<span id="uptime"><?=( preg_replace( '/our.|inute./', '', $data->uptime ) )?></span> <gr>since <?=$data->since?></gr><br>
-			<span id="cpuload"><?=$data->cpuload?></span>%<br>
+			<span id="uptime"><?=$data->uptime?></span> <gr>since <?=$data->since?></gr><br>
+			<span id="cpuload"><?=( $data->cpuload * 100 )?></span>%<br>
 			<span id="cputemp"><?=( round( $data->cputemp / 1000 ) )?></span>°C
 			<span class="<?=( $data->undervoltage ? '' : 'hide' )?>"><br><span id="undervoltage"><?=$data->undervoltage?></span> <a class="red">Under-voltage detected</a></span>
+			<span class="help-block hide"><gr>(Refresh browser to get current status.)</gr></span>
 		</div>
 	<heading>Environment</heading>
 		<div class="col-l">Player name</div>
