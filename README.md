@@ -1,7 +1,6 @@
 RuneOS - DIY RuneAudio+R e
 ---
-- For all **Raspberry Pi**: Zero, 1, 2, 3 and 4
-	- 3B+: not yet tested but should work
+- For all **Raspberry Pi**: Zero, 1, 2, 3 and 4 (3B+: not yet tested but should work)
 - Create **RuneAudio+R e** from [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads) latest releases.
 - Interactive interface with [**Dialog**](https://invisible-island.net/dialog/)
 - Options:
