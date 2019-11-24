@@ -285,10 +285,9 @@ fi
 rpiip=$( dialog --colors --output-fd 1 --cancel-label Rescan --inputbox '\n\Z1Raspberry Pi IP:\Z0' 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
-clear
-
 ssh-keygen -R $rpiip &> /dev/null
 #ssh alarm@$rpiip
 sshpass -f <( printf '%s\n' root ) ssh root@$rpiip
 
+clear
 [[ $? == 0 ]] && rm $0
