@@ -6,6 +6,7 @@ if [[ -e /usr/bin/pacman ]]; then
 	[[ ! -e /usr/bin/dialog ]] && packages+='dialog '
 	[[ ! -e /usr/bin/nmap ]] && packages+='nmap '
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
+	[[ ! -e /usr/bin/sshpass ]] && packages+='sshpass '
 	if [[ -n $packages ]]; then
 		#pacman-mirrors -f5 && sudo pacman -Syyu
 		pacman -Sy --noconfirm --needed $packages
@@ -15,6 +16,7 @@ else
 	[[ ! -e /usr/bin/dialog ]] && packages+='dialog '
 	[[ ! -e /usr/bin/nmap ]] && packages+='nmap '
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
+	[[ ! -e /usr/bin/sshpass ]] && packages+='sshpass '
 	[[ -n $packages ]] && apt install -y $packages
 fi
 
