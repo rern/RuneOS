@@ -13,7 +13,7 @@ if [[ -e /usr/bin/pacman ]]; then
 		pacman -S --noconfirm --needed $packages
 	fi
 else
-	[[ ! -e /usr/bin/bsdtar ]] && packages+='bsdtar '
+	[[ ! -e /usr/bin/bsdtar ]] && packages+='bsdtar libarchive-tools '
 	[[ ! -e /usr/bin/dialog ]] && packages+='dialog '
 	[[ ! -e /usr/bin/nmap ]] && packages+='nmap '
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
