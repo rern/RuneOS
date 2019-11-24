@@ -51,7 +51,7 @@ for line in "${lines[@]}"; do
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
-		if [[ $aplayname == $dirsystem/sysname ]]; then
+		if [[ $aplayname == $( cat $dirsystem/sysname ) ]]; then
 			name=$audiooutput
 			[[ -n $routecmd ]] && eval ${routecmd/\*CARDID\*/$card}
 		else

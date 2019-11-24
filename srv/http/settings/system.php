@@ -1,24 +1,30 @@
 <?php
 $data = json_decode( shell_exec( '/srv/http/settings/system-data.sh' ) );
 $hardwarecode = $data->hardwarecode;
+switch( substr( $hardwarecode, -4, 1 ) ) {
+	case '0': $soc = 'BCM2835'; break;
+	case '1': $soc = 'BCM2836'; break;
+	case '2': $soc = 'BCM2837'; break;
+	case '3': $soc = 'BCM2711';
+}
 switch( substr( $hardwarecode, -3, 2 ) ) {
 	case '00':
 	case '01':
 	case '02':
-	case '03': $cpu = '700 MHz';     break;
-	case '04': $cpu = '4 @ 900 MHz'; break;
+	case '03': $cpu = '700MHz';     break;
+	case '04': $cpu = '4 @ 900MHz'; break;
 	case '09':
-	case '0c': $cpu = '4 @ 1 GHz';   break;
-	case '08': $cpu = '4 @ 1.2 GHz'; break;
+	case '0c': $cpu = '1GHz';       break;
+	case '08': $cpu = '4 @ 1.2GHz'; break;
 	case '0e':
-	case '0d': $cpu = '4 @ 1.4 GHz'; break;
-	case '11': $cpu = '4 @ 1.5 GHz';
+	case '0d': $cpu = '4 @ 1.4GHz'; $soc.='B0'; break;
+	case '11': $cpu = '4 @ 1.5GHz';
 }
 switch( substr( $hardwarecode, -6, 1 ) ) {
-	case '9': $memory = '512 KB'; break;
-	case 'a': $memory = '1 GB';   break;
-	case 'b': $memory = '2 GB';   break;
-	case 'c': $memory = '4 GB';
+	case '9': $memory = '512KB'; break;
+	case 'a': $memory = '1GB';   break;
+	case 'b': $memory = '2GB';   break;
+	case 'c': $memory = '4GB';
 }
 $rpiwireless = in_array( $hardwarecode, [ '0c', '08', '0e', '0d', '11' ] ); // rpi zero w, rpi3, rpi4
 $undervoltage = $data->undervoltage ? '<span id="undervoltage"><br>'.$data->undervoltage.' <a class="red">Under-voltage detected</a></span>' : '';
@@ -47,48 +53,44 @@ $selecttimezone.= '</select>';
 include '/srv/http/settings/system-i2smodules.php';
 $optioni2smodule = '';
 foreach( $i2slist as $name => $sysname ) {
-	$selected = ( $name === $data->audiooutput && $sysname === $data->i2ssysname ) ? ' selected' : '';
+	$selected = ( $name === $data->audiooutput && $sysname === $data->sysname ) ? ' selected' : '';
 	$optioni2smodule.= "<option value=\"$sysname\"$selected>$name</option>";
 }
 if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
+include 'logosvg.php';
 ?>
+<div id="loader"><svg viewBox="0 0 480.2 144.2"><?=$logo?></svg></div>
 <div class="container">
 	<heading>System Status</heading>
 		<div class="col-l text gr">
 			RuneAudio<br>
-			IP address<br>
 			Kernel<br>
 			Hardware<br>
-			CPU<br>
-			RAM<br>
+			SoC<br>
 			Root partition<br>
 			Time<br>
 			Up time<br>
-			CPU Load<br>
-			CPU Temperature
+			IP address<br>
+			CPU Load
 		</div>
 		<div class="col-r text">
 			<i class="fa fa-addons gr" style="line-height: 20px;"></i> <?=$data->version?><br>
-			<?=$data->ip?><br>
 			<?=$data->kernel?><br>
 			<?=$data->hardware?><br>
-			<?=$cpu?><br>
-			<?=$memory?><br>
+			<?=$soc.'<gr> &bull; </gr>'.$cpu.'<gr> &bull; </gr>'.$memory?><br>
 			<?=$data->rootfs?><br>
-			<span id="date"><?=$data->date?></span><gr>&emsp;@ </gr><?=$zonestring?><br>
-			<span id="uptime"><?=$data->uptime?></span> <gr>since <?=$data->since?></gr><br>
-			<span id="cpuload"><?=( $data->cpuload * 100 )?></span>%<br>
-			<span id="cputemp"><?=( round( $data->cputemp / 1000 ) )?></span>°C
+			<?=$data->date?><gr> @ </gr><?=$zonestring?><br>
+			<?=$data->uptime?> <gr>since <?=$data->since?></gr><br>
+			<?=$data->ip?><br>
+			<?=( $data->cpuload * 100 )?>%<gr> &bull; </gr><?=( round( $data->cputemp / 1000 ) )?>°C
 			<span class="<?=( $data->undervoltage ? '' : 'hide' )?>"><br><span id="undervoltage"><?=$data->undervoltage?></span> <a class="red">Under-voltage detected</a></span>
-			<span class="help-block hide"><gr>(Refresh browser to get current status.)</gr></span>
+			<span class="help-block hide"><gr>(Refresh browser to update current status.)</gr></span>
 		</div>
 	<heading>Environment</heading>
 		<div class="col-l">Player name</div>
 		<div class="col-r">
 			<input type="text" id="hostname" value="<?=$data->hostname?>" readonly style="cursor: pointer">
-			<span class="help-block hide">Set the player hostname. This will change the address used to reach RuneAudio.
-				<br>RuneAudio web interface, Local access point, AirPlay, Samba and UPnP/upnp will broadcast this name when enabled.
-				<br>(No spaces or special charecters allowed in the name.)</span>
+			<span class="help-block hide">Name broadcasted by RPi access point, AirPlay, Samba and UPnP.</span>
 		</div>
 		<div class="col-l">Timezone</div>
 		<div class="col-r">
@@ -98,11 +100,11 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 	<heading>Audio</heading>
 		<div class="col-l">I&#178;S Module</div>
 		<div class="col-r i2s">
-			<div id="divi2smodulesw"<?=( $data->i2ssysname ? ' class="hide"' : '' )?>>
+			<div id="divi2smodulesw"<?=( $data->sysname ? ' class="hide"' : '' )?>>
 				<input id="i2smodulesw" type="checkbox">
 				<div class="switchlabel" for="i2smodulesw"></div>
 			</div>
-			<div id="divi2smodule"<?=( $data->i2ssysname ? '' : ' class="hide"' )?>>
+			<div id="divi2smodule"<?=( $data->sysname ? '' : ' class="hide"' )?>>
 				<select id="i2smodule" data-style="btn-default btn-lg">
 					<?=$optioni2smodule?>
 				</select>
@@ -114,12 +116,12 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<input id="soundprofile" type="checkbox" value="<?=$data->soundprofile?>"<?=( $data->soundprofile === 'default' ? '' : ' checked' )?>>
 			<div class="switchlabel" for="soundprofile"></div>
 			<i id="setting-soundprofile" class="setting fa fa-gear<?=( $data->soundprofile === 'default' ? ' hide' : '' )?>"></i>
-			<span class="help-block hide">System kernel parameters tweak: eth0 mtu, eth0 txqueuelen, swappiness and sched_latency_ns.</span>
+			<span class="help-block hide">System kernel parameters tweak: <code>eth0 mtu</code> <code>eth0 txqueuelen</code> <code>swappiness</code> <code>sched_latency_ns</code></span>
 		</div>
-<?php if ( $rpiwireless || $data->i2ssysname ) { ?>
+<?php if ( $rpiwireless || $data->sysname ) { ?>
 	<heading>On-board devices</heading>
 <?php } ?>
-		<div id="divonboardaudio"<?=( $data->i2ssysname ? '' : ' class="hide"' )?>>
+		<div id="divonboardaudio"<?=( $data->sysname ? '' : ' class="hide"' )?>>
 			<div class="col-l">Audio</div>
 			<div class="col-r">
 				<input id="onboardaudio" type="checkbox" <?=$data->onboardaudio?>>
@@ -152,7 +154,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 		<div class="col-r">
 			<input id="airplay" type="checkbox" <?=$data->airplay?>>
 			<div class="switchlabel" for="airplay"></div>
-			<span class="help-block hide"><wh>Shairport Sync</wh> - Receive audio streaming via AirPlay protocol.</span>
+			<span class="help-block hide"><code>Shairport Sync</code> - Receive audio streaming via AirPlay protocol.</span>
 		</div>
 <?php } 
 	  if ( file_exists( '/usr/bin/chromium' ) ) { ?>
@@ -161,7 +163,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<input id="localbrowser" type="checkbox" data-cursor="<?=$data->cursor?>" data-overscan="<?=$data->overscan?>" data-rotate="<?=$data->rotate?>" data-screenoff="<?=$data->screenoff?>" data-zoom="<?=$data->zoom?>" <?=$data->localbrowser?>>
 			<div class="switchlabel" for="localbrowser"></div>
 			<i id="setting-localbrowser" class="setting fa fa-gear <?=( $data->localbrowser === 'checked' ? '' : 'hide' )?>"></i>
-			<span class="help-block hide"><wh>Chromium</wh> - Browser on RPi connected screen. Overscan change needs a reboot.</span>
+			<span class="help-block hide"><code>Chromium</code> - Browser on RPi connected screen. (Overscan change needs reboot.)</span>
 		</div>
 <?php } 
 	  if ( file_exists( '/usr/bin/smbd' ) ) { ?>
@@ -170,7 +172,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<input id="samba" type="checkbox" data-usb="<?=$data->readonlyusb?>" data-sd="<?=$data->readonlysd?>" <?=$data->samba?>>
 			<div class="switchlabel" for="samba"></div>
 			<i id="setting-samba" class="setting fa fa-gear <?=( $data->samba === 'checked' ? '' : 'hide' )?>"></i>
-			<span class="help-block hide"><wh>Samba</wh> - Share your files in USB drives and SD card on your network.</span>
+			<span class="help-block hide"><code>Samba</code> - Share files on RuneAudio.</span>
 		</div>
 <?php } ?>
 		<div class="col-l gr">Password login<i class="fa fa-lock fa-lg wh"></i></div>
@@ -178,7 +180,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<input id="password" type="checkbox"<?=( password_verify( 'rune', $data->password ) ? ' data-default="1"' : '' )?> <?=$data->login?>>
 			<div class="switchlabel" for="password"></div>
 			<i id="setting-password" class="setting fa fa-gear <?=( $data->login ? '' : 'hide' )?>"></i>
-			<span class="help-block hide">Protect the UI with a password. (Default is "rune")</span>
+			<span class="help-block hide">Browser interface login. (Default: <code>rune</code>)</span>
 		</div>
 <?php if ( file_exists( '/usr/bin/upmpdcli' ) ) { ?>
 		<div class="col-l gr">UPnP<i class="fa fa-upnp fa-lg wh"></i></div>
@@ -199,7 +201,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 			<?=$data->upnp?>>
 			<div class="switchlabel" for="upnp"></div>
 			<i id="setting-upnp" class="setting fa fa-gear <?=( $data->upnp === 'checked' ? '' : 'hide' )?>"></i>
-			<span class="help-block hide"><wh>upmpdcli</wh> - Receive audio streaming via UPnP / DLNA.</span>
+			<span class="help-block hide"><code>upmpdcli</code> - Receive audio streaming via UPnP / DLNA.</span>
 		</div>
 <?php } ?>
 <?php if ( file_exists( '/usr/bin/avahi-daemon' ) ) { ?>
@@ -207,8 +209,7 @@ if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 		<div class="col-r">
 			<input id="avahi" type="checkbox"<?=$data->avahi?>>
 			<div class="switchlabel" for="avahi"></div>
-			<span class="help-block hide"><wh>Avahi</wh> - Connect URL by name(e.g., runeaudio.local) from remote browsers.
-				<br>Should be disabled if not used.</span>
+			<span class="help-block hide"><code>Avahi</code> - Connect URL by player name (e.g., <code>runeaudio.local</code>) from remote browsers.</span>
 		</div>
 <?php } ?>
 	<div style="clear: both"></div>

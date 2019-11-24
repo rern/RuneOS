@@ -1,6 +1,6 @@
 <?php
 $audiooutput = trim( @file_get_contents( '/srv/http/data/system/audiooutput' ) );
-$i2ssysname = trim( @file_get_contents( '/srv/http/data/system/i2ssysname' ) );
+$sysname = trim( @file_get_contents( '/srv/http/data/system/sysname' ) );
 $usbdac = trim( @file_get_contents( '/srv/http/data/system/usbdac' ) );
 $dop = file_exists( '/srv/http/data/system/dop' ) ? 'checked' : '';
 $autoplay = file_exists( '/srv/http/data/system/autoplay' ) ? 'checked' : '';
@@ -12,13 +12,18 @@ if ( $hardwarecode === '09' || $hardwarecode === '0c' ) $outputs = array_diff( $
 $htmlacards = '';
 foreach( $outputs as $output ) {
 	$index = strpos( $output, '_' ) ? preg_replace( '/^.*_/', '', $output ) : 0;
-	$extlabel = exec( "$sudo/grep extlabel \"/srv/http/settings/i2s/$output\" | cut -d: -f2" ) ?: $output;
 	$routecmd = exec( "$sudo/grep route_cmd \"/srv/http/settings/i2s/$output\" | cut -d: -f2" );
 	$dataroutecmd = $routecmd ? ' data-routecmd="'.$routecmd.'"' : '';
 	if ( $usbdac ) {
 		$selected = $output === $usbdac ? ' selected' : '';
 	} else {
-		$selected = $output === $audiooutput || $output === $i2ssysname ? ' selected' : '';
+		if ( $output === $audiooutput || $output === $sysname ) {
+			$selected = ' selected';
+			$extlabel = $audiooutput;
+		} else {
+			$selected = '';
+			$extlabel = exec( "$sudo/grep extlabel \"/srv/http/settings/i2s/$output\" | cut -d: -f2" ) ?: $output;
+		}
 	}
 	$htmlacards.= '<option value="'.$output.'" data-index="'.$index.'"'.$dataroutecmd.$selected.'>'.$extlabel.'</option>';
 }
