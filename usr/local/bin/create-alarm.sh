@@ -9,11 +9,10 @@ if [[ -e /usr/bin/pacman ]]; then
 	[[ ! -e /usr/bin/sshpass ]] && packages+='sshpass '
 	if [[ -n $packages ]]; then
 		pacman-mirrors -f5
-		pacman -Sy
-		pacman -S --noconfirm --needed $packages
+		pacman -Sy --noconfirm --needed $packages
 	fi
 else
-	[[ ! -e /usr/bin/bsdtar ]] && packages+='bsdtar '
+	[[ ! -e /usr/bin/bsdtar ]] && packages+='bsdtar libarchive-tools '
 	[[ ! -e /usr/bin/dialog ]] && packages+='dialog '
 	[[ ! -e /usr/bin/nmap ]] && packages+='nmap '
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
@@ -293,4 +292,4 @@ rpiip=$( dialog --colors --output-fd 1 --cancel-label Rescan --inputbox '\n\Z1Ra
 clear
 
 ssh-keygen -R $rpiip &> /dev/null
-sshpass -p root  ssh -o StrictHostKeyChecking=no root@$rpiip
+sshpass -p root ssh -o StrictHostKeyChecking=no root@$rpiip
