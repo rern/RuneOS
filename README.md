@@ -123,7 +123,7 @@ RuneOS - DIY RuneAudio+R e
 su
 
 # get script and run
-wget -qN https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
+wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
 ```
 - Errors or too slow download: press `Ctrl+C` and run `./create-alarm.sh` again
 - Follow instructions until PC to Raspberry Pi connection is up.
