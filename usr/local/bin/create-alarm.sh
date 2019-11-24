@@ -119,17 +119,24 @@ $wifi"
 }
 getData
 
+# if already downloaded, verify latest
+if [[ -e $file ]]; then
+	wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5
+	md5sum -c $file.md5 || rm $file
+fi
+
 # download
 ( wget -O $file http://os.archlinuxarm.org/os/$file 2>&1 | \
-    stdbuf -o0 awk '/[.] +[0-9][0-9]?[0-9]?%/ { \
-        print "XXX\n"substr($0,63,3)
-        print "\\n\\Z1Download Arch Linux Arm\\Z0\\n"
-        print "Time left: "substr($0,74,5)"\nXXX" }' ) | \
-    dialog --backtitle "$title" --colors --gauge "\nConnecting ..." 9 50
+	stdbuf -o0 awk '/[.] +[0-9][0-9]?[0-9]?%/ { \
+		print "XXX\n"substr($0,63,3)
+		print "\\n\\Z1Download Arch Linux Arm\\Z0\\n"
+		print "Time left: "substr($0,74,5)"\nXXX" }' ) | \
+	dialog --backtitle "$title" --colors --gauge "\nConnecting ..." 9 50
 
 # checksum
 wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5
 if ! md5sum -c $file.md5; then
+	rm $file
     msgbox '\Z1Download incomplete!\Z0\n\n
 Run \Z1./create-alarm.sh\Z0 again.\n\n'
     exit
@@ -283,5 +290,3 @@ clear
 
 ssh-keygen -R $rpiip &> /dev/null
 sshpass -p root  ssh -o StrictHostKeyChecking=no root@$rpiip
-
-[[ $? == 0 ]] && rm -f create-alarm.sh ArchLinuxARM*
