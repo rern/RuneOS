@@ -100,11 +100,11 @@ include 'logosvg.php';
 	<heading>Audio</heading>
 		<div class="col-l">I&#178;S Module</div>
 		<div class="col-r i2s">
-			<div id="divi2smodulesw"<?=( $data->sysname ? ' class="hide"' : '' )?>>
+			<div id="divi2smodulesw"<?=( $data->i2sdisabled ? '' : ' class="hide"' )?>>
 				<input id="i2smodulesw" type="checkbox">
 				<div class="switchlabel" for="i2smodulesw"></div>
 			</div>
-			<div id="divi2smodule"<?=( $data->sysname ? '' : ' class="hide"' )?>>
+			<div id="divi2smodule"<?=( $data->i2sdisabled ? ' class="hide"' : '' )?>>
 				<select id="i2smodule" data-style="btn-default btn-lg">
 					<?=$optioni2smodule?>
 				</select>
