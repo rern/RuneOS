@@ -127,15 +127,10 @@ wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin
 ```
 - Errors or too slow download: press `Ctrl+C` and run `./create-alarm.sh` again
 - Follow instructions until PC to Raspberry Pi connection is up.
-- At connecting propmt: confirm `yes` and password `alarm`
 ---
 
 ### Create RuneAudio+Re
 ```sh
-# switch user to root
-su
-# password: root
-
 # run script
 create-rune.sh
 ```
