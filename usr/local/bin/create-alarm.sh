@@ -8,8 +8,8 @@ if [[ -e /usr/bin/pacman ]]; then
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
 	[[ ! -e /usr/bin/sshpass ]] && packages+='sshpass '
 	if [[ -n $packages ]]; then
-		#pacman-mirrors -f5 && sudo pacman -Syyu
-		pacman -Sy --noconfirm --needed $packages
+		pacman-mirrors -f5 && sudo pacman -Syyu
+		pacman -S --noconfirm --needed $packages
 	fi
 else
 	[[ ! -e /usr/bin/bsdtar ]] && packages+='bsdtar '
