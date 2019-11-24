@@ -6,8 +6,9 @@ $addons = [
 
 'rare' => [
 	'title'       => 'RuneAudio+R e2',
-	'version'     => '20191117',
-	'revision'    => 'Fix - bugs'
+	'version'     => '20191122',
+	'revision'    => 'Improve NAS mount'
+					.'<br>Improve system status'
 					.'<br>...'
 					.'<br>Fix - Addons bugs'
 					.'<br>Fix - SD card bug'
