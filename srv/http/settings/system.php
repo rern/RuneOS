@@ -43,18 +43,23 @@ $selecttimezone.= '</select>';
 
 // set value
 //   - append '/boot/config.txt' with 'dtoverlay' file names in '/boot/overlays/*'
-//   - set value to /srv/http/data/system/audiooutput
+//   - set name to /srv/http/data/system/audiooutput
+//   - set value to /srv/http/data/system/sysname
 //   - disable on-board audio in '/boot/config.txt'
 //   - reboot
 //   - '/srv/http/settings/mpd-conf.sh' - parse sysnames with 'aplay -l' and populate to '/etc/mpd.conf'
 //
 //   - MPD setting page - get names from '/srv/http/settings/i2s/*' or 'mpc outputs'
-//   - set selected to audiooutput value
+//   - set selected to audiooutput / sysname
 include '/srv/http/settings/system-i2smodules.php';
 $optioni2smodule = '';
 foreach( $i2slist as $name => $sysname ) {
-	$selected = ( $name === $data->audiooutput && $sysname === $data->sysname ) ? ' selected' : '';
-	$optioni2smodule.= "<option value=\"$sysname\"$selected>$name</option>";
+	if ( $name === $data->audiooutput && $sysname === $data->sysname ) {
+		$i2sselected = ' selected';
+	} else {
+		$i2sselected = '';
+	}
+	$optioni2smodule.= "<option value=\"$sysname\"$i2sselected>$name</option>";
 }
 if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
 include 'logosvg.php';
@@ -100,11 +105,11 @@ include 'logosvg.php';
 	<heading>Audio</heading>
 		<div class="col-l">I&#178;S Module</div>
 		<div class="col-r i2s">
-			<div id="divi2smodulesw"<?=( $data->i2sdisabled ? '' : ' class="hide"' )?>>
+			<div id="divi2smodulesw"<?=( $i2sselected ? ' class="hide"' : '' )?>>
 				<input id="i2smodulesw" type="checkbox">
 				<div class="switchlabel" for="i2smodulesw"></div>
 			</div>
-			<div id="divi2smodule"<?=( $data->i2sdisabled ? ' class="hide"' : '' )?>>
+			<div id="divi2smodule"<?=( $i2sselected ? '' : ' class="hide"' )?>>
 				<select id="i2smodule" data-style="btn-default btn-lg">
 					<?=$optioni2smodule?>
 				</select>
