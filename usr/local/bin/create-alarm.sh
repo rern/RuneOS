@@ -279,8 +279,9 @@ fi
 rpiip=$( dialog --colors --output-fd 1 --cancel-label Rescan --inputbox '\n\Z1Raspberry Pi IP:\Z0' 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
+clear
+
 ssh-keygen -R $rpiip &> /dev/null
 sshpass -p root  ssh -o StrictHostKeyChecking=no root@$rpiip
 
-clear
 [[ $? == 0 ]] && rm -f create-alarm.sh ArchLinuxARM*
