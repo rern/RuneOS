@@ -207,6 +207,9 @@ Key=$password
 	cd "$pwd"
 fi
 
+# ssh - permit root
+sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+
 # get create-rune.sh
 wget -qN https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
 chmod 744 $ROOT/usr/local/bin/create-rune.sh
