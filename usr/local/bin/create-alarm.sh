@@ -288,6 +288,7 @@ rpiip=$( dialog --colors --output-fd 1 --cancel-label Rescan --inputbox '\n\Z1Ra
 clear
 
 ssh-keygen -R $rpiip &> /dev/null
-ssh alarm@$rpiip
+#ssh alarm@$rpiip
+sshpass -f <( printf '%s\n' root ) ssh root@$rpiip
 
 [[ $? == 0 ]] && rm $0
