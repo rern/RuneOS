@@ -217,8 +217,6 @@ msgbox "
                created successfully.
 " 8 58
 
-rm $0
-
 #----------------------------------------------------------------------------
 umount -l $BOOT
 umount -l $ROOT
