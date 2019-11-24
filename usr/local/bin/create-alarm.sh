@@ -280,8 +280,7 @@ rpiip=$( dialog --colors --output-fd 1 --cancel-label Rescan --inputbox '\n\Z1Ra
 [[ $? == 1 ]] && scanIP
 
 ssh-keygen -R $rpiip &> /dev/null
-#ssh alarm@$rpiip
-sshpass -f <( printf '%s\n' root ) ssh root@$rpiip
+sshpass -p root  ssh -o StrictHostKeyChecking=no root@$rpiip
 
 clear
 [[ $? == 0 ]] && rm -f create-alarm.sh ArchLinuxARM*
