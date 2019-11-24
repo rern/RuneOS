@@ -186,9 +186,6 @@ mv -f /etc/nginx/html/50x.html{.custom,}
 # password - set default
 echo root:rune | chpasswd
 
-# ssh - permit root
-sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-
 # user - set expire to none
 users=$( cut -d: -f1 /etc/passwd )
 for user in $users; do
