@@ -20,10 +20,6 @@ else
 	[[ -n $packages ]] && apt install -y $packages
 fi
 
-# remove on exit
-trap 'rm -f ArchLinuxARM*; clear; exit' INT
-trap 'rm -f ArchLinuxARM*; clear' EXIT
-
 #----------------------------------------------------------------------------
 infobox() {
 	[[ -z $2 ]] && w=0 || w=$2
@@ -124,7 +120,7 @@ $wifi"
 getData
 
 # download
-( wget http://os.archlinuxarm.org/os/$file 2>&1 | \
+( wget -O $file http://os.archlinuxarm.org/os/$file 2>&1 | \
     stdbuf -o0 awk '/[.] +[0-9][0-9]?[0-9]?%/ { \
         print "XXX\n"substr($0,63,3)
         print "\\n\\Z1Download Arch Linux Arm\\Z0\\n"
@@ -132,7 +128,7 @@ getData
     dialog --backtitle "$title" --colors --gauge "\nConnecting ..." 9 50
 
 # checksum
-wget -qN http://os.archlinuxarm.org/os/$file.md5
+wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5
 if ! md5sum -c $file.md5; then
     msgbox '\Z1Download incomplete!\Z0\n\n
 Run \Z1./create-alarm.sh\Z0 again.\n\n'
@@ -290,4 +286,4 @@ ssh-keygen -R $rpiip &> /dev/null
 sshpass -f <( printf '%s\n' root ) ssh root@$rpiip
 
 clear
-[[ $? == 0 ]] && rm $0
+[[ $? == 0 ]] && rm -f create-alarm.sh ArchLinuxARM*
