@@ -73,7 +73,7 @@ foreach( $arrayalias as $alias ) {
 	$versioninstalled = file_exists( "$dirsettings/addons/$alias" ) ? trim( file_get_contents( "$dirsettings/addons/$alias" ) ) : 1;
 	$update = 0;
 	// hide by conditions
-	if ( isset( $addon[ 'hide' ] ) ) continue;
+	if ( isset( $addon[ 'hide' ] ) && $addon[ 'hide' ] ) continue;
 	
 	if ( isset( $addon[ 'buttonlabel' ] ) ) {
 		$buttonlabel = $addon[ 'buttonlabel' ];
