@@ -1,5 +1,7 @@
 $( function() { // document ready start >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+$( '#loader' ).addClass( 'hide' );
+
 $( '#timezone, #i2smodule' ).selectric();
 
 var dirsystem = '/srv/http/data/system';

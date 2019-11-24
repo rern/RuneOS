@@ -214,12 +214,10 @@ $( '#sources' ).click( function( e ) {
 		} );
 		return
 	} else {
-		$( '#loader' ).removeClass( 'hide' );
 		location.href = 'index-settings.php?p=sources';
 	}
 } );
 $( '#system, #credits' ).click( function( e ) {
-	$( '#loader' ).removeClass( 'hide' );
 	location.href = 'index-settings.php?p='+ ( $( e.target ).prop( 'id' ) === 'credits' ? 'credits' : 'system' );
 } );
 var cmdpower = [
@@ -267,7 +265,6 @@ $( '#logout' ).click( function( e ) {
 	} );
 } );
 $( '#addons' ).click( function () {
-	$( '#loader' ).removeClass( 'hide' );
 	$.post( 'commands.php'
 		, { bash: 'wget -q --no-check-certificate https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -O /srv/http/addons-list.php' }
 		, function( exit ) {

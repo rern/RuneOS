@@ -26,6 +26,13 @@
 	font-weight: normal;
 	font-style: normal;
 }
+@font-face {
+	font-family: Inconsolata;
+	src: url('/assets/fonts/Inconsolata.woff') format('woff'),
+		url( '/assets/fonts/Inconsolata.ttf' ) format( 'truetype' );
+	font-weight: normal;
+	font-style: normal;
+}
 .fa {
 	display: inline-block;
 	font-family: enhance;
@@ -78,27 +85,32 @@
 .fa-wifi-1:before { content: "\f572" }
 .fa-wifi-2:before { content: "\f571" }
 .fa-wifi-3:before { content: "\f570" }
-.fa-spin {
-	display: inline-block;
-	margin-right: 10px;
-	-webkit-animation: fa-spin 2s infinite linear;
-	animation: fa-spin 2s infinite linear
+svg {
+	-webkit-filter: drop-shadow( 1px 1px 1px #000000 );
+	filter: drop-shadow( 1px 1px 1px #000000 );
 }
-@-webkit-keyframes fa-spin {
-	0% { -webkit-transform: rotate(0deg);
-		transform: rotate(0deg)
-	}
-	100% { -webkit-transform: rotate(359deg);
-		transform: rotate(359deg)
-	}
+svg path.st0 {
+	fill: hsl(200,100%,40%)/*c*/;
 }
-@keyframes fa-spin {
-	0% {  -webkit-transform: rotate(0deg);
-		transform: rotate(0deg)
-	}
-	100% { -webkit-transform: rotate(359deg);
-		transform: rotate(359deg)
-	}
+svg path.st1 {
+	fill: #e0e7ee;
+}
+#loader {
+	position: fixed;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	z-index: 99999;
+	background: #000000;
+}
+#loader svg {
+	margin-top: 40vh;
+	width: 250px;
+	animation: blinkopaque 1.5s linear infinite;
 }
 
 *,
@@ -257,10 +269,11 @@ hr {
 	cursor: pointer;
 }
 code {
-	font-family: 'Inconsolata', monospace;
-	font-size: 14px;
+	font-family: 'Inconsolata';
+	font-size: 16px;
 	color: #e0e7ee;
 	background-color: hsl(200,3%,30%)/*cg*/;
+	padding: 0 3px;
 	border-radius: 3px;
 }
 .bl {
