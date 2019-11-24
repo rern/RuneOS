@@ -241,7 +241,7 @@ routerip=$( ip route get 1 | cut -d' ' -f3 )
 subip=${routerip%.*}.
 scanIP() {
 	infobox "Scan IP address ..." 5 50
-	nmap=$( nmap -sP $subip* | grep -v 'Starting\|Host is up\|Nmap done' | head -n -1 | tac | sed 's/$/\\n/; s/Nmap.*for/IP  :/; s/MAC Address/\\nMAC/' | tr -d '\n' )
+	nmap=$( nmap -sn $subip* | grep -v 'Starting\|Host is up\|Nmap done' | head -n -1 | tac | sed 's/$/\\n/; s/Nmap.*for/IP  :/; s/MAC Address/\\nMAC/' | tr -d '\n' )
 	msgbox "\Z1Find IP address of Raspberry Pi:\Z0\n
 (Raspberri Pi 4 may listed as Unknown)\n
 \Z4[arrowdown] = scrolldown\Z0\n
