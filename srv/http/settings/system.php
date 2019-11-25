@@ -52,10 +52,12 @@ $selecttimezone.= '</select>';
 //   - MPD setting page - get names from '/srv/http/settings/i2s/*' or 'mpc outputs'
 //   - set selected to audiooutput / sysname
 include '/srv/http/settings/system-i2smodules.php';
+$i2senabled = 0;
 $optioni2smodule = '';
 foreach( $i2slist as $name => $sysname ) {
 	if ( $name === $data->audiooutput && $sysname === $data->sysname ) {
 		$i2sselected = ' selected';
+		$i2senabled = 1;
 	} else {
 		$i2sselected = '';
 	}
@@ -105,11 +107,11 @@ include 'logosvg.php';
 	<heading>Audio</heading>
 		<div class="col-l">I&#178;S Module</div>
 		<div class="col-r i2s">
-			<div id="divi2smodulesw"<?=( $i2sselected ? ' class="hide"' : '' )?>>
+			<div id="divi2smodulesw"<?=( $i2senabled ? ' class="hide"' : '' )?>>
 				<input id="i2smodulesw" type="checkbox">
 				<div class="switchlabel" for="i2smodulesw"></div>
 			</div>
-			<div id="divi2smodule"<?=( $i2sselected ? '' : ' class="hide"' )?>>
+			<div id="divi2smodule"<?=( $i2senabled ? '' : ' class="hide"' )?>>
 				<select id="i2smodule" data-style="btn-default btn-lg">
 					<?=$optioni2smodule?>
 				</select>
