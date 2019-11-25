@@ -125,8 +125,8 @@ $( '#i2smodule' ).on( 'selectric-change', function() {
 				+" -e 's/dtparam=audio=.*/dtparam=audio=on/'"
 				+' /boot/config.txt'
 			, "echo 'Disable I&#178;S Module' > "+ filereboot
-			, 'echo bcm2835 ALSA-1 > '+ dirsystem +'/audio-output'
-			, 'echo RaspberryPi Analog Out > '+ dirsystem +'/audio-aplayname'
+			, 'echo RaspberryPi Analog Out > '+ dirsystem +'/audio-output'
+			, 'echo bcm2835 ALSA-1 > '+ dirsystem +'/audio-aplayname'
 			, 'echo 1 > '+ dirsystem +'/onboard-audio'
 			, pstream( 'system' )
 		] }, resetlocal );
