@@ -14,15 +14,15 @@ if ( count( $outputs ) === 1 ) {
 	$htmlacards.= '<option value="'.$audioaplayname.'" data-index="0">'.$audiooutput.'</option>';
 } else {
 	foreach( $outputs as $output ) {
-		$index = preg_match( '/_[0-9]$/', $output ) ? substr( $output, -1 ) : 0;
+		$index = preg_match( '/-[0-9]$/', $output ) ? substr( $output, -1 ) : 0;
 		$routecmd = exec( "$sudo/grep route_cmd \"/srv/http/settings/i2s/$output\" | cut -d: -f2" );
 		$dataroutecmd = $routecmd ? ' data-routecmd="'.$routecmd.'"' : '';
 		if ( $usbdac ) {
 			$selected = $output === $usbdac ? ' selected' : '';
+			$extlabel = $output;
 		} else {
 			// underscore to dash: snd_rpi_rpi_dac > rpi-dac; snd_rpi_wsp_1 > wsp_1
 			$dtboname = preg_replace( [ '/snd_rpi_/', '/_/' ], [ '', '-' ], $output );
-//			if ( !is_numeric( substr( $dtboname, -1 ) ) ) $dtboname = str_replace( '_', '-', $output );
 			if ( $dtboname === $audioaplayname ) {
 				$selected = ' selected';
 				$extlabel = $audiooutput;
