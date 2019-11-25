@@ -87,7 +87,10 @@ echo "$mpdconf" > $file
 
 systemctl restart mpd mpdidle
 
-(( $# == 0 )) && exit
+if (( $# == 0 )); then
+	curl -s -X POST 'http://127.0.0.1/pub?id=page' -d '{ "p": "mpd" }'
+	exit
+fi
 
 usbdacfile=/srv/http/data/system/usbdac
 if [[ $1 == remove ]]; then
