@@ -43,6 +43,7 @@ $autoupdate = exec( "$sudo/grep 'auto_update' /etc/mpd.conf | cut -d'\"' -f2" );
 $buffer = exec( "$sudo/grep 'audio_buffer_size' /etc/mpd.conf | cut -d'\"' -f2" );
 if ( file_exists( '/usr/bin/ffmpeg' ) ) $ffmpeg = exec( "$sudo/sed -n '/ffmpeg/ {n;p}' /etc/mpd.conf | cut -d'\"' -f2" ) === 'yes' ? 'checked' : '';
 ?>
+<input id="usbdac" type="hidden" value="<?=$usbdac?>">
 <div class="container">
 	<heading>Audio Output</heading>
 		<div class="col-l control-label">Inferface</div>
