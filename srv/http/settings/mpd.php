@@ -20,7 +20,10 @@ if ( count( $outputs ) === 1 ) {
 		if ( $usbdac ) {
 			$selected = $output === $usbdac ? ' selected' : '';
 		} else {
-			if ( $output === 'snd_rpi_'.str_replace( '-', '_', $sysname ) ) {
+			// underscore to dash except last(index): snd_rpi_rpi_dac > rpi-dac; snd_rpi_wsp_1 > wsp_1
+			$dtboname = str_replace( 'snd_rpi_', '', $output );
+			if ( !is_numeric( substr( $dtboname, -1 ) ) ) $dtboname = str_replace( '_', '-', $output );
+			if ( $dtboname === $sysname ) {
 				$selected = ' selected';
 				$extlabel = $audiooutput;
 			} else {
@@ -40,7 +43,6 @@ $autoupdate = exec( "$sudo/grep 'auto_update' /etc/mpd.conf | cut -d'\"' -f2" );
 $buffer = exec( "$sudo/grep 'audio_buffer_size' /etc/mpd.conf | cut -d'\"' -f2" );
 if ( file_exists( '/usr/bin/ffmpeg' ) ) $ffmpeg = exec( "$sudo/sed -n '/ffmpeg/ {n;p}' /etc/mpd.conf | cut -d'\"' -f2" ) === 'yes' ? 'checked' : '';
 ?>
-<input id="usbdac" type="hidden" value="<?=$usbdac?>">
 <div class="container">
 	<heading>Audio Output</heading>
 		<div class="col-l control-label">Inferface</div>

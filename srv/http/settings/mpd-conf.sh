@@ -15,6 +15,7 @@ fi
 
 dirsystem=/srv/http/data/system
 audiooutput=$( cat $dirsystem/audiooutput )
+sysname=$( cat $dirsystem/sysname )
 
 model=$( cat /proc/cpuinfo | grep Revision | tail -c 4 | cut -c 1-2 )
 if [[ $model == 11 ]]; then  # RPi4
@@ -41,26 +42,23 @@ for line in "${lines[@]}"; do
 		done
 	fi
 	subdevice=${device: -1}
-	aplayname=$( echo $line | awk -F'[][]' '{print $2}' )
-	aplaynameL=$( echo "$aplay" | grep "$name" | wc -l )
-	[[ $aplaynameL -gt 1 || $aplayname == 'bcm2835 ALSA' ]] && aplayname="$aplayname"_$(( subdevice + 1 ))
+	# aplay -l > card 0: sndrpirpidac [snd_rpi_rpi_dac], device 0: RPi-DAC HiFi pcm1794a-codec-0 [RPi-DAC HiFi pcm1794a-codec-0]
+	# snd_rpi_rpi_dac > rpi-dac.dtbo
+	aplayname=$( echo $line | awk -F'[][]' '{print $2}' | sed 's/snd_rpi_//' | tr '_' '-' )
+	aplaynameL=$( echo "$aplay" | grep -c "$name" )
+	(( $aplaynameL > 1 )) && aplayname="$aplayname"_$(( subdevice + 1 ))
 	# name and output route command if any
 	mixer_control=
 	routecmd=
 	i2sfile="/srv/http/settings/i2s/$aplayname"
+	[[ $aplayname == $sysname ]] && name=$audiooutput
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
-		if [[ $aplayname == $( cat $dirsystem/sysname ) ]]; then
-			name=$audiooutput
-			[[ -n $routecmd ]] && eval ${routecmd/\*CARDID\*/$card}
-		else
-			name=$( grep extlabel "$i2sfile" | cut -d: -f2- )
-			[[ -z "$name" ]] && name=$aplayname
-		fi
-	else
-		name=$aplayname
+		[[ -n $routecmd ]] && eval ${routecmd/\*CARDID\*/$card}
+		[[ -z "$name" ]] && name=$( grep extlabel "$i2sfile" | cut -d: -f2- )
 	fi
+	[[ -z "$name" ]] && name=$aplayname
 	
 	mpdconf+='
 
@@ -93,12 +91,14 @@ echo "$mpdconf" > $file
 
 systemctl restart mpd mpdidle
 
+(( $# == 0 ) && exit
+
 usbdacfile=/srv/http/data/system/usbdac
 if [[ $1 == remove ]]; then
 	name=$audiooutput
 	rm -f $usbdacfile
-else
-	echo $name > $usbdacfile
+else if [[ $1 == add ]]; then
+	echo $aplayname > $usbdacfile
 fi
 
 # last one is new one
