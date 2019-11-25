@@ -43,21 +43,22 @@ $selecttimezone.= '</select>';
 
 // set value
 //   - append '/boot/config.txt' with 'dtoverlay' file names in '/boot/overlays/*'
-//   - set name to /srv/http/data/system/audiooutput
-//   - set value to /srv/http/data/system/sysname
+//   - set name to /srv/http/data/system/audio-output
+//   - set value to /srv/http/data/system/audio-aplayname
 //   - disable on-board audio in '/boot/config.txt'
 //   - reboot
-//   - '/srv/http/settings/mpd-conf.sh' - parse sysnames with 'aplay -l' and populate to '/etc/mpd.conf'
+//   - '/srv/http/settings/mpd-conf.sh' - parse name with 'aplay -l' and populate to '/etc/mpd.conf'
 //
-//   - MPD setting page - get names from '/srv/http/settings/i2s/*' or 'mpc outputs'
-//   - set selected to audiooutput / sysname
+//   - MPD setting page - get names from
+//      - mpc outputs
+//      - audio-output / audio-aplayname
+//      - /srv/http/settings/i2s/*
+//      - set selected to audio-output / audio-aplayname
 include '/srv/http/settings/system-i2smodules.php';
-$i2senabled = 0;
 $optioni2smodule = '';
 foreach( $i2slist as $name => $sysname ) {
-	if ( $name === $data->audiooutput && $sysname === $data->sysname ) {
+	if ( $name === $data->audiooutput && $sysname === $data->audioaplayname ) {
 		$i2sselected = ' selected';
-		$i2senabled = 1;
 	} else {
 		$i2sselected = '';
 	}
@@ -107,11 +108,11 @@ include 'logosvg.php';
 	<heading>Audio</heading>
 		<div class="col-l">I&#178;S Module</div>
 		<div class="col-r i2s">
-			<div id="divi2smodulesw"<?=( $i2senabled ? ' class="hide"' : '' )?>>
+			<div id="divi2smodulesw"<?=( $i2sselected ? ' class="hide"' : '' )?>>
 				<input id="i2smodulesw" type="checkbox">
 				<div class="switchlabel" for="i2smodulesw"></div>
 			</div>
-			<div id="divi2smodule"<?=( $i2senabled ? '' : ' class="hide"' )?>>
+			<div id="divi2smodule"<?=( $i2sselected ? '' : ' class="hide"' )?>>
 				<select id="i2smodule" data-style="btn-default btn-lg">
 					<?=$optioni2smodule?>
 				</select>
@@ -125,10 +126,10 @@ include 'logosvg.php';
 			<i id="setting-soundprofile" class="setting fa fa-gear<?=( $data->soundprofile === 'default' ? ' hide' : '' )?>"></i>
 			<span class="help-block hide">System kernel parameters tweak: <code>eth0 mtu</code> <code>eth0 txqueuelen</code> <code>swappiness</code> <code>sched_latency_ns</code></span>
 		</div>
-<?php if ( $rpiwireless || $data->sysname ) { ?>
+<?php if ( $rpiwireless || $data->audioaplayname ) { ?>
 	<heading>On-board devices</heading>
 <?php } ?>
-		<div id="divonboardaudio"<?=( $data->sysname ? '' : ' class="hide"' )?>>
+		<div id="divonboardaudio"<?=( $data->audioaplayname ? '' : ' class="hide"' )?>>
 			<div class="col-l">Audio</div>
 			<div class="col-r">
 				<input id="onboardaudio" type="checkbox" <?=$data->onboardaudio?>>

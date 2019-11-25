@@ -14,8 +14,8 @@ fi
 {
 
 dirsystem=/srv/http/data/system
-audiooutput=$( cat $dirsystem/audiooutput )
-sysname=$( cat $dirsystem/sysname )
+audiooutput=$( cat $dirsystem/audio-output )
+audioaplayname=$( cat $dirsystem/audio-aplayname )
 
 model=$( cat /proc/cpuinfo | grep Revision | tail -c 4 | cut -c 1-2 )
 if [[ $model == 11 ]]; then  # RPi4
@@ -41,17 +41,17 @@ for line in "${lines[@]}"; do
 			amixer -c $card sset "$mixer" 0dB
 		done
 	fi
-	subdevice=${device: -1}
+	subdevice=$(( ${device: -1} + 1 ))
 	# aplay -l > card 0: sndrpirpidac [snd_rpi_rpi_dac], device 0: RPi-DAC HiFi pcm1794a-codec-0 [RPi-DAC HiFi pcm1794a-codec-0]
 	# snd_rpi_rpi_dac > rpi-dac.dtbo
 	aplayname=$( echo $line | awk -F'[][]' '{print $2}' | sed 's/snd_rpi_//' | tr '_' '-' )
-	aplaynameL=$( echo "$aplay" | grep -c "$name" )
-	(( $aplaynameL > 1 )) && aplayname="$aplayname"_$(( subdevice + 1 ))
+	aplaynameL=$( echo "$aplay" | grep -c "$aplayname" )
+	(( $aplaynameL > 1 )) && aplayname="$aplayname"-$subdevice
 	# name and output route command if any
 	mixer_control=
 	routecmd=
 	i2sfile="/srv/http/settings/i2s/$aplayname"
-	[[ $aplayname == $sysname ]] && name=$audiooutput
+	[[ $aplayname == $audioaplayname ]] && name=$audiooutput
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
@@ -91,13 +91,13 @@ echo "$mpdconf" > $file
 
 systemctl restart mpd mpdidle
 
-(( $# == 0 ) && exit
+(( $# == 0 )) && exit
 
 usbdacfile=/srv/http/data/system/usbdac
 if [[ $1 == remove ]]; then
 	name=$audiooutput
 	rm -f $usbdacfile
-else if [[ $1 == add ]]; then
+elif [[ $1 == add ]]; then
 	echo $aplayname > $usbdacfile
 fi
 

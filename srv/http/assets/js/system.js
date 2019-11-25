@@ -109,8 +109,8 @@ $( '#i2smodule' ).on( 'selectric-change', function() {
 					+" -e '$ a\dtoverlay="+ sysname +"'"
 					+' /boot/config.txt'
 			, "echo 'Enable "+ name +"' > "+ filereboot
-			, "echo '"+ name +"' > "+ dirsystem +'/audiooutput'
-			, 'echo '+ sysname +' > '+ dirsystem +'/sysname'
+			, "echo '"+ name +"' > "+ dirsystem +'/audio-output'
+			, 'echo '+ sysname +' > '+ dirsystem +'/audio-aplayname'
 			, 'rm -f '+ dirsystem +'/onboard-audio'
 			, pstream( 'system' )
 		] }, resetlocal );
@@ -125,8 +125,8 @@ $( '#i2smodule' ).on( 'selectric-change', function() {
 				+" -e 's/dtparam=audio=.*/dtparam=audio=on/'"
 				+' /boot/config.txt'
 			, "echo 'Disable I&#178;S Module' > "+ filereboot
-			, 'echo bcm2835 ALSA_1 > '+ dirsystem +'/audiooutput'
-			, 'rm -f '+ dirsystem +'/sysname'
+			, 'echo bcm2835 ALSA_1 > '+ dirsystem +'/audio-output'
+			, 'rm -f '+ dirsystem +'/audio-aplayname'
 			, 'echo 1 > '+ dirsystem +'/onboard-audio'
 			, pstream( 'system' )
 		] }, resetlocal );

@@ -1,6 +1,6 @@
 <?php
-$audiooutput = trim( @file_get_contents( '/srv/http/data/system/audiooutput' ) );
-$sysname = trim( @file_get_contents( '/srv/http/data/system/sysname' ) );
+$audiooutput = trim( @file_get_contents( '/srv/http/data/system/audio-output' ) );
+$audioaplayname = trim( @file_get_contents( '/srv/http/data/system/audio-aplayname' ) );
 $usbdac = trim( @file_get_contents( '/srv/http/data/system/usbdac' ) );
 $dop = file_exists( '/srv/http/data/system/dop' ) ? 'checked' : '';
 $autoplay = file_exists( '/srv/http/data/system/autoplay' ) ? 'checked' : '';
@@ -11,7 +11,7 @@ if ( $hardwarecode != 11 ) $outputs = array_diff( $outputs, [ 'RaspberryPi HDMI 
 if ( $hardwarecode === '09' || $hardwarecode === '0c' ) $outputs = array_diff( $outputs, [ 'RaspberryPi Analog Out' ] ); // RPi0 - remove 3.5mm out
 $htmlacards = '';
 if ( count( $outputs ) === 1 ) {
-	$htmlacards.= '<option value="'.$sysname.'" data-index="0">'.$audiooutput.'</option>';
+	$htmlacards.= '<option value="'.$audioaplayname.'" data-index="0">'.$audiooutput.'</option>';
 } else {
 	foreach( $outputs as $output ) {
 		$index = preg_match( '/_[0-9]$/', $output ) ? substr( $output, -1 ) : 0;
@@ -20,10 +20,10 @@ if ( count( $outputs ) === 1 ) {
 		if ( $usbdac ) {
 			$selected = $output === $usbdac ? ' selected' : '';
 		} else {
-			// underscore to dash except last(index): snd_rpi_rpi_dac > rpi-dac; snd_rpi_wsp_1 > wsp_1
-			$dtboname = str_replace( 'snd_rpi_', '', $output );
-			if ( !is_numeric( substr( $dtboname, -1 ) ) ) $dtboname = str_replace( '_', '-', $output );
-			if ( $dtboname === $sysname ) {
+			// underscore to dash: snd_rpi_rpi_dac > rpi-dac; snd_rpi_wsp_1 > wsp_1
+			$dtboname = preg_replace( [ '/snd_rpi_/', '/_/' ], [ '', '-' ], $output );
+//			if ( !is_numeric( substr( $dtboname, -1 ) ) ) $dtboname = str_replace( '_', '-', $output );
+			if ( $dtboname === $audioaplayname ) {
 				$selected = ' selected';
 				$extlabel = $audiooutput;
 			} else {

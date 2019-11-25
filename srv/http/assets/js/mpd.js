@@ -42,8 +42,8 @@ $( '#audiooutput' ).on( 'selectric-change', function() {
 	];
 	// set only if not usbdac
 	if ( name !== $( '#usbdac' ).val() ) cmd.push(
-		  'echo '+ name +' > '+ dirsystem +'/audiooutput'
-		, 'echo '+ sysname +' > '+ dirsystem +'/sysname'
+		  'echo '+ name +' > '+ dirsystem +'/audio-output'
+		, 'echo '+ sysname +' > '+ dirsystem +'/audio-aplayname'
 	);
 	var routecmd = $selected.data( 'routecmd' );
 	if ( routecmd ) cmd.push( routecmd.replace( '*CARDID*', index ) );
