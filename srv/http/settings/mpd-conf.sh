@@ -41,24 +41,20 @@ for line in "${lines[@]}"; do
 			amixer -c $card sset "$mixer" 0dB
 		done
 	fi
-	subdevice=$(( ${device: -1} + 1 ))
 	# aplay -l > card 0: sndrpirpidac [snd_rpi_rpi_dac], device 0: RPi-DAC HiFi pcm1794a-codec-0 [RPi-DAC HiFi pcm1794a-codec-0]
-	# snd_rpi_rpi_dac > rpi-dac.dtbo
+	# snd_rpi_rpi_dac > rpi-dac
 	aplayname=$( echo $line | awk -F'[][]' '{print $2}' | sed 's/snd_rpi_//' | tr '_' '-' )
 	aplaynameL=$( echo "$aplay" | grep -c "$aplayname" )
-	(( $aplaynameL > 1 )) && aplayname="$aplayname"-$subdevice
-	# name and output route command if any
+	(( $aplaynameL > 1 )) && aplayname="$aplayname"-$(( ${device: -1} + 1 ))
+	# output mixer and route command if any
 	mixer_control=
 	routecmd=
 	i2sfile="/srv/http/settings/i2s/$aplayname"
-	[[ $aplayname == $audioaplayname ]] && name=$audiooutput
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
 		[[ -n $routecmd ]] && eval ${routecmd/\*CARDID\*/$card}
-		[[ -z "$name" ]] && name=$( grep extlabel "$i2sfile" | cut -d: -f2- )
 	fi
-	[[ -z "$name" ]] && name=$aplayname
 	
 	mpdconf+='
 
@@ -98,6 +94,7 @@ if [[ $1 == remove ]]; then
 	name=$audiooutput
 	rm -f $usbdacfile
 elif [[ $1 == add ]]; then
+	name=$aplayname
 	echo $aplayname > $usbdacfile
 fi
 
