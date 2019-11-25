@@ -10,22 +10,26 @@ exec( "mpc outputs | grep '^Output' | awk -F'[()]' '{print $2}'", $outputs );
 if ( $hardwarecode != 11 ) $outputs = array_diff( $outputs, [ 'RaspberryPi HDMI Out 2' ] ); // RPi4 - remove 2nd hdmi
 if ( $hardwarecode === '09' || $hardwarecode === '0c' ) $outputs = array_diff( $outputs, [ 'RaspberryPi Analog Out' ] ); // RPi0 - remove 3.5mm out
 $htmlacards = '';
-foreach( $outputs as $output ) {
-	$index = strpos( $output, '_' ) ? preg_replace( '/^.*_/', '', $output ) : 0;
-	$routecmd = exec( "$sudo/grep route_cmd \"/srv/http/settings/i2s/$output\" | cut -d: -f2" );
-	$dataroutecmd = $routecmd ? ' data-routecmd="'.$routecmd.'"' : '';
-	if ( $usbdac ) {
-		$selected = $output === $usbdac ? ' selected' : '';
-	} else {
-		if ( $output === $audiooutput || $output === $sysname ) {
-			$selected = ' selected';
-			$extlabel = $audiooutput;
+if ( count( $outputs ) === 1 ) {
+	$htmlacards.= '<option value="'.$sysname.'" data-index="0">'.$audiooutput.'</option>';
+} else {
+	foreach( $outputs as $output ) {
+		$index = preg_match( '/_[0-9]$/', $output ) ? substr( $output, -1 ) : 0;
+		$routecmd = exec( "$sudo/grep route_cmd \"/srv/http/settings/i2s/$output\" | cut -d: -f2" );
+		$dataroutecmd = $routecmd ? ' data-routecmd="'.$routecmd.'"' : '';
+		if ( $usbdac ) {
+			$selected = $output === $usbdac ? ' selected' : '';
 		} else {
-			$selected = '';
-			$extlabel = exec( "$sudo/grep extlabel \"/srv/http/settings/i2s/$output\" | cut -d: -f2" ) ?: $output;
+			if ( $output === 'snd_rpi_'.str_replace( '-', '_', $sysname ) ) {
+				$selected = ' selected';
+				$extlabel = $audiooutput;
+			} else {
+				$selected = '';
+				$extlabel = exec( "$sudo/grep extlabel \"/srv/http/settings/i2s/$output\" | cut -d: -f2" ) ?: $output;
+			}
 		}
+		$htmlacards.= '<option value="'.$output.'" data-index="'.$index.'"'.$dataroutecmd.$selected.'>'.$extlabel.'</option>';
 	}
-	$htmlacards.= '<option value="'.$output.'" data-index="'.$index.'"'.$dataroutecmd.$selected.'>'.$extlabel.'</option>';
 }
 $mixertype = exec( "$sudo/grep mixer_type /etc/mpd.conf | cut -d'\"' -f2" );
 $crossfade = exec( "$sudo/mpc crossfade | cut -d' ' -f2" );
