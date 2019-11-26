@@ -67,6 +67,7 @@ foreach( $i2slist as $name => $sysname ) {
 	$optioni2smodule.= "<option value=\"$sysname\"$i2sselected>$name</option>";
 }
 if ( $data->accesspoint ) echo '<input id="accesspoint" type="hidden">';
+$bullet = '<gr> &bull; </gr>';
 include 'logosvg.php';
 ?>
 <div id="loader"><svg viewBox="0 0 480.2 144.2"><?=$logo?></svg></div>
@@ -87,12 +88,12 @@ include 'logosvg.php';
 			<i class="fa fa-addons gr" style="line-height: 20px;"></i> <?=$data->version?><br>
 			<?=$data->kernel?><br>
 			<?=$data->hardware?><br>
-			<?=$soc.'<gr> &bull; </gr>'.$cpu.'<gr> &bull; </gr>'.$memory?><br>
+			<?=$soc.$bullet.$cpu.$bullet.$memory?><br>
 			<?=$data->rootfs?><br>
 			<?=$data->date?><gr> @ </gr><?=$zonestring?><br>
 			<?=$data->uptime?> <gr>since <?=$data->since?></gr><br>
 			<?=$data->ip?><br>
-			<?=( $data->cpuload * 100 )?>%<gr> &bull; </gr><?=( round( $data->cputemp / 1000 ) )?>°C
+			<?=$data->cpuload.$bullet.$data->cputemp?>°C
 			<span class="<?=( $data->undervoltage ? '' : 'hide' )?>"><br><span id="undervoltage"><?=$data->undervoltage?></span> <a class="red">Under-voltage detected</a></span>
 			<span class="help-block hide"><gr>(Refresh browser to update current status.)</gr></span>
 		</div>
