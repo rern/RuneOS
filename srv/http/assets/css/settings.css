@@ -459,7 +459,7 @@ input:checked + .switchlabel:after {
 	float: left;
 	position: relative;
 	vertical-align: middle;
-	line-height: 26px;
+	line-height: 21px;
 }
 .col-l {
 	display: inline-block;
@@ -471,6 +471,7 @@ input:checked + .switchlabel:after {
 }
 .col-l.text {
 	padding-top: 0;
+	line-height: 26px;
 }
 .col-l i {
 	width: 30px;
@@ -487,6 +488,7 @@ input:checked + .switchlabel:after {
 	float: none;
 	width: auto;
 	white-space: nowrap;
+	line-height: 26px;
 }
 @media (min-width: 768px) {
 	.container {
