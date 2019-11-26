@@ -459,7 +459,7 @@ input:checked + .switchlabel:after {
 	float: left;
 	position: relative;
 	vertical-align: middle;
-	line-height: 21px;
+	line-height: 26px;
 }
 .col-l {
 	display: inline-block;
@@ -467,13 +467,14 @@ input:checked + .switchlabel:after {
 	width: 155px;
 	text-align: right;
 	padding-right: 15px;
-	padding-top: 10px;
+	padding-top: 7px;
 }
 .col-l.text {
 	padding-top: 0;
 }
 .col-l i {
 	width: 30px;
+	vertical-align: -2px;
 }
 .col-r {
 	width: calc( 100% - 155px );
