@@ -1211,6 +1211,7 @@ svg path.st1 {
 }
 #bio .container {
 	max-width: 750px;
+	margin: 0 auto;
 	padding : 20px 30px;
 }
 #bio h1 {
