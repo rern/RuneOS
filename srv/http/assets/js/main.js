@@ -631,6 +631,7 @@ $( '#coverTL' ).click( function() {
 	
 	if ( 'coverTL' in GUI ) {
 		if ( GUI.buttons ) GUI.display.buttons = 1;
+		delete GUI.buttons;
 		delete GUI.coverTL;
 	} else {
 		GUI.buttons = 'buttons' in GUI.display ? 1 : 0;
