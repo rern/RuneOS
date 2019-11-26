@@ -41,9 +41,6 @@ for line in "${lines[@]}"; do
 			amixer -c $card sset "$mixer" 0dB
 		done
 	fi
-	# aplay -l > card 0: sndrpirpidac [snd_rpi_rpi_dac], device 0: RPi-DAC HiFi pcm1794a-codec-0 [RPi-DAC HiFi pcm1794a-codec-0]
-	# snd_rpi_rpi_dac > rpi-dac
-#	aplayname=$( echo $line | awk -F'[][]' '{print $2}' | sed 's/snd_rpi_//' | tr '_' '-' )
 	aplayname=$( echo $line | awk -F'[][]' '{print $2}' )
 	aplaynameL=$( echo "$aplay" | grep -c "$aplayname" )
 	(( $aplaynameL > 1 )) && aplayname="$aplayname"-$(( ${device: -1} + 1 ))
