@@ -95,7 +95,6 @@ include 'logosvg.php';
 			<?=$data->ip?><br>
 			<?=$data->cpuload.$bullet.$data->cputemp?>°C
 			<span class="<?=( $data->undervoltage ? '' : 'hide' )?>"><br><span id="undervoltage"><?=$data->undervoltage?></span> <a class="red">Under-voltage detected</a></span>
-			<span class="help-block hide"><gr>(Refresh browser to update current status.)</gr></span>
 		</div>
 	<heading>Environment</heading>
 		<div class="col-l">Player name</div>
