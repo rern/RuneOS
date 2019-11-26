@@ -1,5 +1,5 @@
-sysname:PianoDACPlus
-extlabel:Allo Piano DAC 2.1 (I&#178;S)
+sysname:Allo Katana
+extlabel:Allo Katana DAC (I&#178;S)
 card_option:format	"*:32:*"
 mixer_numid:1
 mixer_control:Digital
