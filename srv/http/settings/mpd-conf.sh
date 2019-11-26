@@ -53,6 +53,7 @@ for line in "${lines[@]}"; do
 	i2sfile="/srv/http/settings/i2s/$aplayname"
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
+		extlabel=$( grep extlabel "$i2sfile"  | cut -d: -f2- )
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
 		[[ -n $routecmd ]] && eval ${routecmd/\*CARDID\*/$card}
 	fi
@@ -98,7 +99,7 @@ if [[ $1 == remove ]]; then
 	name=$audiooutput
 	rm -f $usbdacfile
 elif [[ $1 == add ]]; then
-	name=$aplayname
+	[[ -n $extlabel ]] && name=$extlabel || name=$aplayname
 	echo $aplayname > $usbdacfile
 fi
 
