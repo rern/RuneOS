@@ -21,7 +21,7 @@ if ( count( $outputs ) === 1 ) {
 			$selected = $output === $usbdac ? ' selected' : '';
 			$extlabel = $output;
 		} else {
-			// underscore to dash: snd_rpi_rpi_dac > rpi-dac; snd_rpi_wsp_1 > wsp_1
+			// underscore to dash: snd_rpi_rpi_dac > rpi-dac; snd_rpi_wsp-1 > wsp-1
 			$dtboname = preg_replace( [ '/snd_rpi_/', '/_/' ], [ '', '-' ], $output );
 			if ( $dtboname === $audioaplayname ) {
 				$selected = ' selected';
