@@ -629,7 +629,13 @@ $( '#volup, #voldn' ).click( function() {
 $( '#coverTL' ).click( function() {
 	if ( $( '#cover-art' ).hasClass( 'vu' ) || GUI.status.ext === 'AirPlay' ) return
 	
-	GUI.coverTL = 1;
+	if ( 'coverTL' in GUI ) {
+		if ( GUI.buttons ) GUI.display.buttons = 1;
+		delete GUI.coverTL;
+	} else {
+		GUI.buttons = 'buttons' in GUI.display ? 1 : 0;
+		GUI.coverTL = 1;
+	}
 	if ( !$( '#controls-cover' ).hasClass( 'hide' ) ) {
 		$( '.controls' ).addClass( 'hide' );
 		$( '.controls1, .rs-tooltip, #imode' ).removeClass( 'hide' );
@@ -666,7 +672,6 @@ $( '#coverTL' ).click( function() {
 					if ( !radio ) GUI.display.coverlarge = 1;
 					delete GUI.display.time;
 					delete GUI.display.volume;
-					delete GUI.display.buttons;
 				}
 			}
 		} else {
