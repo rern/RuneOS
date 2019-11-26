@@ -51,7 +51,7 @@ for line in "${lines[@]}"; do
 	i2sfile="/srv/http/settings/i2s/$aplayname"
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
-		extlabel=$( grep extlabel "$i2sfile"  | cut -d: -f2- )
+		[[ -n $1 ]] && extlabel=$( grep extlabel "$i2sfile"  | cut -d: -f2- )
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
 		[[ -n $routecmd ]] && eval ${routecmd/\*CARDID\*/$card}
 	fi
