@@ -46,6 +46,7 @@ for line in "${lines[@]}"; do
 	(( $aplaynameL > 1 )) && aplayname="$aplayname"-$(( ${device: -1} + 1 ))
 	# output mixer and route command if any
 	mixer_control=
+	extlabel=
 	routecmd=
 	i2sfile="/srv/http/settings/i2s/$aplayname"
 	if [[ -e "$i2sfile" ]]; then
