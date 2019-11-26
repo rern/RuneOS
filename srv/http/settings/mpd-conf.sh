@@ -51,7 +51,7 @@ for line in "${lines[@]}"; do
 	i2sfile="/srv/http/settings/i2s/$aplayname"
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
-		[[ -n $1 ]] && extlabel=$( grep extlabel "$i2sfile"  | cut -d: -f2- )
+		(( $# > 0 )) && extlabel=$( grep extlabel "$i2sfile"  | cut -d: -f2- )
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
 		[[ -n $routecmd ]] && eval ${routecmd/\*CARDID\*/$card}
 	fi
@@ -87,22 +87,17 @@ echo "$mpdconf" > $file
 
 systemctl restart mpd mpdidle
 
-if (( $# == 0 )); then
-	curl -s -X POST 'http://127.0.0.1/pub?id=page' -d '{ "p": "mpd" }'
-	exit
+if (( $# > 0 )); then
+	usbdacfile=/srv/http/data/system/usbdac
+	if [[ $1 == remove ]]; then
+		name=$audiooutput
+		rm -f $usbdacfile
+	elif [[ $1 == add ]]; then
+		[[ -n $extlabel ]] && name=$extlabel || name=$aplayname  # last one is new one
+		echo $aplayname > $usbdacfile
+	fi
+	curl -s -X POST 'http://127.0.0.1/pub?id=notify' -d '{ "title": "Audio Output Switched", "text": "'"$name"'", "icon": "output" }'
 fi
-
-usbdacfile=/srv/http/data/system/usbdac
-if [[ $1 == remove ]]; then
-	name=$audiooutput
-	rm -f $usbdacfile
-elif [[ $1 == add ]]; then
-	[[ -n $extlabel ]] && name=$extlabel || name=$aplayname
-	echo $aplayname > $usbdacfile
-fi
-
-# last one is new one
-curl -s -X POST 'http://127.0.0.1/pub?id=notify' -d '{ "title": "Audio Output Switched", "text": "'"$name"'", "icon": "output" }'
 curl -s -X POST 'http://127.0.0.1/pub?id=page' -d '{ "p": "mpd" }'
 
 } &
