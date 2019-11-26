@@ -677,8 +677,7 @@ function getBio( artist ) {
 			$( '#bio' ).scrollTop( 0 );
 
 			$.get( 'https://webservice.fanart.tv/v3/music/'+ data.mbid +'&?api_key='+ GUI.apikeyfanart, function( data ) {
-				var src = data.artistthumb[ 0 ].url;
-				if ( src ) $( '#biocontent form' ).prepend( '<img id="bioimg" src="'+ src +'">' );
+				if ( 'artistthumb' in data ) $( '#biocontent form' ).prepend( '<img id="bioimg" src="'+ data.artistthumb[ 0 ].url +'">' );
 			} );
 		} );
 	} );
