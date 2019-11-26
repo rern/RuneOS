@@ -46,7 +46,7 @@ data+=',"tidaluser":"'$( grep '^tidaluser' /etc/upmpdcli.conf | cut -d' ' -f3- )
 data+=',"timezone":"'$( timedatectl | grep zone: | awk '{print $3}' )'"'
 data+=',"undervoltage":"'$( journalctl -b | grep -c 'Under-voltage' )'"'
 data+=',"upnp":"'$( systemctl -q is-active upmpdcli && echo checked )'"'
-data+=',"uptime":"'$( uptime -p | sed 's/up //; s/ day.*/d/; s/ hour.*/h/; s/ minute.*/m/' )'"'
+data+=',"uptime":"'$( uptime -p | tr -d 's,' | sed 's/up //; s/ day/d/; s/ hour/h/; s/ minute/m/' )'"'
 data+=',"version":"'$( cat /srv/http/data/system/version )'"'
 data+=',"wlan":"'$wlan'"'
 
