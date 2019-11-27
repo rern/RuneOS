@@ -3,7 +3,7 @@ I2S Setting
 
 ### System > I2S module:
 - Populate select: `/srv/http/settings/system-i2smodules.php`
-	- set `selected`
+	- set `selected` and show
 		- `name` = `/srv/http/data/system/audio-output`
 		- `sysname` = `/srv/http/data/system/audio-aplayname`
 - Selected: `/srv/http/assets/js/system.js`
