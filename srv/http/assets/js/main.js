@@ -819,10 +819,6 @@ $( '.btn-cmd' ).click( function() {
 	if ( [ 'pause', 'play', 'stop' ].indexOf( cmd ) !== -1 ) {
 		GUI.status.state = cmd;
 		renderPlayback();
-		if ( cmd !== 'play' ) {
-			GUI.local = 1;
-			setTimeout( function() { GUI.local = 0 }, 300 );
-		}
 	}
 	if ( $this.hasClass( 'btn-toggle' ) ) {
 		var onoff = GUI.status[ cmd ] ? 0 : 1;
