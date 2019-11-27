@@ -41,19 +41,6 @@ foreach( $timezonelist as $key => $zone ) {
 }
 $selecttimezone.= '</select>';
 
-// set value
-//   - append '/boot/config.txt' with 'dtoverlay' file names in '/boot/overlays/*'
-//   - set name to /srv/http/data/system/audio-output
-//   - set value to /srv/http/data/system/audio-aplayname
-//   - disable on-board audio in '/boot/config.txt'
-//   - reboot
-//   - '/srv/http/settings/mpd-conf.sh' - parse name with 'aplay -l' and populate to '/etc/mpd.conf'
-//
-//   - MPD setting page - get names from
-//      - mpc outputs
-//      - audio-output / audio-aplayname
-//      - /srv/http/settings/i2s/*
-//      - set selected to audio-output / audio-aplayname
 include '/srv/http/settings/system-i2smodules.php';
 $i2senabled = 0;
 $optioni2smodule = '';
