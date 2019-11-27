@@ -821,7 +821,7 @@ $( '.btn-cmd' ).click( function() {
 		renderPlayback();
 		if ( cmd !== 'play' ) {
 			GUI.local = 1;
-			setTimeout( function() { GUI.local = 0 }, 600 );
+			setTimeout( function() { GUI.local = 0 }, 300 );
 		}
 	}
 	if ( $this.hasClass( 'btn-toggle' ) ) {
