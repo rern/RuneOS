@@ -1337,13 +1337,13 @@ function renderPlayback() {
 		if ( status.state === 'play' ) {
 			if ( !status.Title ) $( '#song' ).html( blinkdot );
 			$( '#elapsed' ).html( status.state === 'play' ? blinkdot : '' );
-			GUI.elapsed = status.elapsed;
+			var elapsed = status.elapsed;
 			if ( GUI.display.time ) {
 				$( '#timepos' ).empty();
 				if ( 'radioelapsed' in GUI.display || GUI.localhost ) {
 					GUI.intElapsed = setInterval( function() {
-						GUI.elapsed++;
-						elapsedhms = second2HMS( GUI.elapsed );
+						elapsed++;
+						elapsedhms = second2HMS( elapsed );
 						$( '#total' ).text( elapsedhms ).addClass( 'gr' );
 					}, 1000 );
 				} else {
@@ -1353,8 +1353,8 @@ function renderPlayback() {
 				$( '#total' ).empty();
 				if ( 'radioelapsed' in GUI.display ) {
 					GUI.intElapsed = setInterval( function() {
-						GUI.elapsed++;
-						elapsedhms = second2HMS( GUI.elapsed );
+						elapsed++;
+						elapsedhms = second2HMS( elapsed );
 					$( '#timepos' ).html( '&ensp;<i class="fa fa-play"></i>&ensp;'+ elapsedhms );
 					}, 1000 );
 				} else {
@@ -1439,10 +1439,10 @@ function renderPlayback() {
 	
 	$( '#elapsed, #total' ).removeClass( 'bl gr wh' );
 	$( '#song' ).toggleClass( 'gr', status.state === 'pause' );
-	GUI.elapsed = status.elapsed || 0;
-	var elapsedhms = second2HMS( GUI.elapsed );
+	var elapsed = status.elapsed || 0;
+	var elapsedhms = second2HMS( elapsed );
 	if ( !elapsedhms ) $( '#elapsed' ).empty();
-	var position = Math.round( GUI.elapsed / time * 1000 );
+	var position = Math.round( elapsed / time * 1000 );
 	// pause <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	if ( status.state === 'pause' ) {
 		if ( 'time' in GUI.display ) {
@@ -1459,13 +1459,13 @@ function renderPlayback() {
 	
 	if ( 'time' in GUI.display ) {
 		GUI.intElapsed = setInterval( function() {
-			GUI.elapsed++;
-			elapsedhms = second2HMS( GUI.elapsed );
+			elapsed++;
+			elapsedhms = second2HMS( elapsed );
 			$( '#elapsed' ).text( elapsedhms );
 		}, 1000 );
 		if ( GUI.localhost ) { // fix: high cpu - interval each 1 sec
 			GUI.intKnob = setInterval( function() {
-				position = Math.round( GUI.elapsed / time * 1000 );
+				position = Math.round( elapsed / time * 1000 );
 				if ( position === 1000 ) {
 					clearInterval( GUI.intKnob );
 					clearInterval( GUI.intElapsed );
@@ -1486,13 +1486,13 @@ function renderPlayback() {
 		}
 	} else {
 		GUI.intElapsed = setInterval( function() {
-			GUI.elapsed++;
-			elapsedhms = second2HMS( GUI.elapsed );
+			elapsed++;
+			elapsedhms = second2HMS( elapsed );
 			$( '#timepos' ).html( '&ensp;<i class="fa fa-play"></i>&ensp;<w>'+ elapsedhms +'</w> / '+ timehms );
 		}, 1000 );
 	}
 
-	// playlist current song ( and lyrics if installed )
+	// playlist current song
 	if ( status.Title !== previoussong || status.Album !== previousalbum ) {
 		if ( GUI.playlist && !GUI.pleditor ) setPlaylistScroll();
 		if ( $( '#lyricscontainer' ).length && !$( '#lyricscontainer' ).hasClass( 'hide' ) ) getlyrics();

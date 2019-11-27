@@ -809,17 +809,6 @@ $( '.timemap, .covermap, .volmap' ).tap( function() {
 $( '.btn-cmd' ).click( function() {
 	var $this = $( this );
 	var cmd = this.id;
-	if ( cmd === 'stop' ) {
-		delete GUI.status.elapsed;
-	} else if ( cmd === 'pause' ) {
-		GUI.status.elapsed = GUI.elapsed;
-	} else if ( cmd === 'play' && !'elapsed' in GUI.status ) {
-		GUI.status.elapsed = 0;
-	}
-	if ( [ 'pause', 'play', 'stop' ].indexOf( cmd ) !== -1 ) {
-		GUI.status.state = cmd;
-		renderPlayback();
-	}
 	if ( $this.hasClass( 'btn-toggle' ) ) {
 		var onoff = GUI.status[ cmd ] ? 0 : 1;
 		GUI.status[ cmd ] = onoff;
