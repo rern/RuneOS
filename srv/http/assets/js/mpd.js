@@ -46,7 +46,7 @@ $( '#audiooutput' ).on( 'selectric-change', function() {
 		, 'echo '+ sysname +' > '+ dirsystem +'/audio-aplayname'
 	);
 	var routecmd = $selected.data( 'routecmd' );
-	if ( routecmd ) cmd.push( routecmd.replace( '*CARDID*', index ) );
+	if ( routecmd ) cmd.push( routecmd );
 	local = 1;
 	$.post( 'commands.php', { bash: cmd }, resetlocal );
 } );
