@@ -6,10 +6,13 @@ I2S Setting
 	- set `selected`
 		- `name` = `/srv/http/data/system/audio-output`
 		- `sysname` = `/srv/http/data/system/audio-aplayname`
-- Selected:
-	- `/srv/http/assets/js/system.js`
-		- `name` > `/srv/http/data/system/audio-output`
-		- `sysname` > `/srv/http/data/system/audio-aplayname`
+- Selected: `/srv/http/assets/js/system.js`
+	- `/boot/config.txt`
+		- disable on-board audio
+		- append `dtoverlay=<sysname>`
+	- `sysname` > `/srv/http/data/system/audio-aplayname`
+	- `name` > `/srv/http/data/system/audio-output`
+	- set reboot flag
 
 ### MPD > Interface:
 - Populate select: `/srv/http/settings/mpd.php`
@@ -29,7 +32,7 @@ I2S Setting
 		- `sysname` > `/srv/http/data/system/audio-aplayname`
 
 ### Boot:
-- Parse data: `/srv/http/settings/mpd-conf.sh`
+- Parse: `/srv/http/settings/mpd-conf.sh`
 	- clear all `audio_output`
 	- get `mixer_type` from `/etc/mpd.conf`
 	- if `mixer_type` = `none`, set mixers of each card to 0dB with `amixer`
