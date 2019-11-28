@@ -2,7 +2,7 @@
 
 # skip on startup - called by usbdac.rules
 if [[ -e /tmp/startup ]]; then
-	rm /tmp/startup
+	rm /tmp/startup /srv/http/settings/usbdac
 	# reenable on-board audio if nothing available for aplay
 	if [[ -z $( aplay -l ) ]]; then
 		sed -i 's/dtparam=audio=.*/dtparam=audio=on/' /boot/config.txt
@@ -51,7 +51,8 @@ for line in "${lines[@]}"; do
 	i2sfile="/srv/http/settings/i2s/$aplayname"
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
-		(( $# > 0 )) && extlabel=$( grep extlabel "$i2sfile"  | cut -d: -f2- )
+		extlabel=$( grep extlabel "$i2sfile"  | cut -d: -f2- )
+		[[ -n $extlabel ]] && name=$extlabel || name=$aplayname  # last one is new one
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
 		[[ -n $routecmd ]] && eval ${routecmd/\*CARDID\*/$card}
 	fi
@@ -59,7 +60,7 @@ for line in "${lines[@]}"; do
 	mpdconf+='
 
 audio_output {
-	name              "'$aplayname'"
+	name              "'$name'"
 	device            "'$device'"
 	type              "alsa"
 	auto_resample     "no"
@@ -87,13 +88,13 @@ echo "$mpdconf" > $file
 
 systemctl restart mpd mpdidle
 
+# last one is new one
 if (( $# > 0 )); then
 	usbdacfile=/srv/http/data/system/usbdac
 	if [[ $1 == remove ]]; then
 		name=$audiooutput
 		rm -f $usbdacfile
 	elif [[ $1 == add ]]; then
-		[[ -n $extlabel ]] && name=$extlabel || name=$aplayname  # last one is new one
 		echo $aplayname > $usbdacfile
 	fi
 	curl -s -X POST 'http://127.0.0.1/pub?id=notify' -d '{ "title": "Audio Output Switched", "text": "'"$name"'", "icon": "output" }'
