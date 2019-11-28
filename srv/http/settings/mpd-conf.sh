@@ -44,16 +44,15 @@ for line in "${lines[@]}"; do
 	aplayname=$( echo $line | awk -F'[][]' '{print $2}' )
 	aplaynameL=$( echo "$aplay" | grep -c "$aplayname" )
 	(( $aplaynameL > 1 )) && aplayname="$aplayname"-$(( ${device: -1} + 1 ))
-	# output mixer and route command if any
+	name=$aplayname
 	mixer_control=
 	extlabel=
-	name=
 	routecmd=
 	i2sfile="/srv/http/settings/i2s/$aplayname"
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
 		extlabel=$( grep extlabel "$i2sfile"  | cut -d: -f2- )
-		[[ -n $extlabel ]] && name=$extlabel || name=$aplayname  # last one is new one
+		[[ -n $extlabel ]] && name=$extlabel
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
 		[[ -n $routecmd ]] && eval ${routecmd/\*CARDID\*/$card}
 	fi
@@ -89,7 +88,9 @@ echo "$mpdconf" > $file
 
 systemctl restart mpd mpdidle
 
-# last one is new one
+curl -s -X POST 'http://127.0.0.1/pub?id=page' -d '{ "p": "mpd" }'
+
+# usb dac - last one is new one
 if (( $# > 0 )); then
 	usbdacfile=/srv/http/data/system/usbdac
 	if [[ $1 == remove ]]; then
@@ -97,10 +98,8 @@ if (( $# > 0 )); then
 		rm -f $usbdacfile
 	elif [[ $1 == add ]]; then
 		echo $aplayname > $usbdacfile
-		[[ -z $name ]] && name=$aplayname
 	fi
 	curl -s -X POST 'http://127.0.0.1/pub?id=notify' -d '{ "title": "Audio Output Switched", "text": "'"$name"'", "icon": "output" }'
 fi
-curl -s -X POST 'http://127.0.0.1/pub?id=page' -d '{ "p": "mpd" }'
 
 } &
