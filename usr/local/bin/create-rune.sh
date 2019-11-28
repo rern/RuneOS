@@ -232,8 +232,8 @@ done
 echo runeaudio > /etc/hostname
 sed -i 's/#NTP=.*/NTP=pool.ntp.org/' /etc/systemd/timesyncd.conf
 ln -sf /usr/share/zoneinfo/UTC /etc/localtime
-echo 'RaspberryPi Analog Out' > $dirsystem/audiooutput
-echo bcm2835 ALSA_1 > $dirsystem/sysname
+echo 'RaspberryPi Analog Out' > $dirsystem/audio-output
+echo bcm2835 ALSA_1 > $dirsystem/audio-aplayname
 echo 1 | tee $dirsystem/{localbrowser,onboard-audio,onboard-wlan} > /dev/null
 echo RuneAudio | tee $dirsystem/{hostname,soundprofile} > /dev/null
 echo 0 0 0 > $dirsystem/mpddb
@@ -261,6 +261,6 @@ dialog --colors \
 " 9 50
 
 # boot partition - fix dirty bits if any
-fsck.fat -trawl $( df | grep /boot$ | cut -d' ' -f1 ) | grep -i 'dirty bit'
+fsck.fat -trawl $( df | grep /boot$ | cut -d' ' -f1 ) &> /dev/null
 
 shutdown -r now
