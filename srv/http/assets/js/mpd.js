@@ -41,6 +41,7 @@ $( '#audiooutput' ).on( 'selectric-change', function() {
 		, pstream( 'mpd' )
 	];
 	// set only if not usbdac
+	alert(name)
 	if ( name !== $( '#usbdac' ).val() ) cmd.push(
 		  'echo '+ name +' > '+ dirsystem +'/audio-output'
 		, 'echo '+ sysname +' > '+ dirsystem +'/audio-aplayname'

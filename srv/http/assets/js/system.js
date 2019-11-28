@@ -70,7 +70,7 @@ $( '#setting-ntp' ).click( function() {
 		}
 	} );
 } );
-$( '#timezone' ).on( 'selectric-change', function() {
+$( '#timezone' ).on( 'change', function() {
 	var timezone = $( this ).find( ':selected' ).val();
 	$.post( 'commands.php', { bash: [ 
 		  'timedatectl set-timezone '+ timezone
@@ -95,7 +95,7 @@ $( '#i2smodulesw' ).click( function() {
 		$( '#i2smodulesw' ).prop( 'checked', 0 );
 	}, 200 );
 } );
-$( '#i2smodule' ).on( 'selectric-change', function() {
+$( '#i2smodule' ).on( 'change', function() {
 	var $selected = $( this ).find( ':selected' );
 	var sysname = $selected.val();
 	var name = $selected.text();
@@ -135,7 +135,7 @@ $( '#i2smodule' ).on( 'selectric-change', function() {
 		$( '#divi2smodulesw' ).removeClass( 'hide' );
 	}
 } );
-$( '#soundprofile' ).change( function() {
+$( '#soundprofile' ).click( function() {
 	if ( $( this ).prop( 'checked' ) ) {
 		var profile = 'RuneAudio';
 		$( '#setting-soundprofile' ).removeClass( 'hide' );
