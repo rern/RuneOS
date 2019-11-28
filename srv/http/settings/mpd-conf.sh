@@ -1,14 +1,9 @@
 #!/bin/bash
 
-# skip on startup - called by usbdac.rules
-if [[ -e /tmp/startup ]]; then
-	rm /tmp/startup /srv/http/settings/usbdac
+if [[ -e /tmp/startup && -z $( aplay -l ) ]]; then
 	# reenable on-board audio if nothing available for aplay
-	if [[ -z $( aplay -l ) ]]; then
-		sed -i 's/dtparam=audio=.*/dtparam=audio=on/' /boot/config.txt
-		shutdown -r now
-	fi
-	exit
+	sed -i 's/dtparam=audio=.*/dtparam=audio=on/' /boot/config.txt
+	shutdown -r now
 fi
 
 {
@@ -89,6 +84,12 @@ echo "$mpdconf" > $file
 systemctl restart mpd mpdidle
 
 curl -s -X POST 'http://127.0.0.1/pub?id=page' -d '{ "p": "mpd" }'
+
+# skip on startup - called by usbdac.rules
+if [[ -e /tmp/startup ]]; then
+	rm /tmp/startup /srv/http/settings/usbdac
+	exit
+fi
 
 # usb dac - last one is new one
 if (( $# > 0 )); then
