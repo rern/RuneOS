@@ -47,6 +47,7 @@ for line in "${lines[@]}"; do
 	# output mixer and route command if any
 	mixer_control=
 	extlabel=
+	name=
 	routecmd=
 	i2sfile="/srv/http/settings/i2s/$aplayname"
 	if [[ -e "$i2sfile" ]]; then
@@ -96,6 +97,7 @@ if (( $# > 0 )); then
 		rm -f $usbdacfile
 	elif [[ $1 == add ]]; then
 		echo $aplayname > $usbdacfile
+		[[ -z $name ]] && name=$aplayname
 	fi
 	curl -s -X POST 'http://127.0.0.1/pub?id=notify' -d '{ "title": "Audio Output Switched", "text": "'"$name"'", "icon": "output" }'
 fi
