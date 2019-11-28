@@ -261,6 +261,6 @@ dialog --colors \
 " 9 50
 
 # boot partition - fix dirty bits if any
-fsck.fat -trawl $( df | grep /boot$ | cut -d' ' -f1 ) | grep -i 'dirty bit'
+fsck.fat -trawl $( df | grep /boot$ | cut -d' ' -f1 ) &> /dev/null
 
 shutdown -r now
