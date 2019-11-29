@@ -1,11 +1,5 @@
 #!/bin/bash
 
-if [[ -e /tmp/startup && -z $( aplay -l ) ]]; then
-	# reenable on-board audio if nothing available for aplay
-	sed -i 's/dtparam=audio=.*/dtparam=audio=on/' /boot/config.txt
-	shutdown -r now
-fi
-
 {
 
 dirsystem=/srv/http/data/system
