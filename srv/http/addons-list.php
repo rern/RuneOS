@@ -6,8 +6,11 @@ $addons = [
 
 'rare' => [
 	'title'       => 'RuneAudio+R e2',
-	'version'     => '20191122',
-	'revision'    => 'Improve NAS mount'
+	'version'     => '20191128',
+	'revision'    => 'Fix - Select box not response on Android.'
+					.'<br>Improve I2S module setting'
+					.'<br>...'
+					.'<br>Improve NAS mount'
 					.'<br>Improve system status'
 					.'<br>...'
 					.'<br>Fix - Addons bugs'
