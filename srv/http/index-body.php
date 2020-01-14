@@ -325,32 +325,32 @@ $menu.= menudiv( 'genre', $html );
 	<span class="menushadow"></span>
 	<a href="index-settings.php?p=mpd" class="settings"><i class="fa fa-mpd"></i>MPD
 </a>
-	<a id="sources"><i class="fa fa-folder-cascade"></i>Sources<i class="fa fa-folder-refresh submenu settings"></i></a>
+	<a id="sources" class="settings"><i class="fa fa-folder-cascade"></i>Sources<i class="fa fa-folder-refresh submenu"></i></a>
 	<a href="index-settings.php?p=network" class="settings"><i class="fa fa-network"></i>Network</a>
-	<a id="system"><i class="fa fa-sliders"></i>System<i id="credits" class="fa fa-rune submenu settings"></i></a>
+	<a id="system" class="settings"><i class="fa fa-sliders"></i>System<i id="credits" class="fa fa-rune submenu"></i></a>
 		<?php if ( $login ) { ?>
 	<a id="logout"><i class="fa fa-lock"></i>Logout</a>
 		<?php } ?>
 	<a id="power"><i class="fa fa-power"></i>Power<?=$submenupower ?></a>
 		<?php if ( $gpio ) { ?>
-	<a id="gpio"><i class="fa fa-gpio"></i>GPIO<i class="fa fa-gear submenu"></i></a>
+	<a id="gpio"><i class="fa fa-gpio"></i>GPIO<i class="fa fa-gear submenu settings"></i></a>
 		<?php }
 			  if ( $aria ) { ?>
-	<a id="aria2" data-enabled="<?=$ariaenable?>" data-active="<?=$ariaactive?>">
+	<a id="aria2" class="settings" data-enabled="<?=$ariaenable?>" data-active="<?=$ariaactive?>">
 		<img src="/assets/img/addons/thumbaria.<?=$time?>.png"<?=$ariaactive?>>Aria2
-		<i class="fa fa-gear submenu imgicon settings"></i>
+		<i class="fa fa-gear submenu imgicon"></i>
 	</a>
 		<?php }
 			  if ( $tran ) { ?>
-	<a id="transmission" data-enabled="<?=$tranenable?>" data-active="<?=$tranactive?>">
+	<a id="transmission" class="settings" data-enabled="<?=$tranenable?>" data-active="<?=$tranactive?>">
 		<img src="/assets/img/addons/thumbtran.<?=$time?>.png"<?=$tranactive?>>Transmission
-		<i class="fa fa-gear submenu imgicon settings"></i>
+		<i class="fa fa-gear submenu imgicon"></i>
 	</a>
 		<?php } ?>
 	<a id="displaylibrary"><i class="fa fa-library"></i>Library Tools</a>
 	<a id="displayplayback"><i class="fa fa-play-circle"></i>Playback Tools</a>
 	<a id="displaycolor"><i class="fa fa-brush"></i>Color<?=$submenucolor ?></a>
-	<a id="addons"><i class="fa fa-addons"></i>Addons</a>
+	<a id="addons" class="settings"><i class="fa fa-addons"></i>Addons</a>
 </div>
 <div id="swipebar" class="transparent">
 	<i id="swipeL" class="fa fa-left fa-2x"></i>
