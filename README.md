@@ -139,16 +139,16 @@ create-rune.sh
 
 ---
 
-### Optional
-[**Create image file**](https://github.com/rern/RuneOS/blob/master/imagefile.md)  
+### Optionals
+- [**Create image file**](https://github.com/rern/RuneOS/blob/master/imagefile.md)  
 
-**Setup Wi-Fi auto-connect** (if not set during build)
-- On Linux or Windows
-- Insert micro SD card
-- In `BOOT`
-	- Open file `wifi0` with text editor
-	- Replace `"NAME` and `PASSWORD` with ones for your Wi-Fi
-	- If security of your Wi-Fi is `wep`, replace `wpa` as well.
-	- Save as `wifi`
-- Move micro SD card to Raspberry Pi
-- Power on
+- **Setup Wi-Fi auto-connect** (if not set during build)
+	- On Linux or Windows
+	- Insert micro SD card
+	- In `BOOT`
+		- Open file `wifi0` with text editor
+		- Replace `"NAME` and `PASSWORD` with ones for your Wi-Fi
+		- If security of your Wi-Fi is `wep`, replace `wpa` as well.
+		- Save as `wifi`
+	- Move micro SD card to Raspberry Pi
+	- Power on
