@@ -115,7 +115,7 @@ RuneOS - DIY RuneAudio+R e
 ---
 	
 ### Create Arch Linux Arm
-- Open **Files** app 
+- Open **Files** app (**File Manager** on Manjaro)
 - Click `BOOT` and `ROOT` to mount
 - Note each path in location bar or hover mouse over `BOOT` and `ROOT` for confirmation
 ```sh
