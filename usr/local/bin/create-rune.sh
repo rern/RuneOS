@@ -128,7 +128,7 @@ fi
 
 [[ $nowireless ]] && sed -i '/disable-wifi\|disable-bt/ d' /boot/config.txt
 
-[[ ! -e /usr/bin/bluetoothctl ]] && rm /root/bluealz* /root/armv6h/bluez* /boot/overlays/bcmbt.dtbo
+[[ ! -e /usr/bin/bluetoothctl ]] && rm /root/bluez* /root/armv6h/bluez* /boot/overlays/bcmbt.dtbo
 
 [[ ! $kid3 ]] && rm /root/kid3*
 [[ ! $upnp ]] && rm /etc/upmpdcli.conf /root/{libupnpp*,upmpdcli*}
