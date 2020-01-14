@@ -124,11 +124,14 @@ chown -R http:http /srv/http
 if [[ $rpi01 ]]; then
 	rm /root/*.xz
 	mv /root/armv6h/* /root
+	rmdir /root/armv6h
+else
+	rm -r /root/armv6h
 fi
 
 [[ $nowireless ]] && sed -i '/disable-wifi\|disable-bt/ d' /boot/config.txt
 
-[[ ! -e /usr/bin/bluetoothctl ]] && rm /root/bluez* /root/armv6h/bluez* /boot/overlays/bcmbt.dtbo
+[[ ! -e /usr/bin/bluetoothctl ]] && rm /root/bluez* /boot/overlays/bcmbt.dtbo
 
 [[ ! $kid3 ]] && rm /root/kid3*
 [[ ! $upnp ]] && rm /etc/upmpdcli.conf /root/{libupnpp*,upmpdcli*}
@@ -249,7 +252,6 @@ chown -R mpd:audio "$dirdata/mpd" /mnt/MPD
 
 # remove cache and files
 rm *.zip /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
-rm -r /root/armv6h
 
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
