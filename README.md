@@ -63,8 +63,12 @@ RuneOS - DIY RuneAudio+R e
 ### Prepare partitions
 - On Linux PC
 - Open **GParted** app (Manjaro root password: `manjaro`)
+- 3 Alternatives:
+	- Micro SD card only
+	- Micro SD card + USB drive
+	- USB drive only
 
-**Option 1: Micro SD card only**
+**Alternative 1: Micro SD card only**
 - `Unmount` > `Delete` all partitions (make sure it's the micro SD card)
 - Create partitions:
 
@@ -73,7 +77,7 @@ RuneOS - DIY RuneAudio+R e
 | #1  | 100MiB      | primary | fat32  | BOOT  |
 | #2  | (the rest)  | primary | ext4   | ROOT  |
 	
-**Option 2: Micro SD card + USB drive**
+**Alternative 2: Micro SD card + USB drive**
 - Micro SD card
 	- `Unmount` > `Delete` all partitions (Caution: make sure it's the SD card)
 	- Create a partition:
@@ -101,7 +105,7 @@ RuneOS - DIY RuneAudio+R e
 | (any) | (existing)  | primary | (any)  | (any) |
 | (any) | 3500MiB     | primary | ext4   | ROOT  |
 			
-**Option 3: USB drive only**
+**Alternative 3: USB drive only**
 
 - Enable boot from USB: [Set boot bit](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md) (Micro SD card can still be used as usual if inserted.)
 - Create partitions: (Drive with existing data must be resized and rearranged respectively.)
