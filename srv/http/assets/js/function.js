@@ -508,7 +508,7 @@ function displayIndexBar() {
 	}, 50 );
 }
 function displayItems( checked ) {
-	var itemlibrary = [ 'album','artist','albumartist','composer','coverart','genre','nas','sd','usb','webradio','count','label','plclear','playbackswitch','tapaddplay','thumbbyartist' ];
+	var itemlibrary = [ 'album','artist','albumartist','composer','coverart','genre','nas','sd','usb','webradio','count','label','plclear','playbackswitch','tapaddplay', 'backonleft', 'thumbbyartist' ];
 	var itemplayback = [ 'bars','barsauto','buttons','cover','coverlarge','radioelapsed','time','volume' ]
 	var page = checked.shift();
 	var items = page === 'library' ? itemlibrary : itemplayback;
@@ -1548,7 +1548,7 @@ function renderSavedPlaylist( name ) {
 		} else {
 			counthtml += countradiohtml;
 		}
-		$( '#pl-back' ).css( 'float', 'backonleft' in GUI.display === 'checked' ? 'left' : '' );
+		$( '#pl-back' ).css( 'float', 'backonleft' in GUI.display ? 'left' : '' );
 		$( '#pl-currentpath' ).html( '<a class="lipath">'+ name +'</a></ul>'+ counthtml );
 		$( '#pl-currentpath, #pl-back, #pl-editor' ).removeClass( 'hide' );
 		$( '#pl-currentpath bl' ).removeClass( 'title' );
