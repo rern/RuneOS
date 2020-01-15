@@ -472,7 +472,7 @@ function nicsStatus() {
 			}
 		} );
 		$( '#listinterfaces' ).html( html ).promise().done( function() {
-			if ( accesspoint ) $( '#divaccesspoint' ).toggleClass( 'hide', !accesspoint );
+			$( '#divaccesspoint' ).toggleClass( 'hide', $( '.wlan0' ).length === 0 );
 		} );
 		qr();
 		$( '#refreshing' ).addClass( 'hide' );
