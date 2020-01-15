@@ -1283,7 +1283,7 @@ function renderLsPlaylists( lsplaylists ) {
 	$( '#pl-editor' ).html( content +'<p></p>' ).promise().done( function() {
 		GUI.pleditor = 1;
 		// fill bottom of list to make last li movable to top
-		$( '#pl-editor p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 140 : 100 ) +'px' );
+		$( '#pl-editor p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 144 : 104 ) +'px' );
 		$( '#pl-editor' ).css( 'width', '' );
 		$( '#loader' ).addClass( 'hide' );
 		setTimeout( function() {
@@ -1531,7 +1531,7 @@ function renderPlaylist() {
 	$( '#plconsume' ).toggleClass( 'bl', GUI.status.consume === 1 );
 	$( '#pllibrandom' ).toggleClass( 'bl', GUI.status.librandom === 1 );
 	$( '#pl-entries' ).html( data.content +'<p></p>' ).promise().done( function() {
-		$( '#pl-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 140 : 100 ) +'px' );
+		$( '#pl-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 144 : 104 ) +'px' );
 		setPlaylistScroll();
 	} );
 }
@@ -1555,7 +1555,7 @@ function renderSavedPlaylist( name ) {
 		$( '#pl-editor' ).html( data.content +'<p></p>' ).promise().done( function() {
 			GUI.pleditor = 1;
 			// fill bottom of list to mave last li movable to top
-			$( '#pl-editor p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 140 : 100 ) +'px' );
+			$( '#pl-editor p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 144 : 104 ) +'px' );
 			$( '#pl-editor' ).css( 'width', '100%' );
 			$( '#loader, #pl-index' ).addClass( 'hide' );
 			$( 'html, body' ).scrollTop( GUI.plscrolltop );
