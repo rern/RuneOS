@@ -104,7 +104,7 @@ if ( file_exists( '/usr/bin/ffmpeg' ) ) $ffmpeg = exec( "$sudo/sed -n '/ffmpeg/ 
     <heading>Options</heading>
         <div class="col-l">Auto update</div>
         <div class="col-r">
-            <input id="autoupdate" type="checkbox" <?=$autoupdate?>>
+            <input id="autoupdate" type="checkbox" value="<?=$autoupdate?>" <?=( $autoupdate === 'no' ? '' : 'checked' )?>>
             <div class="switchlabel" for="autoupdate"></div>
             <span class="help-block hide">Automatic update MPD database when files changed.</span>
         </div>
