@@ -129,7 +129,7 @@ else
 	rm -r /root/armv6h
 fi
 
-[[ $nowireless ]] && sed -i '/disable-wifi\|disable-bt/ d' /boot/config.txt
+[[ $nowireless ]] && sed -i '/disable-wifi\|disable-bt\|bcmbt/ d' /boot/config.txt
 
 [[ ! -e /usr/bin/bluetoothctl ]] && rm /root/bluez* /boot/overlays/bcmbt.dtbo
 
