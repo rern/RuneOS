@@ -406,7 +406,7 @@ function dataParse( data, path, querytype, plid ) {
 	$( '#db-entries' ).html( content +'<p></p>' ).promise().done( function() {
 		// fill bottom of list to mave last li movable to top
 		$( '#db-list' ).css( 'padding-top', GUI.bars ? '80px' : '' );
-		$( '#db-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 140 : 100 ) +'px' );
+		$( '#db-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 157 : 117 ) +'px' );
 		if ( !fileplaylist ) displayIndexBar();
 		$( '#loader, .menu, #divcoverarts' ).addClass( 'hide' );
 		$( 'html, body' ).scrollTop( 0 );
@@ -1531,7 +1531,7 @@ function renderPlaylist() {
 	$( '#plconsume' ).toggleClass( 'bl', GUI.status.consume === 1 );
 	$( '#pllibrandom' ).toggleClass( 'bl', GUI.status.librandom === 1 );
 	$( '#pl-entries' ).html( data.content +'<p></p>' ).promise().done( function() {
-		$( '#pl-entries p' ).css( 'min-height', window.innerHeight - 140 +'px' );
+		$( '#pl-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 140 : 100 ) +'px' );
 		setPlaylistScroll();
 	} );
 }

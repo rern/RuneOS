@@ -283,7 +283,7 @@ $( '#addons' ).click( function () {
 	} );
 } );
 $( '#aria2' ).click( function( e ) {
-	menuPackage( e, $( this ), '/aria2/web/index.html' );
+	menuPackage( e, $( this ), '/aria2/index.html' );
 } );
 $( '#transmission' ).click( function( e ) {
 	menuPackage( e, $( this ), 'http://'+ location.hostname +':9091' );
@@ -1843,11 +1843,15 @@ window.addEventListener( 'orientationchange', function() {
 			setNameWidth();
 			getTitleWidth();
 			setTitleWidth();
+			$( '#pl-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 140 : 100 ) +'px' );
 			var scrollpos = $( '#pl-entries li.active' ).offset().top - $( '#pl-entries' ).offset().top - ( 49 * 3 );
 			$( 'html, body' ).scrollTop( scrollpos );
 		}, 300 );
 	} else if ( GUI.dblist || GUI.pleditor  || !$( '#divcoverarts' ).hasClass( 'hide' ) ) {
 		displayIndexBar();
+		if ( GUI.dblist ) setTimeout( function() {
+			$( '#db-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 157 : 117 ) +'px' );
+		}, 300 );
 	}
 } );
 
