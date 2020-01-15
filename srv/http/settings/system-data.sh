@@ -1,6 +1,6 @@
 #!/bin/bash
 
-grep -q '^dtoverlay=bcmbt' /boot/config.txt && bluetooth=checked || bluetooth=
+grep -q '^#dtoverlay=disable-bt' /boot/config.txt && bluetooth=checked || bluetooth=
 grep -q 'dtparam=audio=on' /boot/config.txt && onboardaudio=checked || onboardaudio=
 grep -q '^disable_overscan=1' /boot/config.txt && overscan=0 || overscan=1
 grep -q '^#dtoverlay=disable-wifi' /boot/config.txt && wlan=checked || wlan=
