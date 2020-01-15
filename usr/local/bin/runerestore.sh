@@ -139,15 +139,15 @@ else
 fi
 if [[ -e $dirsystem/onboard-bluetooth ]]; then
 	echo -e "\nEnable $( tcolor 'Onboard Bluetooth' ) ...\n"
-	sed -i '/^#dtoverlay=pi3-disable-bt/ s/^#//' /boot/config.txt
+	sed -i -e '/^dtoverlay=pi3-disable-bt/ s/^/#/' -e '/^#dtoverlay=bcmbt/ s/^#//' /boot/config.txt
 else
-	sed -i '/^dtoverlay=pi3-disable-bt/ s/^/#/' /boot/config.txt
+	sed -i '/^#dtoverlay=pi3-disable-bt/ s/^#//' -e '/^dtoverlay=bcmbt/ s/^/#/' /boot/config.txt
 fi
 if [[ ! -e $dirsystem/onboard-wlan ]]; then
 	echo -e "\nDisable $( tcolor 'Oonboard Wi-Fi' ) ...\n"
-	sed -i '/^dtoverlay=pi3-disable-wifi/ s/^/#/' /boot/config.txt
-else
 	sed -i '/^#dtoverlay=pi3-disable-wifi/ s/^#//' /boot/config.txt
+else
+	sed -i '/^dtoverlay=pi3-disable-wifi/ s/^/#/' /boot/config.txt
 fi
 # samba
 if [[ -e /ust/bin/samba && -e $dirsystem/samba ]]; then
