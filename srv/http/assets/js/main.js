@@ -1843,7 +1843,7 @@ window.addEventListener( 'orientationchange', function() {
 			setNameWidth();
 			getTitleWidth();
 			setTitleWidth();
-			$( '#pl-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 144 : 104 ) +'px' );
+			$( '#pl-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 277 : 237 ) +'px' );
 			var scrollpos = $( '#pl-entries li.active' ).offset().top - $( '#pl-entries' ).offset().top - ( 49 * 3 );
 			$( 'html, body' ).scrollTop( scrollpos );
 		}, 300 );
@@ -1851,9 +1851,11 @@ window.addEventListener( 'orientationchange', function() {
 		displayIndexBar();
 		setTimeout( function() {
 			if ( GUI.dblist ) {
-				$( '#db-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 157 : 117 ) +'px' );
-			} else if ( GUI.pleditor ) {
-				$( '#pl-editor p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 144 : 104 ) +'px' );
+				if ( $( '.licover' ).length ) {
+					$( '#db-entries p' ).css( 'min-height', ( GUI.bars ? 40 : 0 ) +'px' );
+				} else {
+					$( '#db-entries p' ).css( 'min-height', window.innerHeight - ( GUI.bars ? 130 : 90 ) +'px' );
+				}
 			}
 		}, 300 );
 	}

@@ -1753,6 +1753,11 @@ input[type=text] {
 	line-height: 48px;
 	vertical-align: 5%;
 }
+#db-entries p,
+#pl-entries p,
+#pl-editor p {
+	margin: 0;
+}
 #indexcover,
 .lipath,
 .liname,
