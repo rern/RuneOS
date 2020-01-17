@@ -1719,13 +1719,11 @@ function setButtonToggle() {
 			$( '#poslibrandom' ).toggleClass( 'hide', GUI.status.librandom === 0 );
 		}
 		$( '#posaddons' ).toggleClass( 'hide', GUI.bars !== '' || !( 'update' in GUI.display ) );
-		$( '#posgpio' ).toggleClass( 'hide', GUI.gpio !== 'ON' );
 	} else {
 		$( '#posmode i' ).addClass( 'hide' );
 		$( '#iconsume' ).toggleClass( 'hide', GUI.status.consume === 0 );
 		$( '#ilibrandom' ).toggleClass( 'hide', GUI.status.librandom === 0 );
 		$( '#iaddons' ).toggleClass( 'hide', GUI.bars !== '' || !( 'update' in GUI.display ) );
-		$( '#igpio' ).toggleClass( 'hide', GUI.gpio !== 'ON' );
 		if ( $( '#play-group' ).is( ':visible' ) ) {
 			$( '#irandom' ).addClass( 'hide' )
 			$( '#irepeat' ).attr( 'class', 'fa hide' );
