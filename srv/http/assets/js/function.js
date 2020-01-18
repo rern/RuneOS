@@ -1088,8 +1088,19 @@ function mpdSeek( seekto ) {
 		clearInterval( GUI.intElapsed );
 		$.post( 'commands.php', { mpc: 'mpc seek '+ seekto } );
 	} else {
+		if ( GUI.bars ) {
+			$( '#playback-controls button' ).removeClass( 'active' );
+			$( '#pause' ).addClass( 'active' );
+			$( '#song' ).addClass( 'gr' );
+		}
+		$( '#elapsed' ).removeClass( 'gr' ).addClass( 'bl' );
 		$.post( 'commands.php', { mpc: [ 'mpc play', 'mpc seek '+ seekto, 'mpc pause' ] } );
 	}
+	if ( !GUI.status.elapsed ) seekto++;
+	GUI.status.elapsed = seekto;
+	$( '#time' ).roundSlider( 'setValue', Math.round( seekto / GUI.status.Time * 1000 ) );
+	$( '#elapsed' ).html( second2HMS( seekto ) )
+	$( '#total' ).text( second2HMS( GUI.status.Time ) );
 }
 function muteColor( volumemute ) {
 	$volumetooltip.text( volumemute ).addClass( 'bl' );
@@ -1691,6 +1702,7 @@ function second2HMS( second ) {
 }
 function setButton() {
 	$( '#playback-controls' ).toggleClass( 'hide', GUI.status.playlistlength === 0 || GUI.status.ext === 'AirPlay' );
+	if ( GUI.status.playlistlength === 1 ) $( '#previous, #next' ).addClass( 'hide' );
 	var state = GUI.status.state;
 	if ( GUI.bars ) {
 		$( '#playback-controls button' ).removeClass( 'active' );

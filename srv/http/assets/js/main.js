@@ -796,12 +796,6 @@ $( '.timemap, .covermap, .volmap' ).tap( function() {
 		} else {
 			$( '#repeat' ).click();
 		}
-	} else if ( cmd === 'play' ) {
-		if ( GUI.status.state === 'play' ) {
-			GUI.status.ext === 'radio' ? $( '#stop' ).click() : $( '#pause' ).click();
-		} else {
-			$( '#play' ).click();
-		}
 	} else {
 		$( '#'+ cmd ).click();
 	}
@@ -811,45 +805,64 @@ $( '.btn-cmd' ).click( function() {
 	var cmd = this.id;
 	if ( $this.hasClass( 'btn-toggle' ) ) {
 		var onoff = GUI.status[ cmd ] ? 0 : 1;
+		var command = 'mpc '+ cmd +' '+ onoff;
 		GUI.status[ cmd ] = onoff;
-		command = 'mpc '+ cmd +' '+ onoff;
 	} else {
-		if ( GUI.status.ext === 'radio' && cmd === 'pause' ) cmd = 'stop';
-		if ( GUI.bars ) {
-			$( '#playback-controls .btn-cmd' ).removeClass( 'active' );
-			$this.addClass( 'active' );
+		if ( GUI.status.ext === 'radio' ) {
+			if ( cmd === 'pause' || ( cmd === 'play' && GUI.status.state === 'play' ) ) cmd = 'stop';
+		} else if ( cmd === 'play' && GUI.status.state === 'play' ) {
+			cmd = 'pause';
 		}
 		if ( cmd === 'stop' ) {
+			var command = 'mpc stop';
 			if ( GUI.status.ext === 'AirPlay' ) {
 				$.post( 'commands.php', { bash: '/srv/http/shairport-startstop.sh stop' } );
 				notify( 'AirPlay', 'Switch to MPD ...', 'airplay' );
 				return
 				
 			} else {
-				command = 'mpc stop';
+				clearInterval( GUI.intKnob );
+				clearInterval( GUI.intElapsed );
 				$( '#pl-entries .elapsed' ).empty();
+				$( '#time' ).roundSlider( 'setValue', 0 );
+				$( '#elapsed' ).html( second2HMS( GUI.status.Time ) ).addClass( 'gr');
+				$( '#total' ).empty();
+				GUI.status.elapsed = 0;
 			}
+		} else if ( cmd === 'play' ) {
+			var command = 'mpc play';
+			$( '#total' ).removeClass( 'wh' );
+			if ( $( '#total' ).is( ':empty' ) ) $( '#total' ).text( $( '#elapsed' ).text() );
+			$( '#elapsed' ).empty();
+		} else if ( cmd === 'pause' ) {
+			var command = 'mpc pause';
+			clearInterval( GUI.intKnob );
+			clearInterval( GUI.intElapsed );
+			$( '#elapsed' ).addClass( 'bl' );
+			$( '#total' ).addClass( 'wh' );
 		} else if ( cmd === 'previous' || cmd === 'next' ) {
 			// enable previous / next while stop
-			var current = GUI.status.song + 1;
+			var current = GUI.status.song++;
 			var last = GUI.status.playlistlength;
 			if ( GUI.status.random === 1 ) {
 				// improve: repeat pattern of mpd random
 				var pos = Math.floor( Math.random() * last ); // Math.floor( Math.random() * ( max - min + 1 ) ) + min;
-				if ( pos === current ) pos = ( pos === last ) ? pos - 1 : pos + 1; // avoid same pos ( no pos-- or pos++ in ternary )
+				if ( pos === current ) pos = ( pos === last ) ? pos-- : pos++; // avoid same pos ( no pos-- or pos++ in ternary )
 			} else {
 				if ( cmd === 'previous' ) {
-					var pos = current !== 1 ? current - 1 : last;
+					var pos = current !== 1 ? current-- : last;
 				} else {
-					var pos = current !== last ? current + 1 : 1;
+					var pos = current !== last ? current++ : 1;
 				}
 			}
 			pos = pos || 1;
 			command = GUI.status.state === 'play' ? 'mpc play '+ pos : [ 'mpc play '+ pos, 'mpc stop' ];
-		} else {
-			command = ( GUI.status.ext === 'radio' && GUI.status.state === 'play' ) ? 'mpc stop' : 'mpc toggle';
 		}
 		GUI.status.state = cmd;
+	}
+	if ( GUI.bars && [ 'stop', 'play', 'pause' ].indexOf( cmd ) !== -1 ) {
+		$( '#playback-controls .btn-cmd' ).removeClass( 'active' );
+		$( '#'+ cmd ).addClass( 'active' );
 	}
 	$.post( 'commands.php', { mpc: command } );
 	setButtonToggle();
