@@ -1083,10 +1083,26 @@ function menuPackage( e, $this, url ) {
 	}
 }
 function mpdSeek( seekto ) {
-	if ( GUI.status.state !== 'stop' ) {
+	var seektime = Math.round( seekto / 1000 * GUI.status.Time );
+	GUI.status.elapsed = seektime;
+	elapsed = seektime;
+	position = seekto;
+	$( '#time' ).roundSlider( 'setValue', seekto );
+	$( '#elapsed' ).html( second2HMS( seektime ) );
+	$( '#total' ).text( second2HMS( GUI.status.Time ) );
+	if ( GUI.status.state === 'play' ) {
 		clearInterval( GUI.intKnob );
 		clearInterval( GUI.intElapsed );
-		$.post( 'commands.php', { mpc: 'mpc seek '+ seekto } );
+		GUI.intElapsed = setInterval( function() {
+			elapsed++;
+			elapsedhms = second2HMS( elapsed );
+			$( '#elapsed' ).text( elapsedhms );
+		}, 1000 );
+		GUI.intKnob = setInterval( function() {
+			position++;
+			$( '#time' ).roundSlider( 'setValue', position );
+		}, GUI.status.Time );
+		$.post( 'commands.php', { mpc: 'mpc seek '+ seektime } );
 	} else {
 		if ( GUI.bars ) {
 			$( '#playback-controls button' ).removeClass( 'active' );
@@ -1094,13 +1110,8 @@ function mpdSeek( seekto ) {
 			$( '#song' ).addClass( 'gr' );
 		}
 		$( '#elapsed' ).removeClass( 'gr' ).addClass( 'bl' );
-		$.post( 'commands.php', { mpc: [ 'mpc play', 'mpc seek '+ seekto, 'mpc pause' ] } );
+		$.post( 'commands.php', { mpc: [ 'mpc play', 'mpc seek '+ seektime, 'mpc pause' ] } );
 	}
-	if ( !GUI.status.elapsed ) seekto++;
-	GUI.status.elapsed = seekto;
-	$( '#time' ).roundSlider( 'setValue', Math.round( seekto / GUI.status.Time * 1000 ) );
-	$( '#elapsed' ).html( GUI.status.state === 'play' ? '' : second2HMS( seekto ) );
-	$( '#total' ).text( second2HMS( GUI.status.Time ) );
 }
 function muteColor( volumemute ) {
 	$volumetooltip.text( volumemute ).addClass( 'bl' );
@@ -1319,8 +1330,6 @@ function renderPlayback() {
 	if ( 'volume' in GUI.display && !( 'volumenone' in GUI.display ) ) {
 		status.volumemute != 0 ? muteColor( status.volumemute ) : unmuteColor();
 	}
-	clearInterval( GUI.intKnob );
-	clearInterval( GUI.intElapsed );
 	// empty queue
 	if ( !status.playlistlength && status.ext !== 'AirPlay' ) {
 		setPlaybackBlank();
@@ -1462,14 +1471,28 @@ function renderPlayback() {
 	if ( status.state === 'pause' ) {
 		if ( 'time' in GUI.display ) {
 			$( '#time' ).roundSlider( 'setValue', position );
-			$( '#elapsed' ).text( elapsedhms );
-			$( '#elapsed' ).addClass( 'bl' );
+			$( '#elapsed' ).text( elapsedhms ).addClass( 'bl' );
 			$( '#total' ).addClass( 'wh' );
 			$( '#timepos' ).empty();
 		} else {
 			$( '#timepos' ).html( '&ensp;<i class="fa fa-pause"></i>&ensp;<bl>'+ elapsedhms +'</bl> / '+ timehms );
 		}
 		return
+	}
+	
+	// playlist current song
+	if ( status.Title !== previoussong || status.Album !== previousalbum ) {
+		if ( GUI.playlist && !GUI.pleditor ) setPlaylistScroll();
+		if ( $( '#lyricscontainer' ).length && !$( '#lyricscontainer' ).hasClass( 'hide' ) ) getlyrics();
+	}
+	
+	if ( status.state === 'play' || status.state === 'pause' ) {
+		elapsed = status.elapsed;
+		return
+		
+	} else {
+		clearInterval( GUI.intKnob );
+		clearInterval( GUI.intElapsed );
 	}
 	
 	if ( 'time' in GUI.display ) {
@@ -1505,12 +1528,6 @@ function renderPlayback() {
 			elapsedhms = second2HMS( elapsed );
 			$( '#timepos' ).html( '&ensp;<i class="fa fa-play"></i>&ensp;<w>'+ elapsedhms +'</w> / '+ timehms );
 		}, 1000 );
-	}
-
-	// playlist current song
-	if ( status.Title !== previoussong || status.Album !== previousalbum ) {
-		if ( GUI.playlist && !GUI.pleditor ) setPlaylistScroll();
-		if ( $( '#lyricscontainer' ).length && !$( '#lyricscontainer' ).hasClass( 'hide' ) ) getlyrics();
 	}
 }
 function renderPlaylist() {
@@ -1847,7 +1864,7 @@ function setPlaylistScroll() {
 				GUI.status[ key ] = value;
 			} );
 			if ( GUI.bars ) setButton();
-			var elapsed = status.elapsed;
+			elapsed = status.elapsed;
 			var radio = GUI.status.ext === 'radio';
 			var slash = radio ? '' : ' <gr>/</gr>';
 			$linotactive = $( '#pl-entries li:not(:eq( '+ status.song +' ) )' );

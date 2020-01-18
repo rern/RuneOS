@@ -542,24 +542,22 @@ $( '#time' ).roundSlider( {
 		if ( GUI.status.ext === 'radio' ) {
 			$timeRS.setValue( 0 );
 		} else {
-			mpdSeek( Math.floor( e.value / 1000 * GUI.status.Time ) );
+			mpdSeek( e.value );
 		}
 	}
 	, start       : function () {
-		if ( GUI.status.ext === 'radio' ) return
-		
-		clearInterval( GUI.intKnob );
-		clearInterval( GUI.intElapsed );
+		if ( GUI.status.ext !== 'radio' ) {
+			clearInterval( GUI.intKnob );
+			clearInterval( GUI.intElapsed );
+		}
 	}
 	, drag        : function ( e ) { // drag with no transition by default
-		if ( GUI.status.ext === 'radio' ) return
-		
-		$( '#elapsed' ).text( second2HMS( Math.round( e.value / 1000 * GUI.status.Time ) ) );
+		if ( GUI.status.ext !== 'radio' ) {
+			$( '#elapsed' ).text( second2HMS( Math.round( e.value / 1000 * GUI.status.Time ) ) );
+		}
 	}
 	, stop        : function( e ) { // on 'stop drag'
-		if ( GUI.status.ext === 'radio' ) return
-		
-		mpdSeek( Math.round( e.value / 1000 * GUI.status.Time ) );
+		if ( GUI.status.ext !== 'radio' ) mpdSeek( e.value );
 	}
 } );
 $( '#volume' ).roundSlider( {
@@ -585,10 +583,9 @@ $( '#volume' ).roundSlider( {
 		if ( e.preValue === 0 ) unmuteColor();
 		if ( GUI.drag ) {
 			GUI.drag = 0;
-			return
+		} else {
+			$.post( 'commands.php', { volume: e.value } );
 		}
-		
-		$.post( 'commands.php', { volume: e.value } );
 	}
 	, start           : function( e ) { // on 'start drag'
 		// restore handle color immediately on start drag
@@ -813,7 +810,29 @@ $( '.btn-cmd' ).click( function() {
 		} else if ( cmd === 'play' && GUI.status.state === 'play' ) {
 			cmd = 'pause';
 		}
-		if ( cmd === 'stop' ) {
+		clearInterval( GUI.intKnob );
+		clearInterval( GUI.intElapsed );
+		if ( cmd === 'play' ) {
+			var command = 'mpc play';
+			if ( !GUI.status.elapsed ) {
+				$( '#total' ).text( $( '#elapsed' ).text() );
+				$( '#elapsed' ).empty().removeClass( 'gr' );
+				position = 0;
+				elapsed = 0;
+			} else {
+				position = $( '#time' ).roundSlider( 'getValue' );
+				elapsed = GUI.status.elapsed;
+			}
+			GUI.intElapsed = setInterval( function() {
+				elapsed++;
+				elapsedhms = second2HMS( elapsed );
+				$( '#elapsed' ).text( elapsedhms );
+			}, 1000 );
+			GUI.intKnob = setInterval( function() {
+				position++;
+				$( '#time' ).roundSlider( 'setValue', position );
+			}, GUI.status.Time );
+		} else if ( cmd === 'stop' ) {
 			var command = 'mpc stop';
 			if ( GUI.status.ext === 'AirPlay' ) {
 				$.post( 'commands.php', { bash: '/srv/http/shairport-startstop.sh stop' } );
@@ -821,24 +840,15 @@ $( '.btn-cmd' ).click( function() {
 				return
 				
 			} else {
-				clearInterval( GUI.intKnob );
-				clearInterval( GUI.intElapsed );
 				$( '#pl-entries .elapsed' ).empty();
 				$( '#time' ).roundSlider( 'setValue', 0 );
 				$( '#elapsed' ).html( second2HMS( GUI.status.Time ) ).addClass( 'gr');
 				$( '#total' ).empty();
 				GUI.status.elapsed = 0;
 			}
-		} else if ( cmd === 'play' ) {
-			var command = 'mpc play';
-			$( '#total' ).removeClass( 'wh' );
-			if ( $( '#total' ).is( ':empty' ) ) $( '#total' ).text( $( '#elapsed' ).text() );
-			$( '#elapsed' ).empty();
 		} else if ( cmd === 'pause' ) {
 			var command = 'mpc pause';
-			clearInterval( GUI.intKnob );
-			clearInterval( GUI.intElapsed );
-			$( '#elapsed' ).addClass( 'bl' );
+			$( '#elapsed' ).addClass( 'bl' ).text( second2HMS( elapsed + 1 ) );;
 			$( '#total' ).addClass( 'wh' );
 		} else if ( cmd === 'previous' || cmd === 'next' ) {
 			// enable previous / next while stop
