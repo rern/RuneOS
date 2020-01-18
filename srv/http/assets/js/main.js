@@ -842,19 +842,19 @@ $( '.btn-cmd' ).click( function() {
 			$( '#total' ).addClass( 'wh' );
 		} else if ( cmd === 'previous' || cmd === 'next' ) {
 			// enable previous / next while stop
-			var current = GUI.status.song++;
+			var current = GUI.status.song + 1;
 			var last = GUI.status.playlistlength;
 			if ( last === 1 ) return
 			
 			if ( GUI.status.random === 1 ) {
 				// improve: repeat pattern of mpd random
 				var pos = Math.floor( Math.random() * last ); // Math.floor( Math.random() * ( max - min + 1 ) ) + min;
-				if ( pos === current ) pos = ( pos === last ) ? pos-- : pos++; // avoid same pos ( no pos-- or pos++ in ternary )
+				if ( pos === current ) pos = ( pos === last ) ? pos - 1 : pos + 1; // avoid same pos ( no pos-- or pos++ in ternary )
 			} else {
 				if ( cmd === 'previous' ) {
-					var pos = current !== 1 ? current-- : last;
+					var pos = current !== 1 ? current - 1 : last;
 				} else {
-					var pos = current !== last ? current++ : 1;
+					var pos = current !== last ? current + 1 : 1;
 				}
 			}
 			pos = pos || 1;
