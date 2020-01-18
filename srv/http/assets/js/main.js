@@ -862,10 +862,8 @@ $( '.btn-cmd' ).click( function() {
 		}
 		GUI.status.state = cmd;
 	}
-	if ( GUI.bars && [ 'stop', 'play', 'pause' ].indexOf( cmd ) !== -1 ) {
-		$( '#playback-controls .btn-cmd' ).removeClass( 'active' );
-		$( '#'+ cmd ).addClass( 'active' );
-	}
+	$( '#playback-controls .btn-cmd' ).removeClass( 'active' );
+	$( '#'+ cmd ).addClass( 'active' );
 	$.post( 'commands.php', { mpc: command } );
 	setButtonToggle();
 } );
