@@ -844,6 +844,8 @@ $( '.btn-cmd' ).click( function() {
 			// enable previous / next while stop
 			var current = GUI.status.song++;
 			var last = GUI.status.playlistlength;
+			if ( last === 1 ) return
+			
 			if ( GUI.status.random === 1 ) {
 				// improve: repeat pattern of mpd random
 				var pos = Math.floor( Math.random() * last ); // Math.floor( Math.random() * ( max - min + 1 ) ) + min;
