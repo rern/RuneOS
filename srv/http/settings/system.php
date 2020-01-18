@@ -1,13 +1,8 @@
 <?php
 $data = json_decode( shell_exec( '/srv/http/settings/system-data.sh' ) );
 $hardwarecode = $data->hardwarecode;
-switch( substr( $hardwarecode, -4, 1 ) ) {
-	case '0': $soc = 'BCM2835'; break;
-	case '1': $soc = 'BCM2836'; break;
-	case '2': $soc = 'BCM2837'; break;
-	case '3': $soc = 'BCM2711';
-}
-switch( substr( $hardwarecode, -3, 2 ) ) {
+$hwcode = substr( $hardwarecode, -3, 2 );
+switch( $hwcode ) {
 	case '00':
 	case '01':
 	case '02':
@@ -20,13 +15,19 @@ switch( substr( $hardwarecode, -3, 2 ) ) {
 	case '0d': $cpu = '4 @ 1.4GHz'; $soc.='B0'; break;
 	case '11': $cpu = '4 @ 1.5GHz';
 }
+switch( substr( $hardwarecode, -4, 1 ) ) {
+	case '0': $soc = 'BCM2835'; break;
+	case '1': $soc = 'BCM2836'; break;
+	case '2': $soc = 'BCM2837'; break;
+	case '3': $soc = 'BCM2711';
+}
 switch( substr( $hardwarecode, -6, 1 ) ) {
 	case '9': $memory = '512KB'; break;
 	case 'a': $memory = '1GB';   break;
 	case 'b': $memory = '2GB';   break;
 	case 'c': $memory = '4GB';
 }
-$rpiwireless = in_array( $hardwarecode, [ '0c', '08', '0e', '0d', '11' ] ); // rpi zero w, rpi3, rpi4
+$rpiwireless = in_array( $hwcode, [ '0c', '08', '0e', '0d', '11' ] ); // rpi zero w, rpi3, rpi4
 $undervoltage = $data->undervoltage ? '<span id="undervoltage"><br>'.$data->undervoltage.' <a class="red">Under-voltage detected</a></span>' : '';
 date_default_timezone_set( $data->timezone );
 $timezonelist = timezone_identifiers_list();
