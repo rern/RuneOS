@@ -1099,7 +1099,7 @@ function mpdSeek( seekto ) {
 	if ( !GUI.status.elapsed ) seekto++;
 	GUI.status.elapsed = seekto;
 	$( '#time' ).roundSlider( 'setValue', Math.round( seekto / GUI.status.Time * 1000 ) );
-	$( '#elapsed' ).html( second2HMS( seekto ) )
+	$( '#elapsed' ).html( GUI.status.state === 'play' ? '' : second2HMS( seekto ) );
 	$( '#total' ).text( second2HMS( GUI.status.Time ) );
 }
 function muteColor( volumemute ) {
