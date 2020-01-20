@@ -794,6 +794,8 @@ $( '.timemap, .covermap, .volmap' ).tap( function() {
 			$( '#repeat' ).click();
 		}
 	} else {
+		if ( cmd === 'play' && GUI.status.state === 'play' ) cmd = 'pause';
+		if ( cmd === 'pause' && GUI.status.ext === 'radio' ) cmd = 'stop';
 		$( '#'+ cmd ).click();
 	}
 } );
@@ -805,11 +807,6 @@ $( '.btn-cmd' ).click( function() {
 		var command = 'mpc '+ cmd +' '+ onoff;
 		GUI.status[ cmd ] = onoff;
 	} else {
-		if ( GUI.status.ext === 'radio' ) {
-			if ( cmd === 'pause' || ( cmd === 'play' && GUI.status.state === 'play' ) ) cmd = 'stop';
-		} else if ( cmd === 'play' && GUI.status.state === 'play' ) {
-			cmd = 'pause';
-		}
 		if ( cmd === 'play' ) {
 			var command = 'mpc play';
 		} else if ( cmd === 'stop' ) {
@@ -1948,7 +1945,6 @@ pushstreams.display.onmessage = function( data ) {
 }
 pushstreams.idle.onmessage = function( data ) {
 	var changed = data[ 0 ].changed;
-	console.log(changed)
 	clearTimeout( GUI.debounce );
 	GUI.debounce = setTimeout( function() {
 		if ( changed === 'player' ) { // on track changed or fast forward / rewind
