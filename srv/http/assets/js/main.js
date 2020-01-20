@@ -807,7 +807,7 @@ $( '.btn-cmd' ).click( function() {
 		var command = 'mpc '+ cmd +' '+ onoff;
 		GUI.status[ cmd ] = onoff;
 	} else {
-		if ( cmd === 'stop' || cmd === 'pause' ) {
+		if ( cmd !== 'play' ) {
 			clearInterval( GUI.intKnob );
 			clearInterval( GUI.intElapsed );
 			clearInterval( GUI.intElapsedPl );
