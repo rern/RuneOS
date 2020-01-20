@@ -1357,7 +1357,7 @@ function renderPlayback() {
 	}
 	$( '#format-bitrate' ).html( ( 'time' in GUI.display ? '<wh id="dot0"> • </wh>' : '' ) + status.sampling + ext )
 	
-	elapsed = status.elapsed;
+	var elapsed = status.elapsed;
 	clearInterval( GUI.intKnob );
 	clearInterval( GUI.intElapsed );
 	if ( status.ext === 'radio' ) {

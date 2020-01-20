@@ -807,13 +807,15 @@ $( '.btn-cmd' ).click( function() {
 		var command = 'mpc '+ cmd +' '+ onoff;
 		GUI.status[ cmd ] = onoff;
 	} else {
+		if ( cmd === 'stop' || cmd === 'pause' ) {
+			clearInterval( GUI.intKnob );
+			clearInterval( GUI.intElapsed );
+			clearInterval( GUI.intElapsedPl );
+		}
 		if ( cmd === 'play' ) {
 			var command = 'mpc play';
 		} else if ( cmd === 'stop' ) {
 			var command = 'mpc stop';
-			clearInterval( GUI.intKnob );
-			clearInterval( GUI.intElapsed );
-			clearInterval( GUI.intElapsedPl );
 			if ( GUI.status.ext === 'AirPlay' ) {
 				$.post( 'commands.php', { bash: '/srv/http/shairport-startstop.sh stop' } );
 				notify( 'AirPlay', 'Switch to MPD ...', 'airplay' );
@@ -835,9 +837,7 @@ $( '.btn-cmd' ).click( function() {
 			}
 		} else if ( cmd === 'pause' ) {
 			var command = 'mpc pause';
-			$( '#elapsed' )
-				.text( second2HMS( elapsed ) )
-				.addClass( 'bl' );
+			$( '#elapsed' ).addClass( 'bl' );
 			$( '#total' ).addClass( 'wh' );
 		} else if ( cmd === 'previous' || cmd === 'next' ) {
 			// enable previous / next while stop
