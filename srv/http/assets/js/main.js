@@ -821,11 +821,17 @@ $( '.btn-cmd' ).click( function() {
 				
 			} else {
 				$( '#pl-entries .elapsed' ).empty();
-				$( '#elapsed' )
-					.text( second2HMS( GUI.status.Time ) )
-					.addClass( 'gr');
-				$( '#time' ).roundSlider( 'setValue', 0 );
 				$( '#total' ).empty();
+				if ( GUI.status.ext !== 'radio' ) {
+					$( '#elapsed' )
+						.text( second2HMS( GUI.status.Time ) )
+						.addClass( 'gr');
+					$( '#time' ).roundSlider( 'setValue', 0 );
+				} else {
+					$( '#song' ).html( '·&ensp;·&ensp;·' );
+					$( '#elapsed' ).empty();
+					$( '#cover-art' ).attr( 'src', vustop );
+				}
 			}
 		} else if ( cmd === 'pause' ) {
 			var command = 'mpc pause';
