@@ -814,6 +814,9 @@ $( '.btn-cmd' ).click( function() {
 			var command = 'mpc play';
 		} else if ( cmd === 'stop' ) {
 			var command = 'mpc stop';
+			clearInterval( GUI.intKnob );
+			clearInterval( GUI.intElapsed );
+			clearInterval( GUI.intElapsedPl );
 			if ( GUI.status.ext === 'AirPlay' ) {
 				$.post( 'commands.php', { bash: '/srv/http/shairport-startstop.sh stop' } );
 				notify( 'AirPlay', 'Switch to MPD ...', 'airplay' );
@@ -821,10 +824,11 @@ $( '.btn-cmd' ).click( function() {
 				
 			} else {
 				$( '#pl-entries .elapsed' ).empty();
+				$( '#elapsed' ).html( $( '#total' ).text() ).addClass( 'gr');
 				$( '#time' ).roundSlider( 'setValue', 0 );
-				$( '#elapsed' ).html( second2HMS( GUI.status.Time ) ).addClass( 'gr');
 				$( '#total' ).empty();
-				GUI.status.elapsed = 0;
+				GUI.local = 1;
+				setTimeout( function() { GUI.local = 0 }, 300 );
 			}
 		} else if ( cmd === 'pause' ) {
 			var command = 'mpc pause';
@@ -1944,6 +1948,7 @@ pushstreams.display.onmessage = function( data ) {
 }
 pushstreams.idle.onmessage = function( data ) {
 	var changed = data[ 0 ].changed;
+	console.log(changed)
 	clearTimeout( GUI.debounce );
 	GUI.debounce = setTimeout( function() {
 		if ( changed === 'player' ) { // on track changed or fast forward / rewind
@@ -2041,6 +2046,7 @@ pushstreams.volume.onmessage = function( data ) {
 }
 pushstreams.webradio.onmessage = function( data ) {
 	var data = data[ 0 ];
+	if ( !$( '#home-webradio grl' ).length ) $( '#home-webradio .label' ).before( '<grl></grl>' );
 	var count = Number( $( '#home-webradio grl' ).text() );
 	count = count + data;
 	$( '#home-webradio grl' ).text( count ? numFormat( count ) : '' );
