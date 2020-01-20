@@ -821,15 +821,17 @@ $( '.btn-cmd' ).click( function() {
 				
 			} else {
 				$( '#pl-entries .elapsed' ).empty();
-				$( '#elapsed' ).html( $( '#total' ).text() ).addClass( 'gr');
+				$( '#elapsed' )
+					.text( second2HMS( GUI.status.Time ) )
+					.addClass( 'gr');
 				$( '#time' ).roundSlider( 'setValue', 0 );
 				$( '#total' ).empty();
-				GUI.local = 1;
-				setTimeout( function() { GUI.local = 0 }, 300 );
 			}
 		} else if ( cmd === 'pause' ) {
 			var command = 'mpc pause';
-			$( '#elapsed' ).addClass( 'bl' ).text( second2HMS( elapsed ) );
+			$( '#elapsed' )
+				.text( second2HMS( elapsed ) )
+				.addClass( 'bl' );
 			$( '#total' ).addClass( 'wh' );
 		} else if ( cmd === 'previous' || cmd === 'next' ) {
 			// enable previous / next while stop
