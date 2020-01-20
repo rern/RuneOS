@@ -1083,10 +1083,26 @@ function menuPackage( e, $this, url ) {
 	}
 }
 function mpdSeek( seekto ) {
-	if ( GUI.status.state !== 'stop' ) {
+	var seektime = Math.round( seekto / 1000 * GUI.status.Time );
+	GUI.status.elapsed = seektime;
+	elapsed = seektime;
+	position = seekto;
+	$( '#time' ).roundSlider( 'setValue', seekto );
+	$( '#elapsed' ).html( second2HMS( seektime ) );
+	$( '#total' ).text( second2HMS( GUI.status.Time ) );
+	if ( GUI.status.state === 'play' ) {
 		clearInterval( GUI.intKnob );
 		clearInterval( GUI.intElapsed );
-		$.post( 'commands.php', { mpc: 'mpc seek '+ seekto } );
+		GUI.intElapsed = setInterval( function() {
+			elapsed++;
+			elapsedhms = second2HMS( elapsed );
+			$( '#elapsed' ).text( elapsedhms );
+		}, 1000 );
+		GUI.intKnob = setInterval( function() {
+			position++;
+			$( '#time' ).roundSlider( 'setValue', position );
+		}, GUI.status.Time );
+		$.post( 'commands.php', { mpc: 'mpc seek '+ seektime } );
 	} else {
 		if ( GUI.bars ) {
 			$( '#playback-controls button' ).removeClass( 'active' );
@@ -1094,13 +1110,8 @@ function mpdSeek( seekto ) {
 			$( '#song' ).addClass( 'gr' );
 		}
 		$( '#elapsed' ).removeClass( 'gr' ).addClass( 'bl' );
-		$.post( 'commands.php', { mpc: [ 'mpc play', 'mpc seek '+ seekto, 'mpc pause' ] } );
+		$.post( 'commands.php', { mpc: [ 'mpc play', 'mpc seek '+ seektime, 'mpc pause' ] } );
 	}
-	if ( !GUI.status.elapsed ) seekto++;
-	GUI.status.elapsed = seekto;
-	$( '#time' ).roundSlider( 'setValue', Math.round( seekto / GUI.status.Time * 1000 ) );
-	$( '#elapsed' ).html( GUI.status.state === 'play' ? '' : second2HMS( seekto ) );
-	$( '#total' ).text( second2HMS( GUI.status.Time ) );
 }
 function muteColor( volumemute ) {
 	$volumetooltip.text( volumemute ).addClass( 'bl' );
@@ -1319,8 +1330,6 @@ function renderPlayback() {
 	if ( 'volume' in GUI.display && !( 'volumenone' in GUI.display ) ) {
 		status.volumemute != 0 ? muteColor( status.volumemute ) : unmuteColor();
 	}
-	clearInterval( GUI.intKnob );
-	clearInterval( GUI.intElapsed );
 	// empty queue
 	if ( !status.playlistlength && status.ext !== 'AirPlay' ) {
 		setPlaybackBlank();
@@ -1347,12 +1356,15 @@ function renderPlayback() {
 		var ext = '<wh> • </wh><i class="fa fa-airplay bl"></i>' ;
 	}
 	$( '#format-bitrate' ).html( ( 'time' in GUI.display ? '<wh id="dot0"> • </wh>' : '' ) + status.sampling + ext )
+	
+	elapsed = status.elapsed;
+	clearInterval( GUI.intKnob );
+	clearInterval( GUI.intElapsed );
 	if ( status.ext === 'radio' ) {
 		$( '#time' ).roundSlider( 'setValue', 0 );
 		if ( status.state === 'play' ) {
 			if ( !status.Title ) $( '#song' ).html( blinkdot );
 			$( '#elapsed' ).html( status.state === 'play' ? blinkdot : '' );
-			var elapsed = status.elapsed;
 			if ( GUI.display.time ) {
 				$( '#timepos' ).empty();
 				if ( 'radioelapsed' in GUI.display || GUI.localhost ) {
@@ -1454,16 +1466,13 @@ function renderPlayback() {
 	
 	$( '#elapsed, #total' ).removeClass( 'bl gr wh' );
 	$( '#song' ).toggleClass( 'gr', status.state === 'pause' );
-	var elapsed = status.elapsed || 0;
 	var elapsedhms = second2HMS( elapsed );
-	if ( !elapsedhms ) $( '#elapsed' ).empty();
 	var position = Math.round( elapsed / time * 1000 );
 	// pause <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	if ( status.state === 'pause' ) {
 		if ( 'time' in GUI.display ) {
 			$( '#time' ).roundSlider( 'setValue', position );
-			$( '#elapsed' ).text( elapsedhms );
-			$( '#elapsed' ).addClass( 'bl' );
+			$( '#elapsed' ).text( elapsedhms ).addClass( 'bl' );
 			$( '#total' ).addClass( 'wh' );
 			$( '#timepos' ).empty();
 		} else {
@@ -1472,7 +1481,14 @@ function renderPlayback() {
 		return
 	}
 	
+	// playlist current song
+	if ( status.Title !== previoussong || status.Album !== previousalbum ) {
+		if ( GUI.playlist && !GUI.pleditor ) setPlaylistScroll();
+		if ( $( '#lyricscontainer' ).length && !$( '#lyricscontainer' ).hasClass( 'hide' ) ) getlyrics();
+	}
+	
 	if ( 'time' in GUI.display ) {
+		$( '#elapsed' ).text( elapsed );
 		GUI.intElapsed = setInterval( function() {
 			elapsed++;
 			elapsedhms = second2HMS( elapsed );
@@ -1505,12 +1521,6 @@ function renderPlayback() {
 			elapsedhms = second2HMS( elapsed );
 			$( '#timepos' ).html( '&ensp;<i class="fa fa-play"></i>&ensp;<w>'+ elapsedhms +'</w> / '+ timehms );
 		}, 1000 );
-	}
-
-	// playlist current song
-	if ( status.Title !== previoussong || status.Album !== previousalbum ) {
-		if ( GUI.playlist && !GUI.pleditor ) setPlaylistScroll();
-		if ( $( '#lyricscontainer' ).length && !$( '#lyricscontainer' ).hasClass( 'hide' ) ) getlyrics();
 	}
 }
 function renderPlaylist() {
@@ -1702,6 +1712,7 @@ function second2HMS( second ) {
 }
 function setButton() {
 	$( '#playback-controls' ).toggleClass( 'hide', GUI.status.playlistlength === 0 || GUI.status.ext === 'AirPlay' );
+	$( '#pause' ).toggleClass( 'hide', GUI.status.ext === 'radio' );
 	if ( GUI.status.playlistlength === 1 ) $( '#previous, #next' ).addClass( 'hide' );
 	var state = GUI.status.state;
 	if ( GUI.bars ) {
@@ -1847,7 +1858,7 @@ function setPlaylistScroll() {
 				GUI.status[ key ] = value;
 			} );
 			if ( GUI.bars ) setButton();
-			var elapsed = status.elapsed;
+			elapsed = status.elapsed;
 			var radio = GUI.status.ext === 'radio';
 			var slash = radio ? '' : ' <gr>/</gr>';
 			$linotactive = $( '#pl-entries li:not(:eq( '+ status.song +' ) )' );

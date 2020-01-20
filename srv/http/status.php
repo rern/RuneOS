@@ -2,25 +2,6 @@
 $sudo = '/usr/bin/sudo /usr/bin/';
 $statusonly = isset( $_POST[ 'statusonly' ] );
 $activeplayer = 'MPD';
-if ( !$statusonly ) {
-	$mpdactive = exec( "$sudo/systemctl is-active mpd" );
-	$airplayactive = exec( "$sudo/systemctl is-active shairport-sync" );
-	if ( $mpdactive === 'inactive' && $airplayactive === 'active' ) $activeplayer = 'AirPlay';
-	$status[ 'activeplayer' ] = $activeplayer;
-	if ( $activeplayer === 'AirPlay' ) {
-		$status[ 'Artist'] = getData( 'tmp/airplayArtist' );
-		$status[ 'Title'] = getData( 'tmp/airplayTitle' );
-		$status[ 'Album'] = getData( 'tmp/airplayAlbum' );
-		$status[ 'sampling'] = '16 bit • 44.1 kHz 1.41 Mbit/s';
-		$status[ 'ext'] = 'AirPlay';
-		$file = '/srv/http/data/tmp/airplaycoverart';
-		if ( file_exists( $file ) ) $status[ 'coverart' ] = file_get_contents( $file );
-		echo json_encode( $status, JSON_NUMERIC_CHECK );
-		exit();
-	}
-	$status[ 'volumemute' ] = getData( 'display/volumemute' );
-}
-$status[ 'librandom' ] = exec( "$sudo/systemctl is-active libraryrandom" ) === 'active' ? 1 : 0;
 
 // grep cannot be used here
 $mpdtelnet = ' | telnet 127.0.0.1 6600 2> /dev/null | sed "/^Trying\|^Connected\|^Escape\|^OK\|^Connection\|^Date\|^Last-Modified\|^mixrampdb\|^nextsong\|^nextsongid/ d"';
@@ -48,6 +29,26 @@ while ( $line !== false ) {
 }
 if ( !isset( $status[ 'song' ] ) ) $status[ 'song' ] = 0;
 $status[ 'updating_db' ] = isset( $status[ 'updating_db' ] ) ? 1 : 0;
+
+if ( !$statusonly ) {
+	$mpdactive = exec( "$sudo/systemctl is-active mpd" );
+	$airplayactive = exec( "$sudo/systemctl is-active shairport-sync" );
+	if ( $mpdactive === 'inactive' && $airplayactive === 'active' ) $activeplayer = 'AirPlay';
+	$status[ 'activeplayer' ] = $activeplayer;
+	if ( $activeplayer === 'AirPlay' ) {
+		$status[ 'Artist'] = getData( 'tmp/airplayArtist' );
+		$status[ 'Title'] = getData( 'tmp/airplayTitle' );
+		$status[ 'Album'] = getData( 'tmp/airplayAlbum' );
+		$status[ 'sampling'] = '16 bit • 44.1 kHz 1.41 Mbit/s';
+		$status[ 'ext'] = 'AirPlay';
+		$file = '/srv/http/data/tmp/airplaycoverart';
+		if ( file_exists( $file ) ) $status[ 'coverart' ] = file_get_contents( $file );
+		echo json_encode( $status, JSON_NUMERIC_CHECK );
+		exit();
+	}
+	$status[ 'volumemute' ] = getData( 'display/volumemute' );
+}
+$status[ 'librandom' ] = exec( "$sudo/systemctl is-active libraryrandom" ) === 'active' ? 1 : 0;
 
 if ( !isset( $status[ 'playlistlength' ] ) || !$status[ 'playlistlength' ] ) {
 	echo json_encode( $status, JSON_NUMERIC_CHECK );
@@ -149,9 +150,9 @@ if ( $ext === 'DSF' || $ext === 'DFF' ) {
 	$sampling = $bitrate ? samplingline( $bitdepth, $samplerate, $bitrate, $ext ) : '';
 }
 $status[ 'sampling' ] = $sampling;
-$elapsed = exec( "mpc | grep '^\[playing\|^\[paused' | cut -d/ -f2 | awk '{print \$NF}'" );
+/*$elapsed = exec( "mpc | grep '^\[playing\|^\[paused' | cut -d/ -f2 | awk '{print \$NF}'" );
 sscanf( $elapsed, "%d:%d:%d", $h, $m, $s );
-$elapsed = ( $h ? $h * 3600 : 0 ) + $m * 60 + $s;
+$status[ 'elapsed' ] = ( $h ? $h * 3600 : 0 ) + $m * 60 + $s;*/
 
 echo json_encode( $status, JSON_NUMERIC_CHECK );
 
