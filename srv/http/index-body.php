@@ -116,7 +116,7 @@ $blocks = [ // 'id' => [ 'path', 'icon', 'name' ];
 $blockhtml = '';
 foreach( $blocks as $id => $value ) {
 	$browsemode = in_array( $id, [ 'album', 'artist', 'albumartist', 'composer', 'genre', 'coverart' ] ) ? ' data-browsemode="'.$id.'"' : '';
-	$count = isset( $counts[ $value[ 1 ] ] ) && $counts[ $value[ 1 ] ] ? '<grl>'.number_format( $counts[ $value[ 1 ] ] ).'</grl>' : '';
+	$count = isset( $counts[ $value[ 1 ] ] ) && $counts[ $value[ 1 ] ] ? '<grl>'.number_format( $counts[ $value[ 1 ] ] ).'</grl>' : '<grl></grl>';
 	$blockhtml.= '
 		<div class="divblock">
 			<div id="home-'.$id.'" class="home-block"'.$browsemode.'>

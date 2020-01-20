@@ -2046,7 +2046,6 @@ pushstreams.volume.onmessage = function( data ) {
 }
 pushstreams.webradio.onmessage = function( data ) {
 	var data = data[ 0 ];
-	if ( !$( '#home-webradio grl' ).length ) $( '#home-webradio .label' ).before( '<grl></grl>' );
 	var count = Number( $( '#home-webradio grl' ).text() );
 	count = count + data;
 	$( '#home-webradio grl' ).text( count ? numFormat( count ) : '' );
