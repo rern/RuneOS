@@ -126,7 +126,7 @@ RuneOS - DIY RuneAudio+R e
 # switch user to root
 su
 
-# on Manjaro only - rank package servers
+# on Manjaro only - update package servers
 pacman-mirrors -f
 
 # get script and run
