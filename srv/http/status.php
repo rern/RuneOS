@@ -140,20 +140,15 @@ if ( $ext === 'DSF' || $ext === 'DFF' ) {
 	$hex = explode( ' ', $hex );
 	$dsd= $hex[ 1 ] / 1100 * 64; # hex byte#57-58 - @1100:dsd64
 	$bitrate = round( $dsd * 44100 / 1000000, 2 );
-	$sampling = 'DSD'.$dsd.' • '.$bitrate.' Mbit/s';
+	$status[ 'sampling' ] = 'DSD'.$dsd.' • '.$bitrate.' Mbit/s';
 } else {
 	$data = shell_exec( '/usr/bin/ffprobe -v quiet -select_streams a:0 -show_entries stream=bits_per_raw_sample,sample_rate -show_entries format=bit_rate -of default=noprint_wrappers=1:nokey=1 "'.$file.'"' );
 	$data = explode( "\n", $data );
 	$bitdepth = $data[ 1 ];
 	$samplerate = $data[ 0 ];
 	$bitrate = $data[ 2 ];
-	$sampling = $bitrate ? samplingline( $bitdepth, $samplerate, $bitrate, $ext ) : '';
+	$status[ 'sampling' ] = $bitrate ? samplingline( $bitdepth, $samplerate, $bitrate, $ext ) : '';
 }
-$status[ 'sampling' ] = $sampling;
-/*$elapsed = exec( "mpc | grep '^\[playing\|^\[paused' | cut -d/ -f2 | awk '{print \$NF}'" );
-sscanf( $elapsed, "%d:%d:%d", $h, $m, $s );
-$status[ 'elapsed' ] = ( $h ? $h * 3600 : 0 ) + $m * 60 + $s;*/
-
 echo json_encode( $status, JSON_NUMERIC_CHECK );
 
 function samplingline( $bitdepth, $samplerate, $bitrate, $ext ) {
