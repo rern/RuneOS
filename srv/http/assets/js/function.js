@@ -1730,8 +1730,7 @@ function setButton() {
 	}, 100 );
 }
 function setButtonToggle() {
-	var timehide = $( '#time-knob' ).is( ':hidden' );
-	if ( timehide ) {
+	if ( $( '#time-knob' ).is( ':hidden' ) ) {
 		$( '#imode i' ).addClass( 'hide' );
 		if ( GUI.status.playlistlength ) {
 			$( '#posrandom' ).toggleClass( 'hide', GUI.status.random === 0 );
@@ -1742,6 +1741,7 @@ function setButtonToggle() {
 			$( '#poslibrandom' ).toggleClass( 'hide', GUI.status.librandom === 0 );
 		}
 		$( '#posaddons' ).toggleClass( 'hide', GUI.bars !== '' || !( 'update' in GUI.display ) );
+		$( '#posgpio' ).toggleClass( 'hide', GUI.gpio !== 'ON' )
 	} else {
 		$( '#posmode i' ).addClass( 'hide' );
 		$( '#iconsume' ).toggleClass( 'hide', GUI.status.consume === 0 );
@@ -1757,6 +1757,7 @@ function setButtonToggle() {
 			$( '#irandom' ).toggleClass( 'hide', GUI.status.random === 0 );
 			$( '#irepeat' ).attr( 'class', GUI.status.repeat ? ( GUI.status.single ? 'fa fa-repeat-single' : 'fa fa-repeat' ) : 'fa hide' );
 		}
+		$( '#igpio' ).toggleClass( 'hide', GUI.gpio !== 'ON' )
 	}
 }
 function setButtonUpdate() {
