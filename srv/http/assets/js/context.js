@@ -247,29 +247,33 @@ function bookmarkNew() {
 	var path = GUI.list.path;
 	var name = path.split( '/' ).pop();
 	var $el = $( '.home-bookmark' );
-	if ( $el.length ) {
-		$el.each( function() {
-			var $this = $( this );
-			if ( $this.find( '.lipath' ).text() === path ) {
-				var $img = $this.find( 'img' );
-				if ( $img.length ) {
-					var iconhtml = '<img src="'+ $img.attr( 'src' ) +'">'
-								  +'<br><w>'+ path +'</w>';
-				} else {
-					var iconhtml = '<i class="fa fa-bookmark bookmark"></i>'
-								  +'<br><a class="bklabel">'+ $this.find( '.bklabel' ).text() +'</a>'
-								  + path;
-				}
-				info( {
-					  icon    : 'bookmark'
-					, title   : 'Add Bookmark'
-					, message : iconhtml
-							   +'<br><br>Already exists.'
-				} );
-				return false
+	if ( !$el.length ) return
+	
+	var exist = 0;
+	$el.each( function() {
+		var $this = $( this );
+		if ( $this.find( '.lipath' ).text() === path ) {
+			var $img = $this.find( 'img' );
+			if ( $img.length ) {
+				var iconhtml = '<img src="'+ $img.attr( 'src' ) +'">'
+							  +'<br><w>'+ path +'</w>';
+			} else {
+				var iconhtml = '<i class="fa fa-bookmark bookmark"></i>'
+							  +'<br><a class="bklabel">'+ $this.find( '.bklabel' ).text() +'</a>'
+							  + path;
 			}
-		} );
-	}
+			info( {
+				  icon    : 'bookmark'
+				, title   : 'Add Bookmark'
+				, message : iconhtml
+						   +'<br><br>Already exists.'
+			} );
+			exist = 1;
+			return false
+		}
+	} );
+	if ( exist ) return
+	
 	$.post( 'commands.php', { getcover: path }, function( base64img ) {
 		if ( base64img ) {
 			info( {
