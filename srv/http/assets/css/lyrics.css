@@ -67,7 +67,9 @@
 .lyricstext {
 	height: calc(100vh - 100px);
 	width: calc( 100% + 20px );
+	font-family: Lato;
 	font-size: 17px;
+	line-height: 20px;
 	color: #e0e7ee;
 }
 #lyricstextoverlay {
