@@ -61,15 +61,15 @@ $gpio = file_exists( '/srv/http/gpiosettings.php' );
 <input type="hidden" id="reboot" value="<?=$reboot?>">
 <input type="hidden" id="password" value="<?=$login?>">
 
-<script src="/assets/js/vendor/jquery-2.2.4.min.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/jquery.mobile.custom.min.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/pushstream.min.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/openwebapp.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/Sortable.min.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/roundslider.min.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/lazyload.min.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/pica.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/html5kellycolorpicker.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/jquery-2.2.4.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/jquery.mobile.custom.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/pushstream.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/openwebapp.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/Sortable.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/roundslider.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/lazyload.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/pica.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/html5kellycolorpicker.min.<?=$time?>.js"></script>
 <script src="/assets/js/info.<?=$time?>.js"></script>
 <script src="/assets/js/function.<?=$time?>.js"></script>
 <script src="/assets/js/main.<?=$time?>.js"></script>

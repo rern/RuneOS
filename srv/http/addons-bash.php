@@ -35,8 +35,8 @@ $heading = $alias !== 'cove' ? 'Addons Progress' : 'Update Thumbnails';
 <body>
 
 <?php include 'addons-list.php';?>
-<script src="/assets/js/vendor/jquery-2.2.4.min.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/jquery.documentsize.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/jquery-2.2.4.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/jquery.documentsize.min.<?=$time?>.js"></script>
 <script src="/assets/js/info.<?=$time?>.js"></script>
 <script>
 $( 'head' ).append( '<style>#hidescrollv, pre { max-height: '+ ( $.documentHeight() - 200 ) +'px }</style>' );

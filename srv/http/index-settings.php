@@ -46,18 +46,18 @@ $icon = [
 headhtml( $icon [ $p ], strtoupper( $p ) );
 include "settings/$p.php";
 ?>
-<script src="/assets/js/vendor/jquery-2.2.4.min.<?=$time?>.js"></script>
-<script src="/assets/js/vendor/pushstream.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/jquery-2.2.4.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/pushstream.min.<?=$time?>.js"></script>
 <script src="/assets/js/info.<?=$time?>.js"></script>
 	<?php if ( $p !== 'credits' ) { ?>
 <script src="/assets/js/<?=$p?>.<?=$time?>.js"></script>
 	<?php	if ( $p === 'mpd' ) { ?>
-<script src="/assets/js/vendor/jquery.selectric.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/jquery.selectric.min.<?=$time?>.js"></script>
 	<?php	} else if ( $p === 'system' ) { ?>
-<script src="/assets/js/vendor/jquery.selectric.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/jquery.selectric.min.<?=$time?>.js"></script>
 <script src="/assets/js/banner.<?=$time?>.js"></script>
 	<?php	} else if ( $p === 'network' ) { ?>
-<script src="/assets/js/vendor/jquery.qrcode.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/jquery.qrcode.min.<?=$time?>.js"></script>
 <script src="/assets/js/banner.<?=$time?>.js"></script>
 	<?php	}
 		  } ?>

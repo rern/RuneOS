@@ -1,5 +1,5 @@
 <?php if ( file_exists( '/tmp/reboot' ) ) { ?>
-<script src="assets/js/vendor/jquery-2.2.4.min.js"></script>
+<script src="assets/js/plugin/jquery-2.2.4.min.js"></script>
 <script src="assets/js/info.<?=$time?>.js"></script>
 <script>
 	info( {
@@ -50,7 +50,7 @@ if ( $login && !$_SESSION[ 'login' ] ) {
 	<input type="password" id="pwd">
 	<a id="login" class="btn btn-primary">Login</a>
 </div>
-<script src="assets/js/vendor/jquery-2.2.4.min.js"></script>
+<script src="assets/js/plugin/jquery-2.2.4.min.js"></script>
 <script src="assets/js/info.<?=$time?>.js"></script>
 <script>
 $( '#pwd' ).focus();
