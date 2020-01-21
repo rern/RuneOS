@@ -1124,7 +1124,7 @@ function numFormat( num ) {
 }
 function orderLibrary() {
 	if ( 'order' in GUI.display ) {
-		GUI.display.order.forEach( function( name ) {
+		$.each( GUI.display.order, function( i, name ) {
 			var $divblock = $( '.divblock' ).filter( function() {
 				return $( this ).find( '.lipath' ).text() === name;
 			} );
@@ -1488,7 +1488,7 @@ function renderPlayback() {
 	}
 	
 	if ( 'time' in GUI.display ) {
-		$( '#elapsed' ).text( elapsed );
+		$( '#elapsed' ).text( second2HMS( elapsed ) );
 		GUI.intElapsed = setInterval( function() {
 			elapsed++;
 			elapsedhms = second2HMS( elapsed );
