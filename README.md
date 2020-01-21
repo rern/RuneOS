@@ -126,6 +126,9 @@ RuneOS - DIY RuneAudio+R e
 # switch user to root
 su
 
+# on Manjaro only - update package servers
+pacman-mirrors -f
+
 # get script and run
 wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
 ```
