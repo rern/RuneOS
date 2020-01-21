@@ -77,7 +77,7 @@
 	overflow: hidden;
 }
 #lyricstext {
-	padding: 20px 0 100px 0;
+	padding: 20px 0 180px 0;
 	overflow-y: scroll;
 }
 #lyricstextareaoverlay {
@@ -90,7 +90,7 @@
 	background: #000000;
 }
 #lyricstextarea {
-	padding: 20px 10px 140px 5px;
+	padding: 25px 10px 140px 8px;
 	background: #000000;
 	border: none;
 	resize: none;
