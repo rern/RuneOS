@@ -34,7 +34,7 @@ data+=',"qobuzuser":"'$( grep '^qobuzuser' /etc/upmpdcli.conf | cut -d' ' -f3- )
 data+=',"readonlysd":"'$( sed -n '/.mnt.MPD.SD/ {n;p}' /etc/samba/smb.conf | grep -q 'read only = no' && echo 1 || echo 0 )'"'
 data+=',"readonlyusb":"'$( sed -n '/.mnt.MPD.USB/ {n;p}' /etc/samba/smb.conf | grep -q 'read only = no' && echo 1 || echo 0 )'"'
 data+=',"rootfs":"'$( df -h / | tail -1 | awk '{print $3"B / "$2"B"}' )'"'
-data+=',"rotate":"'$rotate'"'
+data+=',"rotate":"'$( cat /srv/http/data/system/localbrowser-rotate 2> /dev/null )'"'
 data+=',"samba":"'$( systemctl -q is-active smb && echo checked )'"'
 data+=',"since":"'$( uptime -s | cut -d: -f1-2 | sed 's| |<gr> \&bull; </gr>|' )'"'
 data+=',"soundprofile":"'$( < /srv/http/data/system/soundprofile )'"'

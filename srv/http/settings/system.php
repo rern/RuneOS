@@ -158,7 +158,7 @@ include 'logosvg.php';
 	  if ( file_exists( '/usr/bin/chromium' ) ) { ?>
 		<div class="col-l gr">Browser on RPi<i class="fa fa-chromium fa-lg wh"></i></div>
 		<div class="col-r">
-			<input id="localbrowser" type="checkbox" data-cursor="<?=$data->cursor?>" data-overscan="<?=$data->overscan?>" data-rotate="<?=$data->rotate?>" data-screenoff="<?=$data->screenoff?>" data-zoom="<?=$data->zoom?>" <?=$data->localbrowser?>>
+			<input id="localbrowser" type="checkbox" data-cursor="<?=$data->cursor?>" data-overscan="<?=$data->overscan?>" data-rotate="<?=( $data->rotate ?: 'NORMAL' )?>" data-screenoff="<?=$data->screenoff?>" data-zoom="<?=$data->zoom?>" <?=$data->localbrowser?>>
 			<div class="switchlabel" for="localbrowser"></div>
 			<i id="setting-localbrowser" class="setting fa fa-gear <?=( $data->localbrowser === 'checked' ? '' : 'hide' )?>"></i>
 			<span class="help-block hide"><code>Chromium</code> - Browser on RPi connected screen. (Overscan change needs reboot.)</span>
