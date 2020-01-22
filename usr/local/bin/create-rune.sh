@@ -51,7 +51,7 @@ sleep 3
 shairport='\Z1Shairport\Z0 - AirPlay'
  upmpdcli='\Z1upmpdcli\Z0  - UPnP client'
 
-if [[ $nowireless ]]
+if [[ $nowireless ]]; then
 	bluez='Bluez     - (no onboard)'
 	onoffb=
 else
@@ -70,8 +70,8 @@ selectFeatures() {
 	   --checklist '\Z1Select features to install:\n
 \Z4[space] = Select / Deselect\Z0' 0 0 10 \
 			1 "$avahi" on \
-			2 "$bluez" onoffb \
-			3 "$chromium" onoffc \
+			2 "$bluez" $onoffb \
+			3 "$chromium" $onoffc \
 			4 "$ffmpeg" on \
 			5 "$hostapd" on \
 			6 "$kid" on \
