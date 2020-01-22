@@ -51,7 +51,7 @@ sleep 3
 shairport='\Z1Shairport\Z0 - AirPlay'
  upmpdcli='\Z1upmpdcli\Z0  - UPnP client'
 
-if [[ $nowireless ]]
+if [[ $nowireless ]]; then
 	bluez='Bluez     - (no onboard)'
 	onoffb=
 else
