@@ -5,10 +5,10 @@ $audioaplayname = trim( @file_get_contents( '/srv/http/data/system/audio-aplayna
 $usbdac = trim( @file_get_contents( '/srv/http/data/system/usbdac' ) );
 $dop = file_exists( '/srv/http/data/system/dop' ) ? 'checked' : '';
 $autoplay = file_exists( '/srv/http/data/system/autoplay' ) ? 'checked' : '';
-$model = exec( 'cat /proc/cpuinfo | grep Revision | tail -c 4 | cut -c 1-2' );
-if ( $model === '11' ) {  // RPi4
+$hwcode = exec( 'cat /proc/cpuinfo | grep Revision | tail -c 4 | cut -c 1-2' );
+if ( $hwcode === '11' ) {  // RPi4
     exec( "$sudo/aplay -l | grep '^card'", $lines );
-} else if ( $model === '09' || $model === '0c' ) {  //RPi Zero
+} else if ( $hwcode === '09' || $hwcode === '0c' ) {  //RPi Zero
     exec( "$sudo/aplay -l | grep '^card' | grep -v 'IEC958/HDMI1\|bcm2835 ALSA\]$'", $lines );
 } else {
     exec( "$sudo/aplay -l | grep '^card' | grep -v 'IEC958/HDMI1'", $lines );
@@ -61,7 +61,7 @@ if ( file_exists( '/usr/bin/ffmpeg' ) ) $ffmpeg = exec( "$sudo/sed -n '/ffmpeg/ 
                 <br>Software volume depends on users preferences.</span>
         </div>
     <heading>Bit-perfect</heading>
-<?php if ( in_array( $hardwarecode, [ '04', '08', '0e', '0d', '11' ] ) ) { ?>
+<?php if ( in_array( $hwcode, [ '04', '08', '0e', '0d', '11' ] ) ) { ?>
         <div class="col-l">DSD over PCM</div>
         <div class="col-r">
             <input id="dop" type="checkbox" <?=$dop?>>
