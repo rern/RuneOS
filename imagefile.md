@@ -1,7 +1,7 @@
 ### Create image file
 
 - Once start RuneAudio+R successfully
-- Optional: remove connected Wi-Fi data
+- Optional: remove all connected Wi-Fi data
 ```sh
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-*
