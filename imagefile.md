@@ -4,7 +4,7 @@
 - Optional: remove all connected Wi-Fi data
 ```sh
 systemctl disable netctl-auto@wlan0
-rm /etc/netctl/* /srv/http/data/system/netctl-*
+rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 ```
 - Power off or CLI: `shutdown -h now`
 - Move micro SD card (and the USB drive, if `ROOT` partition is in USB drive) to PC
