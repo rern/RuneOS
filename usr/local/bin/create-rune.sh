@@ -51,8 +51,18 @@ sleep 3
 shairport='\Z1Shairport\Z0 - AirPlay'
  upmpdcli='\Z1upmpdcli\Z0  - UPnP client'
 
-[[ $nowireless ]] && bluez='Bluez     - (no onboard)'
-[[ $rpi01 ]] &&   chromium='Chromium  - (not for RPi Zero, 1)'
+if [[ $nowireless ]]
+	bluez='Bluez     - (no onboard)'
+	onoffb=
+else
+	onoffb=on
+fi
+if [[ $rpi01 ]]; then
+	chromium='Chromium  - (not for RPi Zero, 1)'
+	onoffc=
+else
+	onoffc=on
+fi
 
 selectFeatures() {
 	select=$( dialog --backtitle "$title" --colors \
@@ -60,8 +70,8 @@ selectFeatures() {
 	   --checklist '\Z1Select features to install:\n
 \Z4[space] = Select / Deselect\Z0' 0 0 10 \
 			1 "$avahi" on \
-			2 "$bluez" on \
-			3 "$chromium" on \
+			2 "$bluez" onoffb \
+			3 "$chromium" onoffc \
 			4 "$ffmpeg" on \
 			5 "$hostapd" on \
 			6 "$kid" on \
