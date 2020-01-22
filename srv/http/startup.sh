@@ -13,6 +13,7 @@
 if [[ -e /boot/wifi ]]; then
 	ssid=$( grep '^ESSID' /boot/wifi | cut -d'"' -f2 )
 	sed -i 's/\r//' /boot/wifi
+	cp /boot/wifi "/srv/http/data/system/netctl-$ssid"
 	mv /boot/wifi "/etc/netctl/$ssid"
 	netctl start "$ssid"
 	systemctl enable netctl-auto@wlan0

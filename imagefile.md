@@ -1,6 +1,11 @@
 ### Create image file
 
 - Once start RuneAudio+R successfully
+- Optional: remove connected Wi-Fi data
+```sh
+systemctl disable netctl-auto@wlan0
+rm /etc/netctl/* /srv/http/data/system/netctl-*
+```
 - Power off or CLI: `shutdown -h now`
 - Move micro SD card (and the USB drive, if `ROOT` partition is in USB drive) to PC
 - Resize `ROOT` partition to smallest size possible with **GParted** app
