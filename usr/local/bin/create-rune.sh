@@ -120,8 +120,6 @@ echo -e "\n\e[36mInstall packages ...\e[m\n"
 pacman -S --noconfirm --needed $packages $features
 [[ $? != 0 ]] && pacmanFailed 'Packages download incomplete!'
 
-[[ -e /usr/bin/python ]] && yes | pip --no-cache-dir install RPi.GPIO
-
 echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip
