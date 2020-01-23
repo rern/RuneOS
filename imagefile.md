@@ -8,7 +8,7 @@ rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 ```
 - Power off or CLI: `shutdown -h now`
 - Move micro SD card (and the USB drive, if `ROOT` partition is in USB drive) to PC
-- Resize `ROOT` partition to smallest size possible with **GParted** app
+- Resize `ROOT` partition to smallest size possible with **GParted** app (smaller the size, less time to write image)
 	- menu: GParted > Devices > /dev/sd?
 	- right-click `ROOT` partiton > Unmount
 	- right-click `ROOT` partiton > Resize/Move
