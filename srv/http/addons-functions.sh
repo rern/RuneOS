@@ -207,7 +207,7 @@ EOF
 	curl -s -X POST 'http://127.0.0.1/pub?id=notify' -d "$data" &> /dev/null
 }
 installstart() { # $1-'u'=update
-#	rm -f $0
+	rm -f $0
 	
 	addonslist=$( sed -n "/^'$alias'/,/^],/p" /srv/http/addons-list.php )
 	title0=$( getvalue title )
