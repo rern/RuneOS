@@ -270,7 +270,7 @@ dialog --colors \
             Press \Z1Enter\Z0 to reboot
 " 9 50
 
-# boot partition - fix dirty bits if any
-fsck.fat -trawl $( df | grep /boot$ | cut -d' ' -f1 ) &> /dev/null
+# sd boot partition - fix dirty bits if any
+fsck.fat -trawl /dev/mmcblk0p1 &> /dev/null
 
 shutdown -r now
