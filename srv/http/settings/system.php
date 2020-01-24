@@ -69,7 +69,7 @@ include 'logosvg.php';
 			Root partition<br>
 			Time<br>
 			Up time<br>
-			IP address<br>
+			IP - MAC<br>
 			CPU Load
 		</div>
 		<div class="col-r text">
