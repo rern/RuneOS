@@ -20,7 +20,7 @@ data+=',"gmusicuser":"'$( grep '^gmusicuser' /etc/upmpdcli.conf | cut -d' ' -f3-
 data+=',"hardware":"'$( tr -d '\0' < /sys/firmware/devicetree/base/model )'"'
 data+=',"hardwarecode":"'$( cat /proc/cpuinfo | grep Revision | awk '{print $NF}' )'"'
 data+=',"hostname":"'$( cat /srv/http/data/system/hostname )'"'
-data+=',"ip":"'$( ip a | grep -A 2 'state UP' | grep inet | head -1 | awk '{print $2}' | cut -d/ -f1 )'"'
+data+=',"ip":"'$( ip a | grep -A 2 'state UP' | head -n3 | tr '\n' d | sed 's/^.: \(.*\):.*ether *\(.*\) brd.*inet \(.*\)\/.*/\3 <gr>\&bull; \2 \&bull; \1<\/gr>/' )'"'
 data+=',"kernel":"'$( uname -r )'"'
 data+=',"login":"'$( [[ -e /srv/http/data/system/login ]] && echo checked )'"'
 data+=',"ntp":"'$( grep '^NTP' /etc/systemd/timesyncd.conf | cut -d= -f2 )'"'
