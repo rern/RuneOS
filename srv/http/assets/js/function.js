@@ -1042,11 +1042,11 @@ function loadCoverart( image ) {
 		GUI.coversave = 1;
 	}
 }
-function menuPackage( e, $this, url ) {
+function menuPackage( $this, $target ) {
 	var id = $this.prop( 'id' );
 	var title = id.charAt( 0 ).toUpperCase() + id.slice( 1 );
 	var active = $this.data( 'active' );
-	if ( $( e.target ).hasClass( 'submenu' ) ) {
+	if ( $target.hasClass( 'submenu' ) ) {
 		info( {
 			  icon        : 'gear'
 			, title       : title
@@ -1075,11 +1075,15 @@ function menuPackage( e, $this, url ) {
 			}
 		} );
 	} else {
+		var url = {
+			  aria2        : '/aria2/index.html'
+			, transmission : 'http://'+ location.hostname +':9091'
+		}
+		$.post( 'commands.php', { bash: 'systemctl start '+ id }, window.open( url[ id ] ) );
 		$this
 			.data( 'active', 1 )
 			.find( 'img' ).addClass( 'on' );
 		notify( title, 'Starting ...', 'gear fa-spin' );
-		$.post( 'commands.php', { bash: 'systemctl start '+ id }, window.open( url ) );
 	}
 }
 function mpdSeek( seekto ) {

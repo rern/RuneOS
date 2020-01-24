@@ -78,13 +78,13 @@ if ( in_array( $_SERVER[ 'REMOTE_ADDR' ], [ '127.0.0.1', '::1' ] ) ) {
 }
 $aria = file_exists( '/srv/http/aria2' );
 if ( $aria ) {
-	$ariaenable = exec( '/usr/bin/systemctl is-enabled aria2' ) === 'enabled';
-	$ariaactive = exec( '/usr/bin/systemctl is-active aria2' ) === 'active' ? ' class="on"' : '';
+	$ariaenable = exec( '/usr/bin/systemctl is-enabled aria2 &> /dev/null && echo 1 || echo 0' );
+	$ariaactive = exec( '/usr/bin/systemctl is-active aria2 &> /dev/null && echo 1 || echo 0' );
 }
 $tran = file_exists( '/etc/systemd/system/transmission.service.d' );
 if ( $tran ) {
-	$tranenable = exec( '/usr/bin/systemctl is-enabled transmission' ) === 'enabled';
-	$tranactive = exec( '/usr/bin/systemctl is-active transmission' ) === 'active'  ? ' class="on"' : '';
+	$tranenable = exec( '/usr/bin/systemctl is-enabled transmission &> /dev/null && echo 1 || echo 0' );
+	$tranactive = exec( '/usr/bin/systemctl is-active transmission &> /dev/null && echo 1 || echo 0' );
 }
 // counts
 $count = exec( '/srv/http/count.sh' );
@@ -336,14 +336,14 @@ $menu.= menudiv( 'genre', $html );
 	<a id="gpio"><i class="fa fa-gpio"></i>GPIO<i class="fa fa-gear submenu settings"></i></a>
 		<?php }
 			  if ( $aria ) { ?>
-	<a id="aria2" class="settings" data-enabled="<?=$ariaenable?>" data-active="<?=$ariaactive?>">
-		<img src="/assets/img/addons/thumbaria.<?=$time?>.png"<?=$ariaactive?>>Aria2
+	<a id="aria2" class="settings pkg" data-enabled="<?=$ariaenable?>" data-active="<?=$ariaactive?>">
+		<img src="/assets/img/addons/thumbaria.<?=$time?>.png" <?=( $ariaactive ? 'class="on"' : '' )?>>Aria2
 		<i class="fa fa-gear submenu imgicon"></i>
 	</a>
 		<?php }
 			  if ( $tran ) { ?>
-	<a id="transmission" class="settings" data-enabled="<?=$tranenable?>" data-active="<?=$tranactive?>">
-		<img src="/assets/img/addons/thumbtran.<?=$time?>.png"<?=$tranactive?>>Transmission
+	<a id="transmission" class="settings pkg" data-enabled="<?=$tranenable?>" data-active="<?=$tranactive?>">
+		<img src="/assets/img/addons/thumbtran.<?=$time?>.png" <?=( $tranactive ? 'class="on"' : '' )?>>Transmission
 		<i class="fa fa-gear submenu imgicon"></i>
 	</a>
 		<?php } ?>

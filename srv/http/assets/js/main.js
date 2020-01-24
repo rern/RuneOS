@@ -198,7 +198,7 @@ $( '#displayplayback' ).click( function() {
 	}
 } );
 $( '.settings' ).click( function() {
-	$( '#loader' ).removeClass( 'hide' );
+	if ( !$( this ).hasClass( 'pkg' ) ) $( '#loader' ).removeClass( 'hide' );
 } );
 $( '#sources' ).click( function( e ) {
 	if ( $( e.target ).hasClass( 'submenu' ) ) {
@@ -282,11 +282,8 @@ $( '#addons' ).click( function () {
 		}
 	} );
 } );
-$( '#aria2' ).click( function( e ) {
-	menuPackage( e, $( this ), '/aria2/index.html' );
-} );
-$( '#transmission' ).click( function( e ) {
-	menuPackage( e, $( this ), 'http://'+ location.hostname +':9091' );
+$( '.pkg' ).click( function( e ) {
+	menuPackage( $( this ), $( e.target ) );
 } );
 $( '#displaycolor' ).click( function( e ) {
 	if ( $( '#home-album grl' ).text() == 0 ) {
