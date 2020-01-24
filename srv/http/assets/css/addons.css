@@ -274,7 +274,8 @@ pre {
 	font-size: 15px;
 	line-height: 20px;
 	white-space: pre-wrap;
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 	-webkit-overflow-scrolling: touch; /* ios momentum scroll */
 }
 code {
