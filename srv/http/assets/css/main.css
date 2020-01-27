@@ -542,16 +542,25 @@ svg path.st1 {
 	line-height: 40px;
 	text-align: center;
 }
-#badge {
+#badge,
+#badgeaddons {
 	position: absolute;
-	width: 20px;
-	height: 20px;
-	top: 15px;
-	right: 15px;
+	width: 15px;
+	height: 15px;
+	top: 20px;
+	right: 24px;
 	text-align: center;
 	border-radius: 50%;
 	color: #e0e7ee;
 	background: red;
+}
+#badgeaddons {
+	position: relative;
+	display: inline-block;
+	top: 2px;
+	right: 15px;
+	font-size: 12px;
+	line-height: 15px;
 }
 #settings {
 	position: fixed;
@@ -2033,7 +2042,7 @@ li.active .li2 bl {
 	margin: 5px auto;
 	width: 70px;
 	height: 36px;
-	line-height: 25px;
+	line-height: 36px;
 	background: -webkit-radial-gradient(
 		50% -50%, 160% 200%, hsla(0,0%,100%,.3) 50%,
 		hsla(0,0%,100%,0) 55% );
