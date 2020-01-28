@@ -154,10 +154,10 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 [[ $hwcode == 11 ]] && mv /usr/lib/firmware/updates/brcm/BCM{4345C0,}.hcd
 
 # remove config of excluded features
-[[ ! -e /usr/bin/avahi-daemon ]] && rm -r /etc/avahi/services
+[[ ! -e /usr/bin/avahi-daemon ]] && rm -r /etc/avahi
 [[ ! -e /usr/bin/bluetoothctl ]] && rm -r /etc/systemd/system/bluetooth.service.d /root/blue*
 [[ ! -e /usr/bin/hostapd ]] && rm -r /etc/{hostapd,dnsmasq.conf}
-[[ ! -e /usr/bin/smbd ]] && rm -r /etc/samba
+[[ ! -e /usr/bin/smbd ]] && rm -r /etc/samba && rm /etc/systemd/system/wsdd.service
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport*
 
 # alsa
@@ -196,6 +196,7 @@ mv -f /etc/nginx/html/50x.html{.custom,}
 
 # password - set default
 echo root:rune | chpasswd
+[[ -e /usr/bin/smbd ]] && ( echo rune; echo rune ) | smbpasswd -s -a root
 
 # user - set expire to none
 users=$( cut -d: -f1 /etc/passwd )

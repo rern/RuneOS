@@ -1,0 +1,13 @@
+[Unit]
+Description=Web Services Dynamic Discovery host daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/wsdd.py --shortlog --preserve-case --hostname RuneAudio
+User=nobody
+Group=nobody
+
+[Install]
+WantedBy=multi-user.target
