@@ -229,12 +229,12 @@ $( '#sources' ).click( function( e ) {
 $( '#system, #credits' ).click( function( e ) {
 	location.href = 'index-settings.php?p='+ ( $( e.target ).prop( 'id' ) === 'credits' ? 'credits' : 'system' );
 } );
-var cmdpower = [
-	  '/usr/local/bin/ply-image /usr/share/bootsplash/start.png'
-	, '/usr/local/bin/gpiooff.py 2> /devnull'
-	, 'umount -l /mnt/MPD/NAS/* &> /dev/null'
+var cmdpower = $( '#gpio' ).length ? [ '/usr/local/bin/gpiooff.py' ] : [];
+cmdpower.push( '/usr/local/bin/ply-image /usr/share/bootsplash/start.png' );
+if ( $( '#home-nas grl' ).text() ) cmdpower.push( 
+	  'umount -l /mnt/MPD/NAS/* &> /dev/null'
 	, 'sleep 3'
-];
+);
 var jsonpower = {
 	  buttonlabel : '<i class="fa fa-reboot"></i>Reboot'
 	, buttoncolor : '#de810e'
@@ -247,6 +247,8 @@ var jsonpower = {
 	, okcolor     : '#bb2828'
 	, ok          : function() {
 		cmdpower.push( 'shutdown -h now' );
+		console.log(cmdpower)
+		return
 		$.post( 'commands.php', { bash: cmdpower } );
 		$( '#loader' )
 			.css( 'background', '#000000' )
