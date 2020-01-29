@@ -552,10 +552,7 @@ $( '#time' ).roundSlider( {
 		}
 	}
 	, start       : function () {
-		if ( GUI.status.ext !== 'radio' ) {
-			clearInterval( GUI.intKnob );
-			clearInterval( GUI.intElapsed );
-		}
+		if ( GUI.status.ext !== 'radio' ) clearIntervalAll();
 	}
 	, drag        : function ( e ) { // drag with no transition by default
 		if ( GUI.status.ext !== 'radio' ) {
@@ -813,11 +810,7 @@ $( '.btn-cmd' ).click( function() {
 		var command = 'mpc '+ cmd +' '+ onoff;
 		GUI.status[ cmd ] = onoff;
 	} else {
-		if ( cmd !== 'play' ) {
-			clearInterval( GUI.intKnob );
-			clearInterval( GUI.intElapsed );
-			clearInterval( GUI.intElapsedPl );
-		}
+		if ( cmd !== 'play' ) clearIntervalAll();
 		if ( cmd === 'play' ) {
 			var command = 'mpc play';
 		} else if ( cmd === 'stop' ) {
@@ -1825,13 +1818,12 @@ function onVisibilityChange( callback ) {
 };
 onVisibilityChange( function( visible ) {
 	if ( visible ) {
-		var libraryhome = $( '#home-blocks' ).hasClass( 'hide' );
 		var color = 'color' in GUI.display ? GUI.display.color : '';
 		displayTopBottom();
 		if ( GUI.playback ) {
 			getPlaybackStatus();
 		} else if ( GUI.library ) {
-			if ( !$( '#db-search-close' ).text()  && !libraryhome ) renderLibrary();
+			if ( !$( '#db-search-close' ).text()  && !$( '#home-blocks' ).hasClass( 'hide' ) ) renderLibrary();
 		} else {
 			if ( $( '#pl-search-close' ).text() ) return
 			
@@ -1847,16 +1839,13 @@ onVisibilityChange( function( visible ) {
 		$.post( 'commands.php', { getdisplay: 1, data: 1 }, function( data ) {
 			if ( 'color' in data && data.color !== color ) {
 				location.href = '/';
-				return
+			} else {
+				GUI.display = data;
+				setButtonUpdate();
 			}
-			
-			GUI.display = data;
-			setButtonUpdate();
 		}, 'json' );
 	} else {
-		clearInterval( GUI.intKnob );
-		clearInterval( GUI.intElapsed );
-		clearInterval( GUI.intElapsedPl );
+		clearIntervalAll();
 	}
 } );
 window.addEventListener( 'orientationchange', function() {

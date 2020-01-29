@@ -21,6 +21,11 @@ function addonsdl( exit ) {
 		location.href = 'addons.php';
 	}
 }
+function clearIntervalAll() {
+	clearInterval( GUI.intKnob );
+	clearInterval( GUI.intElapsed );
+	clearInterval( GUI.intElapsedPl );
+}
 function cssKeyframes( name, trx0, trx100 ) {
 	var moz = '-moz-'+ trx0;
 	var moz100 = '-moz-'+ trx100;
@@ -1108,8 +1113,7 @@ function mpdSeek( seekto ) {
 	$( '#elapsed' ).html( second2HMS( seektime ) );
 	$( '#total' ).text( second2HMS( GUI.status.Time ) );
 	if ( GUI.status.state === 'play' ) {
-		clearInterval( GUI.intKnob );
-		clearInterval( GUI.intElapsed );
+		clearIntervalAll();
 		GUI.intElapsed = setInterval( function() {
 			elapsed++;
 			elapsedhms = second2HMS( elapsed );
@@ -1376,8 +1380,7 @@ function renderPlayback() {
 	$( '#format-bitrate' ).html( ( 'time' in GUI.display ? '<wh id="dot0"> • </wh>' : '' ) + status.sampling + ext )
 	
 	var elapsed = status.elapsed;
-	clearInterval( GUI.intKnob );
-	clearInterval( GUI.intElapsed );
+	clearIntervalAll();
 	if ( status.ext === 'radio' ) {
 		$( '#time' ).roundSlider( 'setValue', 0 );
 		if ( status.state === 'play' ) {
@@ -1516,8 +1519,7 @@ function renderPlayback() {
 			GUI.intKnob = setInterval( function() {
 				position = Math.round( elapsed / time * 1000 );
 				if ( position === 1000 ) {
-					clearInterval( GUI.intKnob );
-					clearInterval( GUI.intElapsed );
+					clearIntervalAll();
 					$( '#elapsed' ).empty();
 				}
 				$( '#time' ).roundSlider( 'setValue', position );
@@ -1526,8 +1528,7 @@ function renderPlayback() {
 			GUI.intKnob = setInterval( function() {
 				position++;
 				if ( position === 1000 ) {
-					clearInterval( GUI.intKnob );
-					clearInterval( GUI.intElapsed );
+					clearIntervalAll();
 					$( '#elapsed' ).empty();
 				}
 				$( '#time' ).roundSlider( 'setValue', position );
@@ -1972,9 +1973,7 @@ function stopAirplay() {
 	} );
 }
 function switchPage( page ) {
-	clearInterval( GUI.intKnob );
-	clearInterval( GUI.intElapsed );
-	clearInterval( GUI.intElapsedPl );
+	clearIntervalAll();
 	if ( GUI.library && $( '#home-blocks' ).hasClass( 'hide' ) ) {
 		if ( !$( '#divcoverarts' ).hasClass( 'hide' ) ) {
 			GUI.cvscrolltop = $( window ).scrollTop();
