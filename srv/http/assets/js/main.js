@@ -1809,12 +1809,22 @@ if ( reboot ) {
 
 } ); // document ready end <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-document.addEventListener( 'visibilitychange', function() {
-	if ( document.hidden ) {
-		clearInterval( GUI.intKnob );
-		clearInterval( GUI.intElapsed );
-		clearInterval( GUI.intElapsedPl );
-	} else {
+function onVisibilityChange( callback ) {
+    var visible = 1;
+    function focused() {
+        if ( !visible ) callback( visible = 1 );
+    }
+    function unfocused() {
+        if ( visible ) callback( visible = 0 );
+    }
+    document.addEventListener( 'visibilitychange', function() {
+		document.hidden ? unfocused() : focused();
+	} );
+    window.onpageshow = window.onfocus = focused;
+    window.onpagehide = window.onblur = unfocused;
+};
+onVisibilityChange( function( visible ) {
+	if ( visible ) {
 		var libraryhome = $( '#home-blocks' ).hasClass( 'hide' );
 		var color = 'color' in GUI.display ? GUI.display.color : '';
 		displayTopBottom();
@@ -1843,6 +1853,10 @@ document.addEventListener( 'visibilitychange', function() {
 			GUI.display = data;
 			setButtonUpdate();
 		}, 'json' );
+	} else {
+		clearInterval( GUI.intKnob );
+		clearInterval( GUI.intElapsed );
+		clearInterval( GUI.intElapsedPl );
 	}
 } );
 window.addEventListener( 'orientationchange', function() {
