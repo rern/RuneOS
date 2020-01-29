@@ -247,8 +247,6 @@ var jsonpower = {
 	, okcolor     : '#bb2828'
 	, ok          : function() {
 		cmdpower.push( 'shutdown -h now' );
-		console.log(cmdpower)
-		return
 		$.post( 'commands.php', { bash: cmdpower } );
 		$( '#loader' )
 			.css( 'background', '#000000' )
