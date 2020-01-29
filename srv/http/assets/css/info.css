@@ -49,8 +49,12 @@ input::-moz-focus-inner { /* dotted outline */
 	background-color: hsl(200,3%,30%)/*cg*/;
 	pointer-events: none;
 }
+hr {
+	margin: 7px 0;
+	border-color: hsl(200,3%,30%)/*cg*/;
+	background-color: hsl(200,3%,30%)/*cg*/;
+}
 #infoOverlay {
-	display: none;
 	position: fixed;
 	top: 0;
 	left: 0;

@@ -120,19 +120,28 @@ var chklibrary = {
 	, genre          : '<i class="fa fa-genre"></i>Genre'
 	, count          : '_<gr>text</gr> Count'
 	, label          : '<gr>text</gr> Label'
-	, plclear        : 'Confirm <gr>on clear Playlist</gr>'
-	, playbackswitch : 'Open Playback <gr>on</gr> <i class="fa fa-play-plus"></i>Add + Play'
-	, tapaddplay     : 'Single tap song&ensp;<gr>=</gr>&ensp;<i class="fa fa-play-plus"></i>Add + Play'
-	, backonleft     : '<i class="fa fa-arrow-left"></i>Back button on the left'
+	, hr             : '<hr>'
 	, thumbbyartist  : '<i class="fa fa-coverart"></i>Sort CoverArts by artist'
+	, backonleft     : '<i class="fa fa-arrow-left"></i>Back button on left side'
+	, hr1            : '<hr>'
+	, playbackswitch : 'Switch to Playback <gr>on</gr> <i class="fa fa-play-plus"></i>or <i class="fa fa-play-replace"></i>'
+	, tapaddplay     : 'Tap song&ensp;<gr>=</gr>&ensp;<i class="fa fa-play-plus"></i>Add + Play'
+	, tapreplaceplay : 'Tap song&ensp;<gr>=</gr>&ensp;<i class="fa fa-play-replace"></i>Replace + Play'
+	, plclear        : 'Confirm <gr>on replace Playlist</gr>'
 }
 $( '#displaylibrary' ).click( function() {
 	var thumbbyartist = 'thumbbyartist' in GUI.display;
 	info( {
 		  icon     : 'library'
 		, title    : 'Library Tools'
-		, message  : 'Show / enable selected items:'
+		, message  : 'Show selected items:'
 		, checkbox : '<form id="displaysavelibrary">'+ displayCheckbox( chklibrary ) +'</form>'
+		, preshow  : function() {
+			$( 'input[name="tapaddplay"], input[name="tapreplaceplay"]' ).click( function() {
+				var toggle = $( this ).prop( 'name' ) === 'tapaddplay' ? 'tapreplaceplay' : 'tapaddplay';
+				if ( $( this ).prop( 'checked' ) ) $( 'input[ name="'+ toggle +'" ]' ).prop( 'checked', 0 ) ;
+			} );
+		}
 		, ok       : function () {
 			var checked = [ 'library' ];
 			$( '#displaysavelibrary input:checked' ).each( function() {
@@ -242,7 +251,7 @@ var jsonpower = {
 		$( '#loader' )
 			.css( 'background', '#000000' )
 			.find( 'svg' ).css( 'animation', 'unset' );
-		notify( 'Powering Off ...', '<li2>Please wait until green LED > Off</li2>', 'power blink', -1 );
+		notify( 'Powering Off ...', '<li2>Please wait green LED blinking until off</li2>', 'power blink', -1 );
 	}
 	, buttonwidth : 1
 }
@@ -1520,7 +1529,7 @@ $( '#pllibrandom' ).click( function() {
 			, "mpc add \"$( mpc listall | sed '"+ Math.floor( Math.random() * GUI.countsong ) +"q;d' )\""
 			, 'systemctl start libraryrandom'
 			, 'curl -s -X POST "http://127.0.0.1/pub?id=idle" -d \'{ "changed": "options" }\''
-		], pushstream: 'options' } );
+		] } );
 	}
 } );
 $( '#plcrop' ).click( function() {
@@ -1871,7 +1880,7 @@ window.addEventListener( 'orientationchange', function() {
 } );
 
 var pushstreams = {};
-var streams = [ 'airplay', 'bookmark', 'display', 'idle', 'notify', 'playlist', 'reload', 'volume', 'webradio' ];
+var streams = [ 'airplay', 'bookmark', 'display', 'idle', 'notify', 'playlist', 'volume', 'webradio' ];
 streams.forEach( function( stream ) {
 	pushstreams[ stream ] = new PushStream( {
 		  modes                                 : 'websocket'
@@ -2001,7 +2010,15 @@ pushstreams.idle.onmessage = function( data ) {
 }
 pushstreams.notify.onmessage = function( data ) {
 	var data = data[ 0 ];
-	notify( data.title, data.text, data.icon, data.delay );
+	if ( 'title' in data ) {
+		notify( data.title, data.text, data.icon, data.delay );
+	} else if ( 'reload' in data ) {
+		location.href = '/';
+	} else { // menuPackage
+		$( '#'+ data[ 0 ] )
+			.data( { active: data[ 1 ], enabled: data[ 2 ] } )
+			.find( 'img' ).toggleClass( 'on', data[ 1 ] );
+	}
 }
 pushstreams.playlist.onmessage = function( data ) {
 	GUI.lsplaylists = data[ 0 ] || [];
@@ -2011,27 +2028,6 @@ pushstreams.playlist.onmessage = function( data ) {
 		renderPlaylist();
 	} else {
 		$( '#plopen' ).click();
-	}
-}
-pushstreams.reload.onmessage = function( data ) {
-	if ( data[ 0 ] === 1 ) {
-		location.href = '/';
-	} else if ( data[ 0 ] === 2 ) { // shutdown
-		$( '#loader' ).removeClass( 'hide' );
-		if ( $( '#bannerTitle .fa-power' ).length ) bannerHide();
-	} else { // bash: curl -s -X POST 'http://127.0.0.1/pub?id=reload' -d '{"content":"xxx"}'
-		if ( GUI.localhost && data[ 0 ].content === 'runonce' ) { 
-			info( {
-				  icon    : 'rune'
-				, title   : 'RuneAudio'
-				, message : 'Welcome!'
-						   +'<br><br>Show <wh>Web user interface</wh> URL'
-						   +'<br>for remote device connection?'
-				, ok      : function() {
-					location.href = 'index-settings.php?p=network';
-				}
-			} );
-		}
 	}
 }
 pushstreams.volume.onmessage = function( data ) {

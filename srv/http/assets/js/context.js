@@ -107,13 +107,13 @@ $( '.contextmenu a' ).click( function( e ) {
 	
 	// functions with dialogue box ////////////////////////////////////////////
 	var contextFunction = {
-		  wrrename      : webRadioRename
-		, wrcoverart    : webRadioCoverart
-		, wrdelete      : webRadioDelete
-		, plrename      : playlistRename
-		, pldelete      : playlistDelete
-		, bookmark      : bookmarkNew
-		, thumbnail     : updateThumbnails
+		  bookmark   : bookmarkNew
+		, plrename   : playlistRename
+		, pldelete   : playlistDelete
+		, thumbnail  : updateThumbnails
+		, wrcoverart : webRadioCoverart
+		, wrdelete   : webRadioDelete
+		, wredit     : webRadioEdit
 	}
 	if ( cmd in contextFunction ) {
 		contextFunction[ cmd ]();
@@ -616,6 +616,28 @@ function webRadioDelete() {
 		}
 	} );
 }
+function webRadioEdit() {
+	var name = GUI.list.name;
+	var img = GUI.list.li.find( 'img' ).prop( 'src' );
+	var url = GUI.list.path;
+	var urlname = url.replace( /\//g, '|' );
+	info( {
+		  icon         : 'webradio'
+		, title        : 'Edit Webradio'
+		, width        : 500
+		, message      : ( img ? '<img src="'+ img +'">' : '<i class="fa fa-webradio bookmark"></i>' )
+		, textlabel    : [ 'Name', 'URL' ]
+		, textvalue    : [ name, url ]
+		, textrequired : [ 0, 1 ]
+		, boxwidth     : 'max'
+		, oklabel      : 'Save'
+		, ok           : function() {
+			var newname = $( '#infoTextBox' ).val();
+			var newurl = $( '#infoTextBox1' ).val().replace( /\/\s*$/, '' ); // omit trailling / and space
+			if ( newname !== name || newurl !== url ) $.post( 'commands.php', { webradios: newname, newurl: newurl, url: url, edit: 1 } );
+		}
+	} );
+}
 function webRadioNew( name, url ) {
 	info( {
 		  icon         : 'webradio'
@@ -628,7 +650,7 @@ function webRadioNew( name, url ) {
 		, textalign    : 'center'
 		, boxwidth     : 'max'
 		, ok           : function() {
-			var newname = $( '#infoTextBox' ).val();
+			var newname = $( '#infoTextBox' ).val().replace( /\/\s*$/, '' ); // omit trailling / and space
 			var url = $( '#infoTextBox1' ).val();
 			$.post( 'commands.php', { webradios: newname, url: url, new: 1 }, function( exist ) {
 				if ( exist ) {
@@ -646,30 +668,6 @@ function webRadioNew( name, url ) {
 					} );
 				}
 			} );
-		}
-	} );
-}
-function webRadioRename() {
-	var name = GUI.list.name;
-	var img = GUI.list.li.find( 'img' ).prop( 'src' );
-	var url = GUI.list.path;
-	var urlname = url.replace( /\//g, '|' );
-	info( {
-		  icon         : 'webradio'
-		, title        : 'Rename Webradio'
-		, width        : 500
-		, message      : ( img ? '<br><img src="'+ img +'">' : '<br><i class="fa fa-webradio bookmark"></i>' )
-						+'<br><w>'+ name +'</w>'
-						+'<br>'+ url
-						+'<br>To:'
-		, textvalue    : name
-		, textrequired : 0
-		, textalign    : 'center'
-		, boxwidth     : 'max'
-		, oklabel      : 'Rename'
-		, ok           : function() {
-			var newname = $( '#infoTextBox' ).val();
-			$.post( 'commands.php', { webradios: newname, url: url, rename: 1 } );
 		}
 	} );
 }

@@ -445,11 +445,12 @@ function dbContextmenu( $li, $target ) {
 	GUI.list.isfile = $li.hasClass( 'file' );
 	GUI.list.thumb = $li.find( '.lithumb' ).text() || '';
 	GUI.list.img = $li.find( '.liimg' ).text() || '';
-	if ( 'tapaddplay' in GUI.display
+	if ( ( 'tapaddplay' in GUI.display || 'tapreplaceplay' in GUI.display )
 		&& !$target.hasClass( 'db-icon' )
 		&& !$li.hasClass( 'licover' )
 	) {
-		$menu.find( 'a:eq( 0 ) .submenu' ).click();
+		var i = 'tapaddplay' in GUI.display ? 0 : 1;
+		$menu.find( 'a:eq( '+ i +' ) .submenu' ).click();
 		$li.addClass( 'active' );
 		return
 	}
@@ -493,6 +494,9 @@ function displayCheckbox( checkboxes ) {
 			col = ' class="infocol"';
 			br = '';
 			val = val.slice( 1 );
+		} else if ( val === '<hr>' ) {
+			html += '<hr>';
+			return
 		} else {
 			col = '';
 			br = '<br>';
@@ -616,6 +620,7 @@ function displayPlayback() {
 }
 function displayTopBottom() {
 	if ( !$( '#bio' ).hasClass( 'hide' ) ) return
+	
 	if ( !( 'bars' in GUI.display ) || ( GUI.screenS && !( 'barsauto' in GUI.display ) ) ) {
 		GUI.bars = 0;
 		$( '#menu-top, #menu-bottom' ).addClass( 'hide' );
@@ -1055,20 +1060,26 @@ function menuPackage( $this, $target ) {
 			, buttonlabel : '<i class="fa fa-stop"></i>Stop'
 			, buttoncolor : '#bb2828'
 			, button      : function() {
-				var checked = $( '#infoCheckBox input[ type=checkbox ]' ).prop( 'checked' );
-				$.post( 'commands.php', { bash: [
-					  'systemctl stop '+ id
-					, 'systemctl '+ ( checked ? 'enable ' : 'disable ' ) + id
-				] } );
+				var checked = $( '#infoCheckBox input[ type=checkbox ]' ).prop( 'checked' ) ? 1 : 0;
+				$.post( 'commands.php', { 
+					  bash: [
+						  'systemctl stop '+ id
+						, 'systemctl '+ ( checked ? 'enable ' : 'disable ' ) + id
+					]
+					, pushstream : [ id, 0, checked ]
+				} );
 				$this
-					.data( 'enabled', checked ? 1 : 0 )
+					.data( 'enabled', checked )
 					.data( 'active', 0 )
 					.find( 'img' ).removeClass( 'on' );
 			}
 			, ok          : function() {
-				var checked = $( '#infoCheckBox input[ type=checkbox ]' ).prop( 'checked' );
-				$.post( 'commands.php', { bash: 'systemctl '+ ( checked ? 'enable ' : 'disable ' ) + id } );
-				$this.data( 'enabled', checked ? 1 : 0 );
+				var checked = $( '#infoCheckBox input[ type=checkbox ]' ).prop( 'checked' ) ? 1 : 0;
+				$.post( 'commands.php', {
+					  bash       : 'systemctl '+ ( checked ? 'enable ' : 'disable ' ) + id
+					, pushstream : [ id, $this.data( 'active' ), checked  ]
+				} );
+				$this.data( 'enabled', checked );
 			}
 			, preshow     : function() {
 				if ( !active ) $( '#infoButton' ).hide();
@@ -1079,11 +1090,13 @@ function menuPackage( $this, $target ) {
 			  aria2        : '/aria2/index.html'
 			, transmission : 'http://'+ location.hostname +':9091'
 		}
-		$.post( 'commands.php', { bash: 'systemctl start '+ id }, window.open( url[ id ] ) );
+		$.post( 'commands.php', {
+			  bash: 'systemctl start '+ id
+			, pushstream : [ id, 1, $this.data( 'enabled' ) ]
+		}, window.open( url[ id ] ) );
 		$this
 			.data( 'active', 1 )
 			.find( 'img' ).addClass( 'on' );
-		notify( title, 'Starting ...', 'gear fa-spin' );
 	}
 }
 function mpdSeek( seekto ) {
@@ -1217,6 +1230,7 @@ function removeFromPlaylist( $li ) {
 	var webradio = $this.find( '.fa-webradio' ).length;
 	var $elcount = webradio ? $( '#countradio' ) : $( '#countsong' );
 	var count = $elcount.attr( 'count' ) - 1;
+	GUI.status.playlistlength--;
 	$elcount.attr( 'count', count ).text( count );
 	var time = +$( '#pltime' ).attr( 'time' ) - $this.find( '.time' ).attr( 'time' );
 	if ( !webradio ) $( '#pltime' ).attr( 'time', time ).text( second2HMS( time ) );
@@ -1246,8 +1260,8 @@ function removeFromPlaylist( $li ) {
 	$this.remove();
 	var cmd = 'mpc del '+ songpos;
 	$.post( 'commands.php', { mpc: cmd } );
-	if ( !$( '#countsong, #countradio' ).length ) {
-		GUI.status.playlistlength = 0;
+	if ( GUI.bars ) $( '#previous, #next' ).toggleClass( 'hide', GUI.status.playlistlength === 1 );
+	if ( !GUI.status.playlistlength ) {
 		GUI.pllist = {};
 		renderPlaylist();
 		setPlaybackBlank();
@@ -1717,16 +1731,16 @@ function second2HMS( second ) {
 function setButton() {
 	$( '#playback-controls' ).toggleClass( 'hide', GUI.status.playlistlength === 0 || GUI.status.ext === 'AirPlay' );
 	$( '#pause' ).toggleClass( 'hide', GUI.status.ext === 'radio' );
-	if ( GUI.status.playlistlength === 1 ) $( '#previous, #next' ).addClass( 'hide' );
+	$( '#previous, #next' ).toggleClass( 'hide', GUI.status.playlistlength === 1 );
 	var state = GUI.status.state;
 	if ( GUI.bars ) {
 		$( '#playback-controls button' ).removeClass( 'active' );
 		$( '#'+ state ).addClass( 'active' );
 	}
+	$( '#badge, #badgeaddons' ).remove();
 	if ( 'update' in GUI.display ) {
-		if ( GUI.bars ) $( '#badge' ).text( GUI.display.update ).removeClass( 'hide' );
-	} else {
-		$( '#badge' ).empty().addClass( 'hide' );
+		if ( GUI.bars ) $( '#menu-settings' ).after( '<span id="badge"></span>' );
+		$( '#addons i' ).after( '<span id="badgeaddons">'+ GUI.display.update +'</span>' );
 	}
 	setTimeout( function() {
 		setButtonUpdate();
@@ -2018,6 +2032,7 @@ function updatePlaylist() {
 			GUI.pllist = {};
 		}
 		if ( GUI.playlist ) renderPlaylist();
+		if ( GUI.bars ) $( '#previous, #next' ).toggleClass( 'hide', GUI.status.playlistlength === 1 );
 		getPlaybackStatus();
 	}, 'json' );
 }

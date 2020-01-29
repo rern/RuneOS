@@ -11,12 +11,10 @@ if ( isset( $_POST[ 'bash' ] ) ) {
 	exec( $command, $output, $std );
 	if ( $std !== 0 ) {
 		echo -1;
-/*	} else if ( count( $output ) === 1 ) {
-		echo $output[ 0 ];*/
 	} else {
 		echo json_encode( $output );
 	}
-	if ( isset( $_POST[ 'pushstream' ] ) ) pushstream( $_POST[ 'pushstream' ], 1 );
+	if ( isset( $_POST[ 'pushstream' ] ) ) pushstream( 'notify', $_POST[ 'pushstream' ] );
 	exit();
 }
 
@@ -130,7 +128,7 @@ s|\(hsl(\).*\()/\*cgl\*/\)|\1'.$hsg.'60%\2|g
 	} else {
 		file_put_contents( "$dirdisplay/color", "hsl($h,$s%,$l%)" );
 	}
-	pushstream( 'reload', 1 );
+	pushstream( 'notify', [ 'reload' => 1 ] );
 	
 } else if ( isset( $_POST[ 'counttag' ] ) ) {
 	$path = $_POST[ 'counttag' ];
@@ -382,7 +380,7 @@ s|\(hsl(\).*\()/\*cgl\*/\)|\1'.$hsg.'60%\2|g
 } else if ( isset( $_POST[ 'setdisplay' ] ) ) {
 	$data = $_POST[ 'setdisplay' ];
 	if ( $data[ 0 ] === 'library' ) {
-		$filelist = '{album,artist,albumartist,composer,coverart,genre,nas,sd,usb,webradio,count,label,plclear,playbackswitch,tapaddplay,thumbbyartist}';
+		$filelist = '{album,artist,albumartist,composer,coverart,genre,nas,sd,usb,webradio,count,label,plclear,playbackswitch,tapaddplay,tapreplaceplay,thumbbyartist}';
 	} else {
 		$filelist = '{bars,barsauto,buttons,cover,coverlarge,radioelapsed,time,volume}';
 	}
@@ -420,8 +418,7 @@ s|\(hsl(\).*\()/\*cgl\*/\)|\1'.$hsg.'60%\2|g
 	
 } else if ( isset( $_POST[ 'webradios' ] ) ) {
 	$name = $_POST[ 'webradios' ];
-	$url = $_POST[ 'url' ];
-	$urlname = str_replace( '/', '|', $url );
+	$urlname = str_replace( '/', '|', $_POST[ 'url' ] );
 	$file = "$dirwebradios/$urlname";
 	if ( ( isset( $_POST[ 'new' ] ) || isset( $_POST[ 'save' ] ) ) 
 		&& file_exists( $file )
@@ -433,10 +430,12 @@ s|\(hsl(\).*\()/\*cgl\*/\)|\1'.$hsg.'60%\2|g
 	if ( isset( $_POST[ 'new' ] ) ) {
 		file_put_contents( "$dirwebradios/$urlname", $name );
 		$count = 1;
-	} else if ( isset( $_POST[ 'rename' ] ) ) {
+	} else if ( isset( $_POST[ 'edit' ] ) ) {
 		$content = file( $file, FILE_IGNORE_NEW_LINES );
+		$urlnamenew = str_replace( '/', '|', $_POST[ 'newurl' ] );
 		if ( count( $content ) > 1 ) $name.= "\n".$content[ 1 ]."\n".$content[ 2 ];
-		file_put_contents( "$dirwebradios/$urlname", $name ); // name, thumbnail, coverart
+		@unlink( $file );
+		file_put_contents( "$dirwebradios/$urlnamenew", $name ); // name, thumbnail, coverart
 		$count = 0;
 	} else if ( isset( $_POST[ 'delete' ] ) ) {
 		unlink( $file );

@@ -258,11 +258,6 @@ headingnoline i {
 	font-size: 26px;
 	letter-spacing: 5px;
 }
-hr {
-	margin: 10px 0;
-	border-color: hsl(200,3%,30%)/*cg*/;
-	background-color: hsl(200,3%,30%)/*cg*/;
-}
 #back {
 	float: right;
 	color: hsl(200,100%,40%)/*c*/;

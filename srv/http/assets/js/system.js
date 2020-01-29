@@ -8,22 +8,27 @@ var dirsystem = '/srv/http/data/system';
 var filereboot = '/srv/http/data/tmp/reboot';
 
 $( '#hostname' ).click( function() {
+	var existing = $( '#hostname' ).val();
 	info( {
 		  icon      : 'rune'
 		, title     : 'Player Name'
 		, textlabel : 'Name'
-		, textvalue : $( '#hostname' ).val()
+		, textvalue : existing
 		, ok        : function() {
 			var hostname = $( '#infoTextBox' ).val().replace( /[^a-zA-Z0-9]+/g, '_' );
+			if ( hostname === existing ) return
+			
 			var hostnamelc = hostname.toLowerCase();
 			$( '#hostname' ).val( hostname );
 			local = 1;
 			var cmd = [
 				  'hostname "'+ hostnamelc +'"'
+				, 'sed -i "s/\\(.*localdomain \\).*/\\1'+ hostnamelc +'.local '+ hostnamelc +'/" /etc/hosts'
+				, 'sed -i "s/\\(.*\\[\\).*\\(\\] \\[.*\\)/\\1'+ hostnamelc +'\\2/" /etc/avahi/services/runeaudio.service'
 				, 'echo '+ hostname +' | tee /etc/hostname '+ dirsystem +'/hostname'
 				, 'sed -i "s/zeroconf_name.*/zeroconf_name           \\"'+ hostname +'\\"/" /etc/mpd.conf'
-				, 'sed -i "s/\\(.*\\[\\).*\\(\\] \\[.*\\)/\\1'+ hostnamelc +'\\2/" /etc/avahi/services/runeaudio.service'
-				, 'sed -i "s/\\(.*localdomain \\).*/\\1'+ hostnamelc +'.local '+ hostnamelc +'/" /etc/hosts'
+				, 'sed -i "/ExecStart/ s/\\w*$/'+ hostname +'/" /etc/systemd/system/wsdd.service'
+				, 'systemctl daemon-reload'
 				, 'systemctl -q is-active bluetooth && bluetoothctl system-alias "'+ hostname +'"'
 			];
 			var service = 'systemctl try-restart avahi-daemon mpd';
@@ -37,7 +42,7 @@ $( '#hostname' ).click( function() {
 			}
 			if ( $( '#samba' ).length ) {
 				cmd.push( 'sed -i "s/netbios name = .*/netbios name = '+ hostname +'/" /etc/samba/smb.conf' );
-				service += ' nmb smb';
+				service += ' nmb smb wsdd';
 			}
 			if ( $( '#localbrowser' ).length ) cmd.push( 'rm /srv/http/.config/chromium/SingletonLock' );
 			if ( $( '#upnp' ).length ) {
@@ -316,24 +321,25 @@ $( '#setting-localbrowser' ).click( function() {
 			var cursor = $( '#infoCheckBox input:eq( 0 )' ).prop( 'checked' ) ? 1 : 0;
 			var rotate = $( '#infoRadio input[ type=radio ]:checked' ).val();
 			var overscan = $( '#infoCheckBox input:eq( 1 )' ).prop( 'checked' ) ? 1 : 0;
-			$( '#localbrowser' )
-				.data( 'zoom', zoom )
-				.data( 'screenoff', screenoff )
-				.data( 'cursor', cursor )
-				.data( 'rotate', rotate )
-				.data( 'overscan', overscan );
+			$( '#localbrowser' ).data( {
+				  zoom      : zoom
+				, screenoff : screenoff
+				, cursor    : cursor
+				, rotate    : rotate
+				, overscan  : overscan
+			} );
 			var localbrowser = dirsystem +'/localbrowser-';
 			var cmd = [];
-			cmd.push( ( zoom != 1 ? 'echo '+ zoom +' > ' : 'rm ' ) + localbrowser +'zoom' );
-			cmd.push( ( cursor ? 'echo 1 > ' : 'rm ' ) + localbrowser +'cursor' );
-			cmd.push( ( screenoff != 0 ? 'echo '+ ( screenoff * 60 ) +' > ' : 'rm ' ) + localbrowser +'screenoff' );
-			cmd.push( ( rotate !== 'NORMAL' ? 'echo '+ rotate +' > ' : 'rm ' ) + localbrowser +'rotate' );
-			cmd.push( ( overscan ? 'echo '+ overscan +' > ' : 'rm ' ) + localbrowser +'overscan' );
-			
 			cmd.push(
-				  'sed -i -e "s/-use_cursor.*/-use_cursor '+ ( cursor == 1 ? 'yes \\&' : 'no \\&' ) +'/'
-						+'" -e "s/factor=.*/factor='+ zoom +'/'
-				, 		+'" -e "s/xset dpms .*/xset dpms 0 0 '+ ( screenoff * 60 ) +' \\\&/" /etc/X11/xinit/xinitrc'
+				  ( zoom != 1 ? 'echo '+ zoom +' > ' : 'rm ' ) + localbrowser +'zoom'
+				, ( cursor ? 'echo 1 > ' : 'rm ' ) + localbrowser +'cursor'
+				, ( screenoff != 0 ? 'echo '+ ( screenoff * 60 ) +' > ' : 'rm ' ) + localbrowser +'screenoff'
+				, ( rotate !== 'NORMAL' ? 'echo '+ rotate +' > ' : 'rm ' ) + localbrowser +'rotate'
+				, ( overscan ? 'echo '+ overscan +' > ' : 'rm ' ) + localbrowser +'overscan'
+				, 'sed -i -e "s/-use_cursor.*/-use_cursor '+ ( cursor == 1 ? 'yes \\&' : 'no \\&' ) +'/'
+					+'" -e "s/factor=.*/factor='+ zoom +'/'
+			 		+'" -e "s/xset dpms .*/xset dpms 0 0 '+ ( screenoff * 60 )
+					+' \\\&/" /etc/X11/xinit/xinitrc'
 				, 'ln -sf /srv/http/assets/img/'+ rotate +'.png /usr/share/bootsplash/start.png'
 			);
 			
@@ -446,19 +452,20 @@ $( '#setting-password' ).click( function() {
 $( '#samba' ).click( function() {
 	var O = getCheck( $( this ) );
 	local = 1;
-	$.post( 'commands.php', { bash: [
-		  'systemctl '+ O.enabledisable +' --now nmb smb'
+	var cmd = [
+		  'systemctl '+ O.enabledisable +' --now nmb smb wsdd'
 		, ( O.onezero ? 'echo 1 > ' : 'rm -f ' ) + dirsystem +'/samba'
 		, pstream( 'system' )
-	] }, resetlocal );
+	]
+	$.post( 'commands.php', { bash: cmd }, resetlocal );
 	$( '#setting-samba' ).toggleClass( 'hide', !O.onezero );
 } );
 $( '#setting-samba' ).click( function() {
 	info( {
 		  icon     : 'network'
 		, title    : 'Samba File Sharing'
-		, message  : '<wh>Write</wh> permission:'
-		, checkbox : { '/mnt/MPD/SD': 1, '/mnt/MPD/USB': 1 }
+		, message  : '<wh>Write</wh> permission:</gr>'
+		, checkbox : { '<gr>/mnt/MPD/</gr>SD': 1, '<gr>/mnt/MPD/</gr>USB': 1 }
 		, preshow  : function() {
 			if ( $( '#samba' ).data( 'sd' ) ) $( '#infoCheckBox input:eq( 0 )' ).prop( 'checked', 1 );
 			if ( $( '#samba' ).data( 'usb' ) ) $( '#infoCheckBox input:eq( 1 )' ).prop( 'checked', 1 );
@@ -466,30 +473,26 @@ $( '#setting-samba' ).click( function() {
 		, ok       : function() {
 			var cmd = "sed -i -e '/read only = no/ d'";
 			if ( $( '#infoCheckBox input:eq( 0 )' ).prop( 'checked' ) ) {
-				cmd += " -e '/path = .*SD/ a\\\\tread only = no'";
 				var sd = 1;
-				$( '#samba' ).data( 'sd', 1 );
+				cmd += " -e '/path = .*SD/ a\\\\tread only = no'";
 			} else {
 				var sd = 0;
-				$( '#samba' ).data( 'sd', 0 );
 			}
 			if ( $( '#infoCheckBox input:eq( 1 )' ).prop( 'checked' ) ) {
-				cmd += " -e '/path = .*USB/ a\\\\tread only = no'";
 				var usb = 1;
-				$( '#samba' ).data( 'usb', 1 );
+				cmd += " -e '/path = .*USB/ a\\\\tread only = no'";
 			} else {
 				var usb = 0;
-				$( '#samba' ).data( 'usb', 0 );
 			}
 			local = 1;
-			cmd = [
-				  cmd +' /etc/samba/smb.conf'
-				, 'systemctl try-restart nmb smb'
-				, 'rm -f '+ dirsystem +'/samba-*'
-			];
-			if ( sd ) cmd.push( 'echo '+ sd +' > '+ dirsystem +'/samba-writesd' );
-			if ( usb ) cmd.push( 'echo '+ usb +' > '+ dirsystem +'/samba-writeusb' );
-			cmd.push( pstream( 'system' ) );
+			cmd = [ cmd +' /etc/samba/smb.conf' ];
+			$( '#samba' ).data( { sd: sd, usb: usb } );
+			cmd.push( 
+				  'systemctl try-restart nmb smb'
+				, ( sd ? 'rm ' : 'echo 1 > ' ) + dirsystem +'/samba-readonlysd'
+				, ( usb ? 'rm ' : 'echo 1 > ' ) + dirsystem +'/samba-readonlyusb'
+				, pstream( 'system' )
+			);
 			$.post( 'commands.php', { bash: cmd }, resetlocal );
 		}
 	} );
@@ -593,8 +596,7 @@ $( '#setting-upnp' ).click( function() {
 				value[ service ] = [ user, pass, quality ];
 				if ( $( '#'+ service +' input' ).prop( 'checked' ) ) {
 					if ( user && pass ) {
-						$( '#upnp' )
-									.data( service +'user', user )
+						$( '#upnp' ).data( service +'user', user )
 									.data( service +'pass', pass )
 									.data( service +'quality', quality );
 						cmd += " -e 's/#*\\("+ service +"user = \\).*/\\1"+ user +"/'"

@@ -280,7 +280,7 @@ $menu.= menudiv( 'radio', $html );
 
 $menudiv = '';
 $html = menucommon( 'wradd', 'wrreplace' );
-$html.= menuli( 'wrrename',   'edit-circle',  'Rename' );
+$html.= menuli( 'wredit',     'edit-circle',  'Edit' );
 $html.= menuli( 'wrcoverart', 'coverart',     'Change coverart' );
 $html.= menuli( 'wrdelete',   'minus-circle', 'Delete' );
 $menu.= menudiv( 'webradio', $html );
@@ -309,7 +309,7 @@ $html = menucommon( 'genreadd', 'genrereplace' );
 $menu.= menudiv( 'genre', $html );
 ?>
 <div id="menu-top" class="hide">
-	<i id="menu-settings" class="fa fa-gear"></i><span id="badge" class="hide"></span>
+	<i id="menu-settings" class="fa fa-gear"></i>
 	<div id="playback-controls">
 		<button id="previous" class="btn btn-default btn-cmd"><i class="fa fa-step-backward"></i></button>
 		<button id="stop" class="btn btn-default btn-cmd"><i class="fa fa-stop"></i></button>

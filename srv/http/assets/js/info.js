@@ -61,7 +61,7 @@ function heredoc( fn ) {
 	return fn.toString().match( /\/\*\s*([\s\S]*?)\s*\*\//m )[ 1 ];
 };
 var containerhtml = heredoc( function() { /*
-<div id="infoOverlay" tabindex="1">
+<div id="infoOverlay" class="hide" tabindex="1">
 	<div id="infoBox">
 		<div id="infoTopBg">
 			<div id="infoTop">
@@ -99,6 +99,7 @@ infocontenthtml = heredoc( function() { /*
 
 $( 'body' ).prepend( containerhtml );
 
+infoactive = 0; // for shortcut.js to ignore all keydown
 emptyinput = 0; // for 'textrequired'
 
 $( '#infoOverlay' ).keydown( function( e ) {
@@ -106,14 +107,9 @@ $( '#infoOverlay' ).keydown( function( e ) {
 		if ( e.key == 'Enter' && !$( '#infoOk' ).hasClass( 'disabled' ) ) {
 			$( '#infoOk' ).click();
 		} else if ( e.key === 'Escape' ) {
-			infoReset();
+			$( '#infoCancel' ).click();
 		}
 	}
-} );
-// close: reset to default
-$( '#infoX' ).click( function() {
-	$( '#infoCancel' ).click();
-	$( '#infoContent' ).empty();
 } );
 $( '#infoContent' ).on( 'click', '.eye', function() {
 	$this = $( this );
@@ -128,9 +124,10 @@ $( '#infoContent' ).on( 'click', '.eye', function() {
 } );
 
 function infoReset() {
+	$( '#infoOverlay' ).addClass( 'hide' );
 	$( '#infoContent' ).html( infocontenthtml );
 	$( '#infoX' ).show();
-	$( '#infoOverlay, .infocontent, .infolabel, .infoinput, .infohtml, .filebtn, .infobtn' ).hide();
+	$( '.infocontent, .infolabel, .infoinput, .infohtml, .filebtn, .infobtn' ).hide();
 	$( '.infoinput' ).css( 'text-align', '' );
 	$( '#infoBox, .infolabel, .infoinput' ).css( 'width', '' );
 	$( '.filebtn, .infobtn' ).css( 'background', '' ).off( 'click' );
@@ -142,6 +139,7 @@ function infoReset() {
 }
 
 function info( O ) {
+	infoactive = 1;
 	infoReset();
 	setTimeout( function() { // fix: wait for infoReset() on 2nd info
 	///////////////////////////////////////////////////////////////////
@@ -151,7 +149,8 @@ function info( O ) {
 		$( '#infoTitle' ).text( 'Info' );
 		$( '#infoX' ).hide();
 		$( '#infoMessage' ).html( O );
-		$( '#infoOverlay, #infoMessage, #infoOk' ).show();
+		$( '#infoMessage, #infoOk' ).show();
+		$( '#infoOverlay' ).removeClass( 'hide' );
 		alignVertical();
 		$( '#infoOk' ).html( 'OK' ).click( infoReset );
 		return;
@@ -172,7 +171,7 @@ function info( O ) {
 	if ( 'nox' in O ) $( '#infoX' ).hide();
 	if ( 'autoclose' in O ) {
 		setTimeout( function() {
-			$( '#infoX' ).click();
+			$( '#infoCancel' ).click();
 		}, O.autoclose );
 	}
 	
@@ -204,10 +203,13 @@ function info( O ) {
 									.click( O.button[ i ] );
 			}
 		}
-		$( '.infobtn' ).click( infoReset );
+		$( '.infobtn' ).click( function() {
+			infoReset();
+			setTimeout( function() { infoactive = 0 }, 300 );
+		} );
 	}
-	$( '#infoCancel' ).click( function() {
-		$( '#infoOverlay' ).hide();
+	$( '#infoX, #infoCancel' ).click( function() {
+		$( '#infoOverlay' ).addClass( 'hide' );
 		if ( typeof O.cancel === 'function' ) O.cancel();
 	} );
 	
@@ -355,7 +357,7 @@ function info( O ) {
 
 	if ( O.preshow ) O.preshow();
 	$( '#infoOverlay' )
-		.show()
+		.removeClass( 'hide' )
 		.focus(); // enable e.which keypress (#infoOverlay needs tabindex="1")
 	alignVertical();
 	if ( $infofocus ) $infofocus.focus();

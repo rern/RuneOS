@@ -61,7 +61,7 @@ if [[ $( cat $dirsystem/hostname ) != RuneAudio ]]; then
 	echo $namelc > /etc/hostname
 	sed -i "s/^\(ssid=\).*/\1$name/" /etc/hostapd/hostapd.conf &> /dev/null
 	sed -i "s/\(zeroconf_name           \"\).*/\1$name\"/" /etc/mpd.conf
-	sed -i "s/\(netbios name = \).*/\1$name/" /etc/samba/smb.conf &> /dev/null
+	sed -i "/ExecStart/ s/\\w*$/$name/" /etc/systemd/system/wsdd.service
 	sed -i "s/^\(name = \).*/\1$name" /etc/shairport-sync.conf &> /dev/null
 	sed -i "s/^\(friendlyname = \).*/\1$name/" /etc/upmpdcli.conf &> /dev/null
 	sed -i "s/\(.*\[\).*\(\] \[.*\)/\1$namelc\2/" /etc/avahi/services/runeaudio.service
@@ -153,11 +153,11 @@ fi
 if [[ -e /ust/bin/samba && -e $dirsystem/samba ]]; then
 	echo -e "\nEnable $( tcolor 'File sharing' ) ...\n"
 	sed -i '/read only = no/ d' /etc/samba/smb.conf
-	[[ -e $dirsystem/samba-writesd ]] && sed -i '/path = .*USB/ a\tread only = no' /etc/samba/smb.conf
-	[[ -e $dirsystem/samba-writeusb ]] && sed -i '/path = .*LocalStorage/ a\tread only = no' /etc/samba/smb.conf
-	systemctl enable nmb smb
+	[[ ! -e $dirsystem/samba-readonlysd ]] && sed -i '/path = .*USB/ a\tread only = no' /etc/samba/smb.conf
+	[[ ! -e $dirsystem/samba-readonlyusb ]] && sed -i '/path = .*LocalStorage/ a\tread only = no' /etc/samba/smb.conf
+	systemctl enable nmb smb wsdd
 else
-	systemctl disable nmb smb
+	systemctl disable nmb smb wsdd
 fi
 # timezone
 if [[ -e $dirsystem/timezone ]]; then

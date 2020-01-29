@@ -64,6 +64,7 @@ include 'logosvg.php';
 		<div class="col-l text gr">
 			RuneAudio<br>
 			Kernel<br>
+			MPD<br>
 			Hardware<br>
 			SoC<br>
 			Root partition<br>
@@ -75,6 +76,7 @@ include 'logosvg.php';
 		<div class="col-r text">
 			<i class="fa fa-addons gr" style="line-height: 20px;"></i> <?=$data->version?><br>
 			<?=$data->kernel?><br>
+			<?=$data->mpd?><br>
 			<?=$data->hardware?><br>
 			<?=$soc.$bullet.$cpu.$bullet.$memory?><br>
 			<?=$data->rootfs?><br>
@@ -167,7 +169,7 @@ include 'logosvg.php';
 	  if ( file_exists( '/usr/bin/smbd' ) ) { ?>
 		<div class="col-l gr">File sharing<i class="fa fa-network fa-lg wh"></i></div>
 		<div class="col-r">
-			<input id="samba" type="checkbox" data-usb="<?=$data->readonlyusb?>" data-sd="<?=$data->readonlysd?>" <?=$data->samba?>>
+			<input id="samba" type="checkbox" data-sd="<?=$data->writesd?>" data-usb="<?=$data->writeusb?>" <?=$data->samba?>>
 			<div class="switchlabel" for="samba"></div>
 			<i id="setting-samba" class="setting fa fa-gear <?=( $data->samba === 'checked' ? '' : 'hide' )?>"></i>
 			<span class="help-block hide"><code>Samba</code> - Share files on RuneAudio.</span>

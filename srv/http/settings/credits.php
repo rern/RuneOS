@@ -81,6 +81,7 @@ $listruneos = [
 	, 'udevil'                   => 'http://ignorantguru.github.io/udevil/'
 	, 'upmpdcli'                 => 'http://www.lesbonscomptes.com/upmpdcli/'
 	, 'Wget'                     => 'https://www.gnu.org/software/wget/wget.html'
+	, 'Web Service Discovery'    => 'https://github.com/christgau/wsdd'
 	, 'X'                        => 'https://xorg.freedesktop.org/wiki/'
 ];
 $runeoshtml = '';

@@ -246,7 +246,6 @@ $( '.close-root' )
 				, '/root/gpiooff.py 2> /devnull'
 				, 'systemctl stop localbrowser 2> /devnull'
 				, '/usr/local/bin/ply-image /usr/share/bootsplash/start.png'
-				, 'curl -s -X POST "http://127.0.0.1/pub?id=reload" -d 2'
 			];
 			info( {
 				  icon        : 'reset'

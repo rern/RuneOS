@@ -6,17 +6,13 @@ $addons = [
 
 'rare' => [
 	'title'       => 'RuneAudio+R e2',
-	'version'     => '20200120',
-	'revision'    => 'Fixed - Auto update in MPD settings'
-					.'<br>Fixed - Bluetooth and WiFi in System settings'
-					.'<br>Fixed - Add 1st Webradio not show unless refresh'
-					.'<br>Improved - Playback interface now responses without delay'
+	'version'     => '20200127',
+	'revision'    => 'Improved - File sharing(Samba)'
 					.'<br>...'
-					.'<br>Fix - Select box not response on Android'
-					.'<br>Improve I2S module setting'
+					.'<br>Fixed - Add 1st bookmark'
+					.'<br>Improved - Edit Webradio'
 					.'<br>...'
-					.'<br>Improve NAS mount'
-					.'<br>Improve system status',
+					.'<br>Minor improvements',
 	'maintainer'  => 'r e r n',
 	'description' => 'Updates for RuneAudio <i class="fa fa-addons"></i> e2.',
 	'buttonlabel' => 'Update',
@@ -80,13 +76,13 @@ $addons = [
 	],
 ],
 'radi' => [
-	'title'       => 'RuneAudio+R e1 - Import Webradio',
+	'title'       => 'RuneAudio+R e2 - Import Webradio',
 	'maintainer'  => 'r e r n',
-	'description' => 'Import default format, <code>*.pls</code> or <code>*.m3u</code>, webradio files.',
+	'description' => 'Import webradio files from other versions of RuneAudio.',
 	'buttonlabel' => '<i class="fa fa-input"></i>Import',
 	'thumbnail'   => '/img/addons/thumbwebr.png',
-	'sourcecode'  => 'https://github.com/rern/RuneAudio-Re1/blob/master/importwebradio.sh',
-	'installurl'  => 'https://github.com/rern/RuneAudio-Re1/raw/master/importwebradio.sh',
+	'sourcecode'  => 'https://github.com/rern/RuneAudio/tree/master/webradio',
+	'installurl'  => 'https://github.com/rern/RuneAudio/raw/master/webradio/importwebradio.sh',
 	'option'      => [
 		'wait'      => 'Copy directory with webradio files:'
 					  .'<br><code>Webradio/*</code> > <code>/mnt/MPD</code>'
@@ -95,7 +91,7 @@ $addons = [
 ],
 'gpio' => [
 	'title'       => 'RuneUI GPIO',
-	'version'     => '20191113',
+	'version'     => '20200120',
 	'needspace'   => 5,
 	'revision'    => 'Support RuneAudio+R e2'
 					.'<br>...'
@@ -110,7 +106,7 @@ $addons = [
 ],
 'aria' => [
 	'title'       => 'Aria2',
-	'version'     => '20170901',
+	'version'     => '20190901',
 	'needspace'   => 15,
 	'revision'    => 'Initial release',
 	'maintainer'  => 'r e r n',

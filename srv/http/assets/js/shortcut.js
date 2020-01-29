@@ -1,6 +1,9 @@
 // keyboard controls
 $( document ).keydown( function( e ) {
+	if ( !$( '#infoOverlay' ).hasClass( 'hide' ) || infoactive ) return
+	
 	var key = e.key;
+
 	if ( [ 'ArrowUp', 'ArrowDown' ].indexOf( key ) !== -1 ) e.preventDefault();
 	
 	if ( !$( '#settings' ).hasClass( 'hide' ) && key === 'Enter' ) {
