@@ -104,7 +104,6 @@ fi
 if [[ -e $dirsystem/mpd-* ]]; then
 	echo -e "\nRestore $( tcolor 'MPD options' ) ...\n"
 	[[ -e $dirsystem/mpd-autoupdate ]] && sed -i 's/\(auto_update\s*"\).*/\1yes"/' /etc/mpd.conf
-	 sed '1 i\audio_buffer_size       "2222"'
 	[[ -e $dirsystem/mpd-buffer ]] && sed -i '1 i\audio_buffer_size       "'$( cat $dirsystem/mpd-buffer )'"' /etc/mpd.conf
 	[[ -e $dirsystem/mpd-ffmpeg ]] && sed -i '/ffmpeg/ {n;s/\(enabled\s*"\).*/\1yes"/}' /etc/mpd.conf
 	[[ -e $dirsystem/mpd-mixertype ]] && sed -i "s/\(mixer_type\s*\"\).*/\1$( cat $dirsystem/mpd-mixertype )\"/" /etc/mpd.conf
