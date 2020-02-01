@@ -104,7 +104,8 @@ fi
 if [[ -e $dirsystem/mpd-* ]]; then
 	echo -e "\nRestore $( tcolor 'MPD options' ) ...\n"
 	[[ -e $dirsystem/mpd-autoupdate ]] && sed -i 's/\(auto_update\s*"\).*/\1yes"/' /etc/mpd.conf
-	[[ -e $dirsystem/mpd-buffer ]] && sed -i "s/\(audio_buffer_size\s*\"\).*/\1$( cat $dirsystem/mpd-buffer )\"/" /etc/mpd.conf
+	 sed '1 i\audio_buffer_size       "2222"'
+	[[ -e $dirsystem/mpd-buffer ]] && sed -i '1 i\audio_buffer_size       "'$( cat $dirsystem/mpd-buffer )'"' /etc/mpd.conf
 	[[ -e $dirsystem/mpd-ffmpeg ]] && sed -i '/ffmpeg/ {n;s/\(enabled\s*"\).*/\1yes"/}' /etc/mpd.conf
 	[[ -e $dirsystem/mpd-mixertype ]] && sed -i "s/\(mixer_type\s*\"\).*/\1$( cat $dirsystem/mpd-mixertype )\"/" /etc/mpd.conf
 	[[ -e $dirsystem/mpd-normalization ]] && sed -i 's/\(volume_normalization\s*"\).*/\1yes"/' /etc/mpd.conf
@@ -153,8 +154,8 @@ fi
 if [[ -e /ust/bin/samba && -e $dirsystem/samba ]]; then
 	echo -e "\nEnable $( tcolor 'File sharing' ) ...\n"
 	sed -i '/read only = no/ d' /etc/samba/smb.conf
-	[[ ! -e $dirsystem/samba-readonlysd ]] && sed -i '/path = .*USB/ a\tread only = no' /etc/samba/smb.conf
-	[[ ! -e $dirsystem/samba-readonlyusb ]] && sed -i '/path = .*LocalStorage/ a\tread only = no' /etc/samba/smb.conf
+	[[ -e $dirsystem/samba-readonlysd ]] && sed -i '/path = .*SD/,/\tread only = no/ {/read only/ d}' /etc/samba/smb.conf
+	[[ -e $dirsystem/samba-readonlyusb ]] && sed -i '/path = .*USB/,/\tread only = no/ {/read only/ d}' /etc/samba/smb.conf
 	systemctl enable nmb smb wsdd
 else
 	systemctl disable nmb smb wsdd
