@@ -174,6 +174,8 @@ if [[ -e /usr/bin/chromium ]]; then
 	ln -s /srv/http/assets/img/{NORMAL,start}.png
 	# login prompt - remove
 	systemctl disable getty@tty1
+	# fix permission for rotate file
+	chmod 775 /etc/X11/xorg.conf.d
 else
 	rm -f /etc/systemd/system/{bootsplash,localbrowser}* /etc/X11/xinit/xinitrc /srv/http/assets/img/{CW,CCW,NORMAL,UD}* /root/*matchbox* /usr/local/bin/ply-image
 fi
