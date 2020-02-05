@@ -11,21 +11,20 @@ dirdisplay=$dirdata/display
 dirsystem=$dirdata/system
 
 # i2s audio
-aplayname=$( cat $dirsystem/audio-aplayname )
-if [[ ${aplayname:0:-2} != 'bcm2835 ALSA' && -e /boot/overlays/$aplayname.dtbo ]]; then
-	echo -e "\n$( tcolor "$( cat $dirsystem/audio-output )" )"
-	echo $aplayname
+audioaplayname=$( cat /srv/http/data/system/audio-aplayname 2> /dev/null )
+audiooutput=$( cat /srv/http/data/system/audio-output )
+if grep -q "$audiooutput.*=>.*$audioaplayname" /srv/http/settings/system-i2smodules.php; then
+	echo -e "\n$( tcolor "$audiooutput" )"
+	echo dtoverlay=$audioaplayname
 	sed -i -e '/^dtoverlay/ d
 		' -e '/^#dtparam=i2s=on/ s/^#//
 		' -e 's/\(dtparam=audio=\).*/\1off/
-		' -e "$ a\dtoverlay=$aplayname
+		' -e "$ a\dtoverlay=$audioaplayname
 		" /boot/config.txt
 fi
-
 # addons
 rm /srv/http/data/addons/*
 echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
-
 # accesspoint
 if [[ -e /usr/bin/hostapd ]]; then
 	if [[ -e $dirsystem/accesspoint ]]; then
