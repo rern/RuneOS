@@ -243,7 +243,7 @@ for item in $playback $library $miscel; do
 	echo 1 > $dirdisplay/$item
 done
 # system
-echo runeaudio > /etc/hostname
+hostnamectl set-hostname runeaudio
 sed -i 's/#NTP=.*/NTP=pool.ntp.org/' /etc/systemd/timesyncd.conf
 ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 echo 'RaspberryPi Analog Out' > $dirsystem/audio-output
