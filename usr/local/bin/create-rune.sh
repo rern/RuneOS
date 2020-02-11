@@ -83,7 +83,7 @@ selectFeatures() {
 	select=" $select "
 	[[ $select == *' 1 '* ]] && features+='avahi ' && list+="$avahi\n"
 	[[ $select == *' 2 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
-	[[ $select == *' 3 '* && ! $rpi01 ]] && features+='chromium xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
+	[[ $select == *' 3 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 4 '* ]] && features+='ffmpeg ' && list+="$ffmpeg\n"
 	[[ $select == *' 5 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
 	[[ $select == *' 6 '* ]] && kid3=1 && list+="$kid\n"
