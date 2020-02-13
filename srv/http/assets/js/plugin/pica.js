@@ -126,24 +126,28 @@ module.exports = blurMono16;
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
+    if (superCtor) {
+      ctor.super_ = superCtor
+      ctor.prototype = Object.create(superCtor.prototype, {
+        constructor: {
+          value: ctor,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      })
+    }
   };
 } else {
   // old school shim for old browsers
   module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
+    if (superCtor) {
+      ctor.super_ = superCtor
+      var TempCtor = function () {}
+      TempCtor.prototype = superCtor.prototype
+      ctor.prototype = new TempCtor()
+      ctor.prototype.constructor = ctor
+    }
   }
 }
 
@@ -170,7 +174,6 @@ function MultiMath(options) {
   this.options         = opts;
 
   this.__cache         = {};
-  this.has_wasm        = hasWebAssembly();
 
   this.__init_promise  = null;
   this.__modules       = opts.modules || {};
@@ -185,14 +188,17 @@ function MultiMath(options) {
 }
 
 
+MultiMath.prototype.has_wasm = hasWebAssembly;
+
+
 MultiMath.prototype.use = function (module) {
   this.__modules[module.name] = module;
 
   // Pin the best possible implementation
-  if (!this.has_wasm || !this.options.wasm || !module.wasm_fn) {
-    this[module.name] = module.fn;
-  } else {
+  if (this.options.wasm && this.has_wasm() && module.wasm_fn) {
     this[module.name] = module.wasm_fn;
+  } else {
+    this[module.name] = module.fn;
   }
 
   return this;
@@ -202,7 +208,7 @@ MultiMath.prototype.use = function (module) {
 MultiMath.prototype.init = function () {
   if (this.__init_promise) return this.__init_promise;
 
-  if (!this.options.js && this.options.wasm && !this.has_wasm) {
+  if (!this.options.js && this.options.wasm && !this.has_wasm()) {
     return Promise.reject(new Error('mathlib: only "wasm" was enabled, but it\'s not supported'));
   }
 
@@ -211,7 +217,7 @@ MultiMath.prototype.init = function () {
   this.__init_promise = Promise.all(Object.keys(self.__modules).map(function (name) {
     var module = self.__modules[name];
 
-    if (!self.has_wasm || !self.options.wasm || !module.wasm_fn) return null;
+    if (!self.options.wasm || !self.has_wasm() || !module.wasm_fn) return null;
 
     // If already compiled - exit
     if (self.__wasm[name]) return null;
@@ -704,7 +710,7 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
 
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -976,7 +982,7 @@ Pica.prototype.resize = function (from, to, options) {
         imageBitmap.close();
         var iData = tmpCtx.getImageData(0, 0, opts.toWidth, opts.toHeight);
 
-        _this2.__mathlib.unsharp(iData.data, opts.toWidth, opts.toHeight, opts.unsharpAmount, opts.unsharpRadius, opts.unsharpThreshold);
+        _this2.__mathlib.unsharp_mask(iData.data, opts.toWidth, opts.toHeight, opts.unsharpAmount, opts.unsharpRadius, opts.unsharpThreshold);
 
         toCtx.putImageData(iData, 0, 0);
         iData = tmpCtx = tmpCanvas = toCtx = null;
@@ -1295,7 +1301,7 @@ function MathLib(requested_features) {
   Multimath.call(this, features);
   this.features = {
     js: features.js,
-    wasm: features.wasm && this.has_wasm
+    wasm: features.wasm && this.has_wasm()
   };
   this.use(mm_unsharp_mask);
   this.use(mm_resize);
