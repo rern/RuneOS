@@ -1,0 +1,5 @@
+sysname:MICROMEGA MYDAC
+extlabel:Micromega MyDAC
+mixer_control:MICROMEGA MYDAC USB Audio 2.0 Output Playba
+mixer_index:2
+type:usb

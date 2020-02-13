@@ -35,11 +35,13 @@ for line in "${lines[@]}"; do
 	(( $aplaynameL > 1 )) && aplayname="$aplayname"-$(( ${device: -1} + 1 ))
 	name=$aplayname
 	mixer_control=
+	mixer_index=0
 	extlabel=
 	routecmd=
 	i2sfile="/srv/http/settings/i2s/$aplayname"
 	if [[ -e "$i2sfile" ]]; then
 		mixer_control=$( grep mixer_control "$i2sfile"  | cut -d: -f2- )
+		mixer_index=$( (grep mixer_index "$i2sfile" || echo ":0") | cut -d: -f2 )
 		extlabel=$( grep extlabel "$i2sfile"  | cut -d: -f2- )
 		[[ -n $extlabel ]] && name=$extlabel
 		routecmd=$( grep route_cmd "$i2sfile" | cut -d: -f2 )
@@ -58,6 +60,7 @@ audio_output {
 	if [[ -n $mixer_control ]]; then
 		mpdconf+='
 	mixer_control     "'$mixer_control'"
+	mixer_index       "'$mixer_index'"
 	mixer_device      "hw:'$card'"'
 	
 	fi
