@@ -126,8 +126,10 @@ RuneOS - DIY RuneAudio+R e
 # switch user to root
 su
 
-# on Manjaro only - update package servers
-pacman-mirrors -f
+# on Manjaro only - select package servers
+#   use specific servers from country (list: grep -i COUNTRY /etc/pacman.d/mirrorlist)
+pacman-mirrors -c COUNRTY
+# if not listed, rank all servers: pacman-mirrors -f
 
 # get script and run
 wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
