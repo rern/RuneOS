@@ -126,7 +126,7 @@ RuneOS - DIY RuneAudio+R e
 # switch user to root
 su
 
-# on Manjaro only
+# on Manjaro only - update package list
 # specific servers by country (list: grep -i COUNTRY /etc/pacman.d/mirrorlist)
 pacman-mirrors -c COUNRTY
 # if not listed, rank all servers: pacman-mirrors -f
