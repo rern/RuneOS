@@ -11,7 +11,7 @@
 	width: 100%;
 	bottom: 0;
 	background: hsl(200,3%,20%)/*cd*/ !important;
-	z-index: 99;
+	z-index: 108; /* #banner > #loader > # #keyboard > #infoOverlay */
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none;   /* Safari */
 	-moz-user-select: none;      /* Firefox */

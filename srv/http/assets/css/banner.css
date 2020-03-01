@@ -4,7 +4,7 @@
 	max-width: 100%;
 	bottom: 50px;
 	padding: 8px 130px 8px 15px;
-	z-index: 101;
+	z-index: 112; /* #banner > #loader > # #keyboard > #infoOverlay */
 	background: linear-gradient( to right, hsl(200,100%,40%)/*c*/ calc( 100% - 100px ), rgba( 0,0,0,0 ) 100% );
 }
 #bannerTitle,
