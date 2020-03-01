@@ -204,7 +204,8 @@ function menucommon( $add, $replace ) {
 
 $kid3 = file_exists( '/usr/bin/kid3-cli' );
 
-$menu = '<div>';
+$menu = '<div id="contextmenu">';
+
 $htmlcommon = menucommon( 'add', 'replace' );
 $htmlsimilar = '<a data-cmd="similar" class="similar"><i class="fa fa-lastfm"></i>Add similar<i class="fa fa-play-plus submenu" data-cmd="similar"></i></a>';
 
@@ -275,7 +276,11 @@ $menu.= menudiv( 'composer', $html );
 $menudiv = '';
 $html = menucommon( 'genreadd', 'genrereplace' );
 $menu.= menudiv( 'genre', $html );
+
+$menu.= '</div>';
 ?>
+<div id="splash"><svg viewBox="0 0 480.2 144.2"><?=$logo?></svg></div>
+<div id="loader" class="hide"><svg viewBox="0 0 480.2 144.2"><?=$logo?></svg></div>
 <div id="menu-top" class="hide">
 	<i id="menu-settings" class="fa fa-gear"></i>
 	<div id="playback-controls">
@@ -543,8 +548,6 @@ $menu.= menudiv( 'genre', $html );
 	</div>
 	<div id="lyricsfade"></div>
 </div>
-<div id="splash"><svg viewBox="0 0 480.2 144.2"><?=$logo?></svg></div>
-<div id="loader" class="hide"><svg viewBox="0 0 480.2 144.2"><?=$logo?></svg></div>
 	<?php if ( $localhost ) { ?>
 <input class="input hide">
 <div id="keyboard" class="hide"><div class="simple-keyboard"></div></div>
