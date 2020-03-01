@@ -1,6 +1,0 @@
-sysname:wm8731-audio
-extlabel:Utilite Analog Out
-mixer_numid:1
-mixer_control:Master
-hwplatformid:05
-type:integrated

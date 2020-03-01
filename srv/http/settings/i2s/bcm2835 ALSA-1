@@ -1,6 +1,0 @@
-sysname:bcm2835 ALSA
-extlabel:RaspberryPi Analog Out
-hwplatformid:01
-mixer_numid:1
-mixer_control:PCM
-route_cmd:amixer -c *CARDID* cset numid=3 1 &> /dev/null

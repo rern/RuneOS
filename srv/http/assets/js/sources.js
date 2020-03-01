@@ -2,8 +2,6 @@ $( function() { // document ready start >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 var dirsystem = '/srv/http/data/system';
 var formdata = {}
-mountStatus();
-
 var html = heredoc( function() { /*
 	<form id="formmount">
 		<div id="infoRadio" class="infocontent infohtml">
@@ -65,12 +63,13 @@ $( '#list' ).on( 'click', 'li', function( e ) {
 						  "sed -i '\\|"+ mountname +"| d' /etc/fstab"
 						, 'rmdir "'+ mountpoint +'" &> /dev/null'
 						, 'rm -f "'+ dirsystem +'/fstab-'+ mountpoint.split( '/' ).pop() +'"'
-						, pstream( 'sources' )
+						, curlPage( 'source' )
 					] }, function() {
-					mountStatus();
+					refreshData();
 					resetlocal();
 					$( '#refreshing' ).addClass( 'hide' );
 				} );
+				banner( 'Network Mount', 'Remove ...', 'network' );
 				$( '#refreshing' ).removeClass( 'hide' );
 			}
 		} );
@@ -89,12 +88,13 @@ $( '#list' ).on( 'click', 'li', function( e ) {
 				local = 1;
 				$.post( 'commands.php', { bash: [
 						  ( nas ? '' : 'udevil ' ) +'umount -l "'+ mountpoint +'"'
-						, pstream( 'sources' )
+						, curlPage( 'source' )
 					] }, function() {
-					mountStatus();
+					refreshData();
 					resetlocal();
 					$( '#refreshing' ).addClass( 'hide' );
 				} );
+				banner( 'Network Mount', 'Unmount ...', 'network' );
 				$( '#refreshing' ).removeClass( 'hide' );
 			}
 		} );
@@ -109,34 +109,33 @@ $( '#list' ).on( 'click', 'li', function( e ) {
 				local = 1;
 				$.post( 'commands.php', { bash: [
 						  ( nas ? 'mount "'+ mountpoint +'"' : 'udevil mount '+ $this.data( 'source' ) )
-						, pstream( 'sources' )
+						, curlPage( 'source' )
 					] }, function() {
-					mountStatus();
+					refreshData();
 					resetlocal();
 					$( '#refreshing' ).addClass( 'hide' );
 				} );
+				banner( 'Network Mount', 'Remount ...', 'network' );
 				$( '#refreshing' ).removeClass( 'hide' );
 			}
 		} );
 	}
 } );
 $( '#listshare' ).on( 'click', 'li', function() {
-	if ( $( this ).find( '.fa-search' ).length ) {
+	if ( $( this ).find( '.fa-search' ).length || !$( '#refreshshares' ).hasClass( 'hide' ) ) {
 		$( '#listshare' ).html( '<li><i class="fa fa-network blink"></i><grl>Scanning ...</grl></li>' );
-		$.post( 'commands.php', { bash: '/srv/http/settings/sources-lookup.sh' }, function( data ) {
-			if ( data.length ) {
-				var htmlshare = '';
-				data.forEach( function( el ) {
-					var val = el.split( '^^' );
-					var host = val[ 0 ];
-					var ip = val[ 1 ];
-					var share = val[ 2 ];
-					htmlshare += '<li data-mount="//'+ ip +'/'+ share +'"><i class="fa fa-network"></i><gr>'+ host +'&ensp;&raquo;&ensp;</gr>//'+ ip +'/'+ share +'</li>';
+		$.post( 'commands.php', { bash: '/srv/http/bash/sources-sharescan.sh' }, function( list ) {
+			var list = JSON.parse( list );
+			if ( list.length ) {
+				var html = '';
+				$.each( list, function( i, val ) {
+					html += '<li data-mount="//'+ val.ip +'/'+ val.share +'"><i class="fa fa-network"></i><gr>'+ val.host +'&ensp;&raquo;&ensp;</gr>//'+ val.ip +'/'+ val.share +'</li>';
 				} );
 			} else {
-				var htmlshare = '<li><i class="fa fa-search"></i><grl>No shares available.</grl></li>';
+				var html = '<li><i class="fa fa-info-circle"></i><gr>No shares available</gr></li>';
 			}
-			$( '#listshare' ).html( htmlshare );
+			$( '#listshare' ).html( html );
+			$( '#refreshshares' ).removeClass( 'hide' );
 		}, 'json' );
 	} else {
 		var source = $( this ).data( 'mount' );
@@ -151,13 +150,29 @@ $( '#listshare' ).on( 'click', 'li', function() {
 		}, 'cifs' );
 	}
 } );
+$( '#refreshshares' ).click( function() {
+	$( '#listshare li' ).click();
+} );
+$( '#mount' ).click( function() {
+	$( '#codemount' ).hasClass( 'hide' ) ? getMounts() : $( '#codemount' ).addClass( 'hide' );
+} );
+$( '#fstab' ).click( function() {
+	$( '#codefstab' ).hasClass( 'hide' ) ? getFstab() : $( '#codefstab' ).addClass( 'hide' );
+} );
 
-function mountStatus() {
-	$.post( 'commands.php', { bash: '/srv/http/settings/sources-status.sh' }, function( data ) {
-		if ( data ) $( '#list' ).html( data );
-		$( '#refreshing' ).addClass( 'hide' );
+function getMounts() {
+	$.post( 'commands.php', { bash: 'mount | grep MPD' }, function( status ) {
+		$( '#codemount' )
+			.html( status.join( '<br>' ) )
+			.removeClass( 'hide' );
 	}, 'json' );
-	$( '#refreshing' ).removeClass( 'hide' );
+}
+function getFstab() {
+	$.post( 'commands.php', { bash: 'cat /etc/fstab' }, function( status ) {
+		$( '#codefstab' )
+			.html( status.join( '<br>' ) )
+			.removeClass( 'hide' );
+	}, 'json' );
 }
 function infoMount( formdata, cifs ) {
 	info( {
@@ -190,25 +205,25 @@ function infoMount( formdata, cifs ) {
 			$.map( formmount, function( val ) {
 				data[ val[ 'name' ] ] = val[ 'value' ];
 			});
-			var mountpoint = '/mnt/MPD/NAS/'+ data.name;
-			var ip = data.ip;
-			var directory = data.directory.replace( /^\//, '' );
-			if ( data.protocol === 'cifs' ) {
+			var mountpoint = '/mnt/MPD/NAS/'+ G.name;
+			var ip = G.ip;
+			var directory = G.directory.replace( /^\//, '' );
+			if ( G.protocol === 'cifs' ) {
 				var options = 'noauto';
-				options += ( !data.user ) ? ',username=guest' : ',username='+ data.user +',password='+ data.password;
+				options += ( !G.user ) ? ',username=guest' : ',username='+ G.user +',password='+ G.password;
 				options += ',uid='+ $( '#list' ).data( 'uid' ) +',gid='+ $( '#list' ).data( 'gid' ) +',iocharset=utf8';
-				options += data.options ? ','+ data.options : '';
+				options += G.options ? ','+ G.options : '';
 				var device = '"//'+ ip +'/'+ directory +'"';
 			} else {
 				var options = 'defaults,noauto,bg,soft,timeo=5';
-				options += data.options ? ','+ data.options : '';
+				options += G.options ? ','+ G.options : '';
 				var device = '"'+ ip +':/'+ directory +'"';
 			}
-			var cmd = '"'+ mountpoint +'" '+ ip +' '+ device +' '+ data.protocol +' '+ options;
+			var cmd = '"'+ mountpoint +'" '+ ip +' '+ device +' '+ G.protocol +' '+ options;
 			local = 1;
 			$.post( 'commands.php', { bash: [
-					  '/srv/http/settings/sources-mount.sh '+ cmd
-					, pstream( 'sources' )
+					  '/srv/http/bash/sources-mount.sh '+ cmd
+					, curlPage( 'source' )
 				] }, function( std ) {
 				var std = std[ 0 ];
 				if ( std ) {
@@ -222,15 +237,41 @@ function infoMount( formdata, cifs ) {
 						}
 					} );
 				} else {
-					mountStatus();
+					refreshData();
 					formdata = {}
 				}
 				resetlocal();
 				$( '#refreshing' ).addClass( 'hide' );
 			}, 'json' );
+			banner( 'Network Mount', 'Mount ...', 'network' );
 			$( '#refreshing' ).removeClass( 'hide' );
 		}
 	} );
 }
+
+refreshData = function() {
+	$( '#refreshing' ).removeClass( 'hide' );
+	$.post( 'commands.php', { getjson: '/srv/http/bash/sources-data.sh' }, function( list ) {
+		G = list;
+		G.reboot = list.pop();
+		if ( G.length ) {
+			var html = '';
+			$.each( G, function( i, val ) {
+				html += '<li data-mountpoint="'+ val.mountpoint +'"><i class="fa fa-'+ val.icon +'"></i>'+ val.mountpoint;
+				html += val.mounted ? '<grn>&ensp;&bull;&ensp;</grn>' : '<red>&ensp;&bull;&ensp;</red>';
+				html += '<gr>'+ val.source +'</gr>';
+				html +=  val.size ? '&ensp;'+ val.size +'</li>' : '</li>';
+			} );
+		} else {
+			html = '<li><i class="fa fa-info-circle"></i><gr>No sources available<gr></li>';
+		}
+		$( '#list' ).html( html );
+		$( '#refreshing' ).addClass( 'hide' );
+		if ( !$( '#codemount' ).hasClass( 'hide' ) ) getMounts();
+		if ( !$( '#codefstab' ).hasClass( 'hide' ) ) getFstab();
+		showContent();
+	}, 'json' );
+}
+refreshData();
 
 } ); // document ready end <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

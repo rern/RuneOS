@@ -1,6 +1,0 @@
-sysname:justboom_dac
-extlabel:JustBoom DAC (I&#178;S)
-mixer_numid:1
-mixer_control:Digital
-hwplatformid:01
-type:i2s

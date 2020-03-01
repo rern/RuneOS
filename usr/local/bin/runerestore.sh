@@ -10,17 +10,22 @@ dirdata=/srv/http/data
 dirdisplay=$dirdata/display
 dirsystem=$dirdata/system
 
+# saved playlist
+php /usr/local/bin/convertplaylist.php
+
 # i2s audio
 audioaplayname=$( cat /srv/http/data/system/audio-aplayname 2> /dev/null )
 audiooutput=$( cat /srv/http/data/system/audio-output )
 if grep -q "$audiooutput.*=>.*$audioaplayname" /srv/http/settings/system-i2smodules.php; then
 	echo -e "\n$( tcolor "$audiooutput" )"
 	echo dtoverlay=$audioaplayname
-	sed -i -e '/^dtoverlay/ d
-		' -e '/^#dtparam=i2s=on/ s/^#//
-		' -e 's/\(dtparam=audio=\).*/\1off/
-		' -e "$ a\dtoverlay=$audioaplayname
-		" /boot/config.txt
+	sed -i -e 's/\(dtparam=audio=\).*/\1off/
+		' -e '/dtparam=i2s=on/ {N;d;}
+		' /boot/config.txt
+	sed -i "$ a\
+dtparam=i2s=on\
+dtparam=$audioaplayname
+	" /boot/config.txt
 fi
 # addons
 rm /srv/http/data/addons/*
@@ -39,7 +44,7 @@ if [[ -e /usr/bin/hostapd ]]; then
 		ip=$( cat $dirsystem/accesspoint-ip )
 		iprange=$( cat $dirsystem/accesspoint-iprange )
 		echo IP: $ip
-		sed -i -e "/wpa\|rsn_pairwise/ s/^#\+//
+		sed -i -e "/wpa\|rsn_pairwise/ s/^#*//
 			 " -e "s/\(wpa_passphrase=\).*/\1$passphrase/
 			 " /etc/hostapd/hostapd.conf
 		sed -i -e "s/^\(dhcp-range=\).*/\1$iprange/
@@ -189,12 +194,12 @@ fi
 if [[ ! -e $dirsystem/onboard-bluetooth ]]; then
 	echo -e "\n$( tcolor 'Onboard Bluetooth' )"
 	echo Disabled
-	sed -i -e '/^#dtoverlay=pi3-disable-bt/ s/^#//' -e '/^dtoverlay=bcmbt/ s/^/#/' /boot/config.txt
+	sed -i -e '/dtoverlay=disable-bt/ s/^#*//' -e '/dtoverlay=bcmbt/ s/^/#/' /boot/config.txt
 fi
 if [[ ! -e $dirsystem/onboard-wlan ]]; then
 	echo -e "\n$( tcolor 'Onboard Wi-Fi' )"
 	echo Disabled
-	sed -i '/^#dtoverlay=pi3-disable-wifi/ s/^#//' /boot/config.txt
+	sed -i '/dtoverlay=disable-wifi/ s/^#*//' /boot/config.txt
 fi
 # samba
 if [[ -e /ust/bin/samba ]]; then

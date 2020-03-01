@@ -43,7 +43,6 @@
 .fa-addons:before { content: "\f581" }
 .fa-airplay:before { content: "\f590" }
 .fa-arrow-left:before { content: "\f602" }
-.fa-check:before { content: "\f51B" }
 .fa-chromium:before { content: "\f584" }
 .fa-code:before { content: "\f50C" }
 .fa-edit-circle:before { content: "\f566" }
@@ -65,6 +64,7 @@
 .fa-plus-circle:before { content: "\f564" }
 .fa-qobuz:before { content: "\f593" }
 .fa-question-circle:before { content: "\f560" }
+.fa-reboot:before { content: "\f521" }
 .fa-redo:before { content: "\f524" }
 .fa-refresh:before { content: "\f526" }
 .fa-reload:before { content: "\f525" }
@@ -104,7 +104,7 @@ svg path.st1 {
 	text-align: center;
 	width: 100%;
 	height: 100%;
-	z-index: 99999;
+	z-index: 100;
 	background: #000000;
 }
 #loader svg {
@@ -152,6 +152,13 @@ a:hover {
 }
 ul {
 	margin: 0;
+}
+pre {
+	margin-top: 0;
+	padding: 5px;
+	tab-size: 4;
+	background: hsl(200,3%,10%)/*cda*/;
+	overflow-x: scroll;
 }
 .btn {
 	margin-bottom: 5px !important;
@@ -204,7 +211,8 @@ heading {
 	border-bottom: 1px solid hsl(200,3%,30%)/*cg*/;
 }
 heading i,
-headingnoline i {
+headingnoline i,
+.status {
 	cursor: pointer;
 }
 @keyframes blinkopaque {
@@ -223,7 +231,7 @@ headingnoline i {
 	padding-right: 10px;
 	background: hsl(200,3%,20%)/*cd*/;
 	box-shadow: 0px 4px 10px #000000;
-	z-index: 100;
+	z-index: 95;
 }
 .page-icon,
 #help,
@@ -268,7 +276,7 @@ code {
 	font-size: 15px;
 	color: #e0e7ee;
 	background-color: hsl(200,3%,30%)/*cg*/;
-	padding: 0 3px;
+	padding: 0 8px;
 	border-radius: 3px;
 }
 .bl {
@@ -282,6 +290,7 @@ code {
 	display: block;
 	margin: 15px 0;
 }
+grw,
 .gr {
 	color: hsl(200,3%,60%)/*cgl*/;
 }
@@ -332,6 +341,9 @@ code {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+.entries li .fa-info-circle {
+    font-size: 22px !important;
+}
 .remove {
 	float: right;
 	margin-right: 0 !important;
@@ -339,12 +351,14 @@ code {
 .checkbox {
 	padding-top: 0 !important;
 }
+red,
 .red {
 	color: #f00;
 }
 .clear {
 	clear: both;
 }
+grn,
 .green {
 	color: #0f0;
 }
@@ -414,7 +428,8 @@ input:checked + .switchlabel:after {
 	width: 40px;
 }
 .setting,
-.settingedit {
+.settingedit,
+.code {
 	position: absolute;
 	left: 90px;
 	line-height: 40px;
@@ -426,6 +441,9 @@ input:checked + .switchlabel:after {
 .settingedit {
 	position: static;
 	margin-left: 5px;
+}
+.code {
+	position: static;
 }
 .cg {
 	background: hsl(200,3%,30%)/*cg*/;
@@ -472,6 +490,11 @@ input:checked + .switchlabel:after {
 	width: 30px;
 	vertical-align: -2px;
 }
+.col-l i.fa-gear {
+	width: 20px;
+	vertical-align: 0;
+	color: #e0e7ee;
+}
 .col-r {
 	width: calc( 100% - 155px );
 	min-width: 230px;
@@ -480,10 +503,14 @@ input:checked + .switchlabel:after {
 	font-weight: normal;
 }
 .col-r.text {
-	float: none;
+	float: left;
 	width: auto;
+	padding-left: 5px !important;
 	white-space: nowrap;
 	line-height: 26px;
+}
+.settings {
+	cursor: pointer;
 }
 @media (min-width: 768px) {
 	.container {
@@ -505,6 +532,10 @@ input:checked + .switchlabel:after {
 	.col-l.text {
 		width: auto;
 	}
+	.col-r.text {
+		float: none;
+		z-index: -1;
+	}
 	.col-r {
 		width: 100%;
 		padding-top: 0;
@@ -512,6 +543,14 @@ input:checked + .switchlabel:after {
 	.col-l i {
 		float: left;
 		margin: 0 0 5px 5px;
+	}
+	.col-l i.fa-gear {
+		float: none;
+		margin: 0 0 0 5px;
+		vertical-align: baseline;
+	}
+	grw {
+		display: none;
 	}
 }
 @media (hover: hover) {

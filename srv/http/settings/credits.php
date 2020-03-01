@@ -43,6 +43,7 @@ $listruneui = [
 	, 'LazyLoad'            => 'https://github.com/verlok/lazyload'
 	, 'pica'                => 'https://github.com/nodeca/pica'
 	, 'roundSlider'         => 'https://github.com/soundar24/roundSlider'
+	, 'simple-keyboard'     => 'https://github.com/hodgef/simple-keyboard/'
 	, 'Sortable'            => 'https://github.com/SortableJS/Sortable'
 ];
 $runeuihtml = '';
@@ -60,6 +61,7 @@ $listruneos = [
 	, 'dosfstools'               => 'https://github.com/dosfstools/dosfstools'
 	, 'FFmpeg'                   => 'http://ffmpeg.org'
 	, 'GCC'                      => 'http://gcc.gnu.org/'
+	, 'hfsprogs'                 => 'https://aur.archlinux.org/packages/hfsprogs'
 	, 'hostapd'                  => 'https://w1.fi/hostapd/'
 	, 'ifplugd'                  => 'http://0pointer.de/lennart/projects/ifplugd/'
 	, 'ImageMagick'              => 'https://imagemagick.org/'
@@ -89,49 +91,39 @@ foreach( $listruneos as $name => $link ) {
 	$runeoshtml.= '<a href="'.$link.'">'.$name.'</a><br>';
 }
 ?>
-<div class="container credits">
-	<h1>RuneAudio</h1>
-	<heading><i class="fa fa-addons gr"></i> <?=( file_get_contents( '/srv/http/data/system/version' ) )?></heading>
-	<a href="https://github.com/rern/">r e r n</a><br>
-	<span class="help-block hide">
-		System-wide upgraded.<br>
-		Integrated addons:
-		<p class="indent gr">
-		- Addons<br>
-		- RuneUI Enhancement<br>
-		- RuneUI Lyrics<br>
-		- RuneUI Metadata Tag Editor<br>
-		- USB DAC Hotplug</p>
-	</span>
-	<heading>Version 0.5</heading>
-	<?=$list05html?>
-	<heading>Version 0.4</heading>
-	<?=$list04html?>
-	<heading>Version 0.1 - 0.3</heading>
-	<?=$list0103html?>
-	<heading>Support us</heading>
-	<form id="form-paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-		<input type="hidden" name="cmd" value="_s-xclick">
-		<input type="hidden" name="hosted_button_id" value="AZ5L5M5PGHJNJ">
-		<input type="image" src="/assets/img/donate.png" name="submit" style="height: 55px">
-	</form>
-	<heading>License &amp; Copyright</heading>
-		<gr>This Program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation either version 3, 
-		or (at your option) any later version. This Program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
-		See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with RuneAudio; see the file COPYING. 
-		If not, see <a href="http://www.gnu.org/licenses/gpl-3.0.txt" target="_blank" rel="nofollow">http://www.gnu.org/licenses/gpl-3.0.txt</a></gr>
-	<p>
-		Copyright (C) 2013-2014 RuneAudio Team
-		<br><gr>Andrea Coiutti &amp; Simone De Gregori &amp; Carmelo San Giovanni</gr><br>
-		RuneUI
-		<br><gr>copyright (C) 2013-2014 – Andrea Coiutti (aka ACX) &amp; Simone De Gregori (aka Orion)</gr><br>
-		RuneOS
-		<br><gr>copyright (C) 2013-2014 – Simone De Gregori (aka Orion) &amp; Carmelo San Giovanni (aka Um3ggh1U)</gr>
-	</p>
-	<heading>RuneUI</heading>
-	<?=$runeuihtml?>
-	<br>
-	<heading>RuneOS</heading>
-	<?=$runeoshtml?>
-	<div style="clear: both"></div>
-</div>
+<heading>RuneAudio <i class="fa fa-addons gr"></i> <?=( file_get_contents( '/srv/http/data/system/version' ) )?></heading>
+<a href="https://github.com/rern/">r e r n</a><br>
+<span class="help-block hide">
+	System-wide improvement with features of <a href="https://www.runeaudio.com/forum/runeui-enhancement-t4207.html">RuneUI Enhancement</a><br>
+</span>
+<heading>Version 0.5</heading>
+<?=$list05html?>
+<heading>Version 0.4</heading>
+<?=$list04html?>
+<heading>Version 0.1 - 0.3</heading>
+<?=$list0103html?>
+<heading>Support us</heading>
+<form id="form-paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+	<input type="hidden" name="cmd" value="_s-xclick">
+	<input type="hidden" name="hosted_button_id" value="AZ5L5M5PGHJNJ">
+	<input type="image" src="/assets/img/donate.png" name="submit" style="height: 55px">
+</form>
+<heading>License &amp; Copyright</heading>
+	<gr>This Program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation either version 3, 
+	or (at your option) any later version. This Program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+	See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with RuneAudio; see the file COPYING. 
+	If not, see <a href="http://www.gnu.org/licenses/gpl-3.0.txt" target="_blank" rel="nofollow">http://www.gnu.org/licenses/gpl-3.0.txt</a></gr>
+<p>
+	Copyright (C) 2013-2014 RuneAudio Team
+	<br><gr>Andrea Coiutti &amp; Simone De Gregori &amp; Carmelo San Giovanni</gr><br>
+	RuneUI
+	<br><gr>copyright (C) 2013-2014 – Andrea Coiutti (aka ACX) &amp; Simone De Gregori (aka Orion)</gr><br>
+	RuneOS
+	<br><gr>copyright (C) 2013-2014 – Simone De Gregori (aka Orion) &amp; Carmelo San Giovanni (aka Um3ggh1U)</gr>
+</p>
+<heading>RuneUI</heading>
+<?=$runeuihtml?>
+<br>
+<heading>RuneOS</heading>
+<?=$runeoshtml?>
+<div style="clear: both"></div>

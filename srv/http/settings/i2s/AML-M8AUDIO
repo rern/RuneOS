@@ -1,6 +1,0 @@
-sysname:AML-M8AUDIO
-extlabel:ODROID HDMI
-card_option:buffer_time	"0"
-mixer_numid:1
-hwplatformid:09
-type:integrated

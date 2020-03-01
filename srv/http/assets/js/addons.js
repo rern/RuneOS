@@ -1,3 +1,4 @@
+data = {}
 $( '.close-root' ).click( function() {
 	location.href = '/';
 } );
@@ -271,6 +272,10 @@ function getoptions() {
 				, selectlabel : ojson.label
 				, select      : ojson.list
 				, checked     : ojson.checked
+				, boxwidth    : ojson.width
+				, preshow     : function() {
+					$( '#infoSelectBox').selectric();
+				}
 				, ok          : function() {
 					opt += "'"+ $( '#infoSelectBox').val() +"' ";
 					sendcommand();
@@ -325,7 +330,7 @@ function sendcommand() {
 // post submit with temporary form (separate option to hide password)
 function formtemp() {
 	$( 'body' ).append(
-		'<form id="formtemp" action="addons-bash.php" method="post">'
+		'<form id="formtemp" action="addons-terminal.php" method="post">'
 			+'<input type="hidden" name="alias" value="'+ alias +'">'
 			+'<input type="hidden" name="type" value="'+ type +'">'
 			+'<input type="hidden" name="opt" value="'+ opt +'">'

@@ -1,5 +1,0 @@
-sysname:NuForce USB Audio
-extlabel:NuForce DDA-100
-mixer_numid:4
-mixer_control:PCM
-type:usb

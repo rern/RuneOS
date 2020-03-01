@@ -1,6 +1,6 @@
 // keyboard controls
 $( document ).keydown( function( e ) {
-	if ( !$( '#infoOverlay' ).hasClass( 'hide' ) || infoactive ) return
+	if ( !$( '#infoOverlay' ).hasClass( 'hide' ) ) return
 	
 	var key = e.key;
 
@@ -15,8 +15,12 @@ $( document ).keydown( function( e ) {
 	}
 	
 	if ( key === 'Escape' ) {
-		$( '.menu' ).addClass( 'hide' );
-		if ( typeof colorpicker !== 'undefined' ) $( '#colorcancel' ).click();
+		if ( $( '.menu:not(.hide)' ).length ) {
+			$( '.menu' ).addClass( 'hide' );
+			if ( typeof colorpicker !== 'undefined' ) $( '#colorcancel' ).click();
+		} else {
+			$( '#menu-settings' ).click();
+		}
 		return
 	}
 	
@@ -40,9 +44,9 @@ $( document ).keydown( function( e ) {
 		e.preventDefault();
 	} else if ( key === 'Tab' ) {
 		e.preventDefault();
-		if ( GUI.library ) {
+		if ( G.library ) {
 			$( '#tab-playback' ).click();
-		} else if ( GUI.playback ) {
+		} else if ( G.playback ) {
 			$( '#tab-playlist' ).click();
 		} else {
 			$( '#tab-library' ).click();
@@ -56,10 +60,10 @@ $( document ).keydown( function( e ) {
 	var $contextmenu = $( '.contextmenu:not( .hide )' );
 	if ( !$contextmenu.length ) $contextmenu = $( '#settings:not( .hide )' );
 	if ( $contextmenu.length ) {
-		if ( GUI.library ) {
+		if ( G.library ) {
 			var $liactive = $( '#db-entries li.active' );
-		} else if ( GUI.playlist ) {
-			if ( !GUI.pleditor ) {
+		} else if ( G.playlist ) {
+			if ( !G.pleditor ) {
 				var $liactive = $( '#pl-entries li.updn' );
 				if ( !$liactive.length ) $liactive = $( '#pl-entries li.active' );
 			} else {
@@ -71,6 +75,12 @@ $( document ).keydown( function( e ) {
 		var $menufirst = $contextmenu.find( 'a:not( .hide )' ).first();
 		var $menulast = $contextmenu.find( 'a:not( .hide )' ).last();
 		if ( key === 'ArrowLeft' ) {
+			if ( $( '.submenu.active' ).length ) {
+				$menuactive.addClass( 'active' );
+				$( '.submenu' ).removeClass( 'active' );
+				return
+			}
+			
 			$( '.menu' ).addClass( 'hide' )
 			$menuactive.removeClass( 'active' );
 			$( '.submenu' ).removeClass( 'active' );
@@ -107,7 +117,7 @@ $( document ).keydown( function( e ) {
 		return
 	}
 	
-	if ( GUI.playback ) {
+	if ( G.playback ) {
 		if ( key === 'ArrowLeft' ) {
 			$( '#previous' ).click();
 		} else if ( key === 'ArrowRight' ) {
@@ -117,7 +127,7 @@ $( document ).keydown( function( e ) {
 		} else if ( key === 'ArrowDown' ) {
 			$( '#voldn' ).click();
 		}
-	} else if ( GUI.library ) {
+	} else if ( G.library ) {
 		if ( !$( '#db-search' ).hasClass( 'hide' ) ) return
 		
 		// home /////////////////////////////////////////
@@ -186,8 +196,8 @@ $( document ).keydown( function( e ) {
 			}
 		}
 		$( '.contextmenu' ).addClass( 'hide' );
-	} else if ( GUI.playlist ) {
-		if ( !GUI.pleditor ) {
+	} else if ( G.playlist ) {
+		if ( !G.pleditor ) {
 			var $liupdn = $( '#pl-entries li.updn' );
 			if ( !$liupdn.length ) $liupdn = $( '#pl-entries li.active' );
 			if ( key === 'ArrowUp' ) {

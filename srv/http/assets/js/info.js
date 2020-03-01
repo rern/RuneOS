@@ -26,6 +26,7 @@ info( {                                     // default
 	pwdrequired   : 1                       // (none)         (password required)
 	
 	fileoklabel   : 'LABEL'                 // 'OK'           (upload button label)
+	fileokdisable : '1                      // (enable)       (disable file button after select)
 	filetype      : 'TYPE'                  // (none)         (filter and verify filetype)
 	
 	radio         : { LABEL: 'VALUE', ... } //                ( var value = $( '#infoRadio input[ type=radio ]:checked' ).val(); )
@@ -56,6 +57,7 @@ info( {                                     // default
 Note:
 - No default - must be specified.
 - Single value/function - no need to be array
+- select requires Selectric.js
 */
 function heredoc( fn ) {
 	return fn.toString().match( /\/\*\s*([\s\S]*?)\s*\*\//m )[ 1 ];
@@ -67,7 +69,7 @@ var containerhtml = heredoc( function() { /*
 			<div id="infoTop">
 				<i id="infoIcon"></i>&emsp;<a id="infoTitle"></a>
 			</div>
-			<i id="infoX" class="fa fa-times"></i>
+			<i id="infoX" class="fa fa-times hide"></i>
 			<div style="clear: both"></div>
 		</div>
 		<div id="infoContent">
@@ -86,7 +88,7 @@ var containerhtml = heredoc( function() { /*
 */ } );
 infocontenthtml = heredoc( function() { /*
 			<p id="infoMessage" class="infocontent"></p>
-			<div id="infoText" class="infocontent">
+			<div id="infoText" class="infocontent hide">
 				<div id="infotextlabel"></div>
 				<div id="infotextbox"></div>
 			</div>
@@ -98,9 +100,6 @@ infocontenthtml = heredoc( function() { /*
 */ } );
 
 $( 'body' ).prepend( containerhtml );
-
-infoactive = 0; // for shortcut.js to ignore all keydown
-emptyinput = 0; // for 'textrequired'
 
 $( '#infoOverlay' ).keydown( function( e ) {
 	if ( $( '#infoOverlay' ).is( ':visible' ) ) {
@@ -125,9 +124,10 @@ $( '#infoContent' ).on( 'click', '.eye', function() {
 
 function infoReset() {
 	$( '#infoOverlay' ).addClass( 'hide' );
+	$( '#infoBox' ).css( 'margin', '' );
 	$( '#infoContent' ).html( infocontenthtml );
-	$( '#infoX' ).show();
-	$( '.infocontent, .infolabel, .infoinput, .infohtml, .filebtn, .infobtn' ).hide();
+	$( '#infoX' ).removeClass( 'hide' );
+	$( '.infocontent, .infolabel, .infoinput, .infohtml, .filebtn, .infobtn' ).addClass( 'hide' );
 	$( '.infoinput' ).css( 'text-align', '' );
 	$( '#infoBox, .infolabel, .infoinput' ).css( 'width', '' );
 	$( '.filebtn, .infobtn' ).css( 'background', '' ).off( 'click' );
@@ -139,7 +139,6 @@ function infoReset() {
 }
 
 function info( O ) {
-	infoactive = 1;
 	infoReset();
 	setTimeout( function() { // fix: wait for infoReset() on 2nd info
 	///////////////////////////////////////////////////////////////////
@@ -147,17 +146,17 @@ function info( O ) {
 	if ( typeof O !== 'object' ) {
 		$( '#infoIcon' ).addClass( 'fa fa-info-circle' );
 		$( '#infoTitle' ).text( 'Info' );
-		$( '#infoX' ).hide();
+		$( '#infoX' ).addClass( 'hide' );
 		$( '#infoMessage' ).html( O );
-		$( '#infoMessage, #infoOk' ).show();
+		$( '#infoMessage, #infoOk' ).removeClass( 'hide' );
 		$( '#infoOverlay' ).removeClass( 'hide' );
-		alignVertical();
 		$( '#infoOk' ).html( 'OK' ).click( infoReset );
+		alignVertical();
 		return;
 	}
 	
 	// title
-	$( '#infoBox' ).css( 'width', ( O.width || 400 ) +'px' );
+	if ( O.width ) $( '#infoBox' ).css( 'width', O.width +'px' );
 	if ( 'icon' in O ) {
 		if ( O.icon.charAt( 0 ) !== '<' ) {
 			$( '#infoIcon' ).addClass( 'fa fa-'+ O.icon );
@@ -168,7 +167,7 @@ function info( O ) {
 		$( '#infoIcon' ).addClass( 'fa fa-question-circle' );
 	}
 	$( '#infoTitle' ).html( O.title || 'Information' );
-	if ( 'nox' in O ) $( '#infoX' ).hide();
+	if ( 'nox' in O ) $( '#infoX' ).addClass( 'hide' );
 	if ( 'autoclose' in O ) {
 		setTimeout( function() {
 			$( '#infoCancel' ).click();
@@ -180,13 +179,13 @@ function info( O ) {
 		$( '#infoOk' )
 			.html( O.oklabel ? O.oklabel : 'OK' )
 			.css( 'background-color', O.okcolor || '' )
-			.show();
+			.removeClass( 'hide' );
 			if ( typeof O.ok === 'function' ) $( '#infoOk' ).click( O.ok );
 		if ( 'cancel' in O ) {
 			$( '#infoCancel' )
 				.html( O.cancellabel || 'Cancel' )
 				.css( 'background', O.cancelcolor || '' );
-			if ( 'cancelbutton' in O || 'cancellabel' in O ) $( '#infoCancel' ).show(); 
+			if ( 'cancelbutton' in O || 'cancellabel' in O ) $( '#infoCancel' ).removeClass( 'hide' );
 		}
 		if ( 'button' in O ) {
 			if ( !O.button.length ) O.button = [ O.button ];
@@ -203,10 +202,7 @@ function info( O ) {
 									.click( O.button[ i ] );
 			}
 		}
-		$( '.infobtn' ).click( function() {
-			infoReset();
-			setTimeout( function() { infoactive = 0 }, 300 );
-		} );
+		$( '.infobtn' ).click( infoReset );
 	}
 	$( '#infoX, #infoCancel' ).click( function() {
 		$( '#infoOverlay' ).addClass( 'hide' );
@@ -222,7 +218,7 @@ function info( O ) {
 			$( '#infoMessage' )
 				.html( O.message )
 				.css( 'text-align', O.messagealign || 'center' )
-				.show();
+				.removeClass( 'hide' );
 		}
 		// inputs
 		if ( 'textlabel' in O || 'textvalue' in O ) {
@@ -238,27 +234,20 @@ function info( O ) {
 				var labeltext = O.textlabel[ i ] || '';
 				labelhtml += '<a class="infolabel">'+ labeltext +'</a>';
 				var valuehtml = O.textvalue[ i ] ? ' value="'+ O.textvalue[ i ].toString().replace( /"/g, '&quot;' ) +'"' : '';
-				boxhtml += '<input type="text" class="infoinput" id="infoTextBox'+ iid +'"'+ valuehtml +' spellcheck="false">';
+				boxhtml += '<input type="text" class="infoinput input" id="infoTextBox'+ iid +'"'+ valuehtml +' spellcheck="false">';
 			}
 			$( '#infotextlabel' ).html( labelhtml );
 			$( '#infotextbox' ).html( boxhtml );
 			var $infofocus = $( '#infoTextBox' );
-			$( '#infoText' ).show();
+			$( '#infoText' ).removeClass( 'hide' );
 			if ( 'textalign' in O ) $( '.infoinput' ).css( 'text-align', O.textalign );
 			if ( 'textrequired' in O ) {
 				if ( typeof O.textrequired !== 'object' ) O.textrequired = [ O.textrequired ];
-				var blank = 0;
 				O.textrequired.forEach( function( e ) {
-					if ( !$( '.infoinput' ).eq( e ).val() ) blank++;
+					$( '.infoinput' ).eq( e ).addClass( 'required' );
 				} );
-				if ( blank ) $( '#infoOk' ).addClass( 'disabled' );
-				$( '.infoinput' ).on( 'input', function() {
-					emptyinput = 0;
-					O.textrequired.forEach( function( e ) {
-						if ( !$( '.infoinput' ).eq( e ).val() ) emptyinput++;
-					} );
-					$( '#infoOk' ).toggleClass( 'disabled', emptyinput !== 0 );
-				} );
+				checkRequired();
+				$( '.infoinput' ).on( 'input', checkRequired );
 			}
 		}
 		if ( 'passwordlabel' in O ) {
@@ -274,17 +263,17 @@ function info( O ) {
 			}
 			$( '#infotextlabel' ).append( labelhtml );
 			$( '#infotextbox' ).append( boxhtml );
-			$( '#infoText' ).show();
+			$( '#infoText' ).removeClass( 'hide' );
 			var $infofocus = $( '#infoPasswordBox' );
 		}
 		if ( 'fileoklabel' in O ) {
 			$( '#infoOk' )
 				.html( O.fileoklabel )
-				.hide();
+				.addClass( 'hide' );
 			$( '#infoFileLabel' ).click( function() {
 				$( '#infoFileBox' ).click();
 			} );
-			$( '#infoFile, #infoFileLabel' ).show();
+			$( '#infoFile, #infoFileLabel' ).removeClass( 'hide' );
 			if ( 'filetype' in O ) $( '#infoFileBox' ).attr( 'accept', O.filetype );
 			$( '#infoFileBox' ).change( function() {
 				var file = this.files[ 0 ];
@@ -312,8 +301,8 @@ function info( O ) {
 					return;
 				}
 				
-				$( '#infoOk' ).show();
-				$( '#infoFileLabel' ).addClass( 'disabled' );
+				$( '#infoOk' ).removeClass( 'hide' );
+				if ( 'fileokdisable' in O ) $( '#infoFileLabel' ).addClass( 'disabled' );
 				$( '#infoFilename' ).html( '&ensp;'+ filename );
 			} );
 		}
@@ -351,7 +340,7 @@ function info( O ) {
 				} );
 			}
 			renderOption( $( '#infoSelectBox' ), html, O.checked || '' );
-			$( '#infoSelect, #infoSelectLabel, #infoSelectBox' ).show();
+			$( '#infoSelect, #infoSelectLabel, #infoSelectBox' ).removeClass( 'hide' );
 		}
 	}
 
@@ -386,14 +375,20 @@ function info( O ) {
 	}, 0 );
 }
 
-function alignVertical() {
+function alignVertical() { // make infoBox scrollable
 	var boxH = $( '#infoBox' ).height();
 	var wH = window.innerHeight;
 	var top = boxH < wH ? ( wH - boxH ) / 2 : 20;
-	$( '#infoBox' ).css( 'margin', top +'px auto' );
+	$( '#infoBox' ).css( 'margin-top', top +'px' );
+}
+function checkRequired() {
+	var $empty = $( '.infoinput.required' ).filter( function() {
+		return !$( this ).val();
+	} );
+	$( '#infoOk' ).toggleClass( 'disabled', $empty.length > 0 );
 }
 function renderOption( $el, htm, chk ) {
-	$el.html( htm ).show();
+	$el.html( htm ).removeClass( 'hide' );
 	if ( $el.prop( 'id' ) === 'infoCheckBox' ) { // by index
 		if ( !chk ) return;
 		
@@ -406,7 +401,7 @@ function renderOption( $el, htm, chk ) {
 		if ( chk === '' ) { // undefined
 			$el.find( opt ).eq( 0 ).prop( 'checked', true );
 		} else {
-			$el.find( opt +'[value="'+ chk +'"]' ).prop( 'checked', true );
+			$el.find( opt +'[value="'+ chk +'"]' ).prop( opt === 'option' ? 'selected' : 'checked', true );
 		}
 	}
 }

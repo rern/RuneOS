@@ -1,5 +1,0 @@
-sysname:ODROID-DAC
-extlabel:ODROID HifiShield (I&#178;S)
-mixer_numid:1
-hwplatformid:10
-type:i2s

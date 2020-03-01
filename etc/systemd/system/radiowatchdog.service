@@ -2,4 +2,4 @@
 Description=MPD watchdog
 
 [Service]
-ExecStart=/srv/http/radiowatchdog.sh
+ExecStart=/srv/http/bash/radiowatchdog.sh

@@ -1,6 +1,0 @@
-sysname:snd_rpi_wsp
-extlabel:Wolfson Card Speakers Out
-hwplatformid:01
-mixer_numid:1
-mixer_control:Speaker Digital
-route_cmd:/usr/local/bin/wolfson.sh *CARDID* speakers_out &> /dev/null

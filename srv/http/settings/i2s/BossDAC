@@ -1,6 +1,0 @@
-sysname:BossDAC
-extlabel:ALLO Boss DAC (I&#178;S)
-mixer_numid:1
-mixer_control:Digital
-hwplatformid:08
-type:i2s

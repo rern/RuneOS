@@ -1,63 +1,36 @@
 $( function() { // document ready start >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 var dirsystem = '/srv/http/data/system';
-var intervalscan;
 var wlcurrent = '';
 var wlconnected = '';
 var accesspoint = $( '#accesspoint' ).length;
-
-nicsStatus();
+var backdelay = 0;
 
 $( '#back' ).click( function() {
 	wlcurrent = '';
 	clearInterval( intervalscan );
 	$( '#divinterface, #divwebui, #divaccesspoint' ).removeClass( 'hide' );
 	$( '#divwifi' ).addClass( 'hide' );
-	if ( wlconnected ) { // refresh for ip to be ready
-		$( '#refreshing' ).removeClass( 'hide' );
-		wlanIP( wlconnected );
-	} else {
-		nicsStatus();
-	}
+	setTimeout( nicsStatus, backdelay );
 } );
 $( '#listinterfaces' ).on( 'click', 'li', function( e ) {
 	var $this = $( this );
-	var inf = $this.prop( 'class' );
-	var ip = $this.data( 'ip' );
-	var router = $this.data( 'router' );
-	var dhcp = $this.data( 'dhcp' ) ? 1 : 0;
-	if ( inf !== 'eth0' ) {
-		wlcurrent = inf;
-		if ( accesspoint && $( '#accesspoint' ).prop( 'checked' ) ) {
+	wlcurrent = $this.prop( 'class' );
+	if ( wlcurrent !== 'eth0' ) {
+		if ( G.hostapd && wlcurrent === 'wlan0' ) {
 			info( {
 				  icon    : 'wifi-3'
-				, title   : 'RPi access point'
-				, message : 'Stop RPi access point and connect a router?'
-						   +'<br><br><i class="fa fa-warning fa-lg"></i>&ensp;<w>Warning</w>'
-						   +'<br><br>Connected devices will be dropped.'
-						   +'<br><w>Before continuing:</w>'
-						   +'<br>Remote browser - with wired LAN IP'
-						   +'<br>or connect a display and a mouse to RPi.'
-				, ok      : function() {
-					local = 1;
-					$.post( 'commands.php', { bash: [
-						  'systemctl stop hostapd dnsmasq'
-						, 'rm -f /srv/http/data/system/accesspoint'
-						, 'ifconfig wlan0 0.0.0.0'
-						, pstream( 'network' )
-						, pstream( 'system' )
-					] }, function() {
-						wlanStatus();
-						resetlocal();
-					} );
-					$( '#accesspoint' ).prop( 'checked', 0 )
-					$( '#boxqr, #settings-accesspoint' ).addClass( 'hide' );
-				}
+				, title   : 'Wi-Fi'
+				, message : 'Access Point must be disabled.'
 			} );
+			return
 		} else {
 			wlanStatus();
 		}
 	} else {
+		var ip = $this.data( 'ip' );
+		var gateway = $this.data( 'gateway' );
+		var dhcp = $this.data( 'dhcp' ) ? 1 : 0;
 		var dataeth0 =   "Description='eth0 connection'"
 						+'\nInterface=eth0'
 						+'\nForceConnect=yes'
@@ -67,7 +40,7 @@ $( '#listinterfaces' ).on( 'click', 'li', function( e ) {
 			  icon         : 'lan'
 			, title        : 'Edit LAN IP'
 			, textlabel    : [ 'IP', 'Gateway', 'Primary DNS', 'Secondary DNS' ]
-			, textvalue    : [ ip, router, router ]
+			, textvalue    : [ ip, gateway, gateway ]
 			, textrequired : [ 0 ]
 			, checkbox     : { 'Static IP': 1 }
 			, preshow      : function() {
@@ -125,14 +98,15 @@ $( '#listwifi' ).on( 'click', '.fa-save', function() {
 			local = 1;
 			$.post( 'commands.php', { bash: [
 				  'netctl stop "'+ ssid +'"'
-				, 'systemctl disable netctl-auto@wlan0'
+				, 'systemctl disable netctl-auto@'+ wlan
 				, 'rm "/etc/netctl/'+ ssid +'" "/srv/http/data/system/netctl-'+ ssid +'"'
-				, pstream( 'network' )
+				, curlPage( 'network' )
 				] }, function() {
 				wlconnected = '';
 				wlanScan();
 				resetlocal();
 			} );
+			banner( 'Wi-Fi', 'Forget ...', 'wifi-3' );
 		}
 		, oklabel     : 'Connect'
 		, ok          : function() {
@@ -141,7 +115,6 @@ $( '#listwifi' ).on( 'click', '.fa-save', function() {
 	} );
 } );
 $( '#listwifi' ).on( 'click', 'li', function( e ) {
-	if ( $( e.target ).hasClass( 'fa-save' ) && !$( e.target ).parent().data( 'connected' ) ) return
 	
 	var $this = $( this );
 	var wlan = $this.data( 'wlan' );
@@ -154,65 +127,59 @@ $( '#listwifi' ).on( 'click', 'li', function( e ) {
 	} else {
 		var msgreconnect = '<br>Reconnect with IP: <wh>'+ eth0ip +'</wh>';
 	}
-	if ( $this.data( 'connected' ) ) {
+	if ( $( e.target ).hasClass( 'fa-info-circle' ) || $this.data( 'connected' ) ) {
+		var connected = $this.data( 'connected' );
 		info( {
 			  icon    : 'wifi-3'
 			, title   : ssid
-			, message : 
+			, message : !connected ? 'Saved Wi-Fi connection:' :
 				'<div class="col-l">'
 					+'IP<br>'
 					+'Router'
 				+'</div>'
 				+'<div class="col-r" style="width: 180px; min-width: auto; top: 10px; color: #e0e7ee; text-align: left;">'
 					+ $this.data( 'ip' ) +'<br>'
-					+ $this.data( 'router' )
+					+ $this.data( 'gateway' )
 				+'</div>'
 			, buttonwidth : 1
 			, buttonlabel : '<i class="fa fa-minus-circle"></i> Forget'
 			, buttoncolor : '#bb2828'
 			, button      : function() {
+				clearInterval( intervalscan );
 				local = 1;
 				$.post( 'commands.php', { bash: [
 					  'netctl stop "'+ ssid +'"'
-					, 'systemctl disable netctl-auto@wlan0'
+					, 'systemctl disable netctl-auto@'+ wlan
 					, 'rm "/etc/netctl/'+ ssid +'" "/srv/http/data/system/netctl-'+ ssid +'"'
-					, pstream( 'network' )
+					, curlPage( 'network' )
 					] }, function() {
 					wlconnected = '';
-					wlanScan();
+					wlanScanInterval();
 					resetlocal();
 				} );
+				banner( 'Wi-Fi', 'Forget ...', 'wifi-3' );
 			}
-			, oklabel     : 'Disconnect'
+			, oklabel     : !connected ? 'Connect' : 'Disconnect'
 			, ok          : function() {
-				clearInterval( intervalscan );
-				$( '#scanning' ).removeClass( 'hide' );
-				local = 1;
-				$.post( 'commands.php', { bash: [
-					  'netctl stop "'+ ssid +'"'
-					, 'systemctl disable netctl-auto@wlan'
-					, pstream( 'network' )
-					] }, function() {
-						wlconnected = '';
-						wlanScanInterval();
-						resetlocal();
-				} );
+				if ( !connected ) {
+					connect( wlan, ssid, 0 );
+				} else {
+					clearInterval( intervalscan );
+					local = 1;
+					$.post( 'commands.php', { bash: [
+						  'netctl stop "'+ ssid +'"'
+						, curlPage( 'network' )
+						] }, function() {
+							wlconnected = '';
+							wlanScanInterval();
+							resetlocal();
+					} );
+					banner( 'Wi-Fi', 'Disconnect ...', 'wifi-3' );
+				}
 			}
 		} );
 	} else if ( $this.data( 'profile' ) ) { // saved wi-fi
-		if ( accesspoint && $( '#accesspoint' ).prop( 'checked' ) ) {
-			info( {
-				  icon    : 'wifi-3'
-				, title   : 'RPi access point'
-				, message : 'Stop RPi access point and connect Wi-Fi?'
-						   + msgreconnect
-				, ok      : function() {
-					connect( wlan, ssid, 0 );
-				}
-			} );
-		} else {
-			connect( wlan, ssid, 0 );
-		}
+		connect( wlan, ssid, 0 );
 	} else if ( encrypt === 'on' ) { // new wi-fi
 		newWiFi( $this );
 	} else { // no password
@@ -266,97 +233,114 @@ $( '#add' ).click( function() {
 	} );
 } );
 $( '#accesspoint' ).change( function() {
-	$( '#refreshing' ).removeClass( 'hide' );
-	if ( $( this ).prop( 'checked' ) ) {
-		var cmd = [
-				  'ifconfig wlan0 '+ $( '#ipwebuiap' ).text()
-				, 'systemctl start hostapd dnsmasq'
-				, 'echo 1 > '+ dirsystem +'/accesspoint'
-				, 'systemctl disable --now netctl-auto@wlan0'
-				, 'netctl stop-all'
-				, pstream( 'network' )
-		];
-		if ( wlconnected ) {
-			var eth0ip = $( '#listinterfaces li.eth0' ).data( 'ip' );
-			var ipwebuiap = $( '#ipwebuiap' ).text();
+	if ( !$( '#divinterface li.wlan0' ).length ) {
+		info( {
+			  icon    : 'wifi-3'
+			, title   : 'Wi-Fi'
+			, message : 'Wi-Fi device not available.'
+					   +'<br>Enable in Sysytem settings.'
+		} );
+		$( this ).prop( 'checked', 0 );
+		return
+	}
+	
+	G.hostapd = $( this ).prop( 'checked' );
+	if ( G.hostapd ) {
+		if ( $( '#divinterface li.wlan0' ).data( 'gateway' ) ) {
 			info( {
-				  icon    : 'wifi-3'
-				, title   : 'Wi-Fi'
-				, message : 'Disconnect Wi-Fi and start RPi access point?'
-						   + ( location.host === eth0ip ? '' : 'Reonnect with IP address: <wh>'+ ipwebuiap +'</wh>' )
-				, ok      : function() {
-					qr();
-					$( '#boxqr, #settings-accesspoint' ).removeClass( 'hide' );
-					local = 1;
-					$.post( 'commands.php', { bash: cmd }, function() {
-						nicsStatus();
-						resetlocal();
-					} );
-				}
+				  icon    : 'network'
+				, title   : 'Access Point'
+				, message : 'Wi-Fi wlan0 must be disconnected.'
 			} );
+			$( this ).prop( 'checked', 0 );
+			G.hostapd = false;
 			return
 		}
 		
-		qr();
-		$( '#boxqr, #settings-accesspoint' ).removeClass( 'hide' );
+		var cmd = [
+				  'ifconfig wlan0 '+ G.hostapdip
+				, 'systemctl start hostapd dnsmasq'
+				, 'echo 1 > '+ dirsystem +'/accesspoint'
+				, curlPage( 'network' )
+		];
 	} else {
 		$( '#boxqr, #settings-accesspoint' ).addClass( 'hide' );
 		var cmd = [
 			  'systemctl stop hostapd dnsmasq'
 			, 'rm -f '+ dirsystem +'/accesspoint'
 			, 'ifconfig wlan0 0.0.0.0'
-			, pstream( 'network' )
+			, curlPage( 'network' )
 		];
 	}
 	local = 1;
 	$.post( 'commands.php', { bash: cmd }, function() {
 		nicsStatus();
 		resetlocal();
+		if ( G.hostapd ) renderQR();
 	} );
+	banner( 'RPi Access Point', G.hostapd, 'wifi-3' );
 });
 $( '#settings-accesspoint' ).click( function() {
 	info( {
-		  icon    : 'network'
-		, title   : 'Access Point Settings'
+		  icon      : 'network'
+		, title     : 'Access Point Settings'
+		, message   : 'Password - at least 8 characters'
 		, textlabel : [ 'Password', 'IP' ]
-		, textvalue : [ $( '#accesspoint' ).data( 'passphrase' ), $( '#accesspoint' ).data( 'ip' ) ]
+		, textvalue : [ G.passphrase, G.hostapdip ]
 		, textrequired : [ 0, 1 ]
 		, ok      : function() {
+			var ip = $( '#infoTextBox1' ).val();
 			var passphrase = $( '#infoTextBox' ).val();
-			if ( passphrase && passphrase.length < 8 ) {
+			if ( ip === G.hostapdip && passphrase === G.passphrase ) return
+			
+			if ( passphrase.length < 8 ) {
 				info( 'Password must be at least 8 characters.' );
 				return
 			}
 			
-			var ip = $( '#infoTextBox1' ).val();
+			G.hostapdip = ip;
+			G.passphrase = passphrase;
 			var ips = ip.split( '.' );
 			var ip3 = ips.pop();
 			var ip012 = ips.join( '.' );
 			var iprange = ip012 +'.'+ ( +ip3 + 1 ) +','+ ip012 +'.254,24h';
-			var values = '"'+ passphrase +'" '+ ip +' '+ iprange;
+			
+			var cmd = [
+				  "sed -i"
+					+" -e 's/^\\(dhcp-range=\\).*/\\1"+ iprange +"/'"
+					+" -e 's/^\\(.*option:router,\\).*/\\1"+ ip +"/'"
+					+" -e 's/^\\(.*option:dns-server,\\).*/\\1"+ ip +"/'"
+					+" /etc/dnsmasq.conf"
+				, "sed -i"
+					+" -e '/wpa\\|rsn_pairwise/ s/^#\\+//'"
+					+" -e 's/\\(wpa_passphrase=\\).*/\\1"+ passphrase +"/'"
+					+" /etc/hostapd/hostapd.conf"
+				, 'systemctl restart hostapd dnsmasq'
+				, curlPage( 'network' )
+			];
+			if ( ip === '192.168.5.1' ) {
+				cmd.push( 'rm -f '+ dirsystem +'/accesspoint-ip*' );
+			} else {
+				cmd.push(
+					  'echo '+ ip +' > '+ dirsystem +'/accesspoint-ip'
+					, 'echo '+ iprange +' > '+ dirsystem +'/accesspoint-iprange'
+				);
+			}
+			cmd.push( ( passphrase === 'RuneAudio' ? 'rm -f ' : 'echo '+ passphrase +' > ' ) + dirsystem +'/accesspoint-passphrase' )
 			local = 1;
-			$.post( 'commands.php', { bash: [
-				  '/srv/http/settings/network-accesspoint.sh '+ values
-				, 'echo '+ passphrase +' > '+ dirsystem +'/accesspoint-passphrase'
-				, 'echo '+ ip +' > '+ dirsystem +'/accesspoint-ip'
-				, 'echo '+ iprange +' > '+ dirsystem +'/accesspoint-iprange'
-				, pstream( 'network' )
-			] }, resetlocal );
+			$.post( 'commands.php', { bash: cmd }, resetlocal );
+			banner( 'RPi Access Point', 'Change ...', 'wifi-3' );
 			$( '#passphrase' ).text( passphrase || '(No password)' );
 			$( '#ipwebuiap' ).text( ip );
-			qr();
+			renderQR();
 		}
 	} );
 } );
-
-document.addEventListener( 'visibilitychange', function() {
-	if ( !wlcurrent ) return
-	
-	if ( document.hidden ) {
-		clearInterval( intervalscan );
-	} else {
-		wlanScanInterval();
-	}
+$( '#ifconfig' ).click( function() {
+	$( '#codeifconfig' ).hasClass( 'hide' ) ? getIfconfig() : $( '#codeifconfig' ).addClass( 'hide' );
+} );
+$( '#netctl' ).click( function() {
+	$( '#codenetctl' ).hasClass( 'hide' ) ? getNetctl() : $( '#codenetctl' ).addClass( 'hide' );
 } );
 
 function connect( wlan, ssid, data ) {
@@ -364,7 +348,8 @@ function connect( wlan, ssid, data ) {
 	wlcurrent = wlan;
 	$( '#scanning' ).removeClass( 'hide' );
 	var cmd = [
-		  'echo -e "'+ data +'" | tee "/etc/netctl/'+ ssid +'" "/srv/http/data/system/netctl-'+ ssid +'"'
+		  'echo -e "'+ data +'" > "/srv/http/data/system/netctl-'+ ssid +'"'
+		, 'cp "/srv/http/data/system/netctl-'+ ssid +'" "/etc/netctl/'+ ssid +'"'
 		, 'netctl stop-all'
 		, 'ifconfig '+ wlan +' down'
 		, 'netctl start "'+ ssid +'"'
@@ -374,26 +359,23 @@ function connect( wlan, ssid, data ) {
 	$.post( 'commands.php', { bash: cmd }, function( std ) {
 		if ( std != -1 ) {
 			wlconnected = wlan;
-			if ( accesspoint && $( '#accesspoint' ).prop( 'checked' ) ) {
-				$( '#listinterfaces li.wlan0' ).html( '<i class="fa fa-wifi-3"></i>Wi-Fi&ensp;<span class="green">&bull;</span>' );
-				$( '#accesspoint' ).prop( 'checked', 0 );
-				$( '#boxqr, #settings-accesspoint' ).addClass( 'hide' );
-				var cmd = [
-					  'systemctl stop hostapd dnsmasq'
-					, 'rm -f '+ dirsystem +'/accesspoint'
-					, 'ifconfig wlan0 0.0.0.0'
-				];
-			} else {
-				var cmd = [];
-			}
-			cmd.push(
-				  'systemctl enable netctl-auto@wlan0'
-				, pstream( 'network' )
-			);
-			$.post( 'commands.php', { bash: cmd }, function() {
+			$.post( 'commands.php', { bash: [
+				  'systemctl enable netctl-auto@'+ wlan
+				, curlPage( 'network' )
+			] }, function() {
 				wlanScanInterval();
 				resetlocal();
+				$( 'li.'+ wlan +' .fa-search')
+					.removeClass( 'fa-search' )
+					.addClass( 'fa-refresh blink' )
+					.next().remove();
+				backdelay = 6000;
+				var delayint = setInterval( function() {
+					backdelay -= 1000;
+					if ( !backdelay ) clearInterval( delayint );
+				}, 1000 );
 			} );
+			banner( 'Wi-Fi', 'Connect ...', 'wifi-3' );
 		} else {
 			$( '#scanning' ).addClass( 'hide' );
 			wlconnected =  '';
@@ -419,6 +401,23 @@ function escape_string( string ) {
 	}
 	return output;
 };
+function getIfconfig() {
+	$.post( 'commands.php', { bash: 'ip a' }, function( status ) {
+		$( '#codeifconfig' )
+			.html( status.join( '<br>' ) )
+			.removeClass( 'hide' );
+//		$( 'html, body' ).scrollTop( $( '#ifconfig' ).offset().top - 60 );
+	}, 'json' );
+}
+function getNetctl() {
+	$.post( 'commands.php', { bash: 'netctl list' }, function( status ) {
+		if ( !status.length ) status = [ '(none)' ];
+		$( '#codenetctl' )
+			.html( status.join( '<br>' ) )
+			.removeClass( 'hide' );
+//		$( 'html, body' ).scrollTop( $( '#codenetctl' ).offset().top - 60 );
+	}, 'json' );
+}
 function newWiFi( $this ) {
 	var wlan = $this.data( 'wlan' );
 	var ssid = $this.data( 'ssid' );
@@ -440,51 +439,56 @@ function newWiFi( $this ) {
 	} );
 }
 function nicsStatus() {
-	$.post( 'commands.php', { bash: '/srv/http/settings/network-status.sh' }, function( data ) {
+	$.post( 'commands.php', { getjson: '/srv/http/bash/network-data.sh' }, function( list ) {
+		var reboot = list.pop();
 		var html = '';
-		data.forEach( function( el ) {
-			var val = el.split( '^^' );
-			var inf = val[ 0 ];
-			var infname = inf === 'eth0' ? 'LAN' : 'Wi-Fi';
-			if ( inf.slice( -1 ) != 0 ) infname += ' '+ inf.slice( -1 );
-			var up = val[ 1 ];
-			var ip = val[ 2 ];
-			var dataip = ip ? ' data-ip="'+ ip +'"' : '';
-			var ssid = val[ 3 ];
-			var router = val[ 4 ];
-			var datarouter = router ? ' data-router="'+ router +'"' : '';
-			var dhcp = val[ 5 ] ? ' data-dhcp="1"' : '';
-			var wlan = inf !== 'eth0';
-			html += '<li class="'+ inf +'"'+ ( up ? ' data-up="1"' : ''  ) + dataip + datarouter + dhcp +'>';
-			html += '<i class="fa fa-'+ ( wlan ? 'wifi-3' : 'lan' ) +'"></i>'+ infname;
-			if ( accesspoint  && $( '#accesspoint' ).prop( 'checked' ) && wlan ) {
-				html += '&ensp;<span class="green">&bull;</span>&ensp;'+ $( '#ipwebuiap' ).text() +'<gr>&ensp;&laquo;&ensp;RPi access point</gr></li>';
-			} else if ( inf === 'eth0' ) {
-				var routerhtml = router ? '<gr>&ensp;&raquo;&ensp;'+ router +'&ensp;</gr>' : '';
-				if ( ip ) html += '&ensp;<span class="green">&bull;</span>&ensp;'+ ip + routerhtml +'</li>';
-			} else {
-				if ( router ) {
-					wlconnected = inf;
-					html += '&ensp;<span class="green">&bull;</span>&ensp;'+ ip +'<gr>&ensp;&raquo;&ensp;'+ router +'&ensp;&bull;&ensp;</gr>'+ ssid +'</li>';
-				} else {
-					html += '</li>';
-				}
+		$.each( list, function( i, val ) {
+			if ( 'hostapd' in val ) {
+				G = val;
+				$( '#ssid' ).text( G.ssid );
+				$( '#passphrase' ).text( G.passphrase )
+				$( '#ipwebuiap' ).text( G.hostapdip );
+				$( '#accesspoint' ).prop( 'checked', G.hostapd );
+				$( '#settings-accesspoint, #boxqr' ).toggleClass( 'hide', !G.hostapd );
+				return
 			}
+			
+			html += '<li class="'+ val.interface +'"';
+			html += val.state === 'UP' ? ' data-up="1"' : '';
+			html += val.ip ? ' data-ip="'+ val.ip +'"' : '';
+			html += val.gateway ? ' data-gateway="'+ val.gateway +'"' : '';
+			html += val.dhcp ? ' data-dhcp="1"' : '';
+			html += '><i class="fa fa-';
+			html += val.interface === 'eth0' ? 'lan"></i>LAN' : 'wifi-3"></i>Wi-Fi';
+			if ( val.interface === 'eth0' ) {
+				html += val.ip ? '&ensp;<grn>&bull;</grn>&ensp;'+ val.ip : '';
+				html += val.gateway ? '<gr>&ensp;&raquo;&ensp;'+ val.gateway +'&ensp;</gr>' : '';
+			} else if ( val.gateway ) {
+				wlconnected = val.interface;
+				html += '&ensp;<grn>&bull;</grn>&ensp;'+ val.ip +'<gr>&ensp;&raquo;&ensp;'+ val.gateway +'&ensp;&bull;&ensp;</gr>'+ val.ssid;
+			} else if ( accesspoint && G.hostapd && val.ip === G.hostapdip ) {
+				html += '&ensp;<grn>&bull;</grn>&ensp;<gr>RPi access point&ensp;&raquo;&ensp;</gr>'+ G.hostapdip
+			} else {
+				html += '&emsp;<i class="fa fa-search"></i><gr>Scan</gr>';
+			}
+			html += '</li>';
 		} );
-		$( '#listinterfaces' ).html( html ).promise().done( function() {
-			$( '#divaccesspoint' ).toggleClass( 'hide', $( '.wlan0' ).length === 0 );
-		} );
-		qr();
+		G.reboot = reboot;
 		$( '#refreshing' ).addClass( 'hide' );
+		$( '#listinterfaces' ).html( html );
+		renderQR();
 		bannerHide();
+		if ( !$( '#codeifconfig' ).hasClass( 'hide' ) ) getIfconfig();
+		if ( !$( '#codenetctl' ).hasClass( 'hide' ) ) getNetctl();
+		showContent();
 	}, 'json' );
 }
-function qr() {
+function renderQR() {
 	var qroptions = { width  : 120, height : 120 }
 	$( 'li' ).each( function() {
 		var ip = $( this ).data( 'ip' );
-		var router = $( this ).data( 'router' );
-		if ( ip && router ) {
+		var gateway = $( this ).data( 'gateway' );
+		if ( ip && gateway ) {
 			$( '#qrwebui' ).empty();
 			$( '#ipwebui' ).text( ip );
 			qroptions.text = 'http://'+ ip;
@@ -493,58 +497,37 @@ function qr() {
 			return false
 		}
 	} );
-	if ( !accesspoint || !$( '#accesspoint' ).prop( 'checked' ) ) return
+	if ( !accesspoint || !G.hostapd ) return
 	
 	$( '#qraccesspoint, #qrwebuiap' ).empty();
-	qroptions.text = 'WIFI:S:'+ escape_string( $( '#ssid' ).text() ) +';T:WPA;P:'+ escape_string( $( '#passphrase' ).text() ) +';';
+	qroptions.text = 'WIFI:S:'+ escape_string( G.ssid ) +';T:WPA;P:'+ escape_string( G.passphrase ) +';';
 	$( '#qraccesspoint' ).qrcode( qroptions );
-	qroptions.text = 'http://'+ $( '#ipwebuiap' ).text();
+	qroptions.text = 'http://'+ G.hostapdip;
 	$( '#qrwebuiap' ).qrcode( qroptions );
 	$( '#boxqr' ).removeClass( 'hide' );
 }
-function wlanIP( wlconnected ) {
-	$.post( 'commands.php', { bash: 'ip addr list '+ wlconnected +' | grep inet' }, function( std ) {
-		if ( std != -1 ) {
-			wlconnected = '';
-			nicsStatus();
-			$( '#refreshing' ).addClass( 'hide' );
-		} else {
-			setTimeout( function() {
-				wlanIP( wlconnected )
-			}, 1000 );
-		}
-	} );
-}
 function wlanScan() {
 	$( '#scanning' ).removeClass( 'hide' );
-	$.post( 'commands.php', { bash: '/srv/http/settings/network-wlanscan.sh '+ wlcurrent }, function( data ) {
-		var val, dbm, db, ssid, encrypt, wpa, wlan, connected, profile, router, ip, db, wifi;
+	$.post( 'commands.php', { getjson: '/srv/http/bash/network-wlanscan.sh' }, function( list ) {
 		var good = -60;
 		var fair = -67;
 		var html = '';
-		data.forEach( function( el ) {
-			val = el.split( '^^' );
-			dbm = val[ 0 ];
-			db = dbm.split( ' ' )[ 0 ];
-			ssid = val[ 1 ];
-			encrypt = val[ 2 ];
-			wpa = val[ 3 ];
-			wlan = val[ 4 ];
-			connected = val[ 5 ] ? ' data-connected="1"' : '';
-			profile = val[ 6 ] ? ' data-profile="1"' : '';
-			router = val[ 7 ] ? ' data-router="'+ val[ 7 ] +'"' : '';
-			ip = val[ 8 ] ? ' data-ip="'+ val[ 8 ] +'"' : '';
-			html += '<li data-db="'+ db +'" data-ssid="'+ ssid +'" data-encrypt="'+ encrypt +'" data-wpa="'+ wpa +'" data-wlan="'+ wlan +'"'+ connected + profile + router + ip +'>';
-			html += '<i class="fa fa-wifi-'+ ( db > good ? 3 : ( db < fair ? 1 : 2 ) ) +'"></i>';
-			html += connected ? '<span class="green">&bull;</span>&ensp;' : '';
-			html += db < fair ? '<gr>'+ ssid +'</gr>' : ssid;
-			html += encrypt === 'on' ? ' <i class="fa fa-lock"></i>' : '';
-			html += '<gr>'+ dbm +'</gr>';
-			html += profile ? '&ensp;<i class="fa fa-save"></i>' : '';
-			$( '#listwifi' ).html( html +'</li>' ).promise().done( function() {
-				bannerHide();
-				$( '#scanning' ).addClass( 'hide' );
-			} );
+		$.each( list, function( i, val ) {
+			html += '<li data-db="'+ val.dbm +'" data-ssid="'+ val.ssid +'" data-encrypt="'+ val.encrypt +'" data-wpa="'+ val.wpa +'" data-wlan="'+ val.wlan +'"';
+			html += val.connected  ? ' data-connected="1"' : '';
+			html += val.gateway ? ' data-gateway="'+ val.gateway +'"' : '';
+			html += val.ip ? ' data-ip="'+ val.ip +'"' : '';
+			html += val.profile ? ' data-profile="1"' : '';
+			html += '><i class="fa fa-wifi-'+ ( val.dbm > good ? 3 : ( val.dbm < fair ? 1 : 2 ) ) +'"></i>';
+			html += val.connected ? '<grn>&bull;</grn>&ensp;' : '';
+			html += val.dbm < fair ? '<gr>'+ val.ssid +'</gr>' : val.ssid;
+			html += val.encrypt === 'on' ? ' <i class="fa fa-lock"></i>' : '';
+			html += '<gr>'+ val.dbm +' dBm</gr>';
+			html += val.profile ? '&ensp;<i class="fa fa-info-circle wh"></i>' : '';
+		} );
+		$( '#listwifi' ).html( html +'</li>' ).promise().done( function() {
+			bannerHide();
+			$( '#scanning' ).addClass( 'hide' );
 		} );
 	}, 'json' );
 }
@@ -560,5 +543,10 @@ function wlanStatus() {
 	$( '#divwifi' ).removeClass( 'hide' );
 	wlanScanInterval()
 }
+
+refreshData = function() {
+	!wlcurrent ? nicsStatus() : wlanScanInterval();
+}
+refreshData();
 
 } );

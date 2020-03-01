@@ -1,4 +1,8 @@
-<?php $time = time();?>
+<?php
+$time = time();
+$localhost = in_array( $_SERVER[ 'REMOTE_ADDR' ], ['127.0.0.1', '::1'] );
+include 'logosvg.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +22,10 @@
 			font-style : normal;
 		}
 	</style>
+		<?php if ( $localhost ) { ?> 
+	<link rel="stylesheet" href="/assets/css/simple-keyboard.min.<?=$time?>.css">
+	<link rel="stylesheet" href="/assets/css/keyboard.<?=$time?>.css">
+		<?php } ?>
 	<link rel="stylesheet" href="/assets/css/selectric.<?=$time?>.css">
 	<link rel="stylesheet" href="/assets/css/info.<?=$time?>.css">
 	<link rel="stylesheet" href="/assets/css/settings.<?=$time?>.css">
@@ -25,17 +33,9 @@
 	<link rel="icon" type="image/png" href="/img/favicon-192x192.<?=$time?>.png" sizes="192x192">
 </head>
 <body>
-
 <?php
+$page = $_GET[ 'p' ];
 $sudo = '/usr/bin/sudo /usr/bin';
-function headhtml( $icon, $title ) {
-	echo '
-		<div class="head">
-			<i class="page-icon fa fa-'.$icon.'"></i><span class="title">'.$title.'</span><a href="/"><i id="close" class="fa fa-times"></i></a><i id="help" class="fa fa-question-circle"></i>
-		</div>
-	';
-}
-$p = $_GET[ 'p' ];
 $icon = [
 	  'credits' => 'rune'
 	, 'mpd'     => 'mpd'
@@ -43,46 +43,38 @@ $icon = [
 	, 'sources' => 'folder-cascade'
 	, 'system'  => 'sliders'
 ];
-headhtml( $icon [ $p ], strtoupper( $p ) );
-include "settings/$p.php";
 ?>
+<div class="head hide">
+	<i class="page-icon fa fa-<?=$icon[ $page ]?>"></i><span class='title'><?=( strtoupper( $page ) )?></span>
+	<i id="close" class="fa fa-times"></i><i id="help" class="fa fa-question-circle"></i>
+</div>
+<div class="container hide">
+<?php
+include "settings/$page.php";
+?>
+</div>
+	<?php if ( $localhost ) { ?>
+<input class="input hide">
+<div id="keyboard" class="hide"><div class="simple-keyboard"></div></div>
+	<?php } ?>
+<div id="loader"><svg viewBox="0 0 480.2 144.2"><?=$logo?></svg></div>
 <script src="/assets/js/plugin/jquery-2.2.4.min.<?=$time?>.js"></script>
 <script src="/assets/js/plugin/pushstream.min.<?=$time?>.js"></script>
 <script src="/assets/js/info.<?=$time?>.js"></script>
-	<?php if ( $p !== 'credits' ) { ?>
-<script src="/assets/js/<?=$p?>.<?=$time?>.js"></script>
-	<?php	if ( $p === 'mpd' ) { ?>
-<script src="/assets/js/plugin/jquery.selectric.min.<?=$time?>.js"></script>
-	<?php	} else if ( $p === 'system' ) { ?>
-<script src="/assets/js/plugin/jquery.selectric.min.<?=$time?>.js"></script>
 <script src="/assets/js/banner.<?=$time?>.js"></script>
-	<?php	} else if ( $p === 'network' ) { ?>
+<script src="/assets/js/settings.<?=$time?>.js"></script>
+	<?php if ( $page !== 'credits' ) { ?>
+<script src="/assets/js/<?=$page?>.<?=$time?>.js"></script>
+	<?php	if ( $page === 'mpd' || $page === 'system' ) { ?>
+<script src="/assets/js/plugin/jquery.selectric.min.<?=$time?>.js"></script>
+	<?php	} else if ( $page === 'network' ) { ?>
 <script src="/assets/js/plugin/jquery.qrcode.min.<?=$time?>.js"></script>
-<script src="/assets/js/banner.<?=$time?>.js"></script>
 	<?php	}
 		  } ?>
-<script>
-$( '.page-icon' ).click( function() {
-	location.reload();
-} );
-$( '#help' ).click( function() {
-	$( this ).toggleClass( 'blue' );
-	$( '.help-block' ).toggleClass( 'hide' );
-} );
-local = 0;
-pushstream = new PushStream( { modes: 'websocket' } );
-pushstream.addChannel( 'page' );
-pushstream.connect();
-pushstream.onmessage = function( data ) {
-	if ( !local && location.search === '?p='+ data[0].p ) location.reload();
-}
-function pstream( page ) {
-	return 'curl -s -X POST "http://127.0.0.1/pub?id=page" -d \'{ "p": "'+ page +'" }\'';
-}
-function resetlocal() {
-	setTimeout( function() { local = 0 }, 1000 );
-}
-</script>
-
+	<?php if ( $localhost ) { ?>
+<script src="/assets/js/plugin/simple-keyboard.min.<?=$time?>.js"></script>
+<script src="/assets/js/keyboard.<?=$time?>.js"></script>
+	<?php } ?>
+	
 </body>
 </html>

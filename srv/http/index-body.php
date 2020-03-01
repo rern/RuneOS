@@ -1,22 +1,4 @@
-<?php if ( file_exists( '/tmp/reboot' ) ) { ?>
-<script src="assets/js/plugin/jquery-2.2.4.min.js"></script>
-<script src="assets/js/info.<?=$time?>.js"></script>
-<script>
-	info( {
-		  icon    : 'warning'
-		, title   : 'USB Drive'
-		, nox     : 1
-		, message : 'No <wh>USB drive</wh> found!<br><br>Please insert one and reboot.'
-		, oklabel : '<i class="fa fa-reboot"></i>Reboot'
-		, okcolor : '#de810e'
-		, ok      : function() {
-			$.post( 'commands.php', { bash: 'shutdown -r now' } );
-		}
-	} );
-</script>
-<?php exit();
-}
-
+<?php
 include 'logosvg.php';
 
 if ( $login && !$_SESSION[ 'login' ] ) {
@@ -71,23 +53,9 @@ $( '#pwd' ).keypress( function( e ) {
 }
 $color = file_exists( '/srv/http/data/display/color' );
 $submenucolor = ( !$color || $color === 'hsl(200,100%,40%)' ) ? '' : '<i class="fa fa-brush-undo submenu"></i>';
-if ( in_array( $_SERVER[ 'REMOTE_ADDR' ], [ '127.0.0.1', '::1' ] ) ) {
-	$submenupower = '<i class="fa fa-screenoff submenu"></i>';
-} else {
-	$submenupower = '';
-}
-$aria = file_exists( '/srv/http/aria2' );
-if ( $aria ) {
-	$ariaenable = exec( '/usr/bin/systemctl is-enabled aria2 &> /dev/null && echo 1 || echo 0' );
-	$ariaactive = exec( '/usr/bin/systemctl is-active aria2 &> /dev/null && echo 1 || echo 0' );
-}
-$tran = file_exists( '/etc/systemd/system/transmission.service.d' );
-if ( $tran ) {
-	$tranenable = exec( '/usr/bin/systemctl is-enabled transmission &> /dev/null && echo 1 || echo 0' );
-	$tranactive = exec( '/usr/bin/systemctl is-active transmission &> /dev/null && echo 1 || echo 0' );
-}
+$submenupower = in_array( $_SERVER[ 'REMOTE_ADDR' ], [ '127.0.0.1', '::1' ] ) ? '<i class="fa fa-screenoff submenu"></i>' : '';
 // counts
-$count = exec( '/srv/http/count.sh' );
+$count = exec( '/srv/http/bash/count.sh' );
 $count = explode( ' ', $count );
 $counts = [
 	  'artist'      => $count[ 0 ]
@@ -219,7 +187,7 @@ function stripLeading( $string ) {
 }
 // context menus
 function menuli( $command, $icon, $label, $type = '' ) {
-	$iconclass = [ 'folder-refresh', 'tag', 'minus-circle', 'lastfm' ];
+	$iconclass = [ 'refresh-library', 'tag', 'minus-circle', 'lastfm' ];
 	$class = in_array( $icon, $iconclass ) ? ' class="'.$icon.'"' : '';
 	$submenu = in_array( $label, [ 'Add', 'Random', 'Replace' ] ) ? '<i class="fa fa-play-plus submenu"></i>' : '';
 	return '<a data-cmd="'.$command.'"'.$class.'><i class="fa fa-'.$icon.'"></i>'.$label.$submenu.'</a>';
@@ -250,17 +218,17 @@ $menu.= menudiv( 'plaction', $html );
 
 $menudiv = '';
 $html = $htmlcommon;
-$html.= menuli( 'bookmark',  'star',           'Bookmark' );
-$html.= menuli( 'exclude',   'folder-forbid',  'Exclude directory' );
-$html.= menuli( 'update',    'folder-refresh', 'Update database' );
-$html.= menuli( 'thumbnail', 'coverart',       'Update thumbnails' );
-if ( $kid3 ) $html.= menuli( 'tag',       'tag',            'Tags' );
+$html.= menuli( 'bookmark',  'star',            'Bookmark' );
+$html.= menuli( 'exclude',   'folder-forbid',   'Exclude directory' );
+$html.= menuli( 'update',    'refresh-library', 'Update database' );
+$html.= menuli( 'thumbnail', 'coverart',        'Update thumbnails' );
+if ( $kid3 ) $html.= menuli( 'tag', 'tag', 'Tags' );
 $menu.= menudiv( 'folder', $html );
 
 $menudiv = '';
 $html = menucommon( 'add', 'replace' );
 $html.= $htmlsimilar;
-if ( $kid3 ) $html.= menuli( 'tag',     'tag',    'Tags' );
+if ( $kid3 ) $html.= menuli( 'tag', 'tag', 'Tags' );
 $menu.= menudiv( 'file', $html );
 
 $menudiv = '';
@@ -271,7 +239,7 @@ $menudiv = '';
 $html = $htmlcommon;
 $html.= $htmlsimilar;
 $html.= menuli( 'savedplremove', 'minus-circle', 'Remove' );
-if ( $kid3 ) $html.= menuli( 'tag',           'tag',          'Tags' );
+if ( $kid3 ) $html.= menuli( 'tag', 'tag', 'Tags' );
 $menu.= menudiv( 'filesavedpl', $html );
 
 $menudiv = '';
@@ -323,26 +291,29 @@ $menu.= menudiv( 'genre', $html );
 </div>
 <div id="settings" class="menu hide">
 	<span class="menushadow"></span>
-	<a href="index-settings.php?p=mpd" class="settings"><i class="fa fa-mpd"></i>MPD
-</a>
-	<a id="sources" class="settings"><i class="fa fa-folder-cascade"></i>Sources<i class="fa fa-folder-refresh submenu"></i></a>
-	<a href="index-settings.php?p=network" class="settings"><i class="fa fa-network"></i>Network</a>
+	<a id="mpd" class="settings"><i class="fa fa-mpd"></i>MPD<i id="update" class="fa fa-refresh-library submenu"></i></a>
+	<a id="network" class="settings"><i class="fa fa-network"></i>Network</a>
+	<a id="sources" class="settings"><i class="fa fa-folder-cascade"></i>Sources</a>
 	<a id="system" class="settings"><i class="fa fa-sliders"></i>System<i id="credits" class="fa fa-rune submenu"></i></a>
 		<?php if ( $login ) { ?>
 	<a id="logout"><i class="fa fa-lock"></i>Logout</a>
 		<?php } ?>
 	<a id="power"><i class="fa fa-power"></i>Power<?=$submenupower ?></a>
-		<?php if ( $gpio ) { ?>
-	<a id="gpio"><i class="fa fa-gpio"></i>GPIO<i class="fa fa-gear submenu settings"></i></a>
+		<?php if ( file_exists( '/srv/http/gpiosettings.php' ) ) { ?>
+	<a id="gpio"><i class="fa fa-gpio"></i>GPIO<i class="fa fa-gear submenu"></i></a>
 		<?php }
-			  if ( $aria ) { ?>
-	<a id="aria2" class="settings pkg" data-enabled="<?=$ariaenable?>" data-active="<?=$ariaactive?>">
+			  if ( file_exists( '/srv/http/aria2' ) ) {
+					$ariaenable = exec( '/usr/bin/systemctl is-enabled aria2 &> /dev/null && echo 1 || echo 0' );
+					$ariaactive = exec( '/usr/bin/systemctl is-active aria2 &> /dev/null && echo 1 || echo 0' ); ?>
+	<a id="aria2" class="pkg" data-enabled="<?=$ariaenable?>" data-active="<?=$ariaactive?>">
 		<img src="/assets/img/addons/thumbaria.<?=$time?>.png" <?=( $ariaactive ? 'class="on"' : '' )?>>Aria2
 		<i class="fa fa-gear submenu imgicon"></i>
 	</a>
 		<?php }
-			  if ( $tran ) { ?>
-	<a id="transmission" class="settings pkg" data-enabled="<?=$tranenable?>" data-active="<?=$tranactive?>">
+			  if ( file_exists( '/etc/systemd/system/transmission.service.d' ) ) {
+					$tranenable = exec( '/usr/bin/systemctl is-enabled transmission &> /dev/null && echo 1 || echo 0' );
+					$tranactive = exec( '/usr/bin/systemctl is-active transmission &> /dev/null && echo 1 || echo 0' ); ?>
+	<a id="transmission" class="pkg" data-enabled="<?=$tranenable?>" data-active="<?=$tranactive?>">
 		<img src="/assets/img/addons/thumbtran.<?=$time?>.png" <?=( $tranactive ? 'class="on"' : '' )?>>Transmission
 		<i class="fa fa-gear submenu imgicon"></i>
 	</a>
@@ -350,7 +321,7 @@ $menu.= menudiv( 'genre', $html );
 	<a id="displaylibrary"><i class="fa fa-library"></i>Library Tools</a>
 	<a id="displayplayback"><i class="fa fa-play-circle"></i>Playback Tools</a>
 	<a id="displaycolor"><i class="fa fa-brush"></i>Color<?=$submenucolor ?></a>
-	<a id="addons" class="settings"><i class="fa fa-addons"></i>Addons</a>
+	<a id="addons"><i class="fa fa-addons"></i>Addons</a>
 </div>
 <div id="swipebar" class="transparent">
 	<i id="swipeL" class="fa fa-left fa-2x"></i>
@@ -425,7 +396,7 @@ $menu.= menudiv( 'genre', $html );
 			<div id="timeBR" class="timemap"></div>
 		</div>
 		<div id="play-group">
-			<div class="btn-group hide">
+			<div class="btn-group">
 				<button id="repeat" class="btn btn-default btn-cmd btn-toggle" type="button"><i class="fa fa-repeat"></i></button>
 				<button id="random" class="btn btn-default btn-cmd btn-toggle" type="button"><i class="fa fa-random"></i></button>
 				<button id="single" class="btn btn-default btn-cmd btn-toggle" type="button"><i class="fa fa-single"></i></button>
@@ -448,7 +419,7 @@ $menu.= menudiv( 'genre', $html );
 			</div>
 		</div>
 		<div id="share-group">
-			<div class="btn-group hide">
+			<div class="btn-group">
 				<button id="share" class="btn btn-default" type="button"><i class="fa fa-share"></i></button>
 				<button id="bio-open" class="btn btn-default" type="button"><i class="fa fa-bio"></i></button>
 			</div>
@@ -463,7 +434,7 @@ $menu.= menudiv( 'genre', $html );
 			<img id="controls-vol" class="controls hide" src="/img/controls-vol.<?=$time?>.svg">
 		</div>
 		<div id="vol-group">
-			<div class="btn-group hide">
+			<div class="btn-group">
 				<button id="voldn" class="btn btn-default" type="button"><i class="fa fa-minus"></i></button>
 				<button id="volmute" class="btn btn-default" type="button"><i class="fa fa-volume"></i></button>
 				<button id="volup" class="btn btn-default" type="button"><i class="fa fa-plus"></i></button>
@@ -477,13 +448,13 @@ $menu.= menudiv( 'genre', $html );
 		<i id="db-searchbtn" class="fa fa-search"></i>
 		<div id="db-search" class="hide">
 			<div class="input-group">
-				<input id="db-search-keyword" class="form-control" type="text">
+				<input id="db-search-keyword" class="form-control input" type="text">
 				<span class="input-group-btn">
 					<button id="dbsearchbtn" class="btn btn-default"><i class="fa fa-search"></i></button>
 				</span>
 			</div>
 		</div>
-		<button id="db-search-close" class="btn hide" type="button"></button>
+		<div id="db-search-close"></div>
 		<div id="db-currentpath">
 			<a class="lipath"></a>
 			<i id="db-back" class="fa fa-arrow-left"></i>
@@ -512,7 +483,7 @@ $menu.= menudiv( 'genre', $html );
 		<i id="pl-searchbtn" class="fa fa-search"></i>
 		<form id="pl-search" class="hide" method="post" onSubmit="return false;">
 			<div class="input-group">
-				<input id="pl-filter" class="form-control" type="text">
+				<input id="pl-filter" class="form-control input" type="text">
 				<span class="input-group-btn">
 					<button id="plsearchbtn" class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
 				</span>
@@ -574,3 +545,7 @@ $menu.= menudiv( 'genre', $html );
 </div>
 <div id="splash"><svg viewBox="0 0 480.2 144.2"><?=$logo?></svg></div>
 <div id="loader" class="hide"><svg viewBox="0 0 480.2 144.2"><?=$logo?></svg></div>
+	<?php if ( $localhost ) { ?>
+<input class="input hide">
+<div id="keyboard" class="hide"><div class="simple-keyboard"></div></div>
+	<?php } ?>

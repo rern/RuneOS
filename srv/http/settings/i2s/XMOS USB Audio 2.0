@@ -1,5 +1,0 @@
-sysname:XMOS USB Audio 2.0
-extlabel:XMOS AK4399 USB-Audio DAC
-mixer_numid:3
-mixer_control:XMOS Clock Selector
-type:usb

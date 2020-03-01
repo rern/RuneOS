@@ -1,6 +1,0 @@
-sysname:Bel Canto 2496 USB
-extlabel:Bel Canto 2496
-card_option:format	"96000:24:2"
-mixer_numid:1
-hwplatformid:08
-type:usb

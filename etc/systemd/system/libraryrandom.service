@@ -3,4 +3,4 @@ Description=Library random
 After=mpd.service
 
 [Service]
-ExecStart=/srv/http/libraryrandom.sh
+ExecStart=/srv/http/bash/libraryrandom.sh

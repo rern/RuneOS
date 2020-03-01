@@ -1,5 +1,0 @@
-sysname:SA9023 USB Audio
-extlabel:HiFimeDIY SABRE U2
-mixer_numid:4
-mixer_control:PCM
-type:usb

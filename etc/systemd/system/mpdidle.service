@@ -3,4 +3,4 @@ Description=MPD idle
 After=mpd.service
 
 [Service]
-ExecStart=/srv/http/mpdidle.sh
+ExecStart=/srv/http/bash/mpdidle.sh

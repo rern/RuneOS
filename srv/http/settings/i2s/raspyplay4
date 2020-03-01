@@ -1,6 +1,0 @@
-sysname:snd_rpi_iqaudio_dac
-extlabel:RaspyPlay4 (I&#178;S)
-mixer_numid:1
-mixer_control:Playback Digital
-hwplatformid:01
-type:i2s

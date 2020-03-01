@@ -46,6 +46,7 @@ if ( $MiBunpart < 10 ) {
 	<link rel="stylesheet" href="/assets/css/info.<?=$time?>.css">
 	<link rel="stylesheet" href="/assets/css/addons.<?=$time?>.css">
 	<link rel="icon" href="/assets/img/addons/addons.<?=$time?>.png">
+	<link rel="stylesheet" href="/assets/css/selectric.<?=$time?>.css">
 </head>
 <body>
 <div class="container">
@@ -200,6 +201,7 @@ if ( file_exists( $restartfile ) ) {
 ?>
 <script src="/assets/js/plugin/jquery-2.2.4.min.<?=$time?>.js"></script>
 <script src="/assets/js/plugin/jquery.mobile.custom.min.<?=$time?>.js"></script>
+<script src="/assets/js/plugin/jquery.selectric.min.<?=$time?>.js"></script>
 <script src="/assets/js/info.<?=$time?>.js"></script>
 <script src="/assets/js/addons.<?=$time?>.js"></script>
 <script>

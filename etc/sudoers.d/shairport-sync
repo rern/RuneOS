@@ -1,1 +1,1 @@
-shairport-sync ALL=NOPASSWD: /usr/bin/systemctl, /usr/bin/curl
+shairport-sync ALL=NOPASSWD: ALL

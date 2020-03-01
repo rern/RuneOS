@@ -1,24 +1,24 @@
 var currentlyrics = '';
 var lyrics = '';
-lyricsArtist = '';
-lyricsSong = '';
+var lyricsArtist = '';
+var lyricsSong = '';
+var lyricshtml = '';
 
 $( function() { //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 if ( !$( '#swipebar' ).length ) $( '#lyricsedit' ).removeClass().addClass( 'fa fa-edit');
 $( '#song, #currentsong' ).click( function() {
-	var playlistlength = GUI.status.playlistlength;
+	var playlistlength = G.status.playlistlength;
 	if ( playlistlength == 0 ) return;
 	
-	var artist = GUI.status.Artist;
-	var title = GUI.status.Title;
-	var file = GUI.status.file;
+	var artist = G.status.Artist;
+	var title = G.status.Title;
+	var file = G.status.file;
 	if ( artist === lyricsArtist && title === lyricsSong && lyrics ) {
 		lyricsshow();
 		return
 	}
-	
-	if ( file.slice( 0, 4 ) === 'http' ) {
+	if ( G.status.mpd && file.slice( 0, 4 ) === 'http' ) {
 		var title = title.split( / - (.*)/ );
 		info( {
 			  icon       : 'info-circle'
@@ -30,8 +30,8 @@ $( '#song, #currentsong' ).click( function() {
 			, textalign  : 'center'
 			, boxwidth   : 'max'
 			, ok         : function() {
-				lyricsArtist = $( '#infoTextBox' ).val().trim().replace( /"/g, '\\"' );
-				lyricsSong = $( '#infoTextBox1' ).val().trim().replace( /"/g, '\\"' );
+				lyricsArtist = $( '#infoTextBox' ).val();
+				lyricsSong = $( '#infoTextBox1' ).val();
 				getlyrics();
 			}
 		} );
@@ -108,7 +108,7 @@ $( '#lyricssave' ).click( function() {
 						lyricstop = $( '#lyricstextarea' ).scrollTop();
 						currentlyrics = newlyrics;
 						lyrics2html( newlyrics );
-						if ( $( '#lyricssong' ).text() === GUI.status.Title ) {
+						if ( $( '#lyricssong' ).text() === G.status.Title ) {
 							lyrics = newlyrics;
 						}
 						$( '#lyricstext, #lyric-text-overlay' ).html( lyricshtml );
@@ -134,6 +134,7 @@ $( '#lyricsdelete' ).click( function() {
 				{ artist: $( '#lyricsartist' ).text(), song: $( '#lyricssong' ).text(), delete: 1 },
 				function( data ) {
 					if ( data ) {
+						lyrics = '';
 						currentlyrics = '(Lyrics not available.)';
 						lyrics2html( currentlyrics )
 						lyricshide();
@@ -155,16 +156,21 @@ $( '#menu-bottom' ).click( function() {
 
 } ); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+htmlEscape = function( str ) {
+	return str
+		.trim()
+		.replace( /'|"/g, '' );
+}
 getlyrics = function() {
-	notify( 'Lyrics', 'Fetching ...', 'search blink', 20000 );
-	$.get( 'lyrics.php',   
-		{ artist: lyricsArtist, song: lyricsSong },
-		function( data ) {
+	var artist = htmlEscape( lyricsArtist );
+	var song = htmlEscape( lyricsSong );
+	$.post( 'lyrics.php', { artist: artist, song: song }, function( data ) {
 			lyrics = data ? data : '(Lyrics not available.)';
 			lyrics2html( lyrics );
 			lyricsshow();
 		}
 	);
+	notify( 'Lyrics', 'Fetching ...', 'search blink', 20000 );
 }
 lyrics2html = function( data ) {
 	lyricshtml = data.replace( /\n/g, '<br>' ) +'<br><br><br>·&emsp;·&emsp;·';
@@ -173,7 +179,7 @@ lyricsshow = function() {
 	$( '#lyricssong' ).text( lyricsSong );
 	$( '#lyricsartist' ).text( lyricsArtist );
 	$( '#lyricstext, #lyric-text-overlay' ).html( lyricshtml );
-	var bars = GUI.status ? GUI.bars : !$( '#menu-top' ).hasClass( 'hide' );
+	var bars = G.status ? G.bars : !$( '#menu-top' ).hasClass( 'hide' );
 	$( '#lyricscontainer' )
 		.css( {
 			  top    : ( bars ? '' : 0 )
@@ -191,7 +197,7 @@ lyricshide = function() {
 	$( '#lyricsedit, #lyricstextoverlay' ).show();
 	$( '#lyricseditbtngroup' ).hide();
 	$( '#lyricscontainer, #lyricstextareaoverlay' ).addClass( 'hide' );
-	if ( GUI.bars || !$( '#menu-top' ).hasClass( 'hide' ) ) $( '#menu-bottom' ).removeClass( 'lyrics-menu-bottom' );
+	if ( G.bars || !$( '#menu-top' ).hasClass( 'hide' ) ) $( '#menu-bottom' ).removeClass( 'lyrics-menu-bottom' );
 }
 lyricsrestore = function( lyricstop ) {
 	$( '#lyricseditbtngroup' ).hide();

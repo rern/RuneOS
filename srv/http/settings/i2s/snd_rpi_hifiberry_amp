@@ -1,6 +1,0 @@
-sysname:hifiberry_amp
-extlabel:HifiBerry Amp+ (I&#178;S)
-mixer_numid:1
-mixer_control:Master
-hwplatformid:08
-type:i2s

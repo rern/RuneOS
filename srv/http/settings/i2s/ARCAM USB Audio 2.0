@@ -1,5 +1,0 @@
-sysname:ARCAM USB Audio 2.0
-extlabel:Arcam rDAC
-mixer_numid:3
-mixer_control:ARCAM Clock Selector
-type:usb

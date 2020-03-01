@@ -1,5 +1,0 @@
-sysname:USB Sound Device
-extlabel:Cmedia CM2606
-mixer_numid:7
-mixer_control:Speaker
-type:usb

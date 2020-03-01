@@ -1,10 +1,9 @@
 [Unit]
-Description=Local Browser
+Description=Local Browser - Chromium
 After=startup.service
 
 [Service]
 Type=idle
-User=http
 ExecStart=/usr/bin/sudo /usr/bin/startx
 ExecStop=/usr/bin/killall Xorg
 

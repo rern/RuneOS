@@ -1,5 +1,0 @@
-sysname:AudioQuest DragonFly
-extlabel:AudioQuest DragonFly DAC
-mixer_numid:3
-mixer_control:PCM
-type:usb

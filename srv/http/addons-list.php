@@ -6,13 +6,25 @@ $addons = [
 
 'rare' => [
 	'title'       => 'RuneAudio+R e2',
-	'version'     => '20200127',
-	'revision'    => 'Improved - File sharing(Samba)'
+	'version'     => '20200213',
+	'revision'    => 'Fix MPD update not saved'
+					.'<br>Fix last song at the screen bottom in Album view cannot be selected'
+					.'<br>Fix Network page - Wi-Fi listing'
+					.'<br>Add status to all setting pages'
 					.'<br>...'
+					.'<br>Improve setting pages'
+					.'<br>Fix Addons loading'
+					.'<br>Fix on-board devices setting'
+					.'<br>Fix Browser on RPi rotate'
+					.'<br>Fix Lyrics fetching songs with aphostrophe'
+					.'<br>Add System Status interval update (toggle)'
+					.'<br>Add Tap song = Replace + Play'
+					.'<br>Add on-screen keyboard for Browser on RPi (available on standard version)'
+					.'<br>Improve Restore Settings addon'
+					.'<br>...'
+					.'<br>Improved - File sharing(Samba)'
 					.'<br>Fixed - Add 1st bookmark'
-					.'<br>Improved - Edit Webradio'
-					.'<br>...'
-					.'<br>Minor improvements',
+					.'<br>Improved - Edit Webradio',
 	'maintainer'  => 'r e r n',
 	'description' => 'Updates for RuneAudio <i class="fa fa-addons"></i> e2.',
 	'buttonlabel' => 'Update',
@@ -27,8 +39,8 @@ $addons = [
 	'description' => 'Restore database and settings from backup.',
 	'buttonlabel' => 'Restore',
 	'thumbnail'   => '/assets/img/addons/thumbrest.png',
-	'sourcecode'  => 'https://github.com/rern/RuneOS/raw/master/usr/local/bin/runerestore.sh',
-	'installurl'  => 'https://github.com/rern/RuneOS/raw/master/usr/local/bin/runerestore.sh',
+	'sourcecode'  => 'https://github.com/rern/RuneAudio-Re2/blob/master/usr/local/bin/runerestore.sh',
+	'installurl'  => 'https://github.com/rern/RuneAudio-Re2/raw/master/usr/local/bin/runerestore.sh',
 	'option'      => [
 		'wait'      => 'Copy existing database and settings:'
 					  .'<br>directory <code>data</code> > <code>/srv/http</code>'
@@ -60,8 +72,9 @@ $addons = [
 	'sourcecode'  => 'https://github.com/rern/RuneAudio/tree/master/rankmirrors',
 	'installurl'  => 'https://github.com/rern/RuneAudio/raw/master/rankmirrors/rankmirrors.sh',
 	'option'      => [
-		'radio'     => [
-			'message' => 'Download test for each server(seconds):',
+		'select'     => [
+			'message' => 'Download test for each server:',
+			'label'   => 'Seconds',
 			'list'    => [
 				'3'  => 3,
 				'4'  => 4,

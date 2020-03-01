@@ -1,6 +1,0 @@
-sysname:DigiHug USB Audio
-extlabel:DigiHug USB DAC
-mixer_numid:1
-mixer_control:PCM
-hwplatformid:08
-type:usb

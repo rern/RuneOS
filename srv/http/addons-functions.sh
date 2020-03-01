@@ -242,7 +242,7 @@ installfinish() { # $1-'u'=update
 	version=$( getvalue version )
 	echo $version > $diraddons/$alias
 	
-	. /srv/http/addons-update.sh 1
+	. /srv/http/bash/addons-update.sh 1
 	
 	timestop
 	notify "$title0" i

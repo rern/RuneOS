@@ -3,7 +3,7 @@ Description=Shairport Sync Metadata
 After=network.target redis.target shairport-sync.service
 
 [Service]
-ExecStart=/srv/http/shairport-meta.sh
+ExecStart=/srv/http/bash/shairport-meta.sh
 User=http
 Group=http
 

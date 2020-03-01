@@ -1,5 +1,0 @@
-sysname:snd_rpi_wsp
-extlabel:Wolfson Card S&#47;PDIF Out
-hwplatformid:01
-mixer_numid:1
-route_cmd:/usr/local/bin/wolfson.sh *CARDID* spdif_out &> /dev/null

@@ -4,7 +4,7 @@ After=nginx.service
 
 [Service]
 Type=oneshot
-ExecStart=/srv/http/startup.sh
+ExecStart=/srv/http/bash/startup.sh
 
 [Install]
 WantedBy=multi-user.target
