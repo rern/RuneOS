@@ -64,7 +64,7 @@ done
 [[ -z $elapsed ]] && status+=', "elapsed":0'
 [[ -z $song ]] && status+=', "song":""'
 [[ -z $updating_db ]] && status+=', "updating_db":""'
-status+=', "volumemute":'$( cat /srv/http/data/display/volumemute )
+status+=', "volumemute":'$( cat /srv/http/data/display/volumemute 2> /dev/null || echo 0 )
 status+=', "librandom":'$( systemctl -q is-active libraryrandom && echo 1 || echo 0 )
 
 if [[ -z $playlistlength ]]; then
