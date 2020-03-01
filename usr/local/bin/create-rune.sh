@@ -125,7 +125,7 @@ echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip
 bsdtar xvf *.zip --strip 1 --exclude=.* --exclude=*.md -C /
 
-chmod 755 /srv/http/* /srv/http/settings/* /usr/local/bin/*
+chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chown -R http:http /srv/http
 
 # RPi 0, 1 - switch packages for armv6h
