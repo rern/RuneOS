@@ -7,5 +7,5 @@ xset dpms 0 0 0 &
 xset s off &
 xset -dpms &
 
-matchbox-window-manager -use_cursor no &
+matchbox-window-manager -use_cursor yes &
 chromium --app=http://localhost --kiosk --incognito --disable-gpu --no-sandbox --force-device-scale-factor=1
