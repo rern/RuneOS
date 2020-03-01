@@ -1,14 +1,22 @@
 #!/bin/bash
 
-# 1. set and connect wi-fi if pre-configured
-# 2. set sound profile if enabled
+# 1. restore settings and database - /boot/data
+#    set and connect wi-fi - /boot/wifi
+# 2. set sound profile - $dirsystem/soundprofile
 # 3. set mpd-conf.sh
 #   - list sound devices
 #   - populate mpd.conf
 #   - start mpd, mpdidle
-# 4. set autoplay if enabled
+# 4. set autoplay - $dirsystem/autoplay
 # 5. disable wlan power saving
 # 6. check addons updates
+
+# restore settings
+if [[ -e /boot/data ]]; then
+	rm /boot/data
+	/srv/http/bash/runerestore.sh
+	[[ -e /tmp/reboot ]] && shutdown -r now
+fi
 
 touch /tmp/startup  # flag for mpd-conf.sh > suppress audio output notification
 
@@ -16,6 +24,7 @@ rm -f /srv/http/data/tmp/airplay* /srv/http/data/system/bootlog
 
 dirsystem=/srv/http/data/system
 
+# pre-configured wi-fi
 if [[ -e /boot/wifi ]]; then
 	ssid=$( grep '^ESSID' /boot/wifi | cut -d'"' -f2 )
 	sed -i 's/\r//' /boot/wifi
