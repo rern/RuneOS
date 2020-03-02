@@ -10,35 +10,33 @@ dirdata=/srv/http/data
 dirdisplay=$dirdata/display
 dirsystem=$dirdata/system
 
+# set permissions and ownership
+chown -R http:http "$dirdata"
+chown -R mpd:audio "$dirdata/mpd"
+
 # saved playlist
 php /usr/local/bin/convertplaylist.php
 
-# i2s audio
-audioaplayname=$( cat /srv/http/data/system/audio-aplayname 2> /dev/null )
-audiooutput=$( cat /srv/http/data/system/audio-output )
-if grep -q "$audiooutput.*=>.*$audioaplayname" /srv/http/settings/system-i2smodules.php; then
-	echo -e "\n$( tcolor "$audiooutput" )"
-	echo dtoverlay=$audioaplayname
-	sed -i -e 's/\(dtparam=audio=\).*/\1off/
-		' -e '/dtparam=i2s=on/ {N;d;}
-		' /boot/config.txt
-	sed -i "$ a\
-dtparam=i2s=on\
-dtparam=$audioaplayname
-	" /boot/config.txt
-fi
 # addons
 rm /srv/http/data/addons/*
 echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
+# hostname
+if [[ $( cat $dirsystem/hostname ) != RuneAudio ]]; then
+	hostname=$( cat $dirsystem/hostname )
+	echo -e "\n$( tcolor Hostname )"
+	echo $hostname
+	hostnamelc=$( echo $hostname | tr '[:upper:]' '[:lower:]' )
+	hostnamectl set-hostname $hostnamelc
+	sed -i "s/\(.*\[\).*\(\] \[.*\)/\1$hostnamelc\2/" /etc/avahi/services/runeaudio.service
+	sed -i "s/^\(ssid=\).*/\1$hostname/" /etc/hostapd/hostapd.conf &> /dev/null
+	sed -i "s/\(zeroconf_name           \"\).*/\1$hostname\"/" /etc/mpd.conf
+	sed -i "s/\(netbios name = \"\).*/\1+ $hostnamelc +\"/" /etc/samba/smb.conf
+	sed -i "/ExecStart/ s/\\w*$/$hostname/" /etc/systemd/system/wsdd.service
+	sed -i "s/^\(name = \).*/\1$hostname" /etc/shairport-sync.conf &> /dev/null
+	sed -i "s/^\(friendlyname = \).*/\1$hostname/" /etc/upmpdcli.conf &> /dev/null
+fi
 # accesspoint
 if [[ -e /usr/bin/hostapd ]]; then
-	if [[ -e $dirsystem/accesspoint ]]; then
-		echo -e "\n$( tcolor 'RPi Access Point' )"
-		echo Enabled
-		systemctl enable hostapd
-	elif [[ -e $dirsystem/accesspoint-passphrase ]]; then
-		echo -e "\n$( tcolor 'RPi Access Point' )"
-	fi
 	if [[ -e $dirsystem/accesspoint-passphrase ]]; then
 		passphrase=$( cat $dirsystem/accesspoint-passphrase )
 		ip=$( cat $dirsystem/accesspoint-ip )
@@ -52,12 +50,19 @@ if [[ -e /usr/bin/hostapd ]]; then
 			 " -e "s/^\(dhcp-option-force=option:dns-server,\).*/\1$ip/
 			 " /etc/dnsmasq.conf
 	fi
+	if [[ -e $dirsystem/accesspoint ]]; then
+		echo -e "\n$( tcolor 'RPi Access Point' )"
+		echo Enabled
+		systemctl enable --now hostapd
+	elif [[ -e $dirsystem/accesspoint-passphrase ]]; then
+		echo -e "\n$( tcolor 'RPi Access Point' )"
+	fi
 fi
 # airplay
 if [[ -e /usr/bin/shairport-sync && -e $dirsystem/airplay ]]; then
 	echo -e "\n$( tcolor AirPlay )"
 	echo Enabled
-	systemctl enable shairport-sync
+	systemctl enable --now shairport-sync
 fi
 # color
 if [[ -e $dirdisplay/color ]]; then
@@ -78,31 +83,9 @@ if ls $dirsystem/fstab-* &> /dev/null; then
 		mkdir -p "/mnt/MPD/NAS/${file/*fstab-}"
 	done
 fi
-# hostname
-if [[ $( cat $dirsystem/hostname ) != RuneAudio ]]; then
-	hostname=$( cat $dirsystem/hostname )
-	echo -e "\n$( tcolor Hostname )"
-	echo $hostname
-	hostnamelc=$( echo $hostname | tr '[:upper:]' '[:lower:]' )
-	hostnamectl set-hostname $hostnamelc
-	sed -i "s/\(.*\[\).*\(\] \[.*\)/\1$hostnamelc\2/" /etc/avahi/services/runeaudio.service
-	sed -i "s/^\(ssid=\).*/\1$hostname/" /etc/hostapd/hostapd.conf &> /dev/null
-	sed -i "s/\(zeroconf_name           \"\).*/\1$hostname\"/" /etc/mpd.conf
-	sed -i "s/\(netbios name = \"\).*/\1+ $hostnamelc +\"/" /etc/samba/smb.conf
-	sed -i "/ExecStart/ s/\\w*$/$hostname/" /etc/systemd/system/wsdd.service
-	sed -i "s/^\(name = \).*/\1$hostname" /etc/shairport-sync.conf &> /dev/null
-	sed -i "s/^\(friendlyname = \).*/\1$hostname/" /etc/upmpdcli.conf &> /dev/null
-fi
 # localbrowser
 if [[ -e /usr/bin/chromium ]]; then
 	file=$dirsystem/localbrowser
-	if [[ -e $file ]]; then
-		echo -e "\n$( tcolor 'Browser on RPi' )"
-		echo Enabled
-		systemctl enable localbrowser
-	elif ls $file-* &> /dev/null; then
-		echo -e "\n$( tcolor 'Browser on RPi' )"
-	fi
 	if [[ -e $file-cursor ]]; then
 		sed -i -e "s/\(-use_cursor \).*/\1yes \&/" /etc/X11/xinit/xinitrc
 		echo Cursor: enabled
@@ -124,6 +107,13 @@ if [[ -e /usr/bin/chromium ]]; then
 		zoom=$( cat $file-zoom )
 		sed -i 's/\(factor=.*\)/\1'$zoom'/' /etc/X11/xinit/xinitrc
 		echo Zoom: $zoom
+	fi
+	if [[ -e $file ]]; then
+		echo -e "\n$( tcolor 'Browser on RPi' )"
+		echo Enabled
+		systemctl enable --now localbrowser
+	elif ls $file-* &> /dev/null; then
+		echo -e "\n$( tcolor 'Browser on RPi' )"
 	fi
 fi
 # login
@@ -195,6 +185,8 @@ if [[ ! -e $dirsystem/onboard-bluetooth ]]; then
 	echo -e "\n$( tcolor 'Onboard Bluetooth' )"
 	echo Disabled
 	sed -i -e '/dtoverlay=disable-bt/ s/^#*//' -e '/dtoverlay=bcmbt/ s/^/#/' /boot/config.txt
+else
+	reboot='on-board Bluetooth'
 fi
 if [[ ! -e $dirsystem/onboard-wlan ]]; then
 	echo -e "\n$( tcolor 'Onboard Wi-Fi' )"
@@ -204,13 +196,6 @@ fi
 # samba
 if [[ -e /ust/bin/samba ]]; then
 	file=$dirsystem/samba
-	if [[ -e $file ]]; then
-		echo -e "\nEnable $( tcolor 'File Sharing' )"
-		echo Enabled
-		systemctl enable nmb smb wsdd
-	elif ls $file-* &> /dev/null; then
-		echo -e "\n$( tcolor 'File Sharing' )"
-	fi
 	if [[ -e $file-readonlysd ]]; then
 		sed -i '/path = .*SD/,/\tread only = no/ {/read only/ d}' /etc/samba/smb.conf
 		echo SD: read only
@@ -219,6 +204,13 @@ if [[ -e /ust/bin/samba ]]; then
 		sed -i '/path = .*USB/,/\tread only = no/ {/read only/ d}' /etc/samba/smb.conf
 		echo USB: read only
 	fi
+	if [[ -e $file ]]; then
+		echo -e "\nEnable $( tcolor 'File Sharing' )"
+		echo Enabled
+		systemctl enable --now nmb smb wsdd
+	elif ls $file-* &> /dev/null; then
+		echo -e "\n$( tcolor 'File Sharing' )"
+	fi
 fi
 # timezone
 if [[ -e $dirsystem/timezone ]]; then
@@ -226,17 +218,10 @@ if [[ -e $dirsystem/timezone ]]; then
 	echo -e "\n$( tcolor Timezone )"
 	echo $timezone
 	timedatectl set-timezone $timezone
-	ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
 fi
 # upnp
 if [[ -e /usr/bin/upmpdcli && -e $dirsystem/upnp ]]; then
 	file=$dirsystem/upnp
-	if [[ -e $file ]]; then
-		echo -e "\nEnable $( tcolor 'UPnP' )"
-		systemctl enable upmpdcli
-	elif ls $file-* &> /dev/null; then
-		echo -e "\n$( tcolor UPnP )"
-	fi
 	setUpnp() {
 		user=( $( cat $dirsystem/upnp-$1user ) )
 		pass=( $( cat $dirsystem/upnp-$1pass ) )
@@ -255,12 +240,36 @@ if [[ -e /usr/bin/upmpdcli && -e $dirsystem/upnp ]]; then
 		sed -i '/^#ownqueue = / a\ownqueue = 0' /etc/upmpdcli.conf
 		echo Remove playlist: enabled
 	fi
+	if [[ -e $file ]]; then
+		echo -e "\nEnable $( tcolor 'UPnP' )"
+		systemctl enable --now upmpdcli
+	elif ls $file-* &> /dev/null; then
+		echo -e "\n$( tcolor UPnP )"
+	fi
 fi
 # version
 echo $version > $dirsystem/version
+# i2s audio
+audioaplayname=$( cat /srv/http/data/system/audio-aplayname 2> /dev/null )
+audiooutput=$( cat /srv/http/data/system/audio-output )
+if grep -q "$audiooutput.*=>.*$audioaplayname" /srv/http/settings/system-i2smodules.php; then
+	echo -e "\n$( tcolor "$audiooutput" )"
+	echo dtoverlay=$audioaplayname
+	sed -i -e 's/\(dtparam=audio=\).*/\1off/
+		' -e '/dtparam=i2s=on/ {N;d;}
+		' /boot/config.txt
+	sed -i "$ a\
+dtparam=i2s=on\
+dtparam=$audioaplayname
+	" /boot/config.txt
+	[[ -n $reboot ]] && reboot+=', '
+	reboot+='I2S Module'
+fi
 
-# set permissions and ownership
-chown -R http:http "$dirdata"
-chown -R mpd:audio "$dirdata/mpd"
+systemctl try-restart mpd mpdidle
 
+if [[ -n $reboot ]]; then
+	echo -e "$( tcolor 'Reboot required for:' ) Enable $reboot"
+	echo 1 /tmp/reboot
+fi
 title -nt "$bar Database and settings restored successfully."
