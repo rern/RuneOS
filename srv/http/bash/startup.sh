@@ -1,22 +1,24 @@
 #!/bin/bash
 
-# 1. restore settings and database - /boot/data
-#    set and connect wi-fi - /boot/wifi
-# 2. set sound profile - $dirsystem/soundprofile
+# 1. set and connect wi-fi if pre-configured
+# 2. set sound profile if enabled
 # 3. set mpd-conf.sh
 #   - list sound devices
 #   - populate mpd.conf
 #   - start mpd, mpdidle
-# 4. set autoplay - $dirsystem/autoplay
+# 4. set autoplay if enabled
 # 5. disable wlan power saving
 # 6. check addons updates
 
-# restore settings
-if [[ -e /boot/data ]]; then
-	rm /boot/data
-	/srv/http/bash/runerestore.sh
-	[[ -e /tmp/reboot ]] && shutdown -r now
-fi
+# remove wireless in config.txt
+hardwarecode=$( grep Revision /proc/cpuinfo | awk '{print $NF}' )
+case ${hardwarecode: -3:2} in
+	00 | 01 | 02 | 03 | 04 | 09 ) # not rpi 0W, 3, 4
+		sed -i '/### onboard/,/dtoverlay=bcmbt/ d' /boot/config.txt
+		;;
+esac
+sed -i '/^# remove wireless/,/^# remove wireless/ d' /srv/http/bash/startup.sh
+# remove wireless
 
 touch /tmp/startup  # flag for mpd-conf.sh > suppress audio output notification
 
@@ -24,7 +26,6 @@ rm -f /srv/http/data/tmp/airplay* /srv/http/data/system/bootlog
 
 dirsystem=/srv/http/data/system
 
-# pre-configured wi-fi
 if [[ -e /boot/wifi ]]; then
 	ssid=$( grep '^ESSID' /boot/wifi | cut -d'"' -f2 )
 	sed -i 's/\r//' /boot/wifi

@@ -4,8 +4,6 @@ $files = array_slice( scandir( '/srv/http/data/playlists' ), 2 );
 foreach( $files as $file ) {
 	$filepath = "/srv/http/data/playlists/$file";
 	$lines = file( $filepath, FILE_IGNORE_NEW_LINES );
-	if ( $lines[ 0 ] === '[' ) exit; // already in json format
-	
 	foreach( $lines as $line ) {
 		$line = str_replace( ' • ', '^^', $line );
 		$list = explode( '^^', $line );
