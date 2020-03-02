@@ -1,12 +1,15 @@
 #!/bin/bash
 
+dirdata=/srv/http/data
+backupfile=$dirdata/tmp/backup.xz
+
 if (( $# == 0 )); then
+	rm $backupfile
 	bsdtar -czf /tmp/backup.xz -C /srv/http data
-	mv -f {,/srv/http/data}/tmp/backup.xz
+	mv /tmp/backup.xz $backupfile
 	exit
 fi
 
-dirdata=/srv/http/data
 dirdisplay=$dirdata/display
 dirsystem=$dirdata/system
 
@@ -19,7 +22,8 @@ if [[ -d $2 ]]; then
 	chown -R http:http "$dirdata"
 	chown -R mpd:audio "$dirdata/mpd"
 else
-	bsdtar -xpf $dirdata/tmp/backup.xz -C /srv/http
+	bsdtar -xpf $backupfile -C /srv/http
+	rm $backupfile
 fi
 # version
 echo $version > $dirsystem/version

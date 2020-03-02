@@ -93,7 +93,20 @@ $dirtmp = '/srv/http/data/tmp';
 $dirwebradios = '/srv/http/data/webradios';
 $format = '%title%^^%time%^^%artist%^^%album%^^%file%^^%genre%^^%composer%^^%albumartist%';
 
-if ( isset( $_POST[ 'bookmarks' ] ) ) {
+if ( isset( $_POST[ 'backuprestore' ] ) ) {
+	if ( $_POST[ 'backuprestore' ] === 'backup' ) {
+		exec( '/usr/bin/sudo /srv/http/bash/backuprestore.sh' );
+		echo 'ready';
+	} else {
+		if ( $_FILES[ 'file' ][ 'error' ] == UPLOAD_ERR_OK ) {
+			move_uploaded_file( $_FILES[ 'file' ][ 'tmp_name' ], '/srv/http/data/tmp/backup.xz' ); // full path
+			exec( '/srv/http/bash/backuprestore.sh restore' );
+		} else {
+			exit( '-1' );
+		}
+	}
+
+} else if ( isset( $_POST[ 'bookmarks' ] ) ) {
 	$name = $_POST[ 'bookmarks' ];
 	$path = $_POST[ 'path' ];
 	$pathname = str_replace( '/', '|', $path );
@@ -166,19 +179,6 @@ if ( isset( $_POST[ 'bookmarks' ] ) ) {
 	];
 	echo json_encode( $data, JSON_NUMERIC_CHECK );
 	
-} else if ( isset( $_POST[ 'backuprestore' ] ) ) {
-	if ( $_POST[ 'backuprestore' ] === 'backup' ) {
-		exec( '/usr/bin/sudo /srv/http/bash/backuprestore.sh' );
-		echo 'ready';
-	} else {
-		if ( $_FILES[ 'file' ][ 'error' ] == UPLOAD_ERR_OK ) {
-			move_uploaded_file( $_FILES[ 'file' ][ 'tmp_name' ], '/srv/http/data/tmp/backup.xz' ); // full path
-			exec( '/srv/http/bash/backuprestore.sh restore' );
-		} else {
-			exit( '-1' );
-		}
-	}
-
 } else if ( isset( $_POST[ 'getbookmarks' ] ) ) {
 	$files = array_slice( scandir( '/srv/http/data/bookmarks' ), 2 );
 	if ( !count( $files ) ) $data = 0;

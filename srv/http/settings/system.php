@@ -1,5 +1,4 @@
 <?php
-header( 'Set-Cookie: fileDownload=true; path=/' ); // for js fetch download
 
 $hwcode = exec( "/usr/bin/sudo /usr/bin/cat /proc/cpuinfo | grep Revision | rev | cut -c2,3 | rev" );
 $rpiwireless = in_array( $hwcode, [ '0c', '08', '0e', '0d', '11' ] ); // rpi zero w, rpi3, rpi4
@@ -171,7 +170,7 @@ if ( file_exists( '/usr/bin/smbd' ) ) { ?>
 </div>
 <?php } ?>
 
-<heading id="backuprestore" class="status">Backup/Restore Settings &emsp;<i class="fa fa-gear"></i></heading>
+<heading id="backuprestore" class="status">Backup/Restore Settings&emsp;<i class="fa fa-gear"></i></heading>
 <span class="help-block hide">Backup or restore all settings and  MPD database.</span>
 
 <div style="clear: both"></div>

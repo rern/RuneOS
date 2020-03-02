@@ -764,7 +764,7 @@ $( '#backuprestore' ).click( function() {
 			$.post( 'commands.php', { backuprestore: 'backup' }, function( data ) {
 				if ( data === 'ready' ) {
 					fetch( '/data/tmp/backup.xz' )
-						.then( resp => resp.blob() )
+						.then( response => response.blob() )
 						.then( blob => {
 							var url = window.URL.createObjectURL( blob );
 							var a = document.createElement( 'a' );
@@ -773,6 +773,7 @@ $( '#backuprestore' ).click( function() {
 							a.download = 'backup.xz';
 							document.body.appendChild( a );
 							a.click();
+							a.remove();
 							window.URL.revokeObjectURL( url );
 						} ).catch( () => {
 							info( {
