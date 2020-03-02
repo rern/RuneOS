@@ -10,16 +10,6 @@
 # 5. disable wlan power saving
 # 6. check addons updates
 
-# remove wireless in config.txt
-hardwarecode=$( grep Revision /proc/cpuinfo | awk '{print $NF}' )
-case ${hardwarecode: -3:2} in
-	00 | 01 | 02 | 03 | 04 | 09 ) # not rpi 0W, 3, 4
-		sed -i '/### onboard/,/dtoverlay=bcmbt/ d' /boot/config.txt
-		;;
-esac
-sed -i '/^# remove wireless/,/^# remove wireless/ d' /srv/http/bash/startup.sh
-# remove wireless
-
 touch /tmp/startup  # flag for mpd-conf.sh > suppress audio output notification
 
 rm -f /srv/http/data/tmp/airplay* /srv/http/data/system/bootlog
