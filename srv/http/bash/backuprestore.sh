@@ -10,6 +10,8 @@ if (( $# == 0 )); then
 	exit
 fi
 
+systemctl stop mpd mpdidle
+
 dirdisplay=$dirdata/display
 dirsystem=$dirdata/system
 
@@ -163,4 +165,4 @@ dtparam=$audioaplayname
 	echo 'Enable I2S Module' > /tmp/reboot
 fi
 
-systemctl restart mpd mpdidle
+systemctl start mpd mpdidle
