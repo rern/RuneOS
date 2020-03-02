@@ -181,8 +181,8 @@ max_usb_current=1
 
 ### onboard wifi, bluetooth and audio
 #dtoverlay=disable-wifi
-dtoverlay=disable-bt
-#dtoverlay=bcmbt
+#dtoverlay=disable-bt
+dtoverlay=bcmbt
 dtparam=audio=on
 
 ### display
