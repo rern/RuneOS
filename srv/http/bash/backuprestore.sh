@@ -37,30 +37,21 @@ if [[ $( cat $dirsystem/hostname ) != RuneAudio ]]; then
 	hostnamectl set-hostname $hostnamelc
 	sed -i "s/\(.*\[\).*\(\] \[.*\)/\1$hostnamelc\2/" /etc/avahi/services/runeaudio.service
 	sed -i "s/^\(ssid=\).*/\1$hostname/" /etc/hostapd/hostapd.conf &> /dev/null
-	sed -i "s/\(zeroconf_name           \"\).*/\1$hostname\"/" /etc/mpd.conf
 	sed -i "s/\(netbios name = \"\).*/\1+ $hostnamelc +\"/" /etc/samba/smb.conf
 	sed -i "/ExecStart/ s/\\w*$/$hostname/" /etc/systemd/system/wsdd.service
 	sed -i "s/^\(name = \).*/\1$hostname" /etc/shairport-sync.conf &> /dev/null
 	sed -i "s/^\(friendlyname = \).*/\1$hostname/" /etc/upmpdcli.conf &> /dev/null
 fi
-# accesspoint
-if [[ -e /usr/bin/hostapd ]]; then
-	if [[ -e $dirsystem/accesspoint-passphrase ]]; then
-		passphrase=$( cat $dirsystem/accesspoint-passphrase )
-		ip=$( cat $dirsystem/accesspoint-ip )
-		iprange=$( cat $dirsystem/accesspoint-iprange )
-		sed -i -e "/wpa\|rsn_pairwise/ s/^#*//
-			 " -e "s/\(wpa_passphrase=\).*/\1$passphrase/
-			 " /etc/hostapd/hostapd.conf
-		sed -i -e "s/^\(dhcp-range=\).*/\1$iprange/
-			 " -e "s/^\(dhcp-option-force=option:router,\).*/\1$ip/
-			 " -e "s/^\(dhcp-option-force=option:dns-server,\).*/\1$ip/
-			 " /etc/dnsmasq.conf
-	fi
-	[[ -e $dirsystem/accesspoint ]] && systemctl enable --now hostapd
+# chromium
+if [[ -e /usr/bin/chromium ]]; then
+	file=$dirsystem/localbrowser
+	[[ -e $file-cursor ]] && sed -i -e "s/\(-use_cursor \).*/\1yes \&/" /etc/X11/xinit/xinitrc
+	[[ -e $file-overscan ]] && sed -i '/^disable_overscan=1/ s/^#//' /boot/config.txt
+	[[ -e $file-rotate ]] && cp $file-rotatefile /etc/X11/xorg.conf.d/99-raspi-rotate.conf
+	[[ -e $file-screenoff ]] && sed -i 's/\(xset dpms 0 0 \).*/\1'$( cat $file-screenoff )' \&/' /etc/X11/xinit/xinitrc
+	[[ -e $file-zoom ]] && sed -i 's/\(factor=.*\)/\1'$( cat $file-zoom )'/' /etc/X11/xinit/xinitrc
+	[[ -e $file ]] && systemctl enable --now localbrowser
 fi
-# airplay
-[[ -e /usr/bin/shairport-sync && -e $dirsystem/airplay ]] && systemctl enable --now shairport-sync
 # color
 if [[ -e $dirdisplay/color ]]; then
 	. /srv/http/addons-functions.sh
@@ -77,15 +68,21 @@ if ls $dirsystem/fstab-* &> /dev/null; then
 	done
 	mount -a
 fi
-# localbrowser
-if [[ -e /usr/bin/chromium ]]; then
-	file=$dirsystem/localbrowser
-	[[ -e $file-cursor ]] && sed -i -e "s/\(-use_cursor \).*/\1yes \&/" /etc/X11/xinit/xinitrc
-	[[ -e $file-overscan ]] && sed -i '/^disable_overscan=1/ s/^#//' /boot/config.txt
-	[[ -e $file-rotate ]] && cp $file-rotatefile /etc/X11/xorg.conf.d/99-raspi-rotate.conf
-	[[ -e $file-screenoff ]] && sed -i 's/\(xset dpms 0 0 \).*/\1'$( cat $file-screenoff )' \&/' /etc/X11/xinit/xinitrc
-	[[ -e $file-zoom ]] && sed -i 's/\(factor=.*\)/\1'$( cat $file-zoom )'/' /etc/X11/xinit/xinitrc
-	[[ -e $file ]] && systemctl enable --now localbrowser
+# hostapd
+if [[ -e /usr/bin/hostapd ]]; then
+	if [[ -e $dirsystem/accesspoint-passphrase ]]; then
+		passphrase=$( cat $dirsystem/accesspoint-passphrase )
+		ip=$( cat $dirsystem/accesspoint-ip )
+		iprange=$( cat $dirsystem/accesspoint-iprange )
+		sed -i -e "/wpa\|rsn_pairwise/ s/^#*//
+			 " -e "s/\(wpa_passphrase=\).*/\1$passphrase/
+			 " /etc/hostapd/hostapd.conf
+		sed -i -e "s/^\(dhcp-range=\).*/\1$iprange/
+			 " -e "s/^\(dhcp-option-force=option:router,\).*/\1$ip/
+			 " -e "s/^\(dhcp-option-force=option:dns-server,\).*/\1$ip/
+			 " /etc/dnsmasq.conf
+	fi
+	[[ -e $dirsystem/accesspoint ]] && systemctl enable --now hostapd
 fi
 # login
 [[ -e $dirsystem/login ]] && sed -i 's/\(bind_to_address\).*/\1         "127.0.0.1"/' /etc/mpd.conf
@@ -123,9 +120,11 @@ if [[ -e /ust/bin/samba ]]; then
 	[[ -e $file-readonlyusb ]] && sed -i '/path = .*USB/,/\tread only = no/ {/read only/ d}' /etc/samba/smb.conf
 	[[ -e $file ]] && systemctl enable --now nmb smb wsdd
 fi
+# shairport-sync
+[[ -e /usr/bin/shairport-sync && -e $dirsystem/airplay ]] && systemctl enable --now shairport-sync
 # timezone
 [[ -e $dirsystem/timezone ]] && timedatectl set-timezone $( cat $dirsystem/timezone )
-# upnp
+# upmpdcli
 if [[ -e /usr/bin/upmpdcli && -e $dirsystem/upnp ]]; then
 	file=$dirsystem/upnp
 	setUpnp() {
