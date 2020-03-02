@@ -817,7 +817,7 @@ $( '#backuprestore' ).click( function() {
 								info( {
 									  icon        : 'slides'
 									, title       : 'Restore Settings and Database'
-									, message     : '<wh>Warning!</wh><br>File upload failed.'
+									, message     : 'File upload failed.'
 								} );
 						   }
 						}
