@@ -1,4 +1,6 @@
 <?php
+header( 'Set-Cookie: fileDownload=true; path=/' ); // for js fetch download
+
 $hwcode = exec( "/usr/bin/sudo /usr/bin/cat /proc/cpuinfo | grep Revision | rev | cut -c2,3 | rev" );
 $rpiwireless = in_array( $hwcode, [ '0c', '08', '0e', '0d', '11' ] ); // rpi zero w, rpi3, rpi4
 $timezone = exec( "timedatectl | grep zone: | awk '{print $3}'" );

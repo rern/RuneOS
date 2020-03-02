@@ -757,17 +757,30 @@ $( '#journalctl' ).click( function() {
 $( '#backuprestore' ).click( function() {
 	info( {
 		  icon        : 'slides'
-		, title       : 'Backup / Restore Settings'
+		, title       : 'Backup/Restore Settings'
 		, buttonlabel : 'Backup'
-//		, buttoncolor : 'Backup'
+		, buttoncolor : '#0a8c68'
 		, button      : function() {
-			info( {
-				  icon        : 'slides'
-				, title       : 'Backup Settings'
-				, message     : 'Select where to save:'
-				, fileoklabel : 'Backup'
-				, ok          : function() {
-//					$.post( 'commands.php', { bash: '/srv/http/bash/backuprestore.sh backup '+ file } );
+			$.post( 'commands.php', { backuprestore: 'backup' }, function( data ) {
+				if ( data === 'ready' ) {
+					fetch( '/data/tmp/backup.xz' )
+						.then( resp => resp.blob() )
+						.then( blob => {
+							var url = window.URL.createObjectURL( blob );
+							var a = document.createElement( 'a' );
+							a.style.display = 'none';
+							a.href = url;
+							a.download = 'backup.xz';
+							document.body.appendChild( a );
+							a.click();
+							window.URL.revokeObjectURL( url );
+						} ).catch( () => {
+							info( {
+								  icon    : 'slides'
+								, title   : 'Backup Settings and Database'
+								, message : '<wh>Warning!</wh><br>File download failed.'
+							} );
+						} );
 				}
 			} );
 		}
@@ -778,11 +791,21 @@ $( '#backuprestore' ).click( function() {
 				, title       : 'Restore Settings'
 				, message     : 'Select backup file'
 				, fileoklabel : 'Restore'
-//				, filetype    : '.xz'
+				, filetype    : '.xz'
 				, ok          : function() {
+					var file = $( '#infoFileBox' )[ 0 ].files[ 0 ];
+					if ( file.name.split( '.' ).pop() !== 'xz' ) {
+						info( {
+							  icon    : 'slides'
+							, title   : 'Restore Settings'
+							, message : 'File type not <wh>*.xz</wh>'
+						} );
+						return
+					}
+					
 					var formData = new FormData();
 					formData.append( 'backuprestore', 'restore' );
-					formData.append( 'file', $( '#infoFileBox' )[ 0 ].files[ 0 ] );
+					formData.append( 'file', file );
 					$.ajax( {
 						  url         : 'commands.php'
 						, type        : 'POST'
@@ -790,11 +813,11 @@ $( '#backuprestore' ).click( function() {
 						, processData : false  // tell jQuery not to process the data
 						, contentType : false  // tell jQuery not to set contentType
 						, success     : function( data ) {
-						   if ( data ) {
+						   if ( data == -1 ) {
 								info( {
 									  icon        : 'slides'
-									, title       : 'Restore Settings'
-									, message     : '<wh>Warning!</wh><br>'+ data
+									, title       : 'Restore Settings and Database'
+									, message     : '<wh>Warning!</wh><br>File upload failed.'
 								} );
 						   }
 						}
