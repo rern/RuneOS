@@ -754,7 +754,56 @@ $( '#refresh' ).click( function() {
 $( '#journalctl' ).click( function() {
 	$( '#codejournalctl' ).hasClass( 'hide' ) ? getJournalctl() : $( '#codejournalctl' ).addClass( 'hide' );
 } );
-
+$( '#backuprestore' ).click( function() {
+	info( {
+		  icon        : 'slides'
+		, title       : 'Backup / Restore Settings'
+		, buttonlabel : 'Backup'
+//		, buttoncolor : 'Backup'
+		, button      : function() {
+			info( {
+				  icon        : 'slides'
+				, title       : 'Backup Settings'
+				, message     : 'Select where to save:'
+				, fileoklabel : 'Backup'
+				, ok          : function() {
+//					$.post( 'commands.php', { bash: '/srv/http/bash/backuprestore.sh backup '+ file } );
+				}
+			} );
+		}
+		, oklabel     : 'Restore'
+		, ok          : function() {
+			info( {
+				  icon        : 'slides'
+				, title       : 'Restore Settings'
+				, message     : 'Select backup file'
+				, fileoklabel : 'Restore'
+//				, filetype    : '.xz'
+				, ok          : function() {
+					var formData = new FormData();
+					formData.append( 'backuprestore', 'restore' );
+					formData.append( 'file', $( '#infoFileBox' )[ 0 ].files[ 0 ] );
+					$.ajax( {
+						  url         : 'commands.php'
+						, type        : 'POST'
+						, data        : formData
+						, processData : false  // tell jQuery not to process the data
+						, contentType : false  // tell jQuery not to set contentType
+						, success     : function( data ) {
+						   if ( data ) {
+								info( {
+									  icon        : 'slides'
+									, title       : 'Restore Settings'
+									, message     : '<wh>Warning!</wh><br>'+ data
+								} );
+						   }
+						}
+					} );
+				}
+			} );
+		}
+	} );
+} );
 function getJournalctl() {
 	if ( $( '#codejournalctl' ).text() ) {
 		$( '#codejournalctl' ).removeClass( 'hide' );

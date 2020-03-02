@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $1 == backup ]]; then
-	bsdtar -czf "$2" -C /srv/http data
+	bsdtar -czf /srv/http/data/tmp/backup.xz -C /srv/http data
 	exit
 fi
 

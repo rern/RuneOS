@@ -166,6 +166,20 @@ if ( isset( $_POST[ 'bookmarks' ] ) ) {
 	];
 	echo json_encode( $data, JSON_NUMERIC_CHECK );
 	
+} else if ( isset( $_POST[ 'backuprestore' ] ) ) {
+	$backupfile = '/srv/http/data/tmp/backup.xz';
+	if ( $_POST[ 'backuprestore' ] === 'backup' ) {
+		exec( "/srv/http/bash/backuprestore.sh backup backupfile" );
+		// push backup file
+	} else {
+//		if ( $_FILES[ 'file' ][ 'type' ] !== 'xz' ) exit( 'File type not *.xz' );
+		if ( $_FILES[ 'file' ][ 'error' ] != UPLOAD_ERR_OK ) exit( 'Upload file failed.' );
+		
+		move_uploaded_file( $_FILES[ 'file' ][ 'tmp_name' ], $backupfile );
+//		exec( "/srv/http/bash/backuprestore.sh restore $file" );
+//		unlink( $backupfile );
+	}
+
 } else if ( isset( $_POST[ 'getbookmarks' ] ) ) {
 	$files = array_slice( scandir( '/srv/http/data/bookmarks' ), 2 );
 	if ( !count( $files ) ) $data = 0;

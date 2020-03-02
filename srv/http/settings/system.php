@@ -168,4 +168,8 @@ if ( file_exists( '/usr/bin/smbd' ) ) { ?>
 		<br>(Note: Disable URL by Name will also disable AirPlay.)</span>
 </div>
 <?php } ?>
+
+<heading id="backuprestore" class="status">Backup/Restore Settings &emsp;<i class="fa fa-gear"></i></heading>
+<span class="help-block hide">Backup or restore all settings and  MPD database.</span>
+
 <div style="clear: both"></div>

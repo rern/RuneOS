@@ -28,6 +28,7 @@ info( {                                     // default
 	fileoklabel   : 'LABEL'                 // 'OK'           (upload button label)
 	fileokdisable : '1                      // (enable)       (disable file button after select)
 	filetype      : 'TYPE'                  // (none)         (filter and verify filetype)
+	                                                          ( var file = $( '#infoFileBox' )[ 0 ].files[ 0 ]; )
 	
 	radio         : { LABEL: 'VALUE', ... } //                ( var value = $( '#infoRadio input[ type=radio ]:checked' ).val(); )
 	checked       : N                       // 0              (pre-select input index)
@@ -132,7 +133,9 @@ function infoReset() {
 	$( '#infoBox, .infolabel, .infoinput' ).css( 'width', '' );
 	$( '.filebtn, .infobtn' ).css( 'background', '' ).off( 'click' );
 	$( '#infoIcon' ).removeAttr( 'class' );
-	$( '#infoFileBox' ).removeAttr( 'accept' );
+	$( '#infoFileBox' ).val( '' ).removeAttr( 'accept' );
+	$( '#infoFilename' ).empty();
+	$( '#infoFileLabel' ).addClass( 'infobtn-primary' )
 	$( '#infoOk, #infoFileLabel' ).removeClass( 'disabled' );
 	$( '.extrabtn' ).remove();
 	$( '#loader' ).addClass( 'hide' ); // for 'X' click
@@ -211,7 +214,11 @@ function info( O ) {
 	}
 	$( '#infoX, #infoCancel' ).click( function() {
 		$( '#infoOverlay' ).addClass( 'hide' );
-		if ( 'cancel' in O && typeof O.cancel === 'function' ) O.cancel();
+		if ( 'cancel' in O && typeof O.cancel === 'function' ) {
+			O.cancel();
+		} else {
+			infoReset();
+		}
 	} );
 	
 	if ( 'content' in O ) {
@@ -308,6 +315,7 @@ function info( O ) {
 				}
 				
 				$( '#infoOk' ).removeClass( 'hide' );
+				$( '#infoFileLabel' ).removeClass( 'infobtn-primary' )
 				if ( 'fileokdisable' in O ) $( '#infoFileLabel' ).addClass( 'disabled' );
 				$( '#infoFilename' ).html( '&ensp;'+ filename );
 			} );

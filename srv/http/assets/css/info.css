@@ -31,15 +31,16 @@ input::-moz-focus-inner { /* dotted outline */
 	font-size: 14px;
 	text-align: center;
 	color: #e0e7ee !important;
-	cursor: pointer;
 	background: -webkit-radial-gradient(50% -50%, 160% 200%, hsla(0,0%,100%,.3) 50%, hsla(0,0%,100%,0) 55%); /* button highlight - last % for anti-alias edge*/
 	background: radial-gradient(160% 100% at 50% 0% ,hsla(0,0%,100%,.3) 50%,hsla(0,0%,100%,0) 55%); /* (Width% Heigth% at H-center_offset% V-center_offset%, hsla(0,0%,100%,1st-T) 1st-area%, hsla(0,0%,100%,2nd-T) 2nd-area%)) */
+	background-color: hsl(200,3%,30%)/*cg*/;
 	box-shadow: 2px 2px 3px 1px #000000;  /*  V-offfset, H-Offset, Blur width, Shadow width , Color */
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none;   /* Safari */
 	-moz-user-select: none;      /* Firefox */
 	-ms-user-select: none;       /* Internet Explorer and Edge */
 	user-select: none;           /* Non-prefixed version, currently supported by Chrome and Opera */
+	cursor: pointer;
 }
 .infobtn-primary {
 	background-color: hsl(200,100%,40%)/*c*/;
