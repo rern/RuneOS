@@ -123,13 +123,15 @@ pacman -S --noconfirm --needed $packages $features
 
 echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
-wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O /tmp/packages.zip
-wget -q --show-progress https://github.com/rern/RuneAudio-Re2/archive/$srvbranch.zip -O /tmp/ui.zip
+# customized packages
+wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip
+bsdtar --strip 1 -C / -xvf *.zip
+rm *.zip
 
-mkdir -p /tmp/root
-bsdtar --strip 1 -C /tmp/root -xvf /tmp/*.zip
-rm /tmp/*.zip /tmp/root/*.*
-mv /tmp/root/* /
+# web interface
+wget -q --show-progress https://github.com/rern/RuneAudio-Re2/archive/$srvbranch.zip
+bsdtar --strip 1 --exclude=./etc --exclude=./usr -C / -xvf *.zip
+rm *.zip /*.*
 
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chown -R http:http /srv/http
