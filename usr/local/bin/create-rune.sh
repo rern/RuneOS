@@ -1,7 +1,7 @@
 #!/bin/bash
 
 version=e2
-srvbranch=UPDATE ############### change UPDATE to master once merge
+srvbranch=UPDATE ############### change UPDATE to master once merged
 
 trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
