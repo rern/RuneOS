@@ -1,12 +1,18 @@
 ### Create image file
 
 - Once start RuneAudio+R successfully
-- Optional: remove all connected Wi-Fi data
+
+- Optional for default image:
 ```sh
+# remove mpd database (auto rescan on initial startup)
+rm /srv/http/data/mpd/mpd.db
+
+# remove all connected Wi-Fi data
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 ```
 - Power off or CLI: `shutdown -h now`
+
 - Move micro SD card (and the USB drive, if `ROOT` partition is in USB drive) to PC
 - Resize `ROOT` partition to smallest size possible with **GParted** app (smaller the size, less time to write image)
 	- menu: GParted > Devices > /dev/sd?
