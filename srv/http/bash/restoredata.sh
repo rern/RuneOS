@@ -2,10 +2,11 @@
 
 dirdata=/srv/http/data
 dirdisplay=$dirdata/display
+dirsystem=$dirdata/system
 
 systemctl stop mpd mpdidle
 
-version=$( cat $dirdata/system/version )
+version=$( cat $dirsystem/version )
 
 if [[ $1 == restore ]]; then
 	backupfile=$dirdata/tmp/backup.xz

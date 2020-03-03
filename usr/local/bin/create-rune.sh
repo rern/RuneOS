@@ -125,6 +125,14 @@ echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip
 bsdtar xvf *.zip --strip 1 --exclude=.* --exclude=*.md -C /
 
+# ui
+# NOTE: 
+#  - uncomment after master+UPDATE merged
+#  - delete RuneOS/srv
+#wget -qN https://github.com/rern/RuneAudio-Re2/archive/master.zip
+#bsdtar --strip 1 --exclude=*.* --exclude=./etc --exclude=./usr -C / -xf master.zip
+#rm master.zip
+
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chown -R http:http /srv/http
 
@@ -228,16 +236,15 @@ systemctl enable $startup
 # data - settings directories
 /srv/http/bash/resetdata.sh
 
+# addons
+wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P /srv/http
+echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
+
 # remove cache and files
 rm *.zip /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
-
-# updates
-#wget -qN https://github.com/rern/RuneAudio-Re2/raw/master/install.sh -O - | sh
-#wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P /srv/http
-#echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
 
 dialog --colors \
 	--msgbox "\n      
