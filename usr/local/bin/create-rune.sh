@@ -123,14 +123,15 @@ pacman -S --noconfirm --needed $packages $features
 
 echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
+# customized packages
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip
-bsdtar xvf *.zip --strip 1 --exclude=.* --exclude=*.md -C /
-rm master.zip
+bsdtar --strip 1 --exclude=*.* -C / -xvf *.zip
+rm *.zip
 
-# ui
-wget -qN https://github.com/rern/RuneAudio-Re2/archive/$srvbranch.zip
-bsdtar --strip 1 --exclude=*.* --exclude=./etc --exclude=./usr -C / -xf $srvbranch.zip
-rm $srvbranch.zip
+# web interface
+wget -q --show-progress https://github.com/rern/RuneAudio-Re2/archive/$srvbranch.zip
+bsdtar --strip 1 --exclude=*.* --exclude=./etc --exclude=./usr -C / -xvf *.zip
+rm *.zip
 
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chown -R http:http /srv/http
@@ -240,7 +241,7 @@ wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P 
 echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
 
 # remove cache and files
-rm *.zip /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
+rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
