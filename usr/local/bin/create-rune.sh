@@ -233,8 +233,6 @@ mkdir -p "$dirdata"
 for dir in addons bookmarks coverarts display gpio lyrics mpd playlists sampling system tmp webradios; do
 	mkdir -p "$dirdata/$dir"
 done
-# addons
-echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
 # display
 playback="bars buttons cover time volume"
 library="album artist albumartist composer coverart genre nas sd usb webradio"
@@ -266,6 +264,11 @@ rm *.zip /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
+
+# updates
+#wget -qN https://github.com/rern/RuneAudio-Re2/raw/master/install.sh -O - | sh
+#wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P /srv/http
+#echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
 
 dialog --colors \
 	--msgbox "\n      
