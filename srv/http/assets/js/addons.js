@@ -57,7 +57,7 @@ $( '.boxed-group .btn' ).on( 'taphold', function () {
 			, radiohtml : '<label><input type="radio" name="inforadio" value="1" checked>&ensp;Rollback to previous version</label><br>'
 						 +'<label><input type="radio" name="inforadio" value="Branch">&ensp;Tree # / Branch ...</label>'
 			, ok        : function() {
-				if ( $( '#infoRadio input[type=radio]:checked').val() == 1 ) {
+				if ( $( '#infoRadio input:checked').val() == 1 ) {
 					opt = rollback +' -b';
 					formtemp();
 				} else {
@@ -242,7 +242,7 @@ function getoptions() {
 				, radio   : ojson.list
 				, checked : ojson.checked
 				, ok      : function() {
-					var radiovalue = $( '#infoRadio input[ type=radio ]:checked' ).val();
+					var radiovalue = $( '#infoRadio input:checked' ).val();
 					opt += "'"+ radiovalue +"' ";
 					sendcommand();
 				}

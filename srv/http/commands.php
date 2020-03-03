@@ -94,16 +94,21 @@ $dirwebradios = '/srv/http/data/webradios';
 $format = '%title%^^%time%^^%artist%^^%album%^^%file%^^%genre%^^%composer%^^%albumartist%';
 
 if ( isset( $_POST[ 'backuprestore' ] ) ) {
-	if ( $_POST[ 'backuprestore' ] === 'backup' ) {
-		exec( '/usr/bin/sudo /srv/http/bash/backuprestore.sh' );
+	$type = $_POST[ 'backuprestore' ];
+	$backupfile = '/srv/http/data/tmp/backup.xz';
+	$restorescript = '/usr/bin/sudo /srv/http/bash/restoredata.sh';
+	if ( $type === 'backup' ) {
+		exec( "$sudo/bsdtar --exclude './tmp/*.*' -czf $backupfile -C /srv/http data" );
 		echo 'ready';
-	} else {
+	} else if ( $type === 'restore' ) {
 		if ( $_FILES[ 'file' ][ 'error' ] == UPLOAD_ERR_OK ) {
-			move_uploaded_file( $_FILES[ 'file' ][ 'tmp_name' ], '/srv/http/data/tmp/backup.xz' ); // full path
-			exec( '/srv/http/bash/backuprestore.sh restore' );
+			move_uploaded_file( $_FILES[ 'file' ][ 'tmp_name' ], $backupfile ); // full path
+			exec( "$restorescript restore" );
 			$reboot = @file_get_contents( '/tmp/reboot' );
 			echo $reboot ?: 'restored';
 		}
+	} else {
+		exec( "$restorescript $type" );
 	}
 
 } else if ( isset( $_POST[ 'bookmarks' ] ) ) {

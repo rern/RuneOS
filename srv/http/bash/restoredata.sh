@@ -1,31 +1,25 @@
 #!/bin/bash
 
 dirdata=/srv/http/data
-backupfile=$dirdata/tmp/backup.xz
-
-if (( $# == 0 )); then
-	rm $backupfile
-	bsdtar -czf /tmp/backup.xz -C /srv/http data
-	mv /tmp/backup.xz $backupfile
-	exit
-fi
+dirdisplay=$dirdata/display
 
 systemctl stop mpd mpdidle
 
-dirdisplay=$dirdata/display
-dirsystem=$dirdata/system
-
 version=$( cat $dirdata/system/version )
 
-rm -rf $dirdata
-if [[ -d $2 ]]; then
-	cp -r "2" /srv/http
-	# set permissions and ownership
-	chown -R http:http "$dirdata"
-	chown -R mpd:audio "$dirdata/mpd"
-else
+if [[ $1 == restore ]]; then
+	backupfile=$dirdata/tmp/backup.xz
+	rm -rf $dirdata
 	bsdtar -xpf $backupfile -C /srv/http
 	rm $backupfile
+elif [[ $1 == reset ]]; then # reset to default
+	mv -f $dirdata/addons /tmp
+	rm -rf $dirdata
+	/srv/http/bash/resetdata.sh
+	mv -f /tmp/addons $dirdata
+else # from copied data
+	chown -R http:http "$dirdata"
+	chown -R mpd:audio "$dirdata/mpd"
 fi
 # version
 echo $version > $dirsystem/version
@@ -162,7 +156,7 @@ if grep -q "$audiooutput.*=>.*$audioaplayname" /srv/http/settings/system-i2smodu
 dtparam=i2s=on\
 dtparam=$audioaplayname
 	" /boot/config.txt
-	echo 'Enable I2S Module' | tee -a /tmp/reboot
+	echo 'Enable I2S Module' >> /tmp/reboot
 fi
 
 systemctl start mpd mpdidle

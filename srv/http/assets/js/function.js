@@ -288,7 +288,7 @@ function dataParse( data, path ) {
 	var currentpath = '';
 	G.currentpath = path;
 	G.albumartist = '';
-	var coverart = 'coverart' in data[ data.length - 1 ];
+	var coverart = 0;
 	$( '#db-index li' ).not( ':eq( 0 )' ).addClass( 'gr' );
 	if ( data[ 0 ].directory || data[ 0 ].file || data[ 0 ].playlist ) {
 		var arraydir = [];
@@ -326,6 +326,7 @@ function dataParse( data, path ) {
 			} else if ( 'playlist' in value ) {
 				arraypl.push( value );
 			} else if ( 'coverart' in value && !arraydir.length ) {
+				coverart = 1;
 				var browsemode = G.dbbackdata.length ? G.dbbackdata[ 0 ].browsemode : '';
 				var artistmode = [ 'artist', 'composer', 'genre' ].indexOf( browsemode ) !== -1 ? 1 : 0;
 				var data0 = data[ 0 ];
@@ -389,19 +390,17 @@ function dataParse( data, path ) {
 	$( '#db-webradio-new' ).toggleClass( 'hide', path !== 'Webradio' );
 	$( '#db-back' ).removeClass( 'hide' );
 	// breadcrumb directory path link
-	var iO = '<i class="fa fa-';
-	var iC = '"></i>';
 	var iconName = {
-		  LocalStorage  : iO +'microsd'+ iC
-		, USB           : iO +'usbdrive'+ iC
-		, NAS           : iO +'network'+ iC
-		, album         : [ iO +'album'+ iC,       'ALBUM' ]
-		, artist        : [ iO +'artist'+ iC,      'ARTIST' ]
-		, albumartist   : [ iO +'albumartist'+ iC, 'ALBUM ARTIST' ]
-		, coverart      : [ iO +'coverart'+ iC,    'COVERART' ]
-		, genre         : [ iO +'genre'+ iC,       'GENRE' ]
-		, composer      : [ iO +'composer'+ iC,    'COMPOSER' ]
-		, composeralbum : [ iO +'composer'+ iC,    'COMPOSER' ]
+		  LocalStorage  : 'microsd'
+		, USB           : 'usbdrive'
+		, NAS           : 'network'
+		, album         : [ 'album',       'ALBUM' ]
+		, artist        : [ 'artist',      'ARTIST' ]
+		, albumartist   : [ 'albumartist', 'ALBUM ARTIST' ]
+		, coverart      : [ 'coverart',    'COVERART' ]
+		, genre         : [ 'genre',       'GENRE' ]
+		, composer      : [ 'composer',    'COMPOSER' ]
+		, composeralbum : [ 'composer',    'COMPOSER' ]
 	}
 	var mode = {
 		  album         : 'Album'
@@ -419,17 +418,11 @@ function dataParse( data, path ) {
 		}
 		$( '#db-currentpath .lipath' ).text( path ); // for back navigation
 		$( '#db-currentpath' ).addClass( 'noellipse' );
-		if ( [ 'Artist', 'Album', 'AlbumArtist', 'Composer', 'Genre' ].indexOf( G.currentpath ) === -1
-			&& !coverart
-		) {
-			currentpath = '<gr>&ensp;·&ensp;</gr><wh>'+ G.currentpath +'</wh>';
-		}
-		// fix: 1 li in genre list
-		if ( $( '.licover' ).length ) {
-			var browsemode = browsemode || G.dbbrowsemode;
-			var pathhtml = iconName[ browsemode ][ 0 ] +' <a id="rootpath" data-path="'+ mode[ G.browsemode ] +'">'+ iconName[ browsemode ][ 1 ] + currentpath +'</a>';
-		} else {
-			var pathhtml = iconName[ G.browsemode ][ 0 ] +' <a id="rootpath" data-path="'+ mode[ G.browsemode ] +'">'+ iconName[ G.browsemode ][ 1 ] + currentpath +'</a>';
+		var pathhtml = '<i class="fa fa-'+ iconName[ G.dbbrowsemode ][ 0 ] +'"></i> <a id="rootpath" data-path="'+ mode[ G.browsemode ] +'">'+ iconName[ G.dbbrowsemode ][ 1 ];
+		if ( [ 'Artist', 'Album', 'AlbumArtist', 'Composer', 'Genre' ].indexOf( G.currentpath ) === -1 ) {
+			pathhtml += '<gr>&ensp;·&ensp;</gr><wh>'
+						  + ( coverart ? G.dbbackdata[ G.dbbackdata.length - 2 ].path : G.currentpath )
+						  +'</wh></a>';
 		}
 		$( '#db-currentpath span' ).html( pathhtml );
 		$( '#artistalbum' ).toggleClass( 'hide', coverart );
@@ -448,7 +441,7 @@ function dataParse( data, path ) {
 			$( '#db-currentpath .lipath' ).text( 'Webradio' );
 			$( '#db-currentpath span' ).html( '<i class="fa fa-webradio"></i> <a>WEBRADIOS</a>' );
 		} else {
-			var folderCrumb = iconName[ folderRoot ];
+			var folderCrumb = '<i class="fa fa-'+ iconName[ folderRoot ] +'"></i>';
 			var folderPath = '';
 			var ext = '';
 			var ilength = folder.length;
@@ -934,7 +927,7 @@ function menuPackage( $this, $target ) {
 			, buttonlabel : '<i class="fa fa-stop"></i>Stop'
 			, buttoncolor : '#bb2828'
 			, button      : function() {
-				var checked = $( '#infoCheckBox input[ type=checkbox ]' ).prop( 'checked' ) ? 1 : 0;
+				var checked = $( '#infoCheckBox input' ).prop( 'checked' ) ? 1 : 0;
 				$.post( 'commands.php', { 
 					  bash: [
 						  'systemctl stop '+ id
@@ -948,7 +941,7 @@ function menuPackage( $this, $target ) {
 					.find( 'img' ).removeClass( 'on' );
 			}
 			, ok          : function() {
-				var checked = $( '#infoCheckBox input[ type=checkbox ]' ).prop( 'checked' ) ? 1 : 0;
+				var checked = $( '#infoCheckBox input' ).prop( 'checked' ) ? 1 : 0;
 				$.post( 'commands.php', { bash: [
 					  'systemctl '+ ( checked ? 'enable ' : 'disable ' ) + id
 					, 'curl -s -X POST "http://127.0.0.1/pub?id=notify" '
@@ -1118,7 +1111,7 @@ function playlistInsertTarget() {
 			G.pladd = {};
 		}
 		, ok      : function() {
-			var target = $( '#infoRadio input[ type=radio ]:checked' ).val();
+			var target = $( '#infoRadio input:checked' ).val();
 			G.pladd.select = target;
 			if ( target !== 'select' ) {
 				playlistInsert( target );

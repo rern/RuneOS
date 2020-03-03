@@ -755,9 +755,13 @@ $( '#journalctl' ).click( function() {
 	$( '#codejournalctl' ).hasClass( 'hide' ) ? getJournalctl() : $( '#codejournalctl' ).addClass( 'hide' );
 } );
 $( '#backuprestore' ).click( function() {
+	var icon = 'sliders';
+	var restoretitle = 'Restore Settings';
+	var backuptitle = restoretitle.replace( 'Restore', 'Backup' );
+	var maintitle = 'Backup/'+ restoretitle;
 	info( {
-		  icon        : 'slides'
-		, title       : 'Backup/Restore Settings'
+		  icon        : icon
+		, title       : maintitle
 		, buttonlabel : 'Backup'
 		, buttoncolor : '#0a8c68'
 		, button      : function() {
@@ -777,8 +781,8 @@ $( '#backuprestore' ).click( function() {
 							window.URL.revokeObjectURL( url );
 						} ).catch( () => {
 							info( {
-								  icon    : 'slides'
-								, title   : 'Backup Settings and Database'
+								  icon    : icon
+								, title   : backuptitle
 								, message : '<wh>Warning!</wh><br>File download failed.'
 							} );
 						} );
@@ -788,17 +792,29 @@ $( '#backuprestore' ).click( function() {
 		, oklabel     : 'Restore'
 		, ok          : function() {
 			info( {
-				  icon        : 'slides'
-				, title       : 'Restore Settings'
-				, message     : 'Select backup file'
+				  icon        : icon
+				, title       : restoretitle
+				, message     : 'Restore from:'
+				, radio       : {
+					  'Backup file <code>*.xz</code>'         : 'restore'
+					, 'Directory <code>/srv/http/data</code>' : 'directory'
+					, 'Reset to default'                      : 'reset'
+				}
+				, checked     : 'restore'
 				, fileoklabel : 'Restore'
 				, filetype    : '.xz'
 				, ok          : function() {
+					var checked = $( '#infoRadio input:checked' ).val();
+					if ( checked !== 'restore' ) { // directly restore from directory
+						$.post( 'commands.php', { backuprestore: checked } );
+						return
+					}
+					
 					var file = $( '#infoFileBox' )[ 0 ].files[ 0 ];
 					if ( file.name.split( '.' ).pop() !== 'xz' ) {
 						info( {
-							  icon    : 'slides'
-							, title   : 'Restore Settings'
+							  icon    : icon
+							, title   : restoretitle
 							, message : 'File type not <wh>*.xz</wh>'
 						} );
 						return
@@ -811,15 +827,15 @@ $( '#backuprestore' ).click( function() {
 						  url         : 'commands.php'
 						, type        : 'POST'
 						, data        : formData
-						, processData : false  // tell jQuery not to process the data
-						, contentType : false  // tell jQuery not to set contentType
+						, processData : false  // no - process the data
+						, contentType : false  // no - contentType
 						, success     : function( data ) {
 							if ( data ) {
 								if ( data !== 'restored' ) G.reboot = data.split( '\n' );
 							} else {
 								info( {
-									  icon        : 'slides'
-									, title       : 'Restore Settings and Database'
+									  icon        : icon
+									, title       : restoretitle
 									, message     : 'File upload failed.'
 								} );
 							}

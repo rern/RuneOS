@@ -221,7 +221,7 @@ $( '.settings' ).click( function( e ) {
 			, ok      : function() {
 				G.status.updating_db = 1;
 				setButtonUpdate();
-				$.post( 'commands.php', { bash: 'mpc '+ $( '#infoRadio input[ type=radio ]:checked' ).val() } );
+				$.post( 'commands.php', { bash: 'mpc '+ $( '#infoRadio input:checked' ).val() } );
 			}
 		} );
 	}

@@ -30,17 +30,18 @@ info( {                                     // default
 	filetype      : 'TYPE'                  // (none)         (filter and verify filetype)
 	                                                          ( var file = $( '#infoFileBox' )[ 0 ].files[ 0 ]; )
 	
-	radio         : { LABEL: 'VALUE', ... } //                ( var value = $( '#infoRadio input[ type=radio ]:checked' ).val(); )
+	radio         : { LABEL: 'VALUE', ... } //                ( var value = $( '#infoRadio input:checked' ).val(); )
 	checked       : N                       // 0              (pre-select input index)
 	
 	select        : { LABEL: 'VALUE', ... } //                ( var value = $( '#infoSelectBox').val(); )
 	selectlabel   : 'LABEL'                 // (blank)        (select input label)
 	checked       : N                       // 0              (pre-select option index)
 	
-	checkbox      : { LABEL: 'VALUE', ... } //                ( $( '#infoCheckBox input[ type=checkbox ]:checked' ).each( function() {
-	                                                                var value = this.value;
+	checkbox      : { LABEL: 'VALUE', ... } //                ( var value = [];
+	                                                            $( '#infoCheckBox input:checked' ).each( function() {
+	                                                                value.push( this.value );
 	                                                            } ); )
-	checked       : [ N, ... ]              // (none)         (pre-select array input indexes)
+	checked       : [ N, ... ]              // (none)         (pre-select array input indexes - single can be  N)
 	
 	oklabel       : 'LABEL'                 // 'OK'           (ok button label)
 	okcolor       : 'COLOR'                 // '#0095d8'      (ok button color)
@@ -329,7 +330,9 @@ function info( O ) {
 					html += '<label><input type="checkbox" value="'+ val.toString().replace( /"/g, '&quot;' ) +'">&ensp;'+ key +'</label><br>';
 				} );
 			}
-			renderOption( $( '#infoCheckBox' ), html, 'checked' in O ? O.checked : '' );
+			var checked = 'checked' in O ? O.checked : '';
+			if ( typeof checked !== 'object' ) checked = [ checked ];
+			renderOption( $( '#infoCheckBox' ), html, checked );
 		}
 		if ( 'radio' in O ) {
 			if ( typeof O.radio !== 'object' ) {
