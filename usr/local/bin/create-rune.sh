@@ -176,7 +176,7 @@ sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit tes
 if [[ -e /usr/bin/chromium ]]; then
 	# boot splash
 	sed -i 's/\(console=\).*/\1tty3 plymouth.enable=0 quiet loglevel=0 logo.nologo vt.global_cursor_default=0/' /boot/cmdline.txt
-	ln -s /srv/http/assets/img/{NORMAL,start}.png
+	ln -sf /srv/http/assets/img/{NORMAL,start}.png
 	# login prompt - remove
 	systemctl disable getty@tty1
 	# fix permission for rotate file
