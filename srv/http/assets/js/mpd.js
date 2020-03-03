@@ -407,11 +407,11 @@ function getMpdconf() {
 }
 function getStatus() {
 	$.post( 'commands.php', { bash: 'systemctl status mpd mpdidle'
-								   +' | sed "s|\\(active (running)\\)|<grn>\1</grn>|;'
-								   +'s|\\(inactive (dead)\\)|<red>\1</ed>|"'
+								   +' | sed "s|\\(active (running)\\)|<grn>\\1</grn>|;'
+								   +'s|\\(inactive (dead)\\)|<red>\\1</ed>|"'
 		}, function( status ) {
 		$( '#codestatus' )
-			.html( data.join( '<br>' ) )
+			.html( status.join( '<br>' ) )
 			.removeClass( 'hide' );
 //		$( 'html, body' ).scrollTop( $( '#status' ).offset().top - 60 );
 	}, 'json' );
