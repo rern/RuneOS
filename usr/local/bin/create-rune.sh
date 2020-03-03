@@ -1,6 +1,7 @@
 #!/bin/bash
 
 version=e2
+srvbranch=UPDATE ############### change UPDATE to master once merge
 
 trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
@@ -127,10 +128,9 @@ bsdtar xvf *.zip --strip 1 --exclude=.* --exclude=*.md -C /
 rm master.zip
 
 # ui
-############### NOTE: change UPDATE.zip to master.zip after merge
-wget -qN https://github.com/rern/RuneAudio-Re2/archive/UPDATE.zip
-bsdtar --strip 1 --exclude=*.* --exclude=./etc --exclude=./usr -C / -xf UPDATE.zip
-rm UPDATE.zip
+wget -qN https://github.com/rern/RuneAudio-Re2/archive/$srvbranch.zip
+bsdtar --strip 1 --exclude=*.* --exclude=./etc --exclude=./usr -C / -xf $srvbranch.zip
+rm $srvbranch.zip
 
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chown -R http:http /srv/http
