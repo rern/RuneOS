@@ -2,7 +2,7 @@
 
 - Once start RuneAudio+R successfully
 
-- Optional for default image:
+	- Optional for default image:
 ```sh
 # remove mpd database (auto rescan on initial startup)
 rm /srv/http/data/mpd/mpd.db
