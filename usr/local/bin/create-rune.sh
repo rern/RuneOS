@@ -125,7 +125,7 @@ echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
 # customized packages
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip
-bsdtar --strip 1 --exclude=*.* -C / -xvf *.zip
+bsdtar --strip 1 --exclude=.* --exclude=*.md -C / -xvf *.zip
 rm *.zip
 
 # web interface
