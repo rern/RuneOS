@@ -5,7 +5,7 @@ srvbranch=UPDATE ############### change UPDATE to master once merge
 
 trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
-hwcode=$( cat /proc/cpuinfo | grep Revision | tail -c 4 | cut -c 1-2 )
+hwcode=$( grep Revision /proc/cpuinfo | tail -c 4 | cut -c1-2 )
 [[ $hwcode =~ ^(00|01|02|03|09|0c)$ ]] && rpi01=1
 [[ $hwcode =~ ^(00|01|02|03|04|09)$ ]] && nowireless=1
 
