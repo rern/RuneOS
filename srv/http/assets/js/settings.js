@@ -5,16 +5,18 @@ var intervalscan;
 var page = location.href.split( '=' ).pop();
 if ( page === 'credits' ) { // no script file to get reboot data for credits page
 	$.post( 'commands.php', { bash: 'cat /srv/http/data/tmp/reboot' }, function( reboot ) {
-		G.reboot = reboot !== -1 ? reboot[ 0 ].split( '<br>' ) : [];
+		G.reboot = reboot !== -1 ? reboot[ 0 ].split( '\n' ) : [];
 	}, 'json' );
 }
 $( '#close' ).click( function() {
+	
 	if ( G.reboot.length ) {
 		var cmdpower = [ 'rm -f /srv/http/data/tmp/reboot' ];
 		if ( $( '#gpio' ).length ) cmdpower.push( '/usr/local/bin/gpiooff.py' );
 		cmdpower.push(
 			  '/usr/local/bin/ply-image /srv/http/assets/img/splash.png'
 			, 'mount | grep -q /mnt/MPD/NAS && umount -l /mnt/MPD/NAS/* &> /dev/null && sleep 3'
+			, 'rm -f /srv/http/data/tmp/*'
 			, 'shutdown -r now'
 		);
 		info( {
@@ -23,8 +25,8 @@ $( '#close' ).click( function() {
 			, message : 'Reboot required for:'
 					   +'<br><br><w>'+ G.reboot.join( '<br>' ) +'</w>'
 			, cancel  : function() {
-				G.reboot = '';
-				$.post( 'commands.php', { bash: 'rm -f /srv/http/data/tmp/reboot' } );
+				G.reboot = [];
+				$.post( 'commands.php', { bash: 'rm -f /srv/http/data/tmp/{reboot,backup.xz}' } );
 			}
 			, ok      : function() {
 				$.post( 'commands.php', { bash: cmdpower } );

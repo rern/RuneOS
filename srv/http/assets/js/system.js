@@ -113,7 +113,7 @@ $( '#i2smodule' ).on( 'change', function() {
 			, "echo '"+ audioaplayname +"' > "+ dirsystem +"/audio-aplayname"
 			, 'rm -f '+ dirsystem +'/onboard-audio'
 			, "sed -i '/I&#178;S Module/ d' "+ filereboot
-			, "echo '"+ G.reboot.join( '<br>' ) +"' > "+ filereboot
+			, "echo -e '"+ G.reboot.join( '\n' ) +"' > "+ filereboot
 			, curlPage( 'system' )
 		] }, resetlocal );
 	} else {
@@ -135,7 +135,7 @@ $( '#i2smodule' ).on( 'change', function() {
 			, "echo 'bcm2835 ALSA-1' > "+ dirsystem +"/audio-aplayname"
 			, "echo 1 > "+ dirsystem +"/onboard-audio"
 			, "sed -i '/I&#178;S Module/ d' "+ filereboot
-			, "echo '"+ G.reboot +"' > "+ filereboot
+			, "echo -e '"+ G.reboot.join( '\n' ) +"' > "+ filereboot
 			, curlPage( 'system' )
 		] }, resetlocal );
 	}
@@ -258,7 +258,7 @@ $( '#onboardaudio' ).click( function() {
 		  "sed -i 's/dtparam=audio=.*/dtparam=audio="+ ( onboardaudio ? 'on' : 'off' ) +"/' /boot/config.txt"
 		, ( onboardaudio ? 'echo 1 > ' : 'rm -f ' ) + dirsystem +'/onboard-audio'
 		, "sed -i '/on-board audio/ d' "+ filereboot
-		, "echo '"+ G.reboot.join( '<br>' ) +"' > "+ filereboot
+		, "echo -e '"+ G.reboot.join( '\n' ) +"' > "+ filereboot
 		, curlPage( 'system' )
 	] }, resetlocal );
 } );
@@ -276,7 +276,7 @@ $( '#bluetooth' ).click( function() {
 		, 'systemctl '+ ( G.bluetooth ? 'enable' : 'disable' ) +' --now bluetooth'
 		, ( G.bluetooth ? 'echo 1 > ' : 'rm -f ' ) + dirsystem +'/onboard-bluetooth'
 		, "sed -i '/on-board Bluetooth/ d' "+ filereboot
-		, "echo '"+ G.reboot.join( '<br>' ) +"' > "+ filereboot
+		, "echo -e '"+ G.reboot.join( '\n' ) +"' > "+ filereboot
 		, curlPage( 'system' )
 	] }, resetlocal );
 } );
@@ -295,7 +295,7 @@ $( '#wlan' ).click( function() {
 		, 'systemctl -q '+ ( G.wlan ? 'enable' : 'disable' ) +' --now netctl-auto@wlan0'
 		, ( G.wlan ? 'echo 1 > ' : 'rm -f ' ) + dirsystem +'/onboard-wlan'
 		, "sed -i '/on-board Wi-Fi/ d' "+ filereboot
-		, "echo '"+ G.reboot.join( '<br>' ) +"' > "+ filereboot
+		, "echo -e '"+ G.reboot.join( '\n' ) +"' > "+ filereboot
 		, curlPage( 'system' )
 		, curlPage( 'network' )
 	] }, resetlocal );
@@ -814,13 +814,15 @@ $( '#backuprestore' ).click( function() {
 						, processData : false  // tell jQuery not to process the data
 						, contentType : false  // tell jQuery not to set contentType
 						, success     : function( data ) {
-						   if ( data == -1 ) {
+							if ( data ) {
+								if ( data !== 'restored' ) G.reboot = data.split( '\n' );
+							} else {
 								info( {
 									  icon        : 'slides'
 									, title       : 'Restore Settings and Database'
 									, message     : 'File upload failed.'
 								} );
-						   }
+							}
 						}
 					} );
 				}
@@ -867,7 +869,7 @@ refreshData = function() {
 		G = list[ 0 ];
 		G.sources = list[ 1 ];
 		G.sources.pop(); // remove 'reboot' from sources-data.sh
-		G.reboot = G.reboot ? G.reboot.split( '<br>' ) : [];
+		G.reboot = G.reboot ? G.reboot.split( '\n' ) : [];
 		
 		var systemlabel =
 			 'RuneAudio<br>'

@@ -162,7 +162,7 @@ if grep -q "$audiooutput.*=>.*$audioaplayname" /srv/http/settings/system-i2smodu
 dtparam=i2s=on\
 dtparam=$audioaplayname
 	" /boot/config.txt
-	echo 'Enable I2S Module' > /tmp/reboot
+	echo 'Enable I2S Module' | tee -a /tmp/reboot
 fi
 
 systemctl start mpd mpdidle

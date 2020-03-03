@@ -101,8 +101,8 @@ if ( isset( $_POST[ 'backuprestore' ] ) ) {
 		if ( $_FILES[ 'file' ][ 'error' ] == UPLOAD_ERR_OK ) {
 			move_uploaded_file( $_FILES[ 'file' ][ 'tmp_name' ], '/srv/http/data/tmp/backup.xz' ); // full path
 			exec( '/srv/http/bash/backuprestore.sh restore' );
-		} else {
-			exit( '-1' );
+			$reboot = @file_get_contents( '/tmp/reboot' );
+			echo $reboot ?: 'restored';
 		}
 	}
 
