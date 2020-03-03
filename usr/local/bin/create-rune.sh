@@ -126,12 +126,10 @@ wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip
 bsdtar xvf *.zip --strip 1 --exclude=.* --exclude=*.md -C /
 
 # ui
-# NOTE: 
-#  - uncomment after master+UPDATE merged
-#  - delete RuneOS/srv
-#wget -qN https://github.com/rern/RuneAudio-Re2/archive/master.zip
-#bsdtar --strip 1 --exclude=*.* --exclude=./etc --exclude=./usr -C / -xf master.zip
-#rm master.zip
+############### NOTE: change UPDATE.zip to master.zip after merge
+wget -qN https://github.com/rern/RuneAudio-Re2/archive/UPDATE.zip
+bsdtar --strip 1 --exclude=*.* --exclude=./etc --exclude=./usr -C / -xf master.zip
+rm master.zip
 
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chown -R http:http /srv/http
