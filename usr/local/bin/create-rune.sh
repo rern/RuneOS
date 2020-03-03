@@ -123,18 +123,14 @@ pacman -S --noconfirm --needed $packages $features
 
 echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
-# customized packages
-wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip
-bsdtar --strip 1 -C / -xvf *.zip
-rm *.zip
-
-# web interface
-wget -q --show-progress https://github.com/rern/RuneAudio-Re2/archive/$srvbranch.zip
-bsdtar --strip 1 --exclude=./etc --exclude=./usr -C / -xvf *.zip
+wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O packages.zip
+wget -q --show-progress https://github.com/rern/RuneAudio-Re2/archive/$srvbranch.zip -O ui.zip
+bsdtar --strip 1 -C / -xvf packages.zip
+bsdtar --strip 1 --exclude=./etc --exclude=./usr -C / -xvf ui.zip
 rm *.zip /*.*
 
-chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chown -R http:http /srv/http
+chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 
 # RPi 0, 1 - switch packages for armv6h
 if [[ $rpi01 ]]; then
