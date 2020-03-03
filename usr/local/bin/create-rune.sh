@@ -130,7 +130,7 @@ rm *.zip
 
 # web interface
 wget -q --show-progress https://github.com/rern/RuneAudio-Re2/archive/$srvbranch.zip
-bsdtar --strip 1 --exclude=*.* --exclude=./etc --exclude=./usr -C / -xvf *.zip
+bsdtar --strip 1 -exclude=.* --exclude=*.md --exclude=./etc --exclude=./usr -C / -xvf *.zip
 rm *.zip
 
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
