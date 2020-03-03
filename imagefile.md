@@ -4,7 +4,7 @@
 
 	- Optional for default image:
 ```sh
-# remove mpd database (auto rescan on initial startup)
+# remove MPD database (auto rescan on initial startup)
 rm /srv/http/data/mpd/mpd.db
 
 # remove all connected Wi-Fi data
