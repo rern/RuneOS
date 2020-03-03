@@ -105,7 +105,7 @@
 	<span class="help-block hide">Start playing automatically after boot.</span>
 </div>
 
-<heading id="status" class="status">Status&emsp;<i class="fa fa-code"></i>&emsp;<i id="restart" class="fa fa-gear"></i></heading>
+<heading id="status" class="status">Status&emsp;<i class="fa fa-code"></i>&emsp;<i id="restart" class="fa fa-reboot"></i></heading>
 <span class="help-block hide"><code>systemctl status mpd mpdidle</code></span>
 <pre id="codestatus" class="hide"></pre>
 
