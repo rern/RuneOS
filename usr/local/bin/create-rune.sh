@@ -231,7 +231,7 @@ systemctl enable $startup
 
 #---------------------------------------------------------------------------------
 # data - settings directories
-/srv/http/bash/resetdata.sh
+/srv/http/bash/resetdata.sh "$version"
 
 # addons
 wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P /srv/http
