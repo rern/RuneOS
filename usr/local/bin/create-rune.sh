@@ -1,7 +1,7 @@
 #!/bin/bash
 
-version=e2
-uibranch=UPDATE ############### change UPDATE to master once merged
+version=e3
+uibranch=master
 
 trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
@@ -124,10 +124,8 @@ pacman -S --noconfirm --needed $packages $features
 echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O packages.zip
-wget -q --show-progress https://github.com/rern/RuneAudio-Re2/archive/$uibranch.zip -O ui.zip
-#bsdtar --strip 1 -C / -xvf *.zip
-bsdtar --strip 1 -C / -xvf packages.zip
-bsdtar --strip 1 --exclude=./etc --exclude=./usr -C / -xvf ui.zip
+wget -q --show-progress https://github.com/rern/RuneAudio-Re3/archive/$uibranch.zip -O ui.zip
+bsdtar --strip 1 -C / -xvf *.zip
 rm *.zip /*.*
 
 chown -R http:http /srv/http
