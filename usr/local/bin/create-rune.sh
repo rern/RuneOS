@@ -267,8 +267,8 @@ rm *.zip /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 
 # updates
 #wget -qN https://github.com/rern/RuneAudio-Re2/raw/master/install.sh -O - | sh
-wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P /srv/http
-echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
+#wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P /srv/http
+#echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
 
 dialog --colors \
 	--msgbox "\n      
