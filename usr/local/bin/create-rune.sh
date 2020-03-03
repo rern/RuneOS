@@ -125,6 +125,7 @@ echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O packages.zip
 wget -q --show-progress https://github.com/rern/RuneAudio-Re2/archive/$srvbranch.zip -O ui.zip
+#bsdtar --strip 1 -C / -xvf *.zip
 bsdtar --strip 1 -C / -xvf packages.zip
 bsdtar --strip 1 --exclude=./etc --exclude=./usr -C / -xvf ui.zip
 rm *.zip /*.*
