@@ -238,7 +238,7 @@ wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P 
 echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
 
 # remove cache and files
-rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
+rm /root/*.xz /usr/local/bin/create-rune.sh /var/cache/pacman/pkg/* /etc/motd
 
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
