@@ -151,7 +151,7 @@ create-rune.sh
 ### Optionals
 - [**Create image file**](https://github.com/rern/RuneOS/blob/master/imagefile.md)  
 
-- **Setup Wi-Fi auto-connect** (if not set during build)
+- **Setup Wi-Fi auto-connect** for headless/no screen (if not set during build)
 	- On Linux or Windows
 	- Insert micro SD card
 	- In `BOOT`
