@@ -146,6 +146,9 @@ create-rune.sh
 - Errors or too slow download: press `Ctrl+C` and run `create-rune.sh` again
 - Notification shows when finished.
 
+### Known errors in boot log `journalctl -b`
+- `Error: Driver 'sdhost-bcm2835' already registered` - not error just information
+- `Error: cannot open framebuffer device` - when no connected screen
 ---
 
 ### Optionals
