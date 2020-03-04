@@ -176,12 +176,14 @@ dtoverlay=bcmbt'
 fi
 if [[ $rpi != 4 ]]; then
 	config+='
-force_turbo=1'
+force_turbo=1
+'
 fi
 if [[ $rpi == Zero ]]; then # fix: kernel panic and hdmi audio
 	config+='
 over_voltage=2
-hdmi_drive=2'
+hdmi_drive=2
+'
 fi
 
 config+='
@@ -193,7 +195,8 @@ disable_splash=1
 disable_overscan=1
 
 dtparam=audio=on
-#dtparam=i2s=on'
+#dtparam=i2s=on
+'
 
 echo "$config" > $BOOT/config.txt
 
