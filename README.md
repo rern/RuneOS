@@ -148,7 +148,7 @@ create-rune.sh
 
 ### Known errors in boot log `journalctl -b`
 - `Error: Driver 'sdhost-bcm2835' already registered` - not error just information
-- `Error: cannot open framebuffer device` - when no connected screen
+- `Error: cannot open framebuffer device` - on RPi 4 when no connected screen
 ---
 
 ### Optionals
