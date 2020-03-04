@@ -168,17 +168,19 @@ $partuuidROOT  /      ext4  defaults  0  0" > $ROOT/etc/fstab
 echo "root=$partuuidROOT rw rootwait selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop fsck.repair=yes console=tty1" > $BOOT/cmdline.txt
 
 # config.txt
-[[ $rpi != 4 ]] && config+='
+[[ $rpi != 4 ]] && \
+config+='
 force_turbo=1'
 
 # RPi 0 - fix: kernel panic and hdmi audio
-[[ $rpi == Zero ]] && config+='
+[[ $rpi == Zero ]] && \
+config+='
 over_voltage=2
 hdmi_drive=2'
 
 # 3, 4 or Zero W
-hwcode=$( grep Revision /proc/cpuinfo | tail -c 4 | cut -c1-2 )
-[[ $rpi == 3 || $rpi == 4 || $hwcode == 0c ]] && config+='
+[[ $rpi == 3 || $rpi == 4 || $( grep Revision /proc/cpuinfo | tail -c 4 | cut -c1-2 ) == 0c ]] && \
+config+='
 #dtoverlay=disable-wifi
 #dtoverlay=disable-bt
 dtoverlay=bcmbt'
