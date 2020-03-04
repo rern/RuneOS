@@ -122,8 +122,9 @@ echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O packages.zip
 wget -q --show-progress https://github.com/rern/RuneAudio-Re3/archive/$uibranch.zip -O ui.zip
-bsdtar --strip 1 -C / -xvf *.zip
-rm *.zip /*.*
+bsdtar --strip 1 -C / -xvf packages.zip
+bsdtar --strip 1 -C / -xvf ui.zip
+rm *.zip /*.* /.* 2> /dev/null
 
 chown -R http:http /srv/http
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
