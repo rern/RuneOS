@@ -177,8 +177,8 @@ over_voltage=2
 hdmi_drive=2'
 
 # 3, 4 or Zero W
-hardwarecode=$( grep Revision /proc/cpuinfo | awk '{print $NF}' )
-[[ $rpi == 3 || $rpi == 4 || ${hardwarecode: -3:2} == 0c ]] && config+='
+hwcode=$( grep Revision /proc/cpuinfo | tail -c 4 | cut -c1-2 )
+[[ $rpi == 3 || $rpi == 4 || $hwcode == 0c ]] && config+='
 #dtoverlay=disable-wifi
 #dtoverlay=disable-bt
 dtoverlay=bcmbt'
