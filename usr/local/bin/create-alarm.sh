@@ -52,15 +52,17 @@ ROOT=$( df | grep 'ROOT$' | awk '{print $NF}' )
 # check mounts
 [[ -z $BOOT ]] && warnings+='BOOT not mounted\n'
 [[ -z $ROOT ]] && warnings+='ROOT not mounted\n'
-# check duplicate names
-[[ -n $BOOT && ${#[BOOT[@]} -gt 1 ]] && warnings+='BOOT has more than 1\n'
-[[ -n $ROOT && ${#[ROOT[@]} -gt 1 ]] && warnings+='ROOT has more than 1\n'
-# check empty to prevent wrong partitions
-[[ -n $BOOT && -n $( ls $BOOT | grep -v 'System Volume Information' ) ]] && warnings+='BOOT not empty\n'
-[[ -n $ROOT && -n $( ls $ROOT | grep -v 'lost+found' ) ]] && warnings+='ROOT not empty\n'
-# check fstype
-[[ $( df --output=fstype $BOOT | tail -1 ) != vfat ]] && warnings+='BOOT not fat32\n'
-[[ $( df --output=fstype $ROOT | tail -1 ) != ext4 ]] && warnings+='ROOT not ext4\n'
+if [[ -n $BOOT && -n $ROOT  ]]; then
+	# check duplicate names
+	[[ ${#[BOOT[@]} -gt 1 ]] && warnings+='BOOT has more than 1\n'
+	[[ ${#[ROOT[@]} -gt 1 ]] && warnings+='ROOT has more than 1\n'
+	# check empty to prevent wrong partitions
+	[[ -n $( ls $BOOT | grep -v 'System Volume Information' ) ]] && warnings+='BOOT not empty\n'
+	[[ -n $( ls $ROOT | grep -v 'lost+found' ) ]] && warnings+='ROOT not empty\n'
+	# check fstype
+	[[ $( df --output=fstype $BOOT | tail -1 ) != vfat ]] && warnings+='BOOT not fat32\n'
+	[[ $( df --output=fstype $ROOT | tail -1 ) != ext4 ]] && warnings+='ROOT not ext4\n'
+fi
 # partition warnings
 if [[ -n $warnings ]]; then
 	msgbox "\Z1Warnings:\n\n$warnings\Z0"
