@@ -176,22 +176,22 @@ force_turbo=1'
 over_voltage=2
 hdmi_drive=2'
 
+# 3, 4 or Zero W
+hardwarecode=$( grep Revision /proc/cpuinfo | awk '{print $NF}' )
+[[ $rpi == 3 || $rpi == 4 || ${hardwarecode: -3:2} == 0c ]] && config+='
+#dtoverlay=disable-wifi
+#dtoverlay=disable-bt
+dtoverlay=bcmbt'
+
 config+='
 gpu_mem=32
 initramfs initramfs-linux.img followkernel
 max_usb_current=1
 
-### onboard wifi, bluetooth and audio
-#dtoverlay=disable-wifi
-#dtoverlay=disable-bt
-dtoverlay=bcmbt
-dtparam=audio=on
-
-### display
 disable_splash=1
 disable_overscan=1
 
-### i2s
+dtparam=audio=on
 #dtparam=i2s=on'
 
 echo "$config" > $BOOT/config.txt
