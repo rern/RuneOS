@@ -145,7 +145,7 @@ fi
 [[ ! $upnp ]] && rm /etc/upmpdcli.conf /root/{libupnpp*,upmpdcli*}
 
 pacman -U --noconfirm --needed /root/*.xz
-[[ $? != 0 ]] && pacmanFailed 'Packages download incomplete!'
+[[ $? != 0 ]] && pacmanFailed 'Custom packages download incomplete!'
 
 #---------------------------------------------------------------------------------
 echo -e "\n\e[36mConfigure ...\e[m\n"
