@@ -44,7 +44,6 @@ sleep 3
     avahi='\Z1Avahi\Z0     - URL as: runeaudio.local'
     bluez='\Z1Bluez\Z0     - Bluetooth supports'
  chromium='\Z1Chromium\Z0  - Browser on RPi'
-   ffmpeg='\Z1FFmpeg\Z0    - Extended decoder'
   hostapd='\Z1hostapd\Z0   - RPi access point'
       kid='\Z1Kid3\Z0      - Metadata tag editor'
    python='\Z1Python\Z0    - Programming language'
@@ -54,44 +53,42 @@ shairport='\Z1Shairport\Z0 - AirPlay'
 
 if [[ $nowireless ]]; then
 	bluez='Bluez     - (no onboard)'
-	onoffb=
+	onoffbluez=off
 else
-	onoffb=on
+	onoffbluez=on
 fi
 if [[ $rpi01 ]]; then
 	chromium='Chromium  - (not for RPi Zero, 1)'
-	onoffc=
+	onoffchromium=off
 else
-	onoffc=on
+	onoffchromium=on
 fi
 
 selectFeatures() {
 	select=$( dialog --backtitle "$title" --colors \
 	   --output-fd 1 \
 	   --checklist '\Z1Select features to install:\n
-\Z4[space] = Select / Deselect\Z0' 0 0 10 \
+\Z4[space] = Select / Deselect\Z0' 0 0 9 \
 			1 "$avahi" on \
-			2 "$bluez" $onoffb \
-			3 "$chromium" $onoffc \
-			4 "$ffmpeg" on \
-			5 "$hostapd" on \
-			6 "$kid" on \
-			7 "$python" on \
-			8 "$samba" on \
-			9 "$shairport" on \
-			10 "$upmpdcli" on )
+			2 "$bluez" $onoffbluez \
+			3 "$chromium" $onoffchromium \
+			4 "$hostapd" on \
+			5 "$kid" on \
+			6 "$python" on \
+			7 "$samba" on \
+			8 "$shairport" on \
+			9 "$upmpdcli" on )
 	
 	select=" $select "
 	[[ $select == *' 1 '* ]] && features+='avahi ' && list+="$avahi\n"
 	[[ $select == *' 2 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
 	[[ $select == *' 3 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
-	[[ $select == *' 4 '* ]] && features+='ffmpeg ' && list+="$ffmpeg\n"
-	[[ $select == *' 5 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
-	[[ $select == *' 6 '* ]] && kid3=1 && list+="$kid\n"
-	[[ $select == *' 7 '* ]] && features+='python python-pip ' && list+="$python\n"
-	[[ $select == *' 8 '* ]] && features+='samba ' && list+="$samba\n"
-	[[ $select == *' 9 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
-	[[ $select == *' 10 '* ]] && upnp=1 && list+="$upmpdcli\n"
+	[[ $select == *' 4 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
+	[[ $select == *' 5 '* ]] && kid3=1 && list+="$kid\n"
+	[[ $select == *' 6 '* ]] && features+='python python-pip ' && list+="$python\n"
+	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
+	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
+	[[ $select == *' 9 '* ]] && upnp=1 && list+="$upmpdcli\n"
 }
 selectFeatures
 
@@ -114,7 +111,7 @@ echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
-packages='alsa-utils cronie dosfstools gcc ifplugd imagemagick inetutils mpd mpc nfs-utils nss-mdns ntfs-3g parted php-fpm python python-pip sudo udevil wget '
+packages='alsa-utils cronie dosfstools ffmpeg gcc ifplugd imagemagick inetutils mpd mpc nfs-utils nss-mdns ntfs-3g parted php-fpm python python-pip sudo udevil wget '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
