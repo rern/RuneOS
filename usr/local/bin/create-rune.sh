@@ -41,7 +41,6 @@ dialog  --backtitle "$title" --colors \
 	--infobox "\n\n                \Z1RuneAudio+R $version\Z0" 7 50
 sleep 3
 
-    avahi='\Z1Avahi\Z0     - URL as: runeaudio.local'
     bluez='\Z1Bluez\Z0     - Bluetooth supports'
  chromium='\Z1Chromium\Z0  - Browser on RPi'
   hostapd='\Z1hostapd\Z0   - RPi access point'
@@ -69,18 +68,16 @@ selectFeatures() {
 	   --output-fd 1 \
 	   --checklist '\Z1Select features to install:\n
 \Z4[space] = Select / Deselect\Z0' 0 0 9 \
-			1 "$avahi" on \
-			2 "$bluez" $onoffbluez \
-			3 "$chromium" $onoffchromium \
-			4 "$hostapd" on \
-			5 "$kid" on \
-			6 "$python" on \
-			7 "$samba" on \
-			8 "$shairport" on \
-			9 "$upmpdcli" on )
+			1 "$bluez" $onoffbluez \
+			2 "$chromium" $onoffchromium \
+			3 "$hostapd" on \
+			4 "$kid" on \
+			5 "$python" on \
+			6 "$samba" on \
+			7 "$shairport" on \
+			8 "$upmpdcli" on )
 	
 	select=" $select "
-	[[ $select == *' 1 '* ]] && features+='avahi ' && list+="$avahi\n"
 	[[ $select == *' 2 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
 	[[ $select == *' 3 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 4 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
@@ -111,7 +108,7 @@ echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
-packages='alsa-utils cronie dosfstools ffmpeg gcc ifplugd imagemagick inetutils mpd mpc nfs-utils nss-mdns ntfs-3g parted php-fpm python python-pip sudo udevil wget '
+packages='alsa-utils cronie dosfstools gcc ifplugd imagemagick inetutils mpd mpc nfs-utils nss-mdns ntfs-3g parted php-fpm python python-pip sudo udevil wget '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
