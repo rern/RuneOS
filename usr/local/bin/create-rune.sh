@@ -227,7 +227,7 @@ systemctl enable $startup
 
 # addons
 wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P /srv/http
-echo $( grep -A 2 rare /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rare
+echo $( grep -A 2 rre3 /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rre3
 
 # remove cache and files
 rm /root/*.xz /usr/local/bin/create-rune.sh /var/cache/pacman/pkg/* /etc/motd
