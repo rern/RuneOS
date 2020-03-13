@@ -250,7 +250,7 @@ Power on.\n
 #----------------------------------------------------------------------------
 title='Connect to Raspberry Pi'
 # scan ip
-routerip=$( ip route get 1 | cut -d' ' -f3 )
+routerip=$( ip r get 1 | head -1 | cut -d' ' -f3 )
 subip=${routerip%.*}.
 scanIP() {
 	infobox "Scan IP address ..." 5 50
