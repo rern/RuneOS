@@ -171,8 +171,7 @@ echo "root=$partuuidROOT rw rootwait selinux=0 plymouth.enable=0 smsc95xx.turbo_
 if [[ $rpi == 3 || $rpi == 4 || $( grep Revision /proc/cpuinfo | tail -c 4 | cut -c1-2 ) == 0c ]]; then # 3, 4 or Zero W
 	config+='
 #dtoverlay=disable-wifi
-#dtoverlay=disable-bt
-dtoverlay=bcmbt'
+#dtoverlay=disable-bt'
 fi
 if [[ $rpi != 4 ]]; then
 	config+='
