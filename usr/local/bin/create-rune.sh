@@ -152,8 +152,7 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 [[ $hwcode == 11 ]] && mv /usr/lib/firmware/updates/brcm/BCM{4345C0,}.hcd
 
 # remove config of excluded features
-[[ ! -e /usr/bin/avahi-daemon ]] && rm -r /etc/avahi
-[[ ! -e /usr/bin/bluetoothctl ]] && rm -r /etc/systemd/system/bluetooth.service.d /root/blue*
+[[ ! -e /usr/bin/bluetoothctl ]] && rm -rf /etc/systemd/system/bluetooth.service.d /srv/http/bash/system-bluetooth.sh
 [[ ! -e /usr/bin/hostapd ]] && rm -r /etc/{hostapd,dnsmasq.conf}
 [[ ! -e /usr/bin/smbd ]] && rm -r /etc/samba && rm /etc/systemd/system/wsdd.service
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport*
@@ -215,9 +214,8 @@ echo 'WIRELESS_REGDOM="00"' > /etc/conf.d/wireless-regdom
 
 # startup services
 systemctl daemon-reload
-startup='cronie devmon@mpd nginx php-fpm startup '
-[[ -e /usr/bin/avahi-daemon ]] && startup+='avahi-daemon '
-[[ -e /usr/bin/chromium ]] && startup+='bootsplash localbrowser '
+startup='avahi-daemon cronie devmon@mpd nginx php-fpm startup'
+[[ -e /usr/bin/chromium ]] && startup+=' bootsplash localbrowser'
 
 systemctl enable $startup
 
