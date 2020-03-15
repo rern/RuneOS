@@ -190,11 +190,6 @@ disable_overscan=1
 
 dtparam=audio=on
 '
-if [[ $rpi == 3 || $rpi == 4 || $( grep Revision /proc/cpuinfo | tail -c 4 | cut -c1-2 ) == 0c ]]; then # 3, 4 or Zero W
-	config+='
-dtoverlay=bcmbt
-'
-fi
 
 echo "$config" > $BOOT/config.txt
 
