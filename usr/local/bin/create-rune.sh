@@ -159,7 +159,7 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 
 # alsa
 chmod 666 /etc/systemd/network/* 
-chmod 755 /var/lib/alsa  # fix permission
+chmod 775 /var/lib/alsa  # fix permission
 sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit test rules
 
 # bluetooth (skip if removed bluetooth)
