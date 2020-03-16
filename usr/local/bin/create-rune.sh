@@ -158,7 +158,7 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport*
 
 # alsa
-chmod 666 /etc/systemd/network/* 
+chmod -R 777 /etc/systemd/network 
 chmod 775 /var/lib/alsa  # fix permission
 sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit test rules
 
