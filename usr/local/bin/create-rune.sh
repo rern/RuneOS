@@ -152,8 +152,7 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 [[ $hwcode == 11 ]] && mv /usr/lib/firmware/updates/brcm/BCM{4345C0,}.hcd
 
 # remove config of excluded features
-[[ ! -e /usr/bin/avahi-daemon ]] && rm -r /etc/avahi
-[[ ! -e /usr/bin/bluetoothctl ]] && rm -r /etc/systemd/system/bluetooth.service.d /root/blue*
+[[ ! -e /usr/bin/bluetoothctl ]] && rm -rf /etc/systemd/system/bluetooth.service.d /srv/http/bash/system-bluetooth.sh
 [[ ! -e /usr/bin/hostapd ]] && rm -r /etc/{hostapd,dnsmasq.conf}
 [[ ! -e /usr/bin/smbd ]] && rm -r /etc/samba && rm /etc/systemd/system/wsdd.service
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport*
@@ -215,19 +214,19 @@ echo 'WIRELESS_REGDOM="00"' > /etc/conf.d/wireless-regdom
 
 # startup services
 systemctl daemon-reload
-startup='cronie devmon@mpd nginx php-fpm startup '
-[[ -e /usr/bin/avahi-daemon ]] && startup+='avahi-daemon '
-[[ -e /usr/bin/chromium ]] && startup+='bootsplash localbrowser '
+startup='avahi-daemon cronie devmon@mpd nginx php-fpm startup'
+[[ -e /usr/bin/chromium ]] && startup+=' bootsplash localbrowser'
 
 systemctl enable $startup
 
 #---------------------------------------------------------------------------------
 # data - settings directories
-/srv/http/bash/resetdata.sh "$version"
+/srv/http/bash/data-reset.sh "$version"
 
 # addons
-wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P /srv/http
-echo $( grep -A 2 rre3 /srv/http/addons-list.php | tail -1 | cut -d"'" -f4 ) > /srv/http/data/addons/rre3
+diraddons=/srv/http/data/addons
+wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P $diraddons
+echo $( grep -A 2 rre3 $diraddons/addons-list.php | tail -1 | cut -d"'" -f4 ) > $diraddons/rre3
 
 # remove cache and files
 rm /root/*.xz /usr/local/bin/create-rune.sh /var/cache/pacman/pkg/* /etc/motd
