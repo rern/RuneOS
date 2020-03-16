@@ -293,5 +293,6 @@ rpiip=$( dialog --colors --output-fd 1 --cancel-label Rescan --inputbox '\n\Z1Ra
 
 clear
 
-ssh-keygen -R $rpiip &> /dev/null
+#ssh-keygen -R $rpiip &> /dev/null
+cat /dev/zero | ssh-keygen -q -N "" &> /dev/null
 sshpass -p root ssh -o StrictHostKeyChecking=no root@$rpiip
