@@ -85,7 +85,7 @@ selectFeatures() {
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
 	[[ $select == *' 4 '* ]] && kid3=1 && list+="$kid\n"
 	[[ $select == *' 5 '* ]] && features+='python python-pip ' && list+="$python\n"
-	[[ $select == *' 6 '* ]] && gpio=1 && list+="$gpio\n"
+	[[ $select == *' 6 '* ]] && gpio=1 && list+="$rpigpio\n"
 	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
 	[[ $select == *' 9 '* ]] && upnp=1 && list+="$upmpdcli\n"
@@ -118,7 +118,7 @@ echo -e "\n\e[36mInstall packages ...\e[m\n"
 pacman -S --noconfirm --needed $packages $features
 [[ $? != 0 ]] && pacmanFailed 'Packages download incomplete!'
 
-[[ -n $gpio ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
+[[ -n $gpio && -e /usr/bin/python ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
 
 echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
