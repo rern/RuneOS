@@ -46,6 +46,7 @@ sleep 3
   hostapd='\Z1hostapd\Z0   - RPi access point'
       kid='\Z1Kid3\Z0      - Metadata tag editor'
    python='\Z1Python\Z0    - Programming language'
+     gpio='\Z1RPi.GPIO\Z0  - Python RPi.GPIO module'
     samba='\Z1Samba\Z0     - File sharing'
 shairport='\Z1Shairport\Z0 - AirPlay'
  upmpdcli='\Z1upmpdcli\Z0  - UPnP client'
@@ -73,16 +74,18 @@ selectFeatures() {
 			3 "$hostapd" on \
 			4 "$kid" on \
 			5 "$python" on \
-			6 "$samba" on \
-			7 "$shairport" on \
-			8 "$upmpdcli" on )
+			6 "$gpio" on \
+			7 "$samba" on \
+			8 "$shairport" on \
+			9 "$upmpdcli" on )
 	
 	select=" $select "
-	[[ $select == *' 2 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
-	[[ $select == *' 3 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
-	[[ $select == *' 4 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
-	[[ $select == *' 5 '* ]] && kid3=1 && list+="$kid\n"
-	[[ $select == *' 6 '* ]] && features+='python python-pip ' && list+="$python\n"
+	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
+	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
+	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
+	[[ $select == *' 4 '* ]] && kid3=1 && list+="$kid\n"
+	[[ $select == *' 5 '* ]] && features+='python python-pip ' && list+="$python\n"
+	[[ $select == *' 6 '* ]] && gpio=1 && list+="$gpio\n"
 	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
 	[[ $select == *' 9 '* ]] && upnp=1 && list+="$upmpdcli\n"
@@ -115,6 +118,8 @@ echo -e "\n\e[36mInstall packages ...\e[m\n"
 pacman -S --noconfirm --needed $packages $features
 [[ $? != 0 ]] && pacmanFailed 'Packages download incomplete!'
 
+[[ -n $gpio ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
+
 echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
 
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O packages.zip
@@ -139,8 +144,8 @@ fi
 
 [[ ! -e /usr/bin/bluetoothctl ]] && rm /root/bluez* /boot/overlays/bcmbt.dtbo
 
-[[ ! $kid3 ]] && rm /root/kid3*
-[[ ! $upnp ]] && rm /etc/upmpdcli.conf /root/{libupnpp*,upmpdcli*}
+[[ -z $kid3 ]] && rm /root/kid3*
+[[ -z $upnp ]] && rm /etc/upmpdcli.conf /root/{libupnpp*,upmpdcli*}
 
 pacman -U --noconfirm --needed /root/*.xz
 [[ $? != 0 ]] && pacmanFailed 'Custom packages download incomplete!'
