@@ -74,7 +74,7 @@ selectFeatures() {
 			3 "$hostapd" on \
 			4 "$kid" on \
 			5 "$python" on \
-			6 "$gpio" on \
+			6 "$rpigpio" on \
 			7 "$samba" on \
 			8 "$shairport" on \
 			9 "$upmpdcli" on )
