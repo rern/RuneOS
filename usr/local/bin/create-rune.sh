@@ -69,15 +69,15 @@ selectFeatures() {
 	   --output-fd 1 \
 	   --checklist '\Z1Select features to install:\n
 \Z4[space] = Select / Deselect\Z0' 0 0 9 \
-			1 "\Z1Bluez\Z0     - Bluetooth supports" $onoffbluez \
-			2 "\Z1Chromium\Z0  - Browser on RPi" $onoffchromium \
-			3 "\Z1hostapd\Z0   - RPi access point" on \
-			4 "\Z1Kid3\Z0      - Metadata tag editor" on \
-			5 "\Z1Python\Z0    - Programming language" on \
-			6 "\Z1RPi.GPIO\Z0  - Python RPi.GPIO module" on \
-			7 "\Z1Samba\Z0     - File sharing" on \
-			8 "\Z1Shairport\Z0 - AirPlay" on \
-			9 "\Z1upmpdcli\Z0  - UPnP client" on )
+			1 "$bluez" $onoffbluez \
+			2 "$chromium" $onoffchromium \
+			3 "$hostapd" on \
+			4 "$kid" on \
+			5 "$python" on \
+			6 "$gpio" on \
+			7 "$samba" on \
+			8 "$shairport" on \
+			9 "$upmpdcli" on )
 	
 	select=" $select "
 	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
