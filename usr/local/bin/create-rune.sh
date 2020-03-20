@@ -85,7 +85,7 @@ selectFeatures() {
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
 	[[ $select == *' 4 '* ]] && kid3=1 && list+="$kid\n"
 	[[ $select == *' 5 '* ]] && features+='python python-pip ' && list+="$python\n" && pyth=1
-	[[ $select == *' 6 '* && ! $pyth ]] && gpio=1 && list+="$rpigpio\n"
+	[[ $select == *' 6 '* && $pyth ]] && gpio=1 && list+="$rpigpio\n"
 	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
 	[[ $select == *' 9 '* ]] && upnp=1 && list+="$upmpdcli\n"
