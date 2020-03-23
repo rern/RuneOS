@@ -5,7 +5,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/wsdd.py --shortlog --preserve-case --hostname RuneRe2
+ExecStart=/usr/local/bin/wsdd.py --shortlog --preserve-case --hostname RuneAudio
 User=nobody
 Group=nobody
 
