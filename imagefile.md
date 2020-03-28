@@ -10,7 +10,8 @@ rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 
 # remove MPD database (force auto rescan on initial startup)
 systemctl stop mpd mpdidle
-rm -f /srv/http/data/{addons/expa,mpd/mpd.db,system/mpddb}
+rm -f /srv/http/data/{addons/expa,mpd/*}
+echo 0 0 0 > /srv/http/data/system/mpddb
 
 shutdown -h now
 ```
