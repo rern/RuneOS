@@ -4,7 +4,7 @@
 
 	- Optional for default image:
 ```sh
-# if built image wifi connection - remove all connected Wi-Fi data
+# if built image with wifi connection - remove all connected Wi-Fi data
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 
