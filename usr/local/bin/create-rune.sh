@@ -186,7 +186,7 @@ fi
 ( crontab -l &> /dev/null; echo '00 01 * * * /srv/http/addons-update.sh &' ) | crontab -
 
 # lvm - remove invalid value
-sed -i '/event_timeout/ s/^/#/' /usr/lib/udev/rules.d/11-dm-lvm.rules
+#sed -i '/event_timeout/ s/^/#/' /usr/lib/udev/rules.d/11-dm-lvm.rules
 
 # mpd - create missing log file
 touch /var/log/mpd.log
