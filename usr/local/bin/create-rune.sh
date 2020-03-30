@@ -195,9 +195,6 @@ chown mpd:audio /var/log/mpd.log
 # netctl - allow write for http
 chmod -R 777 /etc/netctl
 
-# nginx - custom 50x.html
-mv -f /etc/nginx/html/50x.html{.custom,}
-
 # password - set default
 echo root:rune | chpasswd
 [[ -e /usr/bin/smbd ]] && ( echo rune; echo rune ) | smbpasswd -s -a root

@@ -168,13 +168,9 @@ $partuuidROOT  /      ext4  defaults  0  0" > $ROOT/etc/fstab
 echo "root=$partuuidROOT rw rootwait selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop fsck.repair=yes console=tty1" > $BOOT/cmdline.txt
 
 # config.txt
-if [[ $rpi == Zero ]]; then # fix: kernel panic and hdmi audio
-	config="\
+config="\
 over_voltage=2
 hdmi_drive=2
-"
-fi
-config+="\
 force_turbo=1
 gpu_mem=32
 initramfs initramfs-linux.img followkernel
@@ -186,6 +182,7 @@ disable_overscan=1
 dtparam=audio=on
 "
 [[ $rpi == 4 ]] && config=$( sed '/force_turbo/ d' <<<"$config" )
+[[ $rpi != Zero ]] && config=$( sed '/over_voltage\|hdmi_drive/ d' <<<"$config" )
 
 echo "$config" > $BOOT/config.txt
 
