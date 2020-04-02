@@ -210,7 +210,8 @@ sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 
 # get create-rune.sh
 wget -qN https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
-chmod 744 $ROOT/usr/local/bin/create-rune.sh
+wget -qN https://github.com/rern/RuneAudio-R$version/raw/master/srv/http/bash/addons-functions.sh -P $ROOT/usr/local/bin
+chmod 755 $ROOT/usr/local/bin/*.sh
 
 msgbox "
         Arch Linux Arm for \Z1Raspberry Pi $rpi\Z0\n\
