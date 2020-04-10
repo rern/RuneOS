@@ -13,6 +13,9 @@ systemctl stop mpd
 rm -f /srv/http/data/{addons/expa,mpd/*}
 echo 0 0 0 > /srv/http/data/system/mpddb
 
+# remove package files
+rm -f /var/lib/pacman/cache/pkg/*
+
 # sd boot partition - fix dirty bits if any
 fsck.fat -trawl /dev/mmcblk0p1
 
