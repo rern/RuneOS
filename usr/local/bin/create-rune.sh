@@ -187,8 +187,13 @@ fi
 # lvm - remove invalid value
 #sed -i '/event_timeout/ s/^/#/' /usr/lib/udev/rules.d/11-dm-lvm.rules
 
-# mpd - create missing log file
-touch /var/log/mpd.log
+# mpd
+sed -i -e '/^After=/ a\
+BindsTo=mpdidle.service
+' -e 's|ExecStart=/usr/bin/|&taskset -c 3 /usr/bin/|
+' /usr/lib/systemd/system/mpd.service
+
+touch /var/log/mpd.log # create missing log file
 chown mpd:audio /var/log/mpd.log
 
 # netctl - allow write for http
