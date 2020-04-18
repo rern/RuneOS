@@ -1,6 +1,6 @@
 RuneOS - DIY RuneAudio+R e
 ---
-- For all **Raspberry Pi**: Zero, 1, 2, 3 and 4
+- For all **Raspberry Pi**s: Zero, 1, 2, 3 and 4
 - Create **RuneAudio+R e** from latest releases of [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads)
 - Interactive interface
 - Options:
