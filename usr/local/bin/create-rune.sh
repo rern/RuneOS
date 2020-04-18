@@ -193,9 +193,6 @@ BindsTo=mpdidle.service
 ' -e 's|ExecStart=/usr/bin/|&taskset -c 3 /usr/bin/|
 ' /usr/lib/systemd/system/mpd.service
 
-touch /var/log/mpd.log # create missing log file
-chown mpd:audio /var/log/mpd.log
-
 # netctl - allow write for http
 chmod -R 777 /etc/netctl
 
