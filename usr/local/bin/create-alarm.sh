@@ -164,9 +164,8 @@ partuuidBOOT=$( blkid | grep $( df | grep BOOT | awk '{print $1}' ) | awk '{prin
 partuuidROOT=$( blkid | grep $( df | grep ROOT | awk '{print $1}' ) | awk '{print $NF}' | tr -d '"' )
 echo "$partuuidBOOT  /boot  vfat  defaults  0  0
 $partuuidROOT  /      ext4  defaults  0  0" > $ROOT/etc/fstab
-
-cmdline="root=$partuuidROOT rw rootwait selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop fsck.repair=yes console=tty1"
-[[ $rpi > 1 ]] && cmdline+=' isolcpus=3'
+[[ $rpi > 1 ]] && isolcpus=' isolcpus=3'
+cmdline="root=$partuuidROOT rw rootwait selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop fsck.repair=yes$isolcpus console=tty1"
 echo $cmdline > $BOOT/cmdline.txt
 
 # config.txt
