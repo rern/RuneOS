@@ -48,6 +48,7 @@ sleep 3
   rpigpio='\Z1RPi.GPIO\Z0  - Python RPi.GPIO module'
     samba='\Z1Samba\Z0     - File sharing'
 shairport='\Z1Shairport\Z0 - AirPlay'
+ snapcast='\Z1Snapcast\Z0  - Synchronous multiroom player'
  upmpdcli='\Z1upmpdcli\Z0  - UPnP client'
 
 if [[ $nowireless ]]; then
@@ -76,7 +77,8 @@ selectFeatures() {
 			6 "$rpigpio" on \
 			7 "$samba" on \
 			8 "$shairport" on \
-			9 "$upmpdcli" on )
+			9 "$snapcast" on \
+		   10 "$upmpdcli" on )
 	
 	select=" $select "
 	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
@@ -87,7 +89,8 @@ selectFeatures() {
 	[[ $select == *' 6 '* && $pyth ]] && gpio=1 && list+="$rpigpio\n"
 	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
-	[[ $select == *' 9 '* ]] && upnp=1 && list+="$upmpdcli\n"
+	[[ $select == *' 9 '* ]] && snap=1 && list+="$snapcast\n"
+	[[ $select == *' 10 '* ]] && upnp=1 && list+="$upmpdcli\n"
 }
 selectFeatures
 
@@ -144,6 +147,7 @@ fi
 [[ ! -e /usr/bin/bluetoothctl ]] && rm /root/bluez* /boot/overlays/bcmbt.dtbo
 
 [[ ! $kid3 ]] && rm /root/kid3*
+[[ ! $snap ]] && rm /root/snapcast*
 [[ ! $upnp ]] && rm /etc/upmpdcli.conf /root/{libupnpp*,upmpdcli*}
 
 pacman -U --noconfirm --needed /root/*.xz
