@@ -7,8 +7,8 @@ trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
 hardwarecode=$( grep Revision /proc/cpuinfo )
 hwcode=${hardwarecode: -3:2}
-[[ ${hardwarecode: -4:1} == 0 ]] && rpi01=1
 [[ $hwcode =~ ^(00|01|02|03|04|09)$ ]] && nowireless=1
+[[ ${hardwarecode: -4:1} == 0 ]] && rpi01=1
 
 cols=$( tput cols )
 hr() { printf "\e[36m%*s\e[m\n" $cols | tr ' ' -; }
