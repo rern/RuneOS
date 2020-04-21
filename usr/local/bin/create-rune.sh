@@ -6,7 +6,7 @@ uibranch=master
 trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
 hardwarecode=$( grep Revision /proc/cpuinfo )
-hwcode=${hwcode: -3:2}
+hwcode=${hardwarecode: -3:2}
 [[ ${hwcode: -4:1} == 0 ]] && rpi01=1
 [[ $hwcode =~ ^(00|01|02|03|04|09)$ ]] && nowireless=1
 
