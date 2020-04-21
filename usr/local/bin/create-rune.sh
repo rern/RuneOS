@@ -5,8 +5,9 @@ uibranch=master
 
 trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
-hwcode=$( grep Revision /proc/cpuinfo | tail -c 4 | cut -c1-2 )
-[[ $hwcode =~ ^(00|01|02|03|09|0c)$ ]] && rpi01=1
+hardwarecode=$( grep Revision /proc/cpuinfo )
+hwcode=${hwcode: -3:2}
+[[ ${hwcode: -4:1} == 0 ]] && rpi01=1
 [[ $hwcode =~ ^(00|01|02|03|04|09)$ ]] && nowireless=1
 
 cols=$( tput cols )
@@ -133,7 +134,7 @@ rm *.zip /*.* /.* 2> /dev/null
 chown -R http:http /srv/http
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 
-# RPi 0, 1 - switch packages for armv6h
+# RPi 0, 1 - switch packages for armv6h & remove mpd.service
 if [[ $rpi01 ]]; then
 	rm /root/*.xz
 	mv /root/armv6h/* /root
@@ -192,10 +193,7 @@ fi
 #sed -i '/event_timeout/ s/^/#/' /usr/lib/udev/rules.d/11-dm-lvm.rules
 
 # mpd
-sed -i -e '/^After=/ a\
-BindsTo=mpdidle.service
-' -e 's|ExecStart=/usr/bin/|&taskset -c 3 /usr/bin/|
-' /usr/lib/systemd/system/mpd.service
+[[ $rpi01 ]] && sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
 
 # netctl - allow write for http
 chmod -R 777 /etc/netctl
