@@ -209,6 +209,8 @@ fi
 
 # ssh - permit root
 sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
+# suppress warnings
+echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
 
 # get create-rune.sh
 wget -qN https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
