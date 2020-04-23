@@ -31,14 +31,4 @@ I2S Setting
 		- `sysname` > `/srv/http/data/system/audio-aplayname`
 
 ### Boot:
-- Parse: `/srv/http/settings/mpd-conf.sh`
-	- clear all `audio_output`
-	- get `mixer_type` from `/etc/mpd.conf`
-	- if `mixer_type` = `none`, set mixers of each card to 0dB with `amixer`
-	- get `aplayname` list with `aplay -l`
-	- if more than 1 card, append `index`
-	- get data from `/srv/http/settings/i2s/<aplayname>` if exists:
-		- `extlabel` > device name
-		- `mixer_control` > set
-		- `routecmd` > route to subdevice
-- Rewrite: `/etc/mpd.conf`
+- Script: `/srv/http/settings/mpd-conf.sh`
