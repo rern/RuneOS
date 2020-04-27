@@ -48,9 +48,10 @@ sleep 3
    python='\Z1Python\Z0    - Programming language'
   rpigpio='\Z1RPi.GPIO\Z0  - Python RPi.GPIO module'
     samba='\Z1Samba\Z0     - File sharing'
-shairport='\Z1Shairport\Z0 - AirPlay'
+shairport='\Z1Shairport\Z0 - AirPlay renderer'
  snapcast='\Z1Snapcast\Z0  - Synchronous multiroom player'
- upmpdcli='\Z1upmpdcli\Z0  - UPnP client'
+  spotify='\Z1Spotify\Z0   - Spotify renderer'
+ upmpdcli='\Z1upmpdcli\Z0  - UPnP renderer'
 
 if [[ $nowireless ]]; then
 	bluez='Bluez     - (no onboard)'
@@ -69,7 +70,7 @@ selectFeatures() {
 	select=$( dialog --backtitle "$title" --colors \
 	   --output-fd 1 \
 	   --checklist '\Z1Select features to install:\n
-\Z4[space] = Select / Deselect\Z0' 0 0 9 \
+\Z4[space] = Select / Deselect\Z0' 0 0 11 \
 			1 "$bluez" $onoffbluez \
 			2 "$chromium" $onoffchromium \
 			3 "$hostapd" on \
@@ -79,7 +80,8 @@ selectFeatures() {
 			7 "$samba" on \
 			8 "$shairport" on \
 			9 "$snapcast" on \
-		   10 "$upmpdcli" on )
+		   10 "$spotify" on \
+		   11 "$upmpdcli" on )
 	
 	select=" $select "
 	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
@@ -91,7 +93,8 @@ selectFeatures() {
 	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
 	[[ $select == *' 9 '* ]] && snap=1 && list+="$snapcast\n"
-	[[ $select == *' 10 '* ]] && upnp=1 && list+="$upmpdcli\n"
+	[[ $select == *' 10 '* ]] && spot=1 && list+="$spotify\n"
+	[[ $select == *' 11 '* ]] && upnp=1 && list+="$upmpdcli\n"
 }
 selectFeatures
 
@@ -149,6 +152,7 @@ fi
 
 [[ ! $kid3 ]] && rm /root/kid3*
 [[ ! $snap ]] && rm /root/snapcast*
+[[ ! $spot ]] && rm /root/spotify*
 [[ ! $upnp ]] && rm /etc/upmpdcli.conf /root/{libupnpp*,upmpdcli*}
 
 pacman -U --noconfirm --needed /root/*.xz
