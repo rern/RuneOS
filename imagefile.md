@@ -4,18 +4,18 @@
 
 - Optional for default image:
 	- reset mirror list
-	- remove all connected Wi-Fi data
 	- remove non-default files
+	- remove all connected Wi-Fi profile (if any)
 	- remove dirty bits on sd boot partition (if any)
 ```sh
 wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist -O /etc/pacman.d/mirrorlist
-systemctl disable netctl-auto@wlan0
-rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 systemctl stop mpd
 rm -f /srv/http/data/addons/expa /var/cache/pacman/pkg/*
 rm -f /srv/http/data/{bookamrks,coverarts,lyrics,mpd,playlists,webradios}/*
 rm -rf /srv/http/data/tmp/*
 echo 0 0 0 > /srv/http/data/system/mpddb
+systemctl disable netctl-auto@wlan0
+rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 fsck.fat -trawl /dev/mmcblk0p1
 shutdown -h now
 ```
