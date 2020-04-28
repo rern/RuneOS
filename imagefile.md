@@ -6,7 +6,7 @@
 	- remove all connected Wi-Fi data
 	- remove MPD database (force auto rescan on initial startup)
 	- remove package files
-	- sd boot partition - fix dirty bits if any
+	- remove dirty bits on sd boot partition (if any)
 ```sh
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
