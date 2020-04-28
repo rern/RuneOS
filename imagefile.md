@@ -2,11 +2,11 @@
 
 - Once start RuneAudio+R successfully
 
-	- Optional for default image:
-		- if built image with wifi connection - remove all connected Wi-Fi data
-		- remove MPD database (force auto rescan on initial startup)
-		- remove package files
-		- sd boot partition - fix dirty bits if any
+- Optional for default image:
+	- if built image with wifi connection - remove all connected Wi-Fi data
+	- remove MPD database (force auto rescan on initial startup)
+	- remove package files
+	- sd boot partition - fix dirty bits if any
 ```sh
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
