@@ -4,16 +4,16 @@
 
 - Optional for default image:
 	- remove all connected Wi-Fi data
-	- remove MPD database (force auto rescan on initial startup)
-	- remove package files
+	- remove non-default files
 	- remove dirty bits on sd boot partition (if any)
 ```sh
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 systemctl stop mpd
-rm -f /srv/http/data/{addons/expa,mpd/*}
+rm -f /srv/http/data/addons/expa /var/cache/pacman/pkg/*
+rm -f /srv/http/data/{bookamrks,coverarts,lyrics,mpd,playlists,webradios}/*
+rm -rf /srv/http/data/tmp/*
 echo 0 0 0 > /srv/http/data/system/mpddb
-rm -f /var/cache/pacman/pkg/*
 fsck.fat -trawl /dev/mmcblk0p1
 shutdown -h now
 ```
