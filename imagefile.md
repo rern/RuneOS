@@ -5,6 +5,7 @@
 - Optional for default image:
 	- reset mirror list
 	- remove non-default files
+	- remove journal logs
 	- remove all connected Wi-Fi profile (if any)
 	- remove dirty bits on sd boot partition (if any)
 ```sh
@@ -14,6 +15,8 @@ rm -f /srv/http/data/addons/expa /var/cache/pacman/pkg/*
 rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/*
 rm -rf /srv/http/data/tmp/*
 echo 0 0 0 > /srv/http/data/system/mpddb
+journalctl --rotate
+journalctl --vacuum-time=1s
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 fsck.fat -trawl /dev/mmcblk0p1
