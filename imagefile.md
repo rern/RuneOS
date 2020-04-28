@@ -3,10 +3,12 @@
 - Once start RuneAudio+R successfully
 
 - Optional for default image:
+	- reset mirror list
 	- remove all connected Wi-Fi data
 	- remove non-default files
 	- remove dirty bits on sd boot partition (if any)
 ```sh
+wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist -O /etc/pacman.d/mirrorlist
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 systemctl stop mpd
