@@ -2,23 +2,24 @@
 
 - Once start RuneAudio+R successfully
 
-	- Optional for default image:
+- Optional for default image:
+	- reset mirror list
+	- remove non-default files
+	- remove journal logs
+	- remove all connected Wi-Fi profile (if any)
+	- remove dirty bits on sd boot partition (if any)
 ```sh
-# if built image with wifi connection - remove all connected Wi-Fi data
+wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist -O /etc/pacman.d/mirrorlist
+systemctl stop mpd
+rm -f /srv/http/data/addons/expa /var/cache/pacman/pkg/*
+rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/*
+rm -rf /srv/http/data/tmp/*
+echo 0 0 0 > /srv/http/data/system/mpddb
+journalctl --rotate
+journalctl --vacuum-time=1s
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
-
-# remove MPD database (force auto rescan on initial startup)
-systemctl stop mpd
-rm -f /srv/http/data/{addons/expa,mpd/*}
-echo 0 0 0 > /srv/http/data/system/mpddb
-
-# remove package files
-rm -f /var/cache/pacman/pkg/*
-
-# sd boot partition - fix dirty bits if any
 fsck.fat -trawl /dev/mmcblk0p1
-
 shutdown -h now
 ```
 - Power off
