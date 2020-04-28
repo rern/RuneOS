@@ -3,7 +3,7 @@
 - Once start RuneAudio+R successfully
 
 - Optional for default image:
-	- if built image with wifi connection - remove all connected Wi-Fi data
+	- remove all connected Wi-Fi data
 	- remove MPD database (force auto rescan on initial startup)
 	- remove package files
 	- sd boot partition - fix dirty bits if any
