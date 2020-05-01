@@ -213,7 +213,7 @@ sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
 
 # get create-rune.sh
-wget -qN https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
+wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
 chmod 755 $ROOT/usr/local/bin/*.sh
 
 msgbox "
