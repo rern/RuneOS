@@ -1,6 +1,6 @@
 ### Create image file
 
-- Once start RuneAudio+R successfully
+- Once started RuneAudio+R successfully
 
 - Optional for default image:
 	- expand root partition on initial boot (any custom commands or scripts can be appended to the file)
