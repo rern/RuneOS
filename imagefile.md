@@ -5,8 +5,7 @@
 - Optional for default image:
 	- expand root partition on initial boot (any custom commands or scripts can be appended to the file)
 	- reset mirror list
-	- remove non-default files
-	- remove journal logs
+	- remove non-default files and journal logs
 	- remove all connected Wi-Fi profile (if any)
 	- remove dirty bits on sd boot partition (if any)
 ```sh
@@ -24,7 +23,6 @@ rm -f /srv/http/data/addons/expa /var/cache/pacman/pkg/*
 rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/*
 rm -rf /srv/http/data/tmp/*
 echo 0 0 0 > /srv/http/data/system/mpddb
-
 journalctl --rotate
 journalctl --vacuum-time=1s
 
