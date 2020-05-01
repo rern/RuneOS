@@ -19,7 +19,6 @@ RuneOS - DIY RuneAudio+R e
 	- Connect PC to Raspberry Pi
 - Create **RuneAudio+R e**
 	- Select features:
-		- Avahi - URL as: runeaudio.local`
 		- Bluez - Bluetooth support
 		- Chromium - Browser on RPi (Not available for RPi Zero and 1 - too much for CPU)
 		- FFmpeg - [Extended decoders](https://github.com/rern/RuneOS/blob/master/ffmpeg.md)
@@ -28,7 +27,9 @@ RuneOS - DIY RuneAudio+R e
 		- Python - Programming language
 		- Samba - File sharing
 		- Shairport-sync - AirPlay
-		- upmpdcli - UPnP
+		- Snapcast - Sync streamer
+		- Spotifyd - Spotify renderer
+		- upmpdcli - UPnP renderer
 	- Upgrade kernel and default packages
 	- Install feature packages and web interface
 	- Configure
