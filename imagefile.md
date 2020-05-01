@@ -38,7 +38,7 @@ shutdown -h now
 - Power off
 
 - Move micro SD card (and the USB drive, if `ROOT` partition is in USB drive) to PC
-- Resize `ROOT` partition to smallest size possible with **GParted** app (smaller the size, less time to write image)
+- Resize `ROOT` partition to smallest size possible with **GParted** app (smaller the size = smaller image file and less time to flash SD card)
 	- menu: GParted > Devices > /dev/sd?
 	- right-click `ROOT` partiton > Unmount
 	- right-click `ROOT` partiton > Resize/Move
