@@ -19,17 +19,17 @@ RuneOS - DIY RuneAudio+R e
 	- Connect PC to Raspberry Pi
 - Create **RuneAudio+R e**
 	- Select features:
-		- Bluez - Bluetooth support
-		- Chromium - Browser on RPi (Not available for RPi Zero and 1 - too much for CPU)
-		- FFmpeg - [Extended decoders](https://github.com/rern/RuneOS/blob/master/ffmpeg.md)
-		- hostapd - RPi access point
-		- Kid3 - Metadata tag editor
-		- Python - Programming language
-		- Samba - File sharing
-		- Shairport-sync - AirPlay
-		- Snapcast - Sync streamer
-		- Spotifyd - Spotify renderer
-		- upmpdcli - UPnP renderer
+		- [Bluez](https://github.com/bluez/bluez) - Bluetooth support
+		- [Chromium](https://www.chromium.org) - Browser on RPi (Not available for RPi Zero and 1 - too much for CPU)
+		- [FFmpeg](https://ffmpeg.org) - [Extended decoders](https://github.com/rern/RuneOS/blob/master/ffmpeg.md)
+		- [hostapd](http://w1.fi/hostapd/) - RPi access point
+		- [Kid3](https://kid3.kde.org) - Metadata tag editor
+		- [Python](https://www.python.org) - Programming language
+		- [Samba](https://www.samba.org) - File sharing
+		- [Shairport-sync](https://github.com/mikebrady/shairport-sync) - AirPlay
+		- [Snapcast](https://github.com/badaix/snapcast) - Sync streamer
+		- [Spotifyd](https://github.com/Spotifyd/spotifyd) - Spotify renderer
+		- [upmpdcli](https://www.lesbonscomptes.com/upmpdcli/upmpdcli-manual.html) - UPnP renderer
 	- Upgrade kernel and default packages
 	- Install feature packages and web interface
 	- Configure
