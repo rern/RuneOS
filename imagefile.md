@@ -3,7 +3,7 @@
 - Once start RuneAudio+R successfully
 
 - Optional for default image:
-	- expand root partition on initial boot
+	- expand root partition on initial boot (any custom commands or scripts can be appended to the file)
 	- reset mirror list
 	- remove non-default files
 	- remove journal logs
