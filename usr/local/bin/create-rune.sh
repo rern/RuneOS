@@ -50,7 +50,7 @@ sleep 3
     samba='\Z1Samba\Z0     - File sharing'
 shairport='\Z1Shairport\Z0 - AirPlay renderer'
  snapcast='\Z1Snapcast\Z0  - Synchronous multiroom player'
-  spotify='\Z1Spotify\Z0   - Spotify renderer'
+  spotify='\Z1Spotifyd\Z0  - Spotify renderer'
  upmpdcli='\Z1upmpdcli\Z0  - UPnP renderer'
 
 if [[ $nowireless ]]; then
