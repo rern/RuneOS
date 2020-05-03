@@ -45,6 +45,7 @@ sleep 3
  chromium='\Z1Chromium\Z0  - Browser on RPi'
   hostapd='\Z1hostapd\Z0   - RPi access point'
       kid='\Z1Kid3\Z0      - Metadata tag editor'
+     lirc='\Z1LIRC\Z0      - Infrared remote control'
    python='\Z1Python\Z0    - Programming language'
   rpigpio='\Z1RPi.GPIO\Z0  - Python RPi.GPIO module'
     samba='\Z1Samba\Z0     - File sharing'
@@ -70,31 +71,33 @@ selectFeatures() {
 	select=$( dialog --backtitle "$title" --colors \
 	   --output-fd 1 \
 	   --checklist '\Z1Select features to install:\n
-\Z4[space] = Select / Deselect\Z0' 0 0 11 \
+\Z4[space] = Select / Deselect\Z0' 0 0 12 \
 			1 "$bluez" $onoffbluez \
 			2 "$chromium" $onoffchromium \
 			3 "$hostapd" on \
 			4 "$kid" on \
-			5 "$python" on \
-			6 "$rpigpio" on \
-			7 "$samba" on \
-			8 "$shairport" on \
-			9 "$snapcast" on \
-		   10 "$spotify" on \
-		   11 "$upmpdcli" on )
+			5 "$lirc" on \
+			6 "$python" on \
+			7 "$rpigpio" on \
+			8 "$samba" on \
+			9 "$shairport" on \
+		   10 "$snapcast" on \
+		   11 "$spotify" on \
+		   12 "$upmpdcli" on )
 	
 	select=" $select "
 	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
 	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
 	[[ $select == *' 4 '* ]] && kid3=1 && list+="$kid\n"
-	[[ $select == *' 5 '* ]] && features+='python python-pip ' && list+="$python\n" && pyth=1
-	[[ $select == *' 6 '* && $pyth ]] && gpio=1 && list+="$rpigpio\n"
-	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
-	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
-	[[ $select == *' 9 '* ]] && snap=1 && list+="$snapcast\n"
-	[[ $select == *' 10 '* ]] && spot=1 && list+="$spotify\n"
-	[[ $select == *' 11 '* ]] && upnp=1 && list+="$upmpdcli\n"
+	[[ $select == *' 5 '* ]] && features+='lirc ' && list+="$lirc\n"
+	[[ $select == *' 6 '* ]] && features+='python python-pip ' && list+="$python\n" && pyth=1
+	[[ $select == *' 7 '* && $pyth ]] && gpio=1 && list+="$rpigpio\n"
+	[[ $select == *' 8 '* ]] && features+='samba ' && list+="$samba\n"
+	[[ $select == *' 9 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
+	[[ $select == *' 10 '* ]] && snap=1 && list+="$snapcast\n"
+	[[ $select == *' 11 '* ]] && spot=1 && list+="$spotify\n"
+	[[ $select == *' 12 '* ]] && upnp=1 && list+="$upmpdcli\n"
 }
 selectFeatures
 
