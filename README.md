@@ -22,7 +22,6 @@ Audio player and renderer for Raspberry Pi
 	- Select features:
 		- [Bluez](https://github.com/bluez/bluez) - Bluetooth support
 		- [Chromium](https://www.chromium.org) - Browser on RPi (Not available for RPi Zero and 1 - too much for CPU)
-		- [FFmpeg](https://ffmpeg.org) - [Extended decoders](https://github.com/rern/RuneOS/blob/master/ffmpeg.md)
 		- [hostapd](http://w1.fi/hostapd/) - RPi access point
 		- [Kid3](https://kid3.kde.org) - Metadata tag editor
 		- [Python](https://www.python.org) - Programming language
