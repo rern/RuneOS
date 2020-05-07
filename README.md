@@ -1,8 +1,8 @@
-RuneOS - DIY RuneAudio+R e
+RuneOS - DIY RuneAudio+R
 ---
 Audio player and renderer for Raspberry Pi
 - For all **Raspberry Pi**s: Zero, 1, 2, 3 and 4
-- Create **RuneAudio+R e** from latest releases of [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads)
+- Create **RuneAudio+R** from latest releases of [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads)
 - Interactive interface
 - Options:
 	- Run `ROOT` partition on USB drive
@@ -18,7 +18,7 @@ Audio player and renderer for Raspberry Pi
 	- Download and verify
 	- Write `BOOT` and `ROOT` partitions
 	- Connect PC to Raspberry Pi
-- Create **RuneAudio+R e**
+- Create **RuneAudio+R**
 	- Select features:
 		- [Bluez](https://github.com/bluez/bluez) - Bluetooth support
 		- [Chromium](https://www.chromium.org) - Browser on RPi (Not available for RPi Zero and 1 - too much for CPU)
