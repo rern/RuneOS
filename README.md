@@ -1,4 +1,4 @@
-RuneOS - DIY RuneAudio+R
+RuneAudio+R - DIY RuneOS
 ---
 Audio player and renderer for Raspberry Pi
 - For all **Raspberry Pi**s: Zero, 1, 2, 3 and 4
