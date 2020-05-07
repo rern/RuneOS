@@ -27,7 +27,7 @@ Audio player and renderer for Raspberry Pi
 		- [Kid3](https://kid3.kde.org) - Metadata tag editor
 		- [Python](https://www.python.org) - Programming language
 		- [Samba](https://www.samba.org) - File sharing
-		- [Shairport-sync](https://github.com/mikebrady/shairport-sync) - AirPlay
+		- [Shairport-sync](https://github.com/mikebrady/shairport-sync) - AirPlay renderer
 		- [Snapcast](https://github.com/badaix/snapcast) - Sync streamer
 		- [Spotifyd](https://github.com/Spotifyd/spotifyd) - Spotify renderer
 		- [upmpdcli](https://www.lesbonscomptes.com/upmpdcli/upmpdcli-manual.html) - UPnP renderer
