@@ -171,7 +171,6 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport*
 
 # alsa
-chmod 777 /etc/systemd/network/*
 chmod 775 /var/lib/alsa  # fix permission
 sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit test rules
 
@@ -202,8 +201,9 @@ chmod 666 /etc/fstab
 # mpd
 [[ $rpi01 ]] && sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
 
-# netctl - allow write for http
+# network - allow write by http
 chmod -R 777 /etc/netctl
+chmod 666 /etc/systemd/network/*
 
 # password - set default
 echo root:rune | chpasswd
