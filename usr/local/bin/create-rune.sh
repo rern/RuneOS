@@ -174,6 +174,9 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 chmod 775 /var/lib/alsa  # fix permission
 sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit test rules
 
+# avahi
+sed -i 's/\(use-ipv6=\).*/\1no/' /etc/avahi/avahi-daemon.conf
+
 # bluetooth (skip if removed bluetooth)
 [[ -e /usr/bin/bluetoothctl ]] && sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
 
@@ -203,7 +206,7 @@ chmod 666 /etc/fstab
 
 # network - allow write by http
 chmod -R 777 /etc/netctl
-chmod 666 /etc/systemd/network/*
+chown -R http:http /etc/systemd/network
 
 # password - set default
 echo root:rune | chpasswd
