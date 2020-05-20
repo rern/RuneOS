@@ -196,7 +196,7 @@ fi
 ( crontab -l &> /dev/null; echo '00 01 * * * /srv/http/addons-update.sh &' ) | crontab -
 
 # fstab - allow write
-chmod 666 /etc/fstab
+chown http:http  /etc/fstab
 
 # lvm - remove invalid value
 #sed -i '/event_timeout/ s/^/#/' /usr/lib/udev/rules.d/11-dm-lvm.rules
