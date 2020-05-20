@@ -134,9 +134,6 @@ bsdtar --strip 1 -C / -xvf packages.zip
 bsdtar --strip 1 -C / -xvf ui.zip
 rm *.zip /*.* /.* 2> /dev/null
 
-chown -R http:http /srv/http
-chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
-
 # RPi 0, 1 - switch packages for armv6h & remove mpd.service
 if [[ $rpi01 ]]; then
 	rm /root/*.xz
@@ -170,8 +167,12 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 [[ ! -e /usr/bin/smbd ]] && rm -r /etc/samba && rm /etc/systemd/system/wsdd.service
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport*
 
-# alsa
+chown http:http /etc/fstab
+chown -R http:http /etc/netctl /etc/systemd/network /srv/http
+chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chmod 775 /var/lib/alsa  # fix permission
+
+# alsa
 sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit test rules
 
 # avahi
@@ -195,18 +196,11 @@ fi
 # cron - for addons updates
 ( crontab -l &> /dev/null; echo '00 01 * * * /srv/http/addons-update.sh &' ) | crontab -
 
-# fstab - allow write
-chown http:http  /etc/fstab
-
 # lvm - remove invalid value
 #sed -i '/event_timeout/ s/^/#/' /usr/lib/udev/rules.d/11-dm-lvm.rules
 
 # mpd
 [[ $rpi01 ]] && sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
-
-# network - allow write by http
-chmod -R 777 /etc/netctl
-chown -R http:http /etc/systemd/network
 
 # password - set default
 echo root:rune | chpasswd
