@@ -1,6 +1,6 @@
 RuneAudio+R - DIY RuneOS
 ---
-Audio player and renderer for Raspberry Pi (See [User Guide](https://rern.github.io/RuneAudio-Re3/) for more details)
+Audio player and renderer for Raspberry Pi
 - For all **Raspberry Pi**s: Zero, 1, 2, 3 and 4
 - Create **RuneAudio+R** from latest releases of [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads)
 - Interactive interface
@@ -9,6 +9,9 @@ Audio player and renderer for Raspberry Pi (See [User Guide](https://rern.github
 	- Run on USB only - no SD card ([boot from USB](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md))
 	- Pre-configure Wi-Fi connection (headless mode)
 	- Exclude features (can be as light as possible in terms of build time and disk space)
+- More details:
+	- [Forum](https://www.runeaudio.com/forum/runeaudio-r-e3-t7014.html)
+	- [User Guide](https://rern.github.io/RuneAudio-Re3/)
 
 **Procedure**
 - Prepare partitions
