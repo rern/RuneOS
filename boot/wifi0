@@ -5,5 +5,5 @@ Interface=wlan0
 Connection=wireless
 IP=dhcp
 ESSID="NAME"
-Key=PASSWORD
+Key="PASSWORD"
 Security=wpa
