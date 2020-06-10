@@ -38,6 +38,5 @@
 - Model:
 	- `A` - no ethernet
 	- `B` - with ethernet
-- Zero and Zero W:
-	- No 3.5mm headphone output
-	
+- 3.5mm headphone output
+	- None in Zero and Zero W
