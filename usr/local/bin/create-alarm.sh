@@ -194,7 +194,7 @@ IP=dhcp
 ESSID=\"$ssid\""
 	[[ -n $wpa ]] && profile+="
 Security=$wpa
-Key=$password
+Key=\"$password\"
 "
 	echo "$profile" | tee "$ROOT/etc/netctl/$ssid" "/srv/http/data/system/$ssid"
 
