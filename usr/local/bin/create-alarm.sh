@@ -90,8 +90,8 @@ ROOT: \Z1$ROOT\Z0"
 		4) file=ArchLinuxARM-rpi-4-latest.tar.gz ;;
 	esac
 	
-	yesno '\Z1Connect Wi-Fi on boot?\Z0'
-	if [[ $? == 0 ]]; then
+	[[ $rpi != 0 ]] && yesno '\Z1Connect Wi-Fi on boot?\Z0'
+	if [[ $? == 0 || $rpi == 0 ]]; then
 		ssid=$( inputbox '\Z1Wi-Fi\Z0 - SSID:' $ssid )
 
 		password=$( inputbox '\Z1Wi-Fi\Z0 - Password:' $password )
