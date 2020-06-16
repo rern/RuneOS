@@ -157,6 +157,9 @@ It may take 10+ minutes to complete writing\n
 from cache to SD card or thumb drive." 8 50
 sync
 
+# total=$( grep -e Dirty: /proc/meminfo | awk '{print $2}' )
+# watch -d grep -e Dirty: /proc/meminfo
+
 #----------------------------------------------------------------------------
 # fstab and cmdline.txt
 PATH=$PATH:/sbin  # Debian not include /sbin in PATH
