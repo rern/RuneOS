@@ -219,6 +219,7 @@ echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
 wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
 chmod 755 $ROOT/usr/local/bin/*.sh
 
+[[ $rpi == 0 ]] && rpi=Zero
 msgbox "
         Arch Linux Arm for \Z1Raspberry Pi $rpi\Z0\n\
                created successfully.
