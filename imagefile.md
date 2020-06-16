@@ -29,7 +29,7 @@ journalctl --vacuum-time=1s
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 
-fsck.fat -trawl /dev/mmcblk0p1
+fsck.fat -traw /dev/mmcblk0p1
 
 shutdown -h now
 ```
