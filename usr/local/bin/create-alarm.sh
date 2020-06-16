@@ -157,10 +157,9 @@ It may take 10+ minutes to complete writing\n
 from cache to SD card or thumb drive." 8 50
 sync
 
-#sync &
 #infobox "\Z1Be patient.\Z0\n\n
-#It may take 10+ minutes to complete writing.\n
-#$( watch -t "awk '/Dirty:/{print \"Cache: \"\$2\" \" \$3}' /proc/meminfo" )" 8 50
+#It may take 10+ minutes to complete writing." 8 50
+#sync & watch -t "awk '/Dirty:/{print \"Cache: \"\$2\" \" \$3}' /proc/meminfo"
 
 #sync &
 #total=$( grep -e Dirty: /proc/meminfo | awk '{print $2}' )
