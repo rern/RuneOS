@@ -255,7 +255,7 @@ msgbox "
                created successfully.
 " 8 58
 
-rm /usr/local/bin/create-alarm.sh
+rm create-alarm.sh
 
 #----------------------------------------------------------------------------
 umount -l $BOOT
