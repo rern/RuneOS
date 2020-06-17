@@ -153,12 +153,13 @@ fi
 ( pv -n $file | bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 | \
 	dialog --backtitle "$title" --colors --gauge "\nExpand to \Z1ROOT\Z0 ..." 9 50
 
+sync &
+
 infobox "\Z1Be patient.\Z0\n\n
 It may take 10+ minutes to complete writing\n
 from cache to SD card or thumb drive." 8 50
 sleep 2
 
-sync &
 watch -t "awk '/Dirty:/{print \"Cache to write: \"\$2\" \" \$3}' /proc/meminfo" &
 WATCHPID=$!
 while true; do
