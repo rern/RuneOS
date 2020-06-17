@@ -182,7 +182,7 @@ dirty=$( awk '/Dirty:/{print $2}' /proc/meminfo )
 XXX
 $percent
 \nWrite remaining cache to \Z1ROOT\Z0 ...
-\nTime left: $timeleft
+\nTime left: $timeleft m
 XXX
 EOF
 	sleep 2
