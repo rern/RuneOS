@@ -231,7 +231,9 @@ sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 # suppress warnings
 echo 'StrictHostKeyChecking no' >> $ROOT/etc/ssh/ssh_config
 # fix - haveged coredump error
-sed -i '/^SystemCallFilter/ s/^/#/' $ROOT/usr/lib/systemd/system/haveged.service
+cp $ROOT/{usr/lib,etc}/systemd/system/haveged.service
+sed -i '/^SystemCallFilter/ s/^/#/' $ROOT/etc/systemd/system/haveged.service
+ln -sf $ROOT/etc/systemd/system/{,sysinit.target.wants/}haveged.service
 
 # get create-rune.sh
 wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
