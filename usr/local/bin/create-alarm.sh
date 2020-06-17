@@ -159,7 +159,7 @@ from cache to SD card or thumb drive." 8 50
 sleep 2
 
 sync &
-watch -t "awk '/Dirty:/{print \"Cache: \"\$2\" \" \$3}' /proc/meminfo" &
+watch -t "awk '/Dirty:/{print \"Cache to write: \"\$2\" \" \$3}' /proc/meminfo" &
 WATCHPID=$!
 while true; do
 	n=$( awk '/Dirty:/{print $2}' /proc/meminfo )
