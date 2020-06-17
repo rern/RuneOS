@@ -169,12 +169,14 @@ fi
 
 sync &
 
+percent=0
 Sstart=$( date +%s )
 dirty=$( awk '/Dirty:/{print $2}' /proc/meminfo )
 ( while (( $( awk '/Dirty:/{print $2}' /proc/meminfo ) > 10 )); do
 	left=$( awk '/Dirty:/{print $2}' /proc/meminfo )
+	percentPrev=$percent
 	percent=$(( $(( dirty - left )) * 100 / dirty ))
-	if [[ $percent > 0 ]]; then
+	if (( $percent > $percentPrev )); then
 		elapse=$(( $( date +%s ) - $Sstart ))
 		timeleft=$( formatTime $(( $elapse * 100 / $percent - $elapse )) )
 	fi
