@@ -156,9 +156,19 @@ fi
 infobox "\Z1Be patient.\Z0\n\n
 It may take 10+ minutes to complete writing\n
 from cache to SD card or thumb drive." 8 50
-sync
+sleep 2
 
-#sync & watch -t "awk '/Dirty:/{print \"Cache: \"\$2\" \" \$3}' /proc/meminfo"
+sync &
+watch -t "awk '/Dirty:/{print \"Cache: \"\$2\" \" \$3}' /proc/meminfo" &
+WATCHPID=$!
+while true; do
+	n=$( awk '/Dirty:/{print $2}' /proc/meminfo )
+	if [[ $n < 10 ]]; then
+		kill $WATCHPID
+		break
+	fi
+	sleep 2
+done
 
 #----------------------------------------------------------------------------
 # fstab and cmdline.txt
