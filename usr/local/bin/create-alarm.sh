@@ -148,28 +148,28 @@ if [[ ! -e $file ]]; then
 fi
 
 # expand
-( pv -n $file | bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 | \
+( pv -n $file | \
+	bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 | \
 	dialog --backtitle "$title" --colors --gauge "\nExpand to \Z1BOOT\Z0 ..." 9 50
-( pv -n $file | bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 | \
+( pv -n $file | \
+	bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 | \
 	dialog --backtitle "$title" --colors --gauge "\nExpand to \Z1ROOT\Z0 ..." 9 50
 
 sync &
 
-infobox "\Z1Be patient.\Z0\n\n
-It may take 10+ minutes to complete writing\n
-from cache to SD card or thumb drive." 8 50
-sleep 3
-
-watch -t "awk '/Dirty:/{print \"Cache to write: \"\$2\" \" \$3}' /proc/meminfo" &
-WATCHPID=$!
-while true; do
-	n=$( awk '/Dirty:/{print $2}' /proc/meminfo )
-	if [[ $n < 10 ]]; then
-		kill $WATCHPID
-		break
-	fi
+total=$( awk '/Dirty:/{print $2}' /proc/meminfo )
+( while (( $( awk '/Dirty:/{print $2}' /proc/meminfo ) > 10 )); do
+	left=$( awk '/Dirty:/{print $2}' /proc/meminfo )
+	percent=$(( $(( total - left )) * 100 / total ))
+	cat <<EOF
+XXX
+$percent
+\nWrite remaining cache to \Z1ROOT\Z0 ...
+XXX
+EOF
 	sleep 2
-done
+done ) | \
+	dialog --backtitle "$title" --colors --gauge "\nWrite remaining cache to \Z1ROOT\Z0 ..." 9 50
 
 #----------------------------------------------------------------------------
 # fstab and cmdline.txt
