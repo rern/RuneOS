@@ -212,7 +212,7 @@ ESSID=\"$ssid\""
 Security=$wpa
 Key=\"$password\"
 "
-	echo "$profile" | tee "$ROOT/etc/netctl/$ssid" "/srv/http/data/system/$ssid"
+	echo "$profile" > "$ROOT/etc/netctl/$ssid"
 
 	# enable startup
 	pwd=$PWD
