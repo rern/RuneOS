@@ -227,6 +227,8 @@ fi
 sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 # suppress warnings
 echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
+# fix - haveged dumped core
+sed -i '/^SystemCallFilter/ s/^/#/' /usr/lib/systemd/system/haveged.service
 
 # get create-rune.sh
 wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
