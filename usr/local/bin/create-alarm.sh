@@ -243,7 +243,7 @@ fi
 sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 # suppress warnings
 echo 'StrictHostKeyChecking no' >> $ROOT/etc/ssh/ssh_config
-# fix - haveged dumped core
+# fix - haveged coredump error
 sed -i '/^SystemCallFilter/ s/^/#/' $ROOT/usr/lib/systemd/system/haveged.service
 
 # get create-rune.sh
