@@ -264,11 +264,12 @@ umount -l $BOOT
 umount -l $ROOT
 
 [[ ${partuuidBOOT:0:-3} != ${partuuidROOT:0:-3} ]] && usb=' and USB drive'
+[[ $rpi == 0 ]] && wait=60 || wait=30
 msgbox "\Z1Finish.\Z0\n\n
 BOOT and ROOT were unmounted.\n
 Move micro SD card$usb to RPi.\n
 Power on.\n
-\Z1Wait 30 seconds\Z0 then press \Z1Enter\Z0 to continue." 12 55
+\Z1Wait $wait seconds\Z0 then press \Z1Enter\Z0 to continue." 12 55
 
 #----------------------------------------------------------------------------
 title='Connect to Raspberry Pi'
