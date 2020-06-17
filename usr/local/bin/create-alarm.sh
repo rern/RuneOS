@@ -37,16 +37,6 @@ msgbox() {
 yesno() {
 	dialog --backtitle "$title" --colors --yesno "\n$1\n\n" 0 0
 }
-formatTime() {
-	h=00$(( $1 / 3600 ))
-	hh=${h: -2}
-	m=00$(( $1 % 3600 / 60 ))
-	mm=${m: -2}
-	s=00$(( $1 % 60 ))
-	ss=${s: -2}
-	[[ $hh == 00 ]] && hh= || hh=$hh:
-	echo $hh$mm:$ss
-}
 
 title='Create Arch Linux Arm'
 infobox "
@@ -169,22 +159,15 @@ fi
 
 sync &
 
-percentPrev=0
 Sstart=$( date +%s )
 dirty=$( awk '/Dirty:/{print $2}' /proc/meminfo )
 ( while (( $( awk '/Dirty:/{print $2}' /proc/meminfo ) > 10 )); do
 	left=$( awk '/Dirty:/{print $2}' /proc/meminfo )
 	percent=$(( $(( dirty - left )) * 100 / dirty ))
-	if (( $percent > $percentPrev )); then
-		percentPrev=$percent
-		elapse=$(( $( date +%s ) - $Sstart ))
-		timeleft=$( formatTime $(( $elapse * 100 / $percent - $elapse )) )
-	fi
 	cat <<EOF
 XXX
 $percent
 \nWrite remaining cache to \Z1ROOT\Z0 ...
-\nTime left: $timeleft m
 XXX
 EOF
 	sleep 2
