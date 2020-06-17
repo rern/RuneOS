@@ -30,6 +30,7 @@ systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 
 fsck.fat -traw /dev/mmcblk0p1
+rm /boot/FSCK*
 
 shutdown -h now
 ```
