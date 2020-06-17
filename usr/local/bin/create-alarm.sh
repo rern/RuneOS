@@ -176,7 +176,7 @@ dirty=$( awk '/Dirty:/{print $2}' /proc/meminfo )
 	percent=$(( $(( dirty - left )) * 100 / dirty ))
 	if [[ $percent > 0 ]]; then
 		elapse=$(( $( date +%s ) - $Sstart ))
-		timeleft="$( formatTime $elapse ) / $( formatTime $(( $elapse * 100 / $percent )) )"
+		timeleft=$( formatTime $(( $elapse * 100 / $percent - $elapse )) )
 	fi
 	cat <<EOF
 XXX
