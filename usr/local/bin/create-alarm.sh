@@ -37,6 +37,16 @@ msgbox() {
 yesno() {
 	dialog --backtitle "$title" --colors --yesno "\n$1\n\n" 0 0
 }
+formatTime() {
+	h=00$(( $1 / 3600 ))
+	hh=${h: -2}
+	m=00$(( $1 % 3600 / 60 ))
+	mm=${m: -2}
+	s=00$(( $1 % 60 ))
+	ss=${s: -2}
+	[[ $hh == 00 ]] && hh= || hh=$hh:
+	echo $hh$mm:$ss
+}
 
 title='Create Arch Linux Arm'
 infobox "
@@ -119,7 +129,7 @@ ROOT: \Z1$ROOT\Z0"
 	yesno "\Z1Confirm data:\Z0\n\n\
 BOOT path : \Z1$BOOT\Z0\n\
 ROOT path : \Z1$ROOT\Z0\n\
-Target    : \Z1Raspberry Pi $rpi\Z0\n\
+Target    : \Z1Raspberry Pi $rpiname\Z0\n\
 $wifi"
 	[[ $? == 1 ]] && getData
 }
@@ -133,7 +143,7 @@ fi
 
 # download
 if [[ ! -e $file ]]; then
-	( wget -O $file http://os.archlinuxarm.org/os/$file 2>&1 | \
+	( wget -O $file http://os.archlinuxarm.org/os/$file 2>&1| \
 		stdbuf -o0 awk '/[.] +[0-9][0-9]?[0-9]?%/ { \
 			print "XXX\n"substr($0,63,3)
 			print "\\n\\Z1Download Arch Linux Arm\\Z0\\n"
@@ -150,17 +160,34 @@ if [[ ! -e $file ]]; then
 fi
 
 # expand
-( pv -n $file | bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 | \
+( pv -n $file | \
+	bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 | \
 	dialog --backtitle "$title" --colors --gauge "\nExpand to \Z1BOOT\Z0 ..." 9 50
-( pv -n $file | bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 | \
+( pv -n $file | \
+	bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 | \
 	dialog --backtitle "$title" --colors --gauge "\nExpand to \Z1ROOT\Z0 ..." 9 50
 
-infobox "\Z1Be patient.\Z0\n\n
-It may take 10+ minutes to complete writing\n
-from cache to SD card or thumb drive." 8 50
-sync
+sync &
 
-#sync & watch -t "awk '/Dirty:/{print \"Cache: \"\$2\" \" \$3}' /proc/meminfo"
+Sstart=$( date +%s )
+dirty=$( awk '/Dirty:/{print $2}' /proc/meminfo )
+( while (( $( awk '/Dirty:/{print $2}' /proc/meminfo ) > 10 )); do
+	left=$( awk '/Dirty:/{print $2}' /proc/meminfo )
+	percent=$(( $(( dirty - left )) * 100 / dirty ))
+	if [[ $percent > 0 ]]; then
+		elapse=$(( $( date +%s ) - $Sstart ))
+		timeleft=$( formatTime $elapse ) / $( formatTime $(( $elapse * 100 / $percent )) )
+	fi
+	cat <<EOF
+XXX
+$percent
+\nWrite remaining cache to \Z1ROOT\Z0 ...
+Time left: $timeleft
+XXX
+EOF
+	sleep 2
+done ) | \
+	dialog --backtitle "$title" --colors --gauge "\nWrite remaining cache to \Z1ROOT\Z0 ..." 9 50
 
 #----------------------------------------------------------------------------
 # fstab and cmdline.txt
@@ -201,7 +228,7 @@ ESSID=\"$ssid\""
 Security=$wpa
 Key=\"$password\"
 "
-	echo "$profile" | tee "$ROOT/etc/netctl/$ssid" "/srv/http/data/system/$ssid"
+	echo "$profile" > "$ROOT/etc/netctl/$ssid"
 
 	# enable startup
 	pwd=$PWD
@@ -216,6 +243,8 @@ fi
 sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 # suppress warnings
 echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
+# fix - haveged dumped core
+sed -i '/^SystemCallFilter/ s/^/#/' /usr/lib/systemd/system/haveged.service
 
 # get create-rune.sh
 wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin

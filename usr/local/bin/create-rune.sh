@@ -106,9 +106,6 @@ $list\n\n" 0 0
 clear
 
 #----------------------------------------------------------------------------
-# fix - haveged dumped core
-sed -i 's/.*\(IgnorePkg   =\).*/\1 haveged/' /etc/pacman.conf
-
 pacmanFailed() {
 	dialog --backtitle "$title" --colors \
 		--msgbox "\n$1\n\n
