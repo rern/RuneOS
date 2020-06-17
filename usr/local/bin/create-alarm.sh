@@ -90,6 +90,8 @@ ROOT: \Z1$ROOT\Z0"
 		4) file=ArchLinuxARM-rpi-4-latest.tar.gz ;;
 	esac
 	
+	[[ $rpi != 0 ]] && rpiname=$rpi || rpiname=Zero
+	
 	yesno '\Z1Connect Wi-Fi on boot?\Z0'
 	if [[ $? == 0 ]]; then
 		ssid=$( inputbox '\Z1Wi-Fi\Z0 - SSID:' $ssid )
@@ -219,9 +221,8 @@ echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
 wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
 chmod 755 $ROOT/usr/local/bin/*.sh
 
-[[ $rpi == 0 ]] && rpi=Zero
 msgbox "
-        Arch Linux Arm for \Z1Raspberry Pi $rpi\Z0\n\
+        Arch Linux Arm for \Z1Raspberry Pi $rpiname\Z0\n\
                created successfully.
 " 8 58
 
