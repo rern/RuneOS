@@ -241,6 +241,8 @@ Key=\"$password\"
 	cd "$pwd"
 fi
 
+# fix dns errors
+echo DNSSEC=no >> $ROOT/etc/systemd/resolved.conf
 # ssh - permit root
 sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 # suppress warnings
