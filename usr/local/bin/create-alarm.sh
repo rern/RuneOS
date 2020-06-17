@@ -131,7 +131,7 @@ fi
 
 # download
 if [[ ! -e $file ]]; then
-	( wget -O $file http://os.archlinuxarm.org/os/$file 2>/dev/null | \
+	( wget -O $file http://os.archlinuxarm.org/os/$file 2>&1| \
 		stdbuf -o0 awk '/[.] +[0-9][0-9]?[0-9]?%/ { \
 			print "XXX\n"substr($0,63,3)
 			print "\\n\\Z1Download Arch Linux Arm\\Z0\\n"
@@ -148,9 +148,9 @@ if [[ ! -e $file ]]; then
 fi
 
 # expand
-( pv -n $file | bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>/dev/null | \
+( pv -n $file | bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 | \
 	dialog --backtitle "$title" --colors --gauge "\nExpand to \Z1BOOT\Z0 ..." 9 50
-( pv -n $file | bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>/dev/null | \
+( pv -n $file | bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 | \
 	dialog --backtitle "$title" --colors --gauge "\nExpand to \Z1ROOT\Z0 ..." 9 50
 
 sync &
