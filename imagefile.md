@@ -1,7 +1,10 @@
 ### Create image file
 
 - Once started RuneAudio+R successfully
-
+- SSH to RPi
+```sh
+ssh root@<RPI IP>
+```
 - Optional for default image:
 	- expand root partition on initial boot (any custom commands or scripts can be appended to the file)
 	- reset mirror list
