@@ -23,10 +23,6 @@ pacman-key --populate archlinuxarm
 # fill entropy pool (fix - Kernel entropy pool is not initialized)
 systemctl start systemd-random-seed
 
-# fix dns errors
-echo DNSSEC=no >> /etc/systemd/resolved.conf
-systemctl restart systemd-resolved
-
 # rank mirrorlist
 #mkdir -p /srv/http/bash
 #wget -qN https://github.com/rern/RuneAudio-Re3/raw/master/srv/http/bash/addons-functions.sh -P /srv/http/bash
