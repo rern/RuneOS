@@ -3,6 +3,7 @@
 # any argument - custom inputs
 version=e3
 uibranch=master
+addonalias=rr$version
 
 trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
@@ -36,6 +37,7 @@ pacman -Sy --noconfirm --needed dialog
 if (( $# > 0 )); then
 	version=$( dialog --colors --output-fd 1 --inputbox "\n\Z1Version:\Z0" 0 0 $version )
 	uibranch=$( dialog --colors --output-fd 1 --inputbox "\n\Z1UI branch:\Z0" 0 0 $uibranch )
+	addonalias=rr$version
 fi
 
 title="Create RuneAudio+R $version"
@@ -239,7 +241,7 @@ ln -s /mnt /srv/http/
 # addons
 diraddons=/srv/http/data/addons
 wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P $diraddons
-echo $( grep -A 2 "^'rr$version'" $diraddons/addons-list.php | tail -1 | cut -d"'" -f4 ) > $diraddons/rr$version
+echo $( grep -A 2 "^'$addonalias" $diraddons/addons-list.php | tail -1 | cut -d"'" -f4 ) > $diraddons/$addonalias
 
 # remove cache and files
 rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
