@@ -1,7 +1,10 @@
 ### Create image file
 
 - Once started RuneAudio+R successfully
-
+- SSH to RPi
+```sh
+ssh root@<RPI IP>
+```
 - Optional for default image:
 	- expand root partition on initial boot (any custom commands or scripts can be appended to the file)
 	- reset mirror list
@@ -30,6 +33,7 @@ systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 
 fsck.fat -traw /dev/mmcblk0p1
+rm /boot/FSCK*
 
 shutdown -h now
 ```
