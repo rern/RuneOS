@@ -240,8 +240,8 @@ wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/lo
 chmod 755 $ROOT/usr/local/bin/*.sh
 
 msgbox "
-        Arch Linux Arm for \Z1Raspberry Pi $rpiname\Z0\n\
-               created successfully.
+         Arch Linux Arm for \Z1Raspberry Pi $rpiname\Z0\n\
+                created successfully.
 " 8 58
 
 rm create-alarm.sh
