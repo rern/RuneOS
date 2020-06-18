@@ -22,7 +22,7 @@ Audio player and renderer for Raspberry Pi
 	- Download and verify
 	- Write `BOOT` and `ROOT` partitions
 	- Connect PC to Raspberry Pi
-- [Create **RuneAudio+R**](#create-runeaudio+r)
+- [Create **RuneAudio**](#create-runeaudio)
 	- Select features:
 		- [Bluez](https://github.com/bluez/bluez) - Bluetooth support
 		- [Chromium](https://www.chromium.org) - Browser on RPi (Not available for RPi Zero and 1 - too much for CPU)
@@ -143,7 +143,7 @@ wget -qO create-alarm.sh --no-check-certificate https://github.com/rern/RuneOS/r
 - Follow instructions until PC to Raspberry Pi connection is up.
 ---
 
-### Create RuneAudio+R
+### Create RuneAudio
 - UI branch and version number are assigned by this script
 ```sh
 # run script
