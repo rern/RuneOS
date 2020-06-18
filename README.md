@@ -16,7 +16,7 @@ Audio player and renderer for Raspberry Pi
 
 **Procedure**
 - Prepare partitions
-- Create **Arch Linux Arm**
+- [Create Arch Linux Arm](#create-arch-linux-arm)
 	- Verify partitions
 	- Optional - pre-configure Wi-Fi
 	- Download and verify
