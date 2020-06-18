@@ -144,7 +144,7 @@ wget -qO create-alarm.sh --no-check-certificate https://github.com/rern/RuneOS/r
 ---
 
 ### Create RuneAudio+Re
-- Version number and UI branch assigned by this script
+- UI branch and version number are assigned by this script
 ```sh
 # run script
 create-rune.sh

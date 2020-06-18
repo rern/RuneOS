@@ -1,7 +1,7 @@
 #!/bin/bash
 
-[[ -z $1 ]] && version=e3 || version=$1
-[[ -z $2 ]] && uibranch=master || uibranch=$2
+[[ -z $1 ]] && uibranch=master || uibranch=$1
+[[ -z $2 ]] && version=e3 || version=$2
 
 trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
