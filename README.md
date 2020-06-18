@@ -23,17 +23,7 @@ Audio player and renderer for Raspberry Pi
 	- Write `BOOT` and `ROOT` partitions
 	- Connect PC to Raspberry Pi
 - [Create **RuneAudio**](#create-runeaudio)
-	- Select features:
-		- [Bluez](https://github.com/bluez/bluez) - Bluetooth support
-		- [Chromium](https://www.chromium.org) - Browser on RPi (Not available for RPi Zero and 1 - too much for CPU)
-		- [hostapd](http://w1.fi/hostapd/) - RPi access point
-		- [Kid3](https://kid3.kde.org) - Metadata tag editor
-		- [Python](https://www.python.org) - Programming language
-		- [Samba](https://www.samba.org) - File sharing
-		- [Shairport-sync](https://github.com/mikebrady/shairport-sync) - AirPlay renderer
-		- [Snapcast](https://github.com/badaix/snapcast) - Sync streamer
-		- [Spotifyd](https://github.com/Spotifyd/spotifyd) - Spotify renderer
-		- [upmpdcli](https://www.lesbonscomptes.com/upmpdcli/upmpdcli-manual.html) - UPnP renderer
+	- Select features
 	- Upgrade kernel and default packages
 	- Install feature packages and web interface
 	- Configure
