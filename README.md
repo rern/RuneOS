@@ -143,7 +143,7 @@ wget -qO create-alarm.sh --no-check-certificate https://github.com/rern/RuneOS/r
 - Follow instructions until PC to Raspberry Pi connection is up.
 ---
 
-### Create RuneAudio+Re
+### Create RuneAudio+R
 - UI branch and version number are assigned by this script
 ```sh
 # run script
