@@ -72,7 +72,7 @@ selectFeatures() {
 	select=$( dialog --backtitle "$title" --colors \
 	   --output-fd 1 \
 	   --checklist '\Z1Select features to install:\n
-\Z4[space] = Select / Deselect\Z0' 0 0 11 \
+\Z4[space] = Select / Deselect\Z0' 0 0 10 \
 			1 "$bluez" $onoffbluez \
 			2 "$chromium" $onoffchromium \
 			3 "$hostapd" on \
