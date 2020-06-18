@@ -71,30 +71,24 @@ selectFeatures() {
 			2 "$chromium" $onoffchromium \
 			3 "$hostapd" on \
 			4 "$kid" on \
-			5 "$python" on \
-			6 "$rpigpio" on \
-			7 "$samba" on \
-			8 "$shairport" on \
-			9 "$snapcast" on \
-		   10 "$spotify" on \
-		   11 "$upmpdcli" on )
+			5 "$rpigpio" on \
+			6 "$samba" on \
+			7 "$shairport" on \
+			8 "$snapcast" on \
+			9 "$spotify" on \
+		   10 "$upmpdcli" on )
 	
 	select=" $select "
 	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
 	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
-	[[ $select == *' 4 '* ]] && list+="$kid\n" && kid3=1 
-	[[ $select == *' 5 '* ]] && pyth=1
-	[[ $select == *' 6 '* && $pyth ]] && gpio=1
-	if [[ $pyth || $gpio ]]; then
-		features+='python python-pip ' && list+="$python\n"
-		[[ $gpio ]] && list+="$rpigpio\n"
-	fi
-	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
-	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
-	[[ $select == *' 9 '* ]] && list+="$snapcast\n" && snap=1
-	[[ $select == *' 10 '* ]] && list+="$spotify\n" && spot=1
-	[[ $select == *' 11 '* ]] && list+="$upmpdcli\n" && upnp=1
+	[[ $select == *' 4 '* ]] && kid3=1 && list+="$kid\n"
+	[[ $select == *' 5 '* ]] && gpio=1 && list+="$rpigpio\n"
+	[[ $select == *' 6 '* ]] && features+='samba ' && list+="$samba\n"
+	[[ $select == *' 7 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
+	[[ $select == *' 8 '* ]] && snap=1 && list+="$snapcast\n"
+	[[ $select == *' 9 '* ]] && features+='jq ' && spot=1 && list+="$spotify\n"
+	[[ $select == *' 10 '* ]] && upnp=1 && list+="$upmpdcli\n"
 }
 selectFeatures
 
@@ -118,7 +112,6 @@ pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
 packages='alsa-utils cronie dosfstools gcc ifplugd imagemagick inetutils mpd mpc nfs-utils nss-mdns ntfs-3g parted php-fpm python python-pip sshpass sudo udevil wget '
-[[ $spot ]] && packages+='jq '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
@@ -166,7 +159,7 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 [[ ! -e /usr/bin/bluetoothctl ]] && rm -rf /etc/systemd/system/bluetooth.service.d /srv/http/bash/system-bluetooth.sh
 [[ ! -e /usr/bin/hostapd ]] && rm -r /etc/{hostapd,dnsmasq.conf}
 [[ ! -e /usr/bin/samba ]] && rm -r /etc/samba && rm /etc/systemd/system/wsdd.service /usr/local/bin/wsdd.py
-[[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport*
+[[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport-meta.service
 
 chown http:http /etc/fstab
 chown -R http:http /etc/netctl /etc/systemd/network /srv/http
@@ -196,10 +189,6 @@ fi
 
 # cron - for addons updates
 ( crontab -l &> /dev/null; echo '00 01 * * * /srv/http/addons-update.sh &' ) | crontab -
-
-# haveged - fix coredump error
-systemctl disable haveged
-systemctl enable haveged
 
 # lvm - remove invalid value
 #sed -i '/event_timeout/ s/^/#/' /usr/lib/udev/rules.d/11-dm-lvm.rules
@@ -252,13 +241,14 @@ rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
+# sd boot partition - fix dirty bits if any
+fsck.fat -traw /dev/mmcblk0p1 &> /dev/null
+rm -f /boot/FSCK*
+
 dialog --colors \
 	--msgbox "\n      
       \Z1RuneAudio+R $version\Z0 created successfully.\n\n
             Press \Z1Enter\Z0 to reboot
 " 9 50
-
-# sd boot partition - fix dirty bits if any
-fsck.fat -trawl /dev/mmcblk0p1 &> /dev/null
 
 shutdown -r now
