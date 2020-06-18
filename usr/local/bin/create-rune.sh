@@ -34,8 +34,8 @@ pacman -Sy --noconfirm --needed dialog
 
 #----------------------------------------------------------------------------
 if (( $# > 0 )); then
-	version=$( dialog --output-fd 1 --inputbox "\nVersion:" 0 0 $version )
-	uibranch=$( dialog --output-fd 1 --inputbox "\nUI branch:" 0 0 $uibranch )
+	version=$( dialog --colors --output-fd 1 --inputbox "\n\Z1Version:\Z0" 0 0 $version )
+	uibranch=$( dialog --colors --output-fd 1 --inputbox "\n\Z1UI branch:\Z0" 0 0 $uibranch )
 fi
 
 title="Create RuneAudio+R $version"
