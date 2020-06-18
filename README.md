@@ -18,7 +18,7 @@ Audio player and renderer for Raspberry Pi
 - [Prepare partitions](#prepare-partitions)
 - [Create **Arch Linux Arm**](#create-arch-linux-arm)
 	- Verify partitions
-	- Optional - pre-configure Wi-Fi
+	- Optional - pre-configure Wi-Fi (For reliable connection, use wired LAN if possible)
 	- Download and verify
 	- Write `BOOT` and `ROOT` partitions
 	- Connect PC to Raspberry Pi
