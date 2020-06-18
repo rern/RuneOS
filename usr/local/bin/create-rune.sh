@@ -239,7 +239,7 @@ ln -s /mnt /srv/http/
 # addons
 diraddons=/srv/http/data/addons
 wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P $diraddons
-echo $( grep -A 2 rre3 $diraddons/addons-list.php | tail -1 | cut -d"'" -f4 ) > $diraddons/rre3
+echo $( grep -A 2 "^'rr$version'" $diraddons/addons-list.php | tail -1 | cut -d"'" -f4 ) > $diraddons/rr$version
 
 # remove cache and files
 rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
