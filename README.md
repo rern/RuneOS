@@ -15,14 +15,14 @@ Audio player and renderer for Raspberry Pi
 - More details: [Forum](https://www.runeaudio.com/forum/runeaudio-r-e3-t7014.html)
 
 **Procedure**
-- Prepare partitions
-- [Create Arch Linux Arm](#create-arch-linux-arm)
+- [Prepare partitions](#prepare-partitions)
+- [Create **Arch Linux Arm**](#create-arch-linux-arm)
 	- Verify partitions
 	- Optional - pre-configure Wi-Fi
 	- Download and verify
 	- Write `BOOT` and `ROOT` partitions
 	- Connect PC to Raspberry Pi
-- Create **RuneAudio+R**
+- [Create **RuneAudio+R**](#create-runeaudio+r)
 	- Select features:
 		- [Bluez](https://github.com/bluez/bluez) - Bluetooth support
 		- [Chromium](https://www.chromium.org) - Browser on RPi (Not available for RPi Zero and 1 - too much for CPU)
