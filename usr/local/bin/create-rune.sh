@@ -83,14 +83,14 @@ selectFeatures() {
 	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
 	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
-	[[ $select == *' 4 '* ]] && kid3=1 && list+="$kid\n"
+	[[ $select == *' 4 '* ]]&& list+="$kid\n" && kid3=1 
 	[[ $select == *' 5 '* ]] && features+='python python-pip ' && list+="$python\n" && pyth=1
-	[[ $select == *' 6 '* && $pyth ]] && gpio=1 && list+="$rpigpio\n"
+	[[ $select == *' 6 '* && $pyth ]] && list+="$rpigpio\n" && gpio=1
 	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
-	[[ $select == *' 9 '* ]] && snap=1 && list+="$snapcast\n"
-	[[ $select == *' 10 '* ]] && spot=1 && list+="$spotify\n"
-	[[ $select == *' 11 '* ]] && upnp=1 && list+="$upmpdcli\n"
+	[[ $select == *' 9 '* ]] && list+="$snapcast\n" && snap=1
+	[[ $select == *' 10 '* ]] && list+="$spotify\n" && spot=1
+	[[ $select == *' 11 '* ]] && list+="$upmpdcli\n" && upnp=1
 }
 selectFeatures
 
@@ -113,7 +113,8 @@ echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
-packages='alsa-utils cronie dosfstools gcc ifplugd imagemagick inetutils jq mpd mpc nfs-utils nss-mdns ntfs-3g parted php-fpm python python-pip sshpass sudo udevil wget '
+packages='alsa-utils cronie dosfstools gcc ifplugd imagemagick inetutils mpd mpc nfs-utils nss-mdns ntfs-3g parted php-fpm python python-pip sshpass sudo udevil wget '
+[[ $spot ]] && packages+='jq '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
@@ -160,7 +161,7 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 # remove config of excluded features
 [[ ! -e /usr/bin/bluetoothctl ]] && rm -rf /etc/systemd/system/bluetooth.service.d /srv/http/bash/system-bluetooth.sh
 [[ ! -e /usr/bin/hostapd ]] && rm -r /etc/{hostapd,dnsmasq.conf}
-[[ ! -e /usr/bin/smbd ]] && rm -r /etc/samba && rm /etc/systemd/system/wsdd.service
+[[ ! -e /usr/bin/samba ]] && rm -r /etc/samba && rm /etc/systemd/system/wsdd.service /usr/local/bin/wsdd.py
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport*
 
 chown http:http /etc/fstab
