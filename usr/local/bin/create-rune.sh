@@ -83,9 +83,13 @@ selectFeatures() {
 	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
 	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
-	[[ $select == *' 4 '* ]]&& list+="$kid\n" && kid3=1 
-	[[ $select == *' 5 '* ]] && features+='python python-pip ' && list+="$python\n" && pyth=1
-	[[ $select == *' 6 '* && $pyth ]] && list+="$rpigpio\n" && gpio=1
+	[[ $select == *' 4 '* ]] && list+="$kid\n" && kid3=1 
+	[[ $select == *' 5 '* ]] && pyth=1
+	[[ $select == *' 6 '* && $pyth ]] && gpio=1
+	if [[ $pyth || $gpio ]]; then
+		features+='python python-pip ' && list+="$python\n"
+		[[ $gpio ]] && list+="$rpigpio\n"
+	fi
 	[[ $select == *' 7 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 8 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
 	[[ $select == *' 9 '* ]] && list+="$snapcast\n" && snap=1
