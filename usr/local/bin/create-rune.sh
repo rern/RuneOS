@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# any argument - custom inputs
 version=e3
 uibranch=master
 
