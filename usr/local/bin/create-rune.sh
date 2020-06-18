@@ -1,7 +1,7 @@
 #!/bin/bash
 
-[[ -z $1 ]] && uibranch=master || uibranch=$1
-[[ -z $2 ]] && version=e3 || version=$2
+version=e3
+uibranch=master
 
 trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
 
@@ -32,6 +32,11 @@ systemctl start systemd-random-seed
 pacman -Sy --noconfirm --needed dialog
 
 #----------------------------------------------------------------------------
+if (( $# > 0 )); then
+	version=$( dialog --backtitle "$title" --colors --output-fd 1 --inputbox "\nVersion:" 0 0 $version )
+	uibranch=$( dialog --backtitle "$title" --colors --output-fd 1 --inputbox "\nUI branch:" 0 0 $uibranch )
+fi
+
 title="Create RuneAudio+R $version"
 dialog  --backtitle "$title" --colors \
 	--infobox "\n\n                \Z1RuneAudio+R $version\Z0" 7 50
