@@ -250,8 +250,8 @@ rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
 # sd boot partition - fix dirty bits if any
-fsck.fat -traw /dev/mmcblk0p1 &> /dev/null
-rm -f /boot/FSCK*
+#fsck.fat -traw /dev/mmcblk0p1 &> /dev/null
+#rm -f /boot/FSCK*
 
 dialog --colors \
 	--msgbox "\n      
