@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# any argument - custom inputs
+# any argument - custom inputs for version and branch
 version=e4
 uibranch=master
 addonalias=rr$version
