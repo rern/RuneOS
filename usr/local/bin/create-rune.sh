@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # any argument - custom inputs
-version=e3
+version=e4
 uibranch=master
 addonalias=rr$version
 
