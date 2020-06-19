@@ -132,7 +132,11 @@ if [[ -e $file ]]; then
 fi
 
 # download
-if [[ ! -e $file ]]; then
+if [[ -e $file ]]; then
+	msgbox "Existing \Z1$file\Z0 is the latest.\n
+No download required."
+	sleep 2
+else
 	( wget -O $file http://os.archlinuxarm.org/os/$file 2>&1| \
 		stdbuf -o0 awk '/[.] +[0-9][0-9]?[0-9]?%/ { \
 			print "XXX\n"substr($0,63,3)
