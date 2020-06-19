@@ -92,11 +92,6 @@ ROOT: \Z1$ROOT\Z0"
 	
 	[[ $rpi != 0 ]] && rpiname=$rpi || rpiname=Zero
 	
-	if [[ -e $file ]]; then
-		yesno "Use existing \n\Z1$file\Z0 ?"
-		[[ $? != 0 ]] && rm $file $file.md5
-	fi
-	
 	yesno '\Z1Connect Wi-Fi on boot?\Z0'
 	if [[ $? == 0 ]]; then
 		ssid=$( inputbox '\Z1Wi-Fi\Z0 - SSID:' $ssid )
