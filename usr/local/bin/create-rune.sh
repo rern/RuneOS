@@ -186,7 +186,7 @@ sed -i 's/\(use-ipv6=\).*/\1no/' /etc/avahi/avahi-daemon.conf
 # chromium
 if [[ -e /usr/bin/chromium ]]; then
 	# boot splash
-	sed -i 's/\(console=\).*/\1tty3 plymouth.enable=0 quiet loglevel=0 logo.nologo vt.global_cursor_default=0/' /boot/cmdline.txt
+	sed -i 's/\(console=\).*/\1tty3 quiet loglevel=0 logo.nologo vt.global_cursor_default=0/' /boot/cmdline.txt
 	# login prompt
 	systemctl disable getty@tty1
 	# fix permission for rotate file
