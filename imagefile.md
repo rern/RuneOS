@@ -10,7 +10,6 @@ ssh root@<RPI IP>
 	- reset mirror list
 	- remove non-default files and journal logs
 	- remove all connected Wi-Fi profile (if any)
-	- remove dirty bits on sd boot partition (if any)
 ```sh
 echo '#!/bin/bash
 rm $0
@@ -32,8 +31,8 @@ journalctl --vacuum-time=1s
 systemctl disable netctl-auto@wlan0
 rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 
-fsck.fat -traw /dev/mmcblk0p1
-rm -f /boot/FSCK*
+#fsck.fat -traw /dev/mmcblk0p1
+#rm -f /boot/FSCK*
 
 shutdown -h now
 ```
