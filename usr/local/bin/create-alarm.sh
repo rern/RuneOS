@@ -230,6 +230,8 @@ fi
 
 # fix dns errors
 echo DNSSEC=no >> $ROOT/etc/systemd/resolved.conf
+# disable wait-online
+systemctl disable systemd-networkd-wait-online
 # ssh - permit root
 sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 # suppress warnings
