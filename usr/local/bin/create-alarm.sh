@@ -195,6 +195,7 @@ over_voltage=2
 hdmi_drive=2
 force_turbo=1
 gpu_mem=32
+initramfs initramfs-linux.img followkernel
 max_usb_current=1
 disable_splash=1
 disable_overscan=1
