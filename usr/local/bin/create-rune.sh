@@ -204,6 +204,9 @@ fi
 # mpd
 [[ $rpi01 ]] && sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
 
+# expandable partition
+(( $( sfdisk -F /dev/mmcblk0 | head -n1 | awk '{print $6}' ) == 0 )) && rm /boot/x.sh
+
 # password - set default
 echo root:rune | chpasswd
 [[ -e /usr/bin/smbd ]] && ( echo rune; echo rune ) | smbpasswd -s -a root
