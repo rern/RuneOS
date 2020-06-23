@@ -202,7 +202,14 @@ disable_overscan=1
 dtparam=audio=on
 "
 [[ $rpi == 4 ]] && config=$( sed '/force_turbo/ d' <<<"$config" )
-[[ $rpi != 0 ]] && config=$( sed '/over_voltage\|hdmi_drive/ d' <<<"$config" )
+if [[ $rpi != 0 ]]; then
+	config=$( sed '/over_voltage\|hdmi_drive/ d' <<<"$config" )
+else
+	config=$( sed '/dtparam=audio=on/ d' <<<"$config" )
+	config+="
+dtoverlay=vc4-kms-v3d
+"
+fi
 
 echo -n "$config" > $BOOT/config.txt
 
