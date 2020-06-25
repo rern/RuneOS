@@ -30,6 +30,14 @@ systemctl start systemd-random-seed
 #wget -qN https://github.com/rern/RuneAudio-Re3/raw/master/srv/http/bash/addons-functions.sh -P /srv/http/bash
 #wget -qN https://github.com/rern/RuneAudio/raw/master/rankmirrors/rankmirrors.sh -O - | sh
 
+# add private repo
+[[ $rpi01 ]] && repo=armv6h || repo=armv7h
+echo "
+[RR]
+SigLevel = Optional TrustAll
+Server = https://rern.github.io/$repo
+" >> /etc/pacman.conf
+
 # dialog package
 pacman -Sy --noconfirm --needed dialog
 
@@ -108,14 +116,6 @@ $list\n\n" 0 0
 clear
 
 #----------------------------------------------------------------------------
-# add private repo
-[[ $rpi01 ]] && repo=armv6h || repo=armv7h
-echo "
-[RR]
-SigLevel = Optional TrustAll
-Server = https://rern.github.io/$repo
-" >> /etc/pacman.conf
-
 pacmanFailed() {
 	dialog --backtitle "$title" --colors \
 		--msgbox "\n$1\n\n
