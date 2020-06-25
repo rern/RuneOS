@@ -95,7 +95,7 @@ selectFeatures() {
 		   10 "$upmpdcli" on )
 	
 	select=" $select "
-	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-alsa bluez-utils ' && list+="$bluez\n"
+	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-alsa-git bluez-utils ' && list+="$bluez\n"
 	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium libmatchbox matchbox-window-manager upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
 	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid\n"
