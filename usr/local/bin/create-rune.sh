@@ -30,6 +30,14 @@ systemctl start systemd-random-seed
 #wget -qN https://github.com/rern/RuneAudio-Re3/raw/master/srv/http/bash/addons-functions.sh -P /srv/http/bash
 #wget -qN https://github.com/rern/RuneAudio/raw/master/rankmirrors/rankmirrors.sh -O - | sh
 
+# add private repo
+[[ $rpi01 ]] && repo=armv6h || repo=armv7h
+echo "
+[RR]
+SigLevel = Optional TrustAll
+Server = https://rern.github.io/$repo
+" >> /etc/pacman.conf
+
 # dialog package
 pacman -Sy --noconfirm --needed dialog
 
@@ -87,16 +95,16 @@ selectFeatures() {
 		   10 "$upmpdcli" on )
 	
 	select=" $select "
-	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
-	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
+	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-alsa-git bluez-utils ' && list+="$bluez\n"
+	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium matchbox-window-manager upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
-	[[ $select == *' 4 '* ]] && kid3=1 && list+="$kid\n"
+	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid\n"
 	[[ $select == *' 5 '* ]] && gpio=1 && list+="$rpigpio\n"
 	[[ $select == *' 6 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 7 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
-	[[ $select == *' 8 '* ]] && snap=1 && list+="$snapcast\n"
-	[[ $select == *' 9 '* ]] && features+='jq ' && spot=1 && list+="$spotify\n"
-	[[ $select == *' 10 '* ]] && upnp=1 && list+="$upmpdcli\n"
+	[[ $select == *' 8 '* ]] && features+='snapcast ' && list+="$snapcast\n"
+	[[ $select == *' 9 '* ]] && features+='spotifyd jq ' && list+="$spotify\n"
+	[[ $select == *' 10 '* ]] && features+='libnpupnp libupnpp upmpdcli ' && list+="$upmpdcli\n"
 }
 selectFeatures
 
@@ -119,7 +127,8 @@ echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
-packages='alsa-utils cronie dosfstools gcc ifplugd imagemagick inetutils mpd mpc nfs-utils nss-mdns ntfs-3g parted php-fpm python python-pip sshpass sudo udevil wget '
+packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils mpd mpc '
+packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm python python-pip sshpass sudo udevil wget '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
@@ -128,34 +137,17 @@ pacman -S --noconfirm --needed $packages $features
 
 [[ $gpio ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
 
-echo -e "\n\e[36mInstall customized packages and web interface ...\e[m\n"
+echo -e "\n\e[36mInstall configurations and web interface ...\e[m\n"
 
-wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O packages.zip
+wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O config.zip
 wget -q --show-progress https://github.com/rern/RuneAudio-R$version/archive/$uibranch.zip -O ui.zip
-bsdtar --strip 1 -C / -xvf packages.zip
+bsdtar --strip 1 -C / -xvf config.zip
 bsdtar --strip 1 -C / -xvf ui.zip
 rm *.zip /*.* /.* 2> /dev/null
 
-# RPi 0, 1 - switch packages for armv6h & remove mpd.service
-if [[ $rpi01 ]]; then
-	rm /root/*.xz
-	mv /root/armv6h/* /root
-	rmdir /root/armv6h
-else
-	rm -r /root/armv6h
-fi
-
 [[ $nowireless ]] && sed -i '/disable-wifi\|disable-bt\|bcmbt/ d' /boot/config.txt
-
 [[ ! -e /usr/bin/bluetoothctl ]] && rm /root/bluez* /boot/overlays/bcmbt.dtbo
-
-[[ ! $kid3 ]] && rm /root/kid3*
-[[ ! $snap ]] && rm /root/snapcast*
-[[ ! $spot ]] && rm /root/spotify*
-[[ ! $upnp ]] && rm /etc/upmpdcli.conf /root/{libupnpp*,upmpdcli*}
-
-pacman -U --noconfirm --needed /root/*.xz
-[[ $? != 0 ]] && pacmanFailed 'Custom packages download incomplete!'
+[[ ! -e /usr/bin/upmpdcli ]] && rm /etc/upmpdcli.conf
 
 #---------------------------------------------------------------------------------
 echo -e "\n\e[36mConfigure ...\e[m\n"
