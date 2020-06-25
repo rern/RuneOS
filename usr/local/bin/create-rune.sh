@@ -87,8 +87,8 @@ selectFeatures() {
 		   10 "$upmpdcli" on )
 	
 	select=" $select "
-	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-utils ' && list+="$bluez\n"
-	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
+	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-alsa bluez-utils ' && list+="$bluez\n"
+	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium libmatchbox matchbox-window-manager upower xorg-server xf86-video-fbdev xf86-video-vesa xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
 	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid\n"
 	[[ $select == *' 5 '* ]] && gpio=1 && list+="$rpigpio\n"
@@ -127,7 +127,8 @@ echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
-packages='alsa-utils cronie dosfstools gcc ifplugd imagemagick inetutils mpd mpc nfs-utils nss-mdns ntfs-3g parted php-fpm python python-pip sshpass sudo udevil wget '
+packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils mpd mpc '
+packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm python python-pip sshpass sudo udevil wget '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
