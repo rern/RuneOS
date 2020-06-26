@@ -1,7 +1,7 @@
 ### Custom Package Repo
 On  Windows
 - Manage advanced sharing settings > All Networks - Turn off password protection sharing
-- Share `Git` - Anyone read-write
+- Share `Git` - Everyone read-write
 ```sh
 # mount Git
 mkdir -p /mnt/Git
