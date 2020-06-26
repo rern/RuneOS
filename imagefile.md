@@ -14,7 +14,8 @@ ssh root@<RPI IP>
 wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist -O /etc/pacman.d/mirrorlist
 
 systemctl stop mpd
-rm -f /srv/http/data/addons/expa /var/cache/pacman/pkg/*
+pacman -Scc --noconfirm
+rm -f /srv/http/data/addons/expa
 rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/*
 rm -rf /srv/http/data/tmp/*
 echo 0 0 0 > /srv/http/data/system/mpddb
