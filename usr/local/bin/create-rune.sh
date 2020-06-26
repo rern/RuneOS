@@ -103,7 +103,7 @@ selectFeatures() {
 	[[ $select == *' 7 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
 	[[ $select == *' 8 '* ]] && features+='snapcast ' && list+="$snapcast\n"
 	[[ $select == *' 9 '* ]] && features+='spotifyd jq ' && list+="$spotify\n"
-	[[ $select == *' 10 '* ]] && features+='libnpupnp libupnpp upmpdcli ' && list+="$upmpdcli\n"
+	[[ $select == *' 10 '* ]] && features+='upmpdcli ' && list+="$upmpdcli\n"
 }
 selectFeatures
 
