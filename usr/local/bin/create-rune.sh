@@ -31,12 +31,11 @@ systemctl start systemd-random-seed
 #wget -qN https://github.com/rern/RuneAudio/raw/master/rankmirrors/rankmirrors.sh -O - | sh
 
 # add private repo
-[[ $rpi01 ]] && repo=armv6h || repo=armv7h
-echo "
+echo '
 [RR]
 SigLevel = Optional TrustAll
-Server = https://rern.github.io/$repo
-" >> /etc/pacman.conf
+Server = https://rern.github.io/$arch
+' >> /etc/pacman.conf
 
 # dialog package
 pacman -Sy --noconfirm --needed dialog
