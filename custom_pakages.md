@@ -1,8 +1,12 @@
 ### Custom Package Repo
-- Create repo directory on Arch Linux Arm
-- Copy all package files to repo directory
+On  Windows
+- Manage advanced sharing settings > All Networks - Turn off password protection sharing
+- Share `Git` - read-write
 ```sh
-cd armv7h
+# mount Git
+mkdir -p /mnt/Git
+mount -t cifs //192.168.1.9/Git /mnt/Git -o user=x
+cd /mnt/Git/rern.github.io/armv7h
 
 # remove existing
 rm RR*
@@ -11,4 +15,4 @@ rm RR*
 repo-add RR.db.tar.xz *.xz
 ```
 *`armv6h` - for RPi 0-1
-- Upload to `rern.github.io/armv7h`
+- Push to `rern.github.io/armv7h`
