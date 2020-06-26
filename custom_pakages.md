@@ -1,11 +1,11 @@
 ### Custom Package Repo
 On  Windows
 - Manage advanced sharing settings > All Networks - Turn off password protection sharing
-- Share `Git` - read-write
+- Share `Git` - Anyone read-write
 ```sh
 # mount Git
 mkdir -p /mnt/Git
-mount -t cifs //192.168.1.9/Git /mnt/Git -o user=x
+mount -t cifs //192.168.1.9/Git /mnt/Git
 cd /mnt/Git/rern.github.io/armv7h
 
 # remove existing
