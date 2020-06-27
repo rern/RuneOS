@@ -139,7 +139,7 @@ mkdir -p /tmp/config
 bsdtar --strip 1 -C /tmp/config -xvf config.zip
 bsdtar --strip 1 -C /tmp/config -xvf ui.zip
 rm *.zip /tmp/config/*.* /tmp/config/.* 2> /dev/null
-chmod -R -x /tmp/config
+chmod -R go-wx /tmp/config
 chmod -R u+rwX,go+rX /tmp/config
 cp -r /tmp/config/* /
 
