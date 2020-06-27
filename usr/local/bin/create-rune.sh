@@ -191,6 +191,9 @@ fi
 echo root:rune | chpasswd
 [[ -e /usr/bin/smbd ]] && ( echo rune; echo rune ) | smbpasswd -s -a root
 
+# no snapcast
+[[ ! -e /usr/bin/snapclient ]] && rm /etc/default/snapclient
+
 # user - set expire to none
 users=$( cut -d: -f1 /etc/passwd )
 for user in $users; do
