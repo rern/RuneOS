@@ -178,7 +178,6 @@ if [[ -e /usr/bin/chromium ]]; then
 	chmod 775 /etc/X11/xorg.conf.d
 else
 	rm -f /etc/systemd/system/{bootsplash,localbrowser}* /etc/X11/xinit/xinitrc /srv/http/assets/img/{CW,CCW,NORMAL,UD}* /root/*matchbox* /usr/local/bin/ply-image
-#	rm -r /etc/X11
 fi
 
 # cron - for addons updates
