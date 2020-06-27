@@ -139,21 +139,13 @@ bsdtar --strip 1 -C / -xvf config.zip
 bsdtar --strip 1 -C / -xvf ui.zip
 rm *.zip /*.* /.* 2> /dev/null
 
-[[ $nowireless ]] && sed -i '/disable-wifi\|disable-bt\|bcmbt/ d' /boot/config.txt
-[[ ! -e /usr/bin/bluetoothctl ]] && rm /root/bluez* /boot/overlays/bcmbt.dtbo
-[[ ! -e /usr/bin/upmpdcli ]] && rm /etc/upmpdcli.conf
-
 #---------------------------------------------------------------------------------
 echo -e "\n\e[36mConfigure ...\e[m\n"
 
+[[ $nowireless ]] && sed -i '/disable-wifi\|disable-bt\|bcmbt/ d' /boot/config.txt
+
 # RPi 4 - rename bluetooth file
 [[ $hwcode == 11 ]] && mv /usr/lib/firmware/updates/brcm/BCM{4345C0,}.hcd
-
-# remove config of excluded features
-[[ ! -e /usr/bin/bluetoothctl ]] && rm -rf /etc/systemd/system/bluetooth.service.d /srv/http/bash/system-bluetooth.sh
-[[ ! -e /usr/bin/hostapd ]] && rm -r /etc/{hostapd,dnsmasq.conf}
-[[ ! -e /usr/bin/samba ]] && rm -r /etc/samba && rm /etc/systemd/system/wsdd.service /usr/local/bin/wsdd.py
-[[ ! -e /usr/bin/shairport-sync ]] && rm /etc/systemd/system/shairport-meta.service
 
 chown http:http /etc/fstab
 chown -R http:http /etc/netctl /etc/systemd/network /srv/http
@@ -166,11 +158,11 @@ sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit tes
 # avahi
 sed -i 's/\(use-ipv6=\).*/\1no/' /etc/avahi/avahi-daemon.conf
 
-# bluetooth (skip if removed bluetooth)
+# bluetooth
 if [[ -e /usr/bin/bluetoothctl ]]; then
 	sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
 else
-	rm -r /etc/systemd/system/bluetooth.service.d
+	rm -rf /boot/overlays/bcmbt.dtbo /etc/systemd/system/bluetooth.service.d /srv/http/bash/system-bluetooth.sh /root/bluez*
 fi
 
 # chromium
@@ -189,6 +181,9 @@ fi
 # cron - for addons updates
 ( crontab -l &> /dev/null; echo '00 01 * * * /srv/http/addons-update.sh &' ) | crontab -
 
+# no hostapd
+[[ ! -e /usr/bin/hostapd ]] && rm -rf /etc/{hostapd,dnsmasq.conf}
+
 # mpd
 [[ $rpi01 ]] && sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
 
@@ -196,14 +191,8 @@ fi
 echo root:rune | chpasswd
 [[ -e /usr/bin/smbd ]] && ( echo rune; echo rune ) | smbpasswd -s -a root
 
-# no hostapd
-[[ ! -e /usr/bin/hostapd ]] && rm -r /etc/hostapd
-
 # no samba
-if [[ ! -e /usr/bin/samba ]]; then
-	rm -r /etc/samba
-	rm /etc/systemd/system/wsdd.service
-fi
+[[ ! -e /usr/bin/samba ]] && rm -rf /etc/samba /etc/systemd/system/wsdd.service /usr/local/bin/wsdd.py
 
 # no shairport-sync
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/sudoers.d/shairport-sync /etc/systemd/system/shairport-meta.service
@@ -222,7 +211,7 @@ if [[ -e /usr/bin/upmpdcli ]]; then
 	mpd --no-config &> /dev/null
 	upmpdcli &> /dev/null &
 else
-	rm -r /etc/systemd/system/upmpdcli.service.d
+	rm -rf /etc/systemd/system/upmpdcli.service.d /etc/upmpdcli.conf
 fi
 
 # wireless-regdom
