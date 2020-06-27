@@ -26,7 +26,7 @@ pacman-key --populate archlinuxarm
 systemctl start systemd-random-seed
 
 # add private repo
-! grep -q rern.github.io /etc/pacman.conf && echo '
+! grep -q '\[RR\]' /etc/pacman.conf && echo '
 [RR]
 SigLevel = Optional TrustAll
 Server = https://rern.github.io/$arch
