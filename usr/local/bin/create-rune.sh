@@ -152,7 +152,7 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 
 chown http:http /etc/fstab
 chown -R http:http /etc/netctl /etc/systemd/network /srv/http
-chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
+chmod 755 /etc /usr /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chmod 775 /var/lib/alsa  # fix permission
 
 # alsa
