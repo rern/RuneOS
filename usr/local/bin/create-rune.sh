@@ -155,8 +155,9 @@ chown http:http /etc/fstab
 chown -R http:http /etc/netctl /etc/systemd/network /srv/http
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 
-# alsa
-sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit test rules
+# alsa - fix 'alsactl restore' errors
+cp /{usr/lib,etc}/udev/rules.d/90-alsa-restore.rules
+sed -i '/^TEST/ s/^/#/' /etc/udev/rules.d/90-alsa-restore.rules
 
 # avahi
 sed -i 's/\(use-ipv6=\).*/\1no/' /etc/avahi/avahi-daemon.conf
