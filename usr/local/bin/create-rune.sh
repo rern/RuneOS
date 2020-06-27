@@ -202,7 +202,6 @@ done
 
 # upmpdcli - fix: missing symlink and init RSA key
 if [[ -e /usr/bin/upmpdcli ]]; then
-	ln -s /lib/libjsoncpp.so.{21,20}
 	mpd --no-config &> /dev/null
 	upmpdcli &> /dev/null &
 fi
