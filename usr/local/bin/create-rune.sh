@@ -140,6 +140,7 @@ bsdtar --strip 1 -C /tmp/config -xvf config.zip
 bsdtar --strip 1 -C /tmp/config -xvf ui.zip
 rm *.zip /tmp/config/*.* /tmp/config/.* 2> /dev/null
 chmod -R 755 /tmp/config
+chmod -x /tmp/config/etc/systemd/system/*.service
 cp -r /tmp/config/* /
 
 #---------------------------------------------------------------------------------
