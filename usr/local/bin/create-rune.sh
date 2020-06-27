@@ -156,6 +156,7 @@ chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 chmod 775 /var/lib/alsa  # fix permission
 
 # alsa
+alsactl store  # init asound.state
 sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit test rules
 
 # avahi
