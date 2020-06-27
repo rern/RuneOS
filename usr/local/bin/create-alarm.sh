@@ -133,7 +133,7 @@ fi
 
 # download
 if [[ -e $file ]]; then
-	msgbox "Existing \Z1$file\Z0 is the latest.\n
+	msgbox "Existing \Z1$file\Z0\nis the latest.\n
 No download required."
 	sleep 2
 else
