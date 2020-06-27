@@ -122,14 +122,17 @@ pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
 packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils mpd mpc '
-packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm python python-pip sshpass sudo udevil wget '
+packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm sshpass sudo udevil wget '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
 pacman -S --noconfirm --needed $packages $features
 [[ $? != 0 ]] && pacmanFailed 'Packages download incomplete!'
 
-[[ $gpio ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
+if [[ $gpio ]]; then
+	pacman -S --noconfirm --needed python-pip
+	yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
+fi
 
 echo -e "\n\e[36mInstall configurations and web interface ...\e[m\n"
 
