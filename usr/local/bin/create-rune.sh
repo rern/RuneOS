@@ -138,9 +138,12 @@ echo -e "\n\e[36mInstall configurations and web interface ...\e[m\n"
 
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O config.zip
 wget -q --show-progress https://github.com/rern/RuneAudio-R$version/archive/$uibranch.zip -O ui.zip
-bsdtar --strip 1 -C / -xvf config.zip
-bsdtar --strip 1 -C / -xvf ui.zip
-rm *.zip /*.* /.* 2> /dev/null
+mkdir -p /tmp/config
+bsdtar --strip 1 -C /tmp/config -xvf config.zip
+bsdtar --strip 1 -C /tmp/config -xvf ui.zip
+rm *.zip /tmp/config/*.* /tmp/config/.* 2> /dev/null
+chmod -R 755 /tmp/config
+cp -r /tmp/config/* /
 
 #---------------------------------------------------------------------------------
 echo -e "\n\e[36mConfigure ...\e[m\n"
@@ -152,7 +155,7 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 
 chown http:http /etc/fstab
 chown -R http:http /etc/netctl /etc/systemd/network /srv/http
-chmod 755 /etc /usr /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
+chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 #chmod 775 /var/lib/alsa  # fix permission
 
 # alsa
