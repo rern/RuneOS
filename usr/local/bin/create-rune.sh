@@ -93,7 +93,7 @@ selectFeatures() {
 	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium matchbox-window-manager upower xf86-video-fbdev xf86-video-vesa xorg-server xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
 	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid\n"
-	[[ $select == *' 5 '* ]] && gpio=1 && list+="$rpigpio\n"
+	[[ $select == *' 5 '* ]] && features+='python-pip ' && list+="$rpigpio\n" && gpio=1
 	[[ $select == *' 6 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 7 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
 	[[ $select == *' 8 '* ]] && features+='snapcast ' && list+="$snapcast\n"
@@ -129,10 +129,7 @@ echo -e "\n\e[36mInstall packages ...\e[m\n"
 pacman -S --noconfirm --needed $packages $features
 [[ $? != 0 ]] && pacmanFailed 'Packages download incomplete!'
 
-if [[ $gpio ]]; then
-	pacman -S --noconfirm --needed python-pip
-	yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
-fi
+[[ $gpio ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
 
 echo -e "\n\e[36mInstall configurations and web interface ...\e[m\n"
 
