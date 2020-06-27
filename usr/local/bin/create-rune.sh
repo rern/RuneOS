@@ -167,7 +167,11 @@ sed -i '/^TEST/ s/^/#/' /usr/lib/udev/rules.d/90-alsa-restore.rules   # omit tes
 sed -i 's/\(use-ipv6=\).*/\1no/' /etc/avahi/avahi-daemon.conf
 
 # bluetooth (skip if removed bluetooth)
-[[ -e /usr/bin/bluetoothctl ]] && sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
+if [[ -e /usr/bin/bluetoothctl ]]; then
+	sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
+else
+	rm -r /etc/systemd/system/bluetooth.service.d
+fi
 
 # chromium
 if [[ -e /usr/bin/chromium ]]; then
@@ -179,6 +183,7 @@ if [[ -e /usr/bin/chromium ]]; then
 	chmod 775 /etc/X11/xorg.conf.d
 else
 	rm -f /etc/systemd/system/{bootsplash,localbrowser}* /etc/X11/xinit/xinitrc /srv/http/assets/img/{CW,CCW,NORMAL,UD}* /root/*matchbox* /usr/local/bin/ply-image
+#	rm -r /etc/X11
 fi
 
 # cron - for addons updates
@@ -190,6 +195,18 @@ fi
 # password - set default
 echo root:rune | chpasswd
 [[ -e /usr/bin/smbd ]] && ( echo rune; echo rune ) | smbpasswd -s -a root
+
+# no hostapd
+[[ ! -e /usr/bin/hostapd ]] && rm -r /etc/hostapd
+
+# no samba
+if [[ ! -e /usr/bin/samba ]]; then
+	rm -r /etc/samba
+	rm /etc/systemd/system/wsdd.service
+fi
+
+# no shairport-sync
+[[ ! -e /usr/bin/shairport-sync ]] && rm /etc/sudoers.d/shairport-sync /etc/systemd/system/shairport-meta.service
 
 # no snapcast
 [[ ! -e /usr/bin/snapclient ]] && rm /etc/default/snapclient
@@ -204,6 +221,8 @@ done
 if [[ -e /usr/bin/upmpdcli ]]; then
 	mpd --no-config &> /dev/null
 	upmpdcli &> /dev/null &
+else
+	rm -r /etc/systemd/system/upmpdcli.service.d
 fi
 
 # wireless-regdom
