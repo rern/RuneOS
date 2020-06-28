@@ -1,0 +1,23 @@
+[Unit]
+Description=Music Player Daemon
+After=network.target sound.target
+BindsTo=mpdidle.service
+
+[Service]
+User=mpd
+Type=notify
+ExecStart=/usr/bin/taskset -c 3 /usr/bin/mpd --no-daemon
+
+LimitRTPRIO=50
+LimitRTTIME=infinity
+ProtectSystem=yes
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
+RestrictNamespaces=yes
+
+[Install]
+WantedBy=default.target
+Also=mpd.socket
