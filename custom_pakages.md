@@ -3,7 +3,7 @@ On  Windows
 - Manage advanced sharing settings > All Networks - Turn off password protection sharing
 - Share `Git` - read-write for Everyone
 ```sh
-updateDb() {
+updateRepo() {
     read -n 1 -p "Arch: 6=armv6h 7=armv7h ? " arch
     echo
     read -n 1 -p "Local IP - 192.168.1.9: y/n ? " ip
@@ -22,6 +22,6 @@ updateDb() {
     umount -l /mnt/Git
     rmdir /mny/Git
 }
-updateDb
+updateRepo
 ```
 - Push to `rern.github.io/armv7h`
