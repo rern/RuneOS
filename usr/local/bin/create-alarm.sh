@@ -239,8 +239,8 @@ echo 'StrictHostKeyChecking no' >> $ROOT/etc/ssh/ssh_config
 # fix - haveged coredump error
 sed -i -e '/^SystemCallFilter/ d
 ' -e '/SystemCallArchitectures/ a\
-SystemCallFilter=@system-service
-SystemCallFilter=~@mount
+SystemCallFilter=@system-service\
+SystemCallFilter=~@mount\
 SystemCallErrorNumber=EPERM
 ' $ROOT/usr/lib/systemd/system/haveged.service
 
