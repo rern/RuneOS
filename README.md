@@ -32,11 +32,10 @@ Audio player and renderer for Raspberry Pi
 ![dialog1](https://github.com/rern/_assets/raw/master/RuneOS/select-hw.jpg)
 ![dialog2](https://github.com/rern/_assets/raw/master/RuneOS/select-features.jpg)
 **Need**
-- PC
-	- Linux - any distro
-	- or Linux on USB e.g., [Manjaro](https://itsfoss.com/create-live-usb-manjaro-linux/) - Arch Linux
-	- or Linux in VirtualBox on Windows (with network set as `Bridge Adapter`)
-	- or Raspberry Pi itself with running Linux (need `fdisk` and `mount` skill)
+- PC - Linux - any distro
+	- or on USB e.g., [Manjaro](https://itsfoss.com/create-live-usb-manjaro-linux/) - Arch Linux
+	- or on VirtualBox on Windows (with network set as `Bridge Adapter`)
+	- or on Raspberry Pi itself (If no GUI, `fdisk` and `mount` skills needed.)
 - Raspberry Pi
 - Network connection to Raspberry Pi 
 	- Wired LAN
