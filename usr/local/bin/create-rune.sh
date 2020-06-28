@@ -25,11 +25,6 @@ pacman-key --populate archlinuxarm
 # fill entropy pool (fix - Kernel entropy pool is not initialized)
 systemctl start systemd-random-seed
 
-# fix - haveged core dump
-cp /{usr/lib,etc}/systemd/system/haveged.service
-systemctl disable haveged
-systemctl enable haveged
-
 # add private repo
 ! grep -q '\[RR\]' /etc/pacman.conf && echo '
 [RR]
