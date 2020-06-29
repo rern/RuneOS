@@ -4,14 +4,14 @@ On  Windows
 - Share `Git` - read-write for Everyone
 ```sh
 updateRepo() {
-    read -n 1 -p "Arch: 6=armv6h 7=armv7h ? " arch
-    echo
-    read -n 1 -p "Local IP - 192.168.1.9: y/n ? " ip
-    echo
-    if [[ $ip == y ]]; then
+    read -n 1 -p $'\nArch: \e[36m6\e[0m=armv6h \e[36m7\e[0m=armv7h ? ' arch
+    [[ $arch != 6 && $arch != 7 ]] && echo -e "\nWrong Arch." && updateRepo && return
+    read -n 1 -p $'\nLocal IP - 192.168.1.9: \e[36my\e[0m/n ? ' ip
+    if [[ $ip != n ]]; then
         ip=192.168.1.9
     else
         read -p "Local IP: 192.168.1." ip
+        [[ -z $ip ]] && echo -e "\nNo IP." && updateRepo && return
         ip=192.168.1.$ip
     fi
     mkdir -p /mnt/Git
