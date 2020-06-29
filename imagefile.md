@@ -6,11 +6,13 @@
 ssh root@<RPI IP>
 ```
 - Optional for default image:
+	- get partition auto-expansion file
 	- reset mirror list
 	- remove non-default files and journal logs
 	- remove all connected Wi-Fi profile (if any)
 	- fix dirty bits in BOOT partition
 ```sh
+wget https://github.com/rern/RuneOS/raw/master/boot/x.sh -O /boot/x.sh
 wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist -O /etc/pacman.d/mirrorlist
 
 systemctl stop mpd
