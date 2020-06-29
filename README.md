@@ -155,10 +155,15 @@ create-rune.sh
 - **Setup Wi-Fi auto-connect** for headless/no screen (if not set during build)
 	- On Linux or Windows
 	- Insert micro SD card
-	- In `BOOT`
-		- Open file `wifi0` with text editor
-		- Replace `"NAME` and `PASSWORD` with ones for your Wi-Fi
-		- If security of your Wi-Fi is `wep`, replace `wpa` as well.
-		- Save as `wifi`
+	- 3 alternatives:
+		1. From existing
+			- Backup the profile file from `/etc/netctl/PROFILE`
+			- Rename it to `wifi` then copy it to `BOOT` before power on.
+		2. Edit template file - name and password
+			- Rename `wifi0` in BOOT to `wifi`
+			- Edit SSID and Key.
+		3. Generate a complex profile - static IP, hidden SSID
+			- With Pre-configure Wi-Fi connection link in the 1st post.
+			- Save it in BOOT
 	- Move micro SD card to Raspberry Pi
 	- Power on
