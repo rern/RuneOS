@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm $0
+
 select=$( dialog --colors \
 	   --output-fd 1 \
 	   --checklist '\n\Z1Select features:\n
@@ -11,8 +13,6 @@ select=$( dialog --colors \
 			5 "Clear system log" on \
 			6 "Clear Wi-Fi connection" on )
 [[ $? == 1 ]] && clear && exit
-
-rm $0
 
 select=" $select "
 
