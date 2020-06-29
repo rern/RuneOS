@@ -72,7 +72,7 @@ else
 	onoffchromium=on
 fi
 
-selectFeatures() { # --checklist <message> <lines outside select box> <0=auto> <0=auto>
+selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=autoW dialog> <0=autoH checklist>
 	select=$( dialog --backtitle "$title" --colors \
 	   --output-fd 1 \
 	   --checklist '\n\Z1Select features to install:\n
