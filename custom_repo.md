@@ -16,11 +16,11 @@ updateRepo() {
     fi
     mkdir -p /mnt/Git
     mount -t cifs //$ip/Git /mnt/Git
-	currentdir=$( pwd )
+    currentdir=$( pwd )
     cd /mnt/Git/rern.github.io/armv${arch}h
     rm RR*
     repo-add RR.db.tar.xz *.xz
-	cd "$currentdir"
+    cd "$currentdir"
     umount -l /mnt/Git
     rmdir /mnt/Git
 }
