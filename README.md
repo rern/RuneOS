@@ -165,7 +165,7 @@ create-rune.sh
 		- Rename `wifi0` in BOOT to `wifi`
 		- Edit SSID and Key.
 	3. Generate a complex profile - static IP, hidden SSID
-		- With Pre-configure Wi-Fi connection link in the 1st post.
+		- With [Pre-configure Wi-Fi connection](https://rern.github.io/WiFi_profile/)
 		- Save it in BOOT
 - Move micro SD card to Raspberry Pi
 - Power on
