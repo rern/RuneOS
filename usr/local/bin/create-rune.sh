@@ -155,7 +155,9 @@ chown http:http /etc/fstab
 chown -R http:http /etc/netctl /etc/systemd/network /srv/http
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
 
-# alsa - fix 'alsactl restore' errors
+# alsa
+alsactl store
+# fix 'alsactl restore' errors
 cp /{usr/lib,etc}/udev/rules.d/90-alsa-restore.rules
 sed -i '/^TEST/ s/^/#/' /etc/udev/rules.d/90-alsa-restore.rules
 
