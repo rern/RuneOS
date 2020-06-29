@@ -77,7 +77,7 @@ ROOT: \Z1$ROOT\Z0"
 	[[ $? == 1 ]] && clear && exit
 
 	rpi=$( dialog --backtitle "$title" --colors --output-fd 1 \
-		--menu '\n\Z1Target:\Z0' 0 0 5 \
+		--menu '\n\Z1Target:\Z0' 8 0 0 \
 			0 'Raspberry Pi Zero' \
 			1 'Raspberry Pi 1' \
 			2 'Raspberry Pi 2' \
