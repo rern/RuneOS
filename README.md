@@ -150,20 +150,57 @@ create-rune.sh
 ---
 
 ### Optionals
-- [**Create image file**](https://github.com/rern/RuneOS/blob/master/imagefile.md)  
+**Setup Wi-Fi auto-connect** for headless/no screen (if not set during build)
+- On Linux or Windows
+- Insert micro SD card
+- 3 alternatives:
+	1. From existing
+		- Backup the profile file from `/etc/netctl/PROFILE`
+		- Rename it to `wifi` then copy it to `BOOT` before power on.
+	2. Edit template file - name and password
+		- Rename `wifi0` in BOOT to `wifi`
+		- Edit SSID and Key.
+	3. Generate a complex profile - static IP, hidden SSID
+		- With Pre-configure Wi-Fi connection link in the 1st post.
+		- Save it in BOOT
+- Move micro SD card to Raspberry Pi
+- Power on
+	
+**Create image file**
+- Once started RuneAudio+R successfully
+- Reset for image
+```sh
+ssh root@<RPI IP>
+wget https://github.com/rern/RuneOS/raw/master/resetforimage.sh -O - | sh
+```
+- Power off
 
-- **Setup Wi-Fi auto-connect** for headless/no screen (if not set during build)
-	- On Linux or Windows
-	- Insert micro SD card
-	- 3 alternatives:
-		1. From existing
-			- Backup the profile file from `/etc/netctl/PROFILE`
-			- Rename it to `wifi` then copy it to `BOOT` before power on.
-		2. Edit template file - name and password
-			- Rename `wifi0` in BOOT to `wifi`
-			- Edit SSID and Key.
-		3. Generate a complex profile - static IP, hidden SSID
-			- With Pre-configure Wi-Fi connection link in the 1st post.
-			- Save it in BOOT
-	- Move micro SD card to Raspberry Pi
-	- Power on
+- Move micro SD card (and the USB drive, if `ROOT` partition is in USB drive) to PC
+- Resize `ROOT` partition to smallest size possible with **GParted** app (smaller the size = smaller image file and less time to flash SD card)
+	- menu: GParted > Devices > /dev/sd?
+	- right-click `ROOT` partiton > Unmount
+	- right-click `ROOT` partiton > Resize/Move
+	- drag rigth triangle to fit minimum size
+	- menu: Edit > Apply all operations
+- Create image - **SD card mode**
+	- on Windows (much faster): [Win32 Disk Imager](https://sourceforge.net/projects/win32diskimager/) > Read only allocated partitions
+	- OR
+```sh
+# get device and verify
+part=$( df | grep BOOT | awk '{print $1}' )
+dev=${part:0:-1}
+df | grep BOOT
+echo device = $dev
+
+# get partition end and verify
+fdisk -u -l $dev
+end=$( fdisk -u -l $dev | tail -1 | awk '{print $3}' )
+echo end = $end
+
+# create image
+dd if=$dev of=RuneAudio+Re2.img count=$(( end + 1 )) status=progress  # remove status=progress if errors
+```
+- Create image - **USB drive mode**
+	- Open **Disks** app - select drive > select partition > cogs button > Create Partition Image
+		- Micro SD card
+		- USB drive
