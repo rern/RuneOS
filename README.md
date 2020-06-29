@@ -34,8 +34,8 @@ Audio player and renderer for Raspberry Pi
 **Need**
 - PC - Linux - any distro
 	- or on USB e.g., [Manjaro](https://itsfoss.com/create-live-usb-manjaro-linux/) - Arch Linux
-	- or on VirtualBox on Windows (with network set as `Bridge Adapter`)
 	- or on Raspberry Pi itself (If no GUI, `fdisk` and `mount` skills needed.)
+	- or on VirtualBox on Windows (with network set as `Bridge Adapter`) - Slowest
 - Raspberry Pi
 - Network connection to Raspberry Pi 
 	- Wired LAN
