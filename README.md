@@ -30,7 +30,8 @@ Audio player and renderer for Raspberry Pi
 	- Set default settings
 
 ![dialog1](https://github.com/rern/_assets/raw/master/RuneOS/select-hw.jpg)
-![dialog2](https://github.com/rern/_assets/raw/master/RuneOS/select-features.jpg)
+![dialog2](https://github.com/rern/_assets/raw/master/RuneOS/select-features.jpg)  
+
 **Need**
 - PC - Linux - any distro
 	- or on USB e.g., [Manjaro](https://itsfoss.com/create-live-usb-manjaro-linux/) - Arch Linux
