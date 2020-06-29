@@ -17,7 +17,7 @@ systemctl stop mpd
 pacman -Scc --noconfirm
 rm -f /srv/http/data/addons/expa
 rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/*
-rm -rf /srv/http/data/tmp/*
+rm -rf /root/.cache/* /srv/http/data/tmp/*
 echo 0 0 0 > /srv/http/data/system/mpddb
 journalctl --rotate
 journalctl --vacuum-time=1s
