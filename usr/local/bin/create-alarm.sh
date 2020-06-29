@@ -70,7 +70,7 @@ if [[ -n $warnings ]]; then
 fi
 
 # get build data
-getData() { # --menu <message> <lines outside menu box> <0=autoW dialog> <0=autoH menu>
+getData() { # --menu <message> <lines exclude menu box> <0=autoW dialog> <0=autoH menu>
 	yesno "\Z1Confirm path:\Z0\n\n\
 BOOT: \Z1$BOOT\Z0\n\
 ROOT: \Z1$ROOT\Z0"
