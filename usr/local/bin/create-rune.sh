@@ -72,11 +72,11 @@ else
 	onoffchromium=on
 fi
 
-selectFeatures() {
+selectFeatures() { # --checklist <message> <lines outside select box> <0=auto> <0=auto>
 	select=$( dialog --backtitle "$title" --colors \
 	   --output-fd 1 \
-	   --checklist '\Z1Select features to install:\n
-\Z4[space] = Select / Deselect\Z0' 8 0 0 \
+	   --checklist '\n\Z1Select features to install:\n
+\Z4[space] = Select / Deselect\Z0' 9 0 0 \
 			1 "$bluez" $onoffbluez \
 			2 "$chromium" $onoffchromium \
 			3 "$hostapd" on \
