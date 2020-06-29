@@ -16,7 +16,8 @@ select=$( dialog --colors \
 
 select=" $select "
 
-if [[ $select == *' 1 '* ]]; then
+[[ $select == *' 1 '* ]] && resize=1
+if [[ $resize ]]; then
 	string=$( cat <<'EOF'
 #!/bin/bash
 rm $0
@@ -56,4 +57,7 @@ fsck.fat -traw /dev/mmcblk0p1
 rm -f /boot/FSCK*
 
 dialog --colors --yesno "\Z1Finish.\Z0\n\n                  Shutdown?" 8 50
+clear
 [[ $? == 0 ]] && shutdown -h now
+
+[[ $resize ]] && gparted &> /dev/null &
