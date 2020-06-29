@@ -28,6 +28,9 @@ Audio player and renderer for Raspberry Pi
 	- Install feature packages and web interface
 	- Configure
 	- Set default settings
+- [Optionals](#optionals)
+	- Setup Wi-Fi auto-connect
+	- Create image file
 
 ![dialog1](https://github.com/rern/_assets/raw/master/RuneOS/select-hw.jpg)
 ![dialog2](https://github.com/rern/_assets/raw/master/RuneOS/select-features.jpg)  
