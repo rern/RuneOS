@@ -59,5 +59,3 @@ rm -f /boot/FSCK*
 dialog --colors --yesno "\Z1Finish.\Z0\n\n                  Shutdown?" 8 50
 clear
 [[ $? == 0 ]] && shutdown -h now
-
-[[ $resize ]] && gparted &> /dev/null &
