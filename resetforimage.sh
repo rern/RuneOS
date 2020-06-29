@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm $0
+rm -f $0
 
 select=$( dialog --colors \
 	   --output-fd 1 \
