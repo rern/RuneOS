@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm $0
+
 arch=$( dialog --colors --output-fd 1 --menu '\n\Z1Arch:\Z0' 8 30 0 \
 	0 'armv6h' \
 	1 'armv7h' )

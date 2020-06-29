@@ -10,8 +10,11 @@ select=$( dialog --colors \
 			4 "Clear package cache" on \
 			5 "Clear system log" on \
 			6 "Clear Wi-Fi connection" on )
+[[ $? == 1 ]] && clear && exit
+
+rm $0
+
 select=" $select "
-echo $select
 
 if [[ $select == *' 1 '* ]]; then
 	string=$( cat <<'EOF'
