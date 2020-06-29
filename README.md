@@ -162,10 +162,11 @@ create-rune.sh
 		- Backup the profile file from `/etc/netctl/PROFILE`
 		- Rename it to `wifi` then copy it to `BOOT` before power on.
 	2. Edit template file - name and password
-		- Rename `wifi0` in BOOT to `wifi`
-		- Edit SSID and Key.
+		- Open `wifi0` in BOOT with text editor
+		- Edit SSID and Key
+		- Save as `wifi`
 	3. Generate a complex profile - static IP, hidden SSID
-		- With [Pre-configure Wi-Fi connection](https://rern.github.io/WiFi_profile/)
+		- With [**Pre-configure Wi-Fi connection**](https://rern.github.io/WiFi_profile/)
 		- Save it in BOOT
 - Move micro SD card to Raspberry Pi
 - Power on
