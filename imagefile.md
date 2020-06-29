@@ -1,46 +1,10 @@
 ### Create image file
 
 - Once started RuneAudio+R successfully
-- SSH to RPi
+- Reset for image
 ```sh
 ssh root@<RPI IP>
-```
-- Optional for default image:
-	- partition auto-expansion file
-	- reset mirror list
-	- remove cache, non-default files and journal logs
-	- remove all connected Wi-Fi profile (if any)
-	- fix dirty bits in BOOT partition
-```sh
-string=$( cat <<'EOF'
-#!/bin/bash
-rm $0
-(( $( sfdisk -F /dev/mmcblk0 | head -n1 | awk '{print $6}' ) == 0 )) && exit
-echo -e "d\n\nn\n\n\n\n\nw" | fdisk /dev/mmcblk0 &>/dev/null
-partprobe /dev/mmcblk0
-resize2fs /dev/mmcblk0p2
-EOF
-)
-echo "$string" > /boot/x.sh
-
-wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist -O /etc/pacman.d/mirrorlist
-
-systemctl stop mpd
-pacman -Scc --noconfirm
-rm -rf /root/.cache/* /srv/http/data/tmp/*
-rm -f /srv/http/data/addons/expa
-rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/*
-echo 0 0 0 > /srv/http/data/system/mpddb
-journalctl --rotate
-journalctl --vacuum-time=1s
-
-systemctl disable netctl-auto@wlan0
-rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
-
-fsck.fat -traw /dev/mmcblk0p1
-rm -f /boot/FSCK*
-
-shutdown -h now
+wget https://github.com/rern/RuneOS/raw/master/resetforimage.sh -O - | sh
 ```
 - Power off
 
