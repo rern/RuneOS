@@ -13,16 +13,39 @@ mount -t cifs -o password= //$ip/Git /mnt/Git
 currentdir=$( pwd )
 cd /mnt/Git/rern.github.io/$arch
 
+# index.html
+html='<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>R+R Packages</title>
+	<style>
+		table { font-family: monospace; white-space: pre; border: none }
+		td:last-child { padding-left: 10px; text-align: right }
+	</style>
+</head>
+<body>
+<table>
+	<tr><td><a href="/">../</a></td><td></td></tr>'
+pkg=( $( ls *.pkg.tar.xz ) )
+sizedate=$( ls -lh *.pkg.tar.xz | cut -c24-40 )
+readarray -t sizedate <<<"$sizedate"
+pkgL=${#pkg[@]}
+for (( i=1; i < $pkgL; i++ )); do
+	pkg=${pkg[$i]}
+	html+='
+	<tr><td><a href="'$arch'/'$pkg'">'$pkg'</a></td><td>'"${sizedate[$i]}"'</td></tr>'
+done
+html+='
+<table>
+</body>
+</html>'
+
+echo -e "$html" > ../$arch.html
+
 # recreate database
 rm RR*
 repo-add -R RR.db.tar.xz *.xz
-
-# index.html
-pkgs=( $( ls *.pkg.tar.xz ) )
-for pkg in "${pkgs[@]}"; do
-	html+='<a href="'$pkg'">'$pkg'</a><br>\n'
-done
-echo -e "$html" > index.html
 
 cd "$currentdir"
 umount -l /mnt/Git
