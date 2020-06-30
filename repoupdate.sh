@@ -20,13 +20,12 @@ updateRepo() {
 <table>
 	<tr><td><a href="/">../</a></td><td></td></tr>'
 	pkg=( $( ls *.pkg.tar.xz ) )
-	sizedate=$( ls -lh *.pkg.tar.xz | cut -c24-40 )
-	readarray -t sizedate <<<"$sizedate"
+	readarray -t sizedate <<<$( ls -lh *.pkg.tar.xz | cut -c24-40 )
 	pkgL=${#pkg[@]}
 	for (( i=1; i < $pkgL; i++ )); do
 		pkg=${pkg[$i]}
 		html+='
-	<tr><td><a href="'$1'/'$pkg'">'$pkg'</a></td><td>'"${sizedate[$i]}"'</td></tr>'
+	<tr><td><a href="'$1'/'$pkg'">'$pkg'</a></td><td>'${sizedate[$i]}'</td></tr>'
 	done
 	html+='
 <table>
@@ -43,7 +42,7 @@ updateRepo() {
 arch=$( dialog --colors --output-fd 1 --checklist '\n\Z1Arch:\Z0' 8 30 0 \
 	1 armv6h on \
 	2 armv7h on )
-select=" $select "
+arch=" $arch "
 
 ip=$( dialog --colors --output-fd 1 --inputbox "\n\Z1Local Git IP:\Z0" 10 30 192.168.1.9 )
 
@@ -51,13 +50,9 @@ mkdir -p /mnt/Git
 mount -t cifs -o password= //$ip/Git /mnt/Git
 currentdir=$( pwd )
 
-[[ $select == *' 1 '* ]] && updateRepo armv6h
+[[ $arch == *' 1 '* ]] && updateRepo armv6h
 [[ $select == *' 2 '* ]] && updateRepo armv7h
 
 cd "$currentdir"
 umount -l /mnt/Git
 rmdir /mnt/Git
-
-dialog --colors --msgbox "\n         Done.\n\n" 8 30
-
-clear
