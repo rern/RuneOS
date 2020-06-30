@@ -12,8 +12,18 @@ mkdir -p /mnt/Git
 mount -t cifs -o password= //$ip/Git /mnt/Git
 currentdir=$( pwd )
 cd /mnt/Git/rern.github.io/$arch
+
+# recreate database
 rm RR*
 repo-add -R RR.db.tar.xz *.xz
+
+# index.html
+pkgs=( $( ls *.pkg.tar.xz ) )
+for pkg in "${pkgs[@]}"; do
+	html+='<a href="'$pkg'">'$pkg'</a><br>\n'
+done
+echo -e "$html" > index.html
+
 cd "$currentdir"
 umount -l /mnt/Git
 rmdir /mnt/Git
