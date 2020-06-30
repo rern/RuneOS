@@ -131,14 +131,6 @@ pacman -S --noconfirm --needed $packages $features
 
 [[ $gpio ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
 
-# fix - haveged coredump error until 1.9.13
-sed -i -e '/^SystemCallFilter/ d
-' -e '/SystemCallArchitectures/ a\
-SystemCallFilter=@system-service\
-SystemCallFilter=~@mount\
-SystemCallErrorNumber=EPERM
-' /usr/lib/systemd/system/haveged.service
-
 echo -e "\n\e[36mInstall configurations and web interface ...\e[m\n"
 
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O config.zip

@@ -236,13 +236,6 @@ systemctl disable systemd-networkd-wait-online
 sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 # suppress warnings
 echo 'StrictHostKeyChecking no' >> $ROOT/etc/ssh/ssh_config
-# fix - haveged coredump error until 1.9.13
-sed -i -e '/^SystemCallFilter/ d
-' -e '/SystemCallArchitectures/ a\
-SystemCallFilter=@system-service\
-SystemCallFilter=~@mount\
-SystemCallErrorNumber=EPERM
-' $ROOT/usr/lib/systemd/system/haveged.service
 
 # get create-rune.sh
 wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
