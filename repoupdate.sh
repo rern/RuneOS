@@ -46,6 +46,8 @@ arch=" $arch "
 
 ip=$( dialog --colors --output-fd 1 --inputbox "\n\Z1Local Git IP:\Z0" 10 30 192.168.1.9 )
 
+clear
+
 mkdir -p /mnt/Git
 mount -t cifs -o password= //$ip/Git /mnt/Git
 currentdir=$( pwd )
