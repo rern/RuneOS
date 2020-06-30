@@ -25,7 +25,8 @@ Audio player and renderer for Raspberry Pi
 - [Create **RuneAudio**](#create-runeaudio)
 	- Select features
 	- Upgrade kernel and default packages
-	- Install feature packages and web interface
+	- Install feature packages (from official and [RR](https://rern.github.io) repo) 
+	- Install web interface
 	- Configure
 	- Set default settings
 - [Optionals](#optionals)
