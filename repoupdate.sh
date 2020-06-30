@@ -12,8 +12,7 @@ mkdir -p /mnt/Git
 mount -t cifs //$ip/Git /mnt/Git
 currentdir=$( pwd )
 cd /mnt/Git/rern.github.io/$arch
-rm RR*
-repo-add RR.db.tar.xz *.xz
+repo-add -nR RR.db.tar.xz *.xz
 cd "$currentdir"
 umount -l /mnt/Git
 rmdir /mnt/Git
