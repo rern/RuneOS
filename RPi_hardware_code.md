@@ -39,6 +39,6 @@
 	- `A` - no ethernet
 	- `B` - with ethernet
 - Wi-Fi and Bluetooth
-	`[[ $BB =~ ^(08|0c|0d|0e|11)$ ]]`
+	- `[[ $BB =~ ^(08|0c|0d|0e|11)$ ]]`
 - 3.5mm headphone output
 	- None in Zero and Zero W
