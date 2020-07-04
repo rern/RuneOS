@@ -23,7 +23,7 @@
 | RPi 4B     | `11`      |       |        | BCM2711   | `3`      | /       |
 
 - `A` - PCB revision
-- `BB` - model : `cat /proc/cpuinfo | grep Revision | tail -c 4 | cut -c 1-2`
+- `BB` - model : `BB=$( cat /proc/cpuinfo | grep Revision | tail -c 4 | cut -c 1-2 )`
 - `C` - SoC
 - `D` - manufacturer
 	- `0` - Sony UK
