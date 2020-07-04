@@ -1,6 +1,6 @@
 **Raspberry Pi Hardware**
 
-- code `EDCBBA` : `cat /proc/cpuinfo | grep Revision | awk '{print $NF}'`
+- code `EDCBBA` : `awk '/Revision/ {print $NF}' /proc/cpuinfo`
 - example: `a22082` : 1GB - Embest - BCM2837 - Raspberry Pi 3B - revision 2
 
 | Name       | code `BB` | no wl | no eth | SoC       | code `C` | 4 cores |
@@ -23,7 +23,7 @@
 | RPi 4B     | `11`      |       |        | BCM2711   | `3`      | /       |
 
 - `A` - PCB revision
-- `BB` - model : `BB=$( cat /proc/cpuinfo | grep Revision | tail -c 4 | cut -c 1-2 )`
+- `BB` - model : `BB=$( awk '/Revision/ {print substr($NF, 4, 2)}' /proc/cpuinfo )`
 - `C` - SoC
 - `D` - manufacturer
 	- `0` - Sony UK
