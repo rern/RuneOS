@@ -121,7 +121,7 @@ echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
-packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils mpd mpc '
+packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils man mpd mpc '
 packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm sshpass sudo udevil wget '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
