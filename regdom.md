@@ -6,7 +6,7 @@
 	- `\'` > `^`
 	- `'` > `"`
 	- `^` > `'`
-- Create `3166-1.json`
+- Create `regdom.json`
 ```sh
 regdomlist=( $( wget -qO- https://git.kernel.org/pub/scm/linux/kernel/git/sforshee/wireless-regdb.git/plain/db.txt \
     | awk -F '[ :]' '/^country/ {print $2}' ) )
@@ -26,5 +26,5 @@ regdom=$( echo "$codes" | sort )
 
 regdom='"(Generic / World)": "00"'$regdom
 
-echo {$regdom} | jq . > 3166-1.json
+echo {$regdom} | jq . > regdom.json
 ```
