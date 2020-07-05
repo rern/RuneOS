@@ -1,9 +1,16 @@
+### Regulatory Domain Codes
+
+- Fetch [regdom codes](https://git.kernel.org/pub/scm/linux/kernel/git/sforshee/wireless-regdb.git/)
+	- Get only `country` codes
+- Fetch [ISO 3166-1 country codes](https://gist.github.com/vxnick/380904/)
+	- `\'` > `^`
+	- `'` > `"`
+	- `^` > `'`
+- Create `3166-1.json`
 ```sh
-# fetch country codes
 regdomlist=( $( wget -qO- https://git.kernel.org/pub/scm/linux/kernel/git/sforshee/wireless-regdb.git/plain/db.txt \
     | awk -F '[ :]' '/^country/ {print $2}' ) )
 
-# fetch iso 3166-1 country codes
 isolist=$( wget -qO- https://gist.github.com/vxnick/380904/raw/464e508a59a16e0d2aa62e2817eab820972f196c/gistfile1.php \
     | sed "s/\\\'/^/" \
 	| tr "'" '"' \
