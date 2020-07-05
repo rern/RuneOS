@@ -1,4 +1,4 @@
-### Regulatory Domain Codes
+### Regulatory Domain Codes - `regdom.json`
 
 - Fetch [regdom codes](https://git.kernel.org/pub/scm/linux/kernel/git/sforshee/wireless-regdb.git/)
 	- Get only `country` codes
