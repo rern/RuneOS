@@ -43,6 +43,12 @@ arch=$( dialog --colors --output-fd 1 --checklist '\n\Z1Arch:\Z0' 8 30 0 \
 	1 armv6h on \
 	2 armv7h on )
 arch=" $arch "
+[[ $arch == *' 1 '* ]] && armv6h='armv6h '
+[[ $arch == *' 2 '* ]] && armv7h='armv7h '
+if [[ -z $armv6h && -z $armv7h ]]; then
+	dialog --colors --msgbox '\nNo \Z1Arch\Z0 selected.' 8 30
+	exit
+fi
 
 ip=$( dialog --colors --output-fd 1 --inputbox "\n\Z1Local Git IP:\Z0" 10 30 192.168.1.9 )
 
@@ -50,11 +56,18 @@ clear
 
 mkdir -p /mnt/Git
 mount -t cifs -o password= //$ip/Git /mnt/Git
+if [[ $? == 1 ]]; then
+	dialog --colors --msgbox "\nMount \Z1$ip\Z0 failed." 8 30
+	exit
+fi
+
 currentdir=$( pwd )
 
-[[ $arch == *' 1 '* ]] && updateRepo armv6h
-[[ $select == *' 2 '* ]] && updateRepo armv7h
+[[ $armv6h ]] && updateRepo armv6h
+[[ $armv7h ]] && updateRepo armv7h
 
 cd "$currentdir"
 umount -l /mnt/Git
 rmdir /mnt/Git
+
+dialog --colors --msgbox "\n\Z1$armv6h$armv7h\Z0repo\nupdated succesfully." 8 30
