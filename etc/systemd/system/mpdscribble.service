@@ -4,6 +4,7 @@ Requires=mpd.service
 After=mpd.service
 
 [Service]
+Type=idle
 ExecStart=/usr/bin/mpdscribble -D
 
 [Install]
