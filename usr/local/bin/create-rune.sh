@@ -191,6 +191,7 @@ fi
 
 # mpd
 [[ $rpi01 ]] && sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
+cp /usr/share/mpdscribble/mpdscribble.conf.example /etc/mpdscribble.conf
 
 # password - set default
 echo root:rune | chpasswd
