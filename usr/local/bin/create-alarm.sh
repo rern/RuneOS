@@ -24,18 +24,18 @@ fi
 infobox() {
 	[[ -z $2 ]] && w=0 || w=$2
 	[[ -z $3 ]] && h=0 || h=$3
-	dialog --backtitle "$title" --colors --infobox "\n$1\n" $w $h
+	dialog --backtitle "$title" --colors --no-shadow --infobox "\n$1\n" $w $h
 }
 inputbox() {
-	dialog --backtitle "$title" --colors --output-fd 1 --inputbox "\n$1" 0 0 $2
+	dialog --backtitle "$title" --colors --no-shadow --output-fd 1 --inputbox "\n$1" 0 0 $2
 }
 msgbox() {
 	[[ -z $2 ]] && w=0 || w=$2
 	[[ -z $3 ]] && h=0 || h=$3
-	dialog --backtitle "$title" --colors --msgbox "\n$1\n\n" $w $h
+	dialog --backtitle "$title" --colors --no-shadow --msgbox "\n$1\n\n" $w $h
 }
 yesno() {
-	dialog --backtitle "$title" --colors --yesno "\n$1\n\n" 0 0
+	dialog --backtitle "$title" --colors --no-shadow --yesno "\n$1\n\n" 0 0
 }
 
 title='Create Arch Linux Arm'
