@@ -43,7 +43,7 @@ if (( $# > 0 )); then
 fi
 
 title="Create RuneAudio+R $version"
-dialog  --backtitle "$title" --colors \
+dialog  --backtitle "$title" --colors --no-shadow \
 	--infobox "\n\n                \Z1RuneAudio+R $version\Z0" 7 50
 sleep 3
 
@@ -73,7 +73,7 @@ else
 fi
 
 selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=autoW dialog> <0=autoH checklist>
-	select=$( dialog --backtitle "$title" --colors \
+	select=$( dialog --backtitle "$title" --colors --no-shadow \
 	   --output-fd 1 \
 	   --checklist '\n\Z1Select features to install:\n
 \Z4[space] = Select / Deselect\Z0' 9 0 0 \
@@ -102,7 +102,7 @@ selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=auto
 }
 selectFeatures
 
-dialog --backtitle "$title" --colors \
+dialog --backtitle "$title" --colors --no-shadow \
 	--yesno "\n\Z1Confirm features to install:\Z0\n\n
 $list\n\n" 0 0
 [[ $? == 1 ]] && selectFeatures
@@ -111,7 +111,7 @@ clear
 
 #----------------------------------------------------------------------------
 pacmanFailed() {
-	dialog --backtitle "$title" --colors \
+	dialog --backtitle "$title" --colors --no-shadow \
 		--msgbox "\n$1\n\n
 Run \Z1create-rune.sh\Z0 again.\n\n" 0 0
 	exit
@@ -252,7 +252,7 @@ rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 #fsck.fat -traw /dev/mmcblk0p1 &> /dev/null
 #rm -f /boot/FSCK*
 
-dialog --colors \
+dialog --colors --no-shadow \
 	--msgbox "\n      
       \Z1RuneAudio+R $version\Z0 created successfully.\n\n
             Press \Z1Enter\Z0 to reboot
