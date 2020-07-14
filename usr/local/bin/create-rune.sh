@@ -122,7 +122,7 @@ pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
 packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils man mpc mpd mpdscribble '
-packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm sshpass sudo udevil wget '
+packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm python-wheel sshpass sudo udevil wget '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
