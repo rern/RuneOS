@@ -24,11 +24,12 @@ fi
 title='Create Arch Linux Arm'
 opt=( --backtitle "$title" --colors --no-shadow )
 
-dialog --colors --no-shadow --infobox "
-                    \Z1Arch Linux Arm\Z0
-                          for
-                     Raspberry Pi
-" 8 58
+dialog --colors --no-shadow --infobox "\n
+\n                    \Z1Arch Linux Arm\Z0
+\n                          for
+\n                     Raspberry Pi
+" 9 58
+
 sleep 3
 
 BOOT=$( df | grep 'BOOT$' | awk '{print $NF}' )
