@@ -67,18 +67,19 @@ ROOT: \Z1$ROOT\Z0
 " 0 0
 	[[ $? == 1 ]] && clear && exit
 
-	rpi=$( dialog "${opt[@]}" --output-fd 1 \
-		--menu '\n\Z1Target:\Z0' 8 0 0 \
-			0 'Raspberry Pi Zero' \
-			1 'Raspberry Pi 1' \
-			2 'Raspberry Pi 2' \
-			3 'Raspberry Pi 3' \
-			4 'Raspberry Pi 4' )
+	rpi=$( dialog "${opt[@]}" --output-fd 1 --menu "
+\Z1Target:\Z0
+" 8 0 0 \
+0 'Raspberry Pi Zero' \
+1 'Raspberry Pi 1' \
+2 'Raspberry Pi 2' \
+3 'Raspberry Pi 3' \
+4 'Raspberry Pi 4' )
 	
 	case $rpi in
-		0 | 1) file=ArchLinuxARM-rpi-latest.tar.gz ;;
-		2 | 3) file=ArchLinuxARM-rpi-2-latest.tar.gz ;;
-		4) file=ArchLinuxARM-rpi-4-latest.tar.gz ;;
+		0 | 1 ) file=ArchLinuxARM-rpi-latest.tar.gz ;;
+		2 | 3 ) file=ArchLinuxARM-rpi-2-latest.tar.gz ;;
+		4 )     file=ArchLinuxARM-rpi-4-latest.tar.gz ;;
 	esac
 	
 	[[ $rpi != 0 ]] && rpiname=$rpi || rpiname=Zero
@@ -88,13 +89,18 @@ ROOT: \Z1$ROOT\Z0
 
 " 0 0
 	if [[ $? == 0 ]]; then
-		ssid=$( dialog "${opt[@]}" --output-fd 1 --inputbox "\n\Z1Wi-Fi\Z0 - SSID:" 0 0 $ssid )
-		password=$( dialog "${opt[@]}" --output-fd 1 --inputbox "\n\Z1Wi-Fi\Z0 - Password:" 0 0 $password )
-		wpa=$( dialog "${opt[@]}" --output-fd 1 \
-			--menu '\n\Z1Wi-Fi -Security:\Z1' 0 0 3 \
-				1 'WPA' \
-				2 'WEP' \
-				3 'None' )
+		ssid=$( dialog "${opt[@]}" --output-fd 1 --inputbox "
+\Z1Wi-Fi\Z0 - SSID:
+" 0 0 $ssid )
+		password=$( dialog "${opt[@]}" --output-fd 1 --inputbox "
+\Z1Wi-Fi\Z0 - Password:
+" 0 0 $password )
+		wpa=$( dialog "${opt[@]}" --output-fd 1 --menu "
+\Z1Wi-Fi -Security:\Z1
+" 0 0 3 \
+1 WPA \
+2 WEP \
+3 None )
 		if [[ $wpa == 1 ]]; then
 			wpa=wpa
 		elif [[ $wpa == 2 ]]; then
@@ -141,7 +147,10 @@ else
 			print "XXX\n"substr($0,63,3)
 			print "\\n\\Z1Download Arch Linux Arm\\Z0\\n"
 			print "Time left: "substr($0,74,5)"\nXXX" }' ) | \
-		dialog "${opt[@]}" --gauge "\nConnecting ..." 9 50
+		dialog "${opt[@]}" --gauge "
+Connecting ...
+
+" 9 50
 	# checksum
 	wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5
 	if ! md5sum -c $file.md5; then
@@ -159,10 +168,16 @@ fi
 # expand
 ( pv -n $file | \
 	bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 | \
-	dialog "${opt[@]}" --gauge "\nExpand to \Z1BOOT\Z0 ..." 9 50
+	dialog "${opt[@]}" --gauge "
+Expand to \Z1BOOT\Z0 ...
+
+" 9 50
 ( pv -n $file | \
 	bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 | \
-	dialog "${opt[@]}" --gauge "\nExpand to \Z1ROOT\Z0 ..." 9 50
+	dialog "${opt[@]}" --gauge "
+Expand to \Z1ROOT\Z0 ...
+
+" 9 50
 
 sync &
 
@@ -179,7 +194,10 @@ XXX
 EOF
 	sleep 2
 done ) | \
-	dialog "${opt[@]}" --gauge "\nWrite remaining cache to \Z1ROOT\Z0 ..." 9 50
+	dialog "${opt[@]}" --gauge "
+Write remaining cache to \Z1ROOT\Z0 ...
+
+" 9 50
 
 #----------------------------------------------------------------------------
 # fstab and cmdline.txt
@@ -275,7 +293,10 @@ opt=( --backtitle "$title" --colors --no-shadow )
 routerip=$( ip r get 1 | head -1 | cut -d' ' -f3 )
 subip=${routerip%.*}.
 scanIP() {
-	dialog "${opt[@]}" --infobox "Scan IP address ..." 5 50
+	dialog "${opt[@]}" --infobox "
+Scan IP address ...
+
+" 5 50
 	nmap=$( nmap -sn $subip* | grep -v 'Starting\|Host is up\|Nmap done' | head -n -1 | tac | sed 's/$/\\n/; s/Nmap.*for/IP :/; s/MAC Address/\\nMAC/' | tr -d '\n' )
 	dialog "${opt[@]}" --msgbox "
 \Z1Find IP address of Raspberry Pi:\Z0
@@ -286,9 +307,7 @@ $nmap
 
 " 50 100
 
-	dialog "${opt[@]}" \
-		--ok-label Yes --extra-button --extra-label Rescan --cancel-label No \
-		--yesno "
+	dialog "${opt[@]}" --ok-label Yes --extra-button --extra-label Rescan --cancel-label No --yesno "
 \Z1Found IP address of Raspberry Pi?\Z0
 
 " 7 38
@@ -334,7 +353,10 @@ if [[ $ans == 1 ]]; then
 fi
 
 # connect RPi
-rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox '\n\Z1Raspberry Pi IP:\Z0' 0 0 $subip )
+rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
+\Z1Raspberry Pi IP:\Z0
+
+" 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
 clear

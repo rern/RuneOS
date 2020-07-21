@@ -44,7 +44,10 @@ fi
 
 title="Create RuneAudio+R $version"
 opt=( --backtitle "$title" --colors --no-shadow )
-dialog --colors --no-shadow --infobox "\n\n                \Z1RuneAudio+R $version\Z0" 7 50
+dialog --colors --no-shadow --infobox "
+
+                \Z1RuneAudio+R $version\Z0
+" 7 50
 sleep 3
 
     bluez='\Z1Bluez\Z0     - Bluetooth supports'
