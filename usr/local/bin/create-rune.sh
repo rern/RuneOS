@@ -252,14 +252,11 @@ wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.json -P
 jq -r .rre4.version /srv/http/data/addons/addons-list.json > $diraddons/$addonalias
 
 # remove cache and files
-rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
+rm /root/*.xz /usr/local/bin/create-* /etc/motd
+pacman -Scc --noconfirm
 
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
-
-# sd boot partition - fix dirty bits if any
-#fsck.fat -traw /dev/mmcblk0p1 &> /dev/null
-#rm -f /boot/FSCK*
 
 dialog --colors --no-shadow --msgbox "\n
 \n
