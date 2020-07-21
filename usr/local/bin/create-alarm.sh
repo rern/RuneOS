@@ -318,9 +318,9 @@ $nmap\n
 	if [[ $ans == 3 ]]; then
 		scanIP
 	elif [[ $ans == 1 && -n $rescan ]]; then
-		dialog "${opt[@]}" --msgbox "
-Try starting over again.
-
+		dialog "${opt[@]}" --msgbox "\n
+Try starting over again.\n
+\n
 " 0 0
 		clear && exit
 	fi
@@ -334,22 +334,22 @@ if [[ $ans == 1 ]]; then
 " 0 0
 	if [[ $? == 0 ]]; then
 		rescan=1
-		dialog "${opt[@]}" --msgbox "
-- Power off
-- Connect wired LAN
-- Power on
-- Wait 30 seconds
-- Press Enter to rescan
-
+		dialog "${opt[@]}" --msgbox "\n
+- Power off\n
+- Connect wired LAN\n
+- Power on\n
+- Wait 30 seconds\n
+- Press Enter to rescan\n
+\n
 " 0 0
 		scanIP
 	else
-		dialog "${opt[@]}" --msgbox "
-- Power off
-- Connect a monitor/TV
-- Power on and observe errors
-- Try starting over again
-
+		dialog "${opt[@]}" --msgbox "\n
+- Power off\n
+- Connect a monitor/TV\n
+- Power on and observe errors\n
+- Try starting over again\n
+\n
 " 0 0
 		clear && exit
 	fi
