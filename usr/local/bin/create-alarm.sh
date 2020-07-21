@@ -260,7 +260,15 @@ sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 # suppress warnings
 echo 'StrictHostKeyChecking no' >> $ROOT/etc/ssh/ssh_config
 # fix - haveged coredump error
-sed -i '/^SystemCallFilter/ s/^/#/' $ROOT/usr/lib/systemd/system/haveged.service
+file=$ROOT/usr/lib/systemd/system/haveged.service
+if grep -q SystemCallFilter=arch $file; then
+	sed -i -e '/^SystemCallFilter/ s/^/#/
+' -e '/SystemCallArchitectures/ a\
+SystemCallFilter=@system-service\
+SystemCallFilter=~@mount\
+SystemCallErrorNumber=EPERM
+' $file
+fi
 
 # get create-rune.sh
 wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
