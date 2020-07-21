@@ -197,7 +197,7 @@ XXX
 EOF
 	sleep 2
 done ) \
-| dialog "${opt[@]}"--gauge "\n
+| dialog "${opt[@]}" --gauge "\n
 Write remaining cache to \Z1ROOT\Z0 ...
 " 9 50
 
