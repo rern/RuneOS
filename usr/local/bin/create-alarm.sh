@@ -151,14 +151,12 @@ No download required.\n
 " 0 0
 	sleep 2
 else
-	( wget -O $file http://os.archlinuxarm.org/os/$file 2>&1| \
-		stdbuf -o0 awk '/[.] +[0-9][0-9]?[0-9]?%/ { \
+	( wget -O $file http://os.archlinuxarm.org/os/$file 2>&1 \
+		| stdbuf -o0 awk '/[.] +[0-9][0-9]?[0-9]?%/ { \
 			print "XXX\n"substr($0,63,3)
 			print "\\n\\Z1Download Arch Linux Arm\\Z0\\n"
-			print "Time left: "substr($0,74,5)"\nXXX" }' ) | \
-		dialog "${opt[@]}" --gauge "
-Connecting ...
-" 9 50
+			print "Time left: "substr($0,74,5)"\nXXX" }' ) \
+		| dialog "${opt[@]}" --gauge "Connecting ..." 9 50
 	# checksum
 	wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5
 	if ! md5sum -c $file.md5; then
@@ -174,16 +172,12 @@ Run \Z1./create-alarm.sh\Z0 again.\n
 fi
 
 # expand
-( pv -n $file | \
-	bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 | \
-	dialog "${opt[@]}" --gauge "
-Expand to \Z1BOOT\Z0 ...
-" 9 50
-( pv -n $file | \
-	bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 | \
-	dialog "${opt[@]}" --gauge "
-Expand to \Z1ROOT\Z0 ...
-" 9 50
+( pv -n $file \
+	| bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 \
+	| dialog "${opt[@]}" --gauge "Expand to \Z1BOOT\Z0 ..." 9 50
+( pv -n $file \
+	| bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 \
+	| dialog "${opt[@]}" --gauge "Expand to \Z1ROOT\Z0 ..." 9 50
 
 sync &
 
@@ -199,10 +193,8 @@ $percent
 XXX
 EOF
 	sleep 2
-done ) | \
-	dialog "${opt[@]}" --gauge "
-Write remaining cache to \Z1ROOT\Z0 ...
-" 9 50
+done ) \
+| dialog "${opt[@]}" --gauge "Write remaining cache to \Z1ROOT\Z0 ..." 9 50
 
 #----------------------------------------------------------------------------
 # fstab and cmdline.txt
