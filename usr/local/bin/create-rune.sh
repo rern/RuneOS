@@ -250,6 +250,8 @@ ln -s /mnt /srv/http/
 diraddons=/srv/http/data/addons
 wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.php -P $diraddons
 grep -A 2 "^'$addonalias" $diraddons/addons-list.php | tail -1 | cut -d"'" -f4 > $diraddons/$addonalias
+#wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.json -P $diraddons
+#jq -r .rre4.version /srv/http/data/addons/addons-list.json > $diraddons/$addonalias
 
 # remove cache and files
 rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
