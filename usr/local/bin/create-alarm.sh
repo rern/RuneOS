@@ -261,7 +261,7 @@ sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 echo 'StrictHostKeyChecking no' >> $ROOT/etc/ssh/ssh_config
 # fix - haveged coredump error
 file=$ROOT/usr/lib/systemd/system/haveged.service
-if grep -q SystemCallFilter=arch $file; then
+if ! grep -q SystemCallErrorNumber=EPERM $file; then
 	sed -i -e '/^SystemCallFilter/ d
 ' -e '/SystemCallArchitectures/ a\
 SystemCallFilter=@system-service\
