@@ -21,21 +21,22 @@ else
 fi
 
 #----------------------------------------------------------------------------
+opt='--colors --no-shadow'
 infobox() {
 	[[ -z $2 ]] && w=0 || w=$2
 	[[ -z $3 ]] && h=0 || h=$3
-	dialog --backtitle "$title" --colors --no-shadow --infobox "\n$1\n" $w $h
+	dialog --backtitle "$title" $opt --infobox "\n$1\n" $w $h
 }
 inputbox() {
-	dialog --backtitle "$title" --colors --no-shadow --output-fd 1 --inputbox "\n$1" 0 0 $2
+	dialog --backtitle "$title" $opt --output-fd 1 --inputbox "\n$1" 0 0 $2
 }
 msgbox() {
 	[[ -z $2 ]] && w=0 || w=$2
 	[[ -z $3 ]] && h=0 || h=$3
-	dialog --backtitle "$title" --colors --no-shadow --msgbox "\n$1\n\n" $w $h
+	dialog --backtitle "$title" $opt --msgbox "\n$1\n\n" $w $h
 }
 yesno() {
-	dialog --backtitle "$title" --colors --no-shadow --yesno "\n$1\n\n" 0 0
+	dialog --backtitle "$title" $opt --yesno "\n$1\n\n" 0 0
 }
 
 title='Create Arch Linux Arm'
@@ -76,7 +77,7 @@ BOOT: \Z1$BOOT\Z0\n\
 ROOT: \Z1$ROOT\Z0"
 	[[ $? == 1 ]] && clear && exit
 
-	rpi=$( dialog --backtitle "$title" --colors --output-fd 1 \
+	rpi=$( dialog --backtitle "$title" $opt --output-fd 1 \
 		--menu '\n\Z1Target:\Z0' 8 0 0 \
 			0 'Raspberry Pi Zero' \
 			1 'Raspberry Pi 1' \
@@ -98,7 +99,7 @@ ROOT: \Z1$ROOT\Z0"
 
 		password=$( inputbox '\Z1Wi-Fi\Z0 - Password:' $password )
 
-		wpa=$( dialog --backtitle "$title" --colors --output-fd 1 \
+		wpa=$( dialog --backtitle "$title" $opt --output-fd 1 \
 			--menu '\n\Z1Wi-Fi -Security:\Z1' 0 0 3 \
 				1 'WPA' \
 				2 'WEP' \
@@ -142,7 +143,7 @@ else
 			print "XXX\n"substr($0,63,3)
 			print "\\n\\Z1Download Arch Linux Arm\\Z0\\n"
 			print "Time left: "substr($0,74,5)"\nXXX" }' ) | \
-		dialog --backtitle "$title" --colors --gauge "\nConnecting ..." 9 50
+		dialog --backtitle "$title" $opt --gauge "\nConnecting ..." 9 50
 	# checksum
 	wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5
 	if ! md5sum -c $file.md5; then
@@ -156,10 +157,10 @@ fi
 # expand
 ( pv -n $file | \
 	bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 | \
-	dialog --backtitle "$title" --colors --gauge "\nExpand to \Z1BOOT\Z0 ..." 9 50
+	dialog --backtitle "$title" $opt --gauge "\nExpand to \Z1BOOT\Z0 ..." 9 50
 ( pv -n $file | \
 	bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 | \
-	dialog --backtitle "$title" --colors --gauge "\nExpand to \Z1ROOT\Z0 ..." 9 50
+	dialog --backtitle "$title" $opt --gauge "\nExpand to \Z1ROOT\Z0 ..." 9 50
 
 sync &
 
@@ -176,7 +177,7 @@ XXX
 EOF
 	sleep 2
 done ) | \
-	dialog --backtitle "$title" --colors --gauge "\nWrite remaining cache to \Z1ROOT\Z0 ..." 9 50
+	dialog --backtitle "$title" $opt --gauge "\nWrite remaining cache to \Z1ROOT\Z0 ..." 9 50
 
 #----------------------------------------------------------------------------
 # fstab and cmdline.txt
@@ -273,14 +274,14 @@ scanIP() {
 \Z4[arrowdown] = scrolldown\Z0\n
 $nmap" 50 100
 
-	dialog --backtitle "$title" --colors \
+	dialog --backtitle "$title" $opt \
 		--ok-label Yes --extra-button --extra-label Rescan --cancel-label No \
 		--yesno '\n\Z1Found IP address of Raspberry Pi?\Z0' 7 38
 	ans=$?
 	if [[ $ans == 3 ]]; then
 		scanIP
 	elif [[ $ans == 1 && -n $rescan ]]; then
-		diadog --msgbox '  Try starting over again.' 0 0
+		diadog $opt --msgbox '  Try starting over again.' 0 0
 		clear && exit
 	fi
 }
@@ -308,7 +309,7 @@ if [[ $ans == 1 ]]; then
 fi
 
 # connect RPi
-rpiip=$( dialog --colors --output-fd 1 --cancel-label Rescan --inputbox '\n\Z1Raspberry Pi IP:\Z0' 0 0 $subip )
+rpiip=$( dialog $opt --output-fd 1 --cancel-label Rescan --inputbox '\n\Z1Raspberry Pi IP:\Z0' 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
 clear
