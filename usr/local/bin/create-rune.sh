@@ -44,8 +44,8 @@ fi
 
 title="Create RuneAudio+R $version"
 opt=( --backtitle "$title" --colors --no-shadow )
-dialog --colors --no-shadow --infobox "
-
+dialog --colors --no-shadow --infobox "\n
+\n
                 \Z1RuneAudio+R $version\Z0
 " 7 50
 sleep 3
@@ -105,11 +105,11 @@ selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=auto
 }
 selectFeatures
 
-dialog "${opt[@]}" --yesno "
-\Z1Confirm features to install:\Z0
-
-$list
-
+dialog "${opt[@]}" --yesno "\n
+\Z1Confirm features to install:\Z0\n
+\n
+$list\n
+\n
 " 0 0
 [[ $? == 1 ]] && selectFeatures
 
@@ -117,11 +117,11 @@ clear
 
 #----------------------------------------------------------------------------
 pacmanFailed() {
-	dialog "${opt[@]}" --msgbox "
-$1
-
-Run \Z1create-rune.sh\Z0 again.
-
+	dialog "${opt[@]}" --msgbox "\n
+$1\n
+\n
+Run \Z1create-rune.sh\Z0 again.\n
+\n
 " 0 0
 	exit
 }
@@ -261,12 +261,11 @@ rm /root/*.xz /usr/local/bin/create-* /var/cache/pacman/pkg/* /etc/motd
 #fsck.fat -traw /dev/mmcblk0p1 &> /dev/null
 #rm -f /boot/FSCK*
 
-dialog --colors --no-shadow --msgbox "
-
-    \Z1RuneAudio+R '$version'\Z0 created successfully.
-
+dialog --colors --no-shadow --msgbox "\n
+\n
+    \Z1RuneAudio+R $version\Z0 created successfully.\n
+\n
             Press \Z1Enter\Z0 to reboot
-
 " 10 50
 
 shutdown -r now
