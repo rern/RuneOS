@@ -156,7 +156,7 @@ else
 			print "XXX\n"substr($0,63,3)
 			print "\\n\\Z1Download Arch Linux Arm\\Z0\\n"
 			print "Time left: "substr($0,74,5)"\nXXX" }' ) \
-		| dialog "${opt[@]}" --gauge "Connecting ..." 9 50
+		| dialog "${opt[@]}" --gauge "\nConnecting ..." 9 50
 	# checksum
 	wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5
 	if ! md5sum -c $file.md5; then
@@ -174,10 +174,10 @@ fi
 # expand
 ( pv -n $file \
 	| bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 \
-	| dialog "${opt[@]}" --gauge "Expand to \Z1BOOT\Z0 ..." 9 50
+	| dialog --backtitle "$title" --colors --no-shadow --gauge "\nExpand to \Z1BOOT\Z0 ..." 9 50
 ( pv -n $file \
 	| bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 \
-	| dialog "${opt[@]}" --gauge "Expand to \Z1ROOT\Z0 ..." 9 50
+	| dialog --backtitle "$title" --colors --no-shadow --gauge "\nExpand to \Z1ROOT\Z0 ..." 9 50
 
 sync &
 
@@ -194,7 +194,7 @@ XXX
 EOF
 	sleep 2
 done ) \
-| dialog "${opt[@]}" --gauge "Write remaining cache to \Z1ROOT\Z0 ..." 9 50
+| dialog --backtitle "$title" --colors --no-shadow --gauge "\nWrite remaining cache to \Z1ROOT\Z0 ..." 9 50
 
 #----------------------------------------------------------------------------
 # fstab and cmdline.txt
