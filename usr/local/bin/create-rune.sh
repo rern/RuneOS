@@ -160,6 +160,9 @@ echo -e "\n\e[36mConfigure ...\e[m\n"
 # RPi 4 - rename bluetooth file
 [[ $hwcode == 11 ]] && mv /usr/lib/firmware/updates/brcm/BCM{4345C0,}.hcd
 
+# RPi Zero W - fix missing module
+[[ $hwcode == 0c ]] && modprobe brcmfmac
+
 chown http:http /etc/fstab
 chown -R http:http /etc/netctl /etc/systemd/network /srv/http
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/* /usr/local/bin/*
