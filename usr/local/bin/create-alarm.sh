@@ -276,9 +276,9 @@ chmod 755 $ROOT/usr/local/bin/*.sh
 
 dialog --colors --no-shadow --msgbox "\n
 \n
-                Arch Linux Arm\n
-                \Z1Raspberry Pi $rpiname\Z0\n
-             Created successfully.
+                   Arch Linux Arm\n
+                   \Z1Raspberry Pi $rpiname\Z0\n
+                Created successfully.
 " 10 58
 
 rm create-alarm.sh
