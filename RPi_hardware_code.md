@@ -1,6 +1,6 @@
 **Raspberry Pi Hardware**
 
-- Number of cores: `lscpu | awk '/CPU\(s\):/ {print $NF}'` = 1 for Zero and 1
+- Number of cores: `lscpu | awk '/CPU\(s\):/ {print $NF}'` = 1 for Zero and 1 `armv6h`
 - code `EDCBBA` : `awk '/Revision/ {print $NF}' /proc/cpuinfo`
 - example: `a22082` : 1GB - Embest - BCM2837 - Raspberry Pi 3B - revision 2
 
