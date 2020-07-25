@@ -1,7 +1,8 @@
 **Raspberry Pi Hardware**
 
-- Number of cores: `lscpu | awk '/CPU\(s\):/ {print $NF}'` = 1 for Zero and 1 `armv6h`
-- code `EDCBBA` : `awk '/Revision/ {print $NF}' /proc/cpuinfo`
+- code `EDCBBA=$( awk '/Revision/ {print $NF}' /proc/cpuinfo )`
+	- `C=$( awk '/Revision/ {print $NF}' /proc/cpuinfo | cut -c3 )`
+	- `BB=$( awk '/Revision/ {print $NF}' /proc/cpuinfo | cut -c4-5 )`
 - example: `a22082` : 1GB - Embest - BCM2837 - Raspberry Pi 3B - revision 2
 
 | Name       | code `BB` | no wl | no eth | SoC       | code `C` | 4 cores |
