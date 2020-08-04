@@ -6,7 +6,7 @@ Audio player and renderer for Raspberry Pi
 
 - For all **Raspberry Pi**s: Zero, 1, 2, 3 and 4
 - Create **RuneAudio+R** from latest releases of [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads)
-- Interactive interface by 2 command lines only:
+- Interactive interface by only 2 command lines:
 ```sh
 #1
 wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
