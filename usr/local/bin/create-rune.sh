@@ -202,6 +202,9 @@ fi
 [[ $rpi01 ]] && sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
 cp /usr/share/mpdscribble/mpdscribble.conf.example /etc/mpdscribble.conf
 
+# disable again after upgrade
+systemctl disabled systemd-networkd-wait-online
+
 # password - set default
 echo root:rune | chpasswd
 [[ -e /usr/bin/smbd ]] && ( echo rune; echo rune ) | smbpasswd -s -a root
