@@ -38,6 +38,9 @@ fi
 
 wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist -O /etc/pacman.d/mirrorlist
 
+# upgrade might re-enable
+systemctl disabled systemd-networkd-wait-online
+
 fsck.fat -traw /dev/mmcblk0p1
 rm -f /boot/FSCK*
 
