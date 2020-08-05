@@ -25,7 +25,7 @@ if [[ $select == *' 2 '* ]]; then
 	rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/*
 fi
 if [[ $select == *' 3 '* ]]; then
-	pacman -Scc --noconfirm
+	rm -f /var/cache/pacman/pkg/*
 fi
 if [[ $select == *' 4 '* ]]; then
 	journalctl --rotate
