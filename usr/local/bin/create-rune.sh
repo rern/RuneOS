@@ -219,7 +219,7 @@ echo root:rune | chpasswd
 [[ ! -e /usr/bin/snapclient ]] && rm /etc/default/snapclient
 
 # spotifyd
-cp /usr/lib/systemd/{user,system}/spotifyd.service
+ln -s /usr/lib/systemd/{user,system}/spotifyd.service
 
 # user - set expire to none
 users=$( cut -d: -f1 /etc/passwd )
