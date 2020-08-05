@@ -299,7 +299,7 @@ dialog --colors --no-shadow --msgbox "\n
 3. \Z1Wait $wait seconds\Z0\n
 4. Press \Z1Enter\Z0 to continue.\n
 \n
-" 12 55
+" 14 55
 
 #----------------------------------------------------------------------------
 title='Connect to Raspberry Pi'
