@@ -293,9 +293,11 @@ dialog --colors --no-shadow --msgbox "\n
 \Z1Finish.\Z0\n
 \n
 \Z1BOOT\Z0 and \Z1ROOT\Z0 were unmounted.\n
-Move micro SD card$usb to RPi.\n
-Power on.\n
-\Z1Wait $wait seconds\Z0 then press \Z1Enter\Z0 to continue.\n
+\n
+1. Move micro SD card$usb to RPi.\n
+2. Power on.\n
+3. \Z1Wait $wait seconds\Z0\n
+4. Press \Z1Enter\Z0 to continue.\n
 \n
 " 12 55
 
