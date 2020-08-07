@@ -1,9 +1,10 @@
 **Raspberry Pi Hardware**
 
 - code `EDCBBA=$( awk '/Revision/ {print $NF}' /proc/cpuinfo )`
-	- `C=$( awk '/Revision/ {print $NF}' /proc/cpuinfo | cut -c3 )`
-	- `BB=$( awk '/Revision/ {print $NF}' /proc/cpuinfo | cut -c4-5 )`
-- example: `a22082` : 1GB - Embest - BCM2837 - Raspberry Pi 3B - revision 2
+	- `BB=${EDCBBA: -3:2}`
+	- `C=${EDCBBA: -4:1}`
+	- RPi Zero W on Kernel 5: `19000c1` - 7 characters
+
 
 | Name       | code `BB` | no wl | no eth | SoC       | code `C` | 4 cores |
 |------------|-----------|-------|--------|-----------|----------|---------|
@@ -37,10 +38,11 @@
 	- `a` - 1GB
 	- `b` - 2GB
 	- `c` - 4GB
+- example: `a22082` : 1GB - Embest - BCM2837 - Raspberry Pi 3B - revision 2
 - Model:
 	- `A` - no ethernet
 	- `B` - with ethernet
-- Wi-Fi and Bluetooth
+- Wi-Fi and Bluetooth:
 	- `[[ $BB =~ ^(08|0c|0d|0e|11)$ ]]`
-- 3.5mm headphone output
+- 3.5mm headphone output:
 	- None in Zero and Zero W
