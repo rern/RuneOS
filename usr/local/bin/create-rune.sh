@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # any argument - custom inputs for version and branch
-version=e4
+version=e5
 uibranch=master
 addonalias=rr$version
 
