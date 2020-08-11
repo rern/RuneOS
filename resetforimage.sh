@@ -23,6 +23,8 @@ fi
 if [[ $select == *' 2 '* ]]; then
 	rm -rf /root/.cache/* /srv/http/data/tmp/*
 	rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/*
+	wget -qO - https://github.com/rern/RuneOS/raw/master/radioparadise.tar.xz | bsdtar xvf - -C /srv/http/data/webradios
+	chown http:http /srv/http/data/webradios/*
 fi
 if [[ $select == *' 3 '* ]]; then
 	rm -f /var/cache/pacman/pkg/*
