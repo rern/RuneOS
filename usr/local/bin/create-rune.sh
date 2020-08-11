@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# any argument - custom inputs for version and branch
+# create-rune.sh any - custom inputs for version and branch
+# new version:
+#1   - https://github.com/rern/RuneAudio_Addons/blob/master/addons-list.json > new item with key > "rreN": {
+#2   - this file > version=eN
 version=e5
 uibranch=master
 addonalias=rr$version
