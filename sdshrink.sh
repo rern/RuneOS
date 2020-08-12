@@ -8,12 +8,14 @@ yesno() {
 	echo
 	echo -e '\e[36m0\e[m / 1 ? '
 	read -n 1 answer
+	echo
 }
 
 devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 [[ -z $devmount ]] && echo No ROOT mounted. && exit
 
 yesno "Confirm partition: $devmount"
+
 [[ $answer != 1 ]] && exit
 
 part=$( cut -d' ' -f1 <<< $devmount )
