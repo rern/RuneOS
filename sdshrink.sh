@@ -3,15 +3,13 @@
 devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 [[ -z $devmount ]] && echo No \e[36mROOT\e[m partiton mounted. && exit
 
-yesno "Confirm partition: $devmount"
-
 dialog --colors --yesno "\n
 Confirm partition:\n
 \n
 \Z1$devmount\Z0\n
 " 9 50
 
-[[ $? == 0 ]] && exit
+[[ $? == 1 ]] && exit
 
 part=$( cut -d' ' -f1 <<< $devmount )
 dev=${part:0:-1}
