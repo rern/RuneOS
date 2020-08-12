@@ -2,7 +2,7 @@
 
 rm -f $0
 
-if [[ ! -e /sev/http/data/addons ]]; then
+if [[ ! -e /srv/http/data/addons ]]; then
 	echo This is not RuneAudio+R
 	exit
 fi
