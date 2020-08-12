@@ -53,6 +53,8 @@ rm -f /boot/FSCK*
 
 wget https://github.com/rern/RuneOS/raw/master/x.sh -P /boot
 
-dialog --colors --yesno "\Z1Finish.\Z0\n\n                  Shutdown?" 8 50
-clear
+dialog --colors --yesno "\n
+\Z1Finish.\Z0\n
+\n                  Shutdown?" 8 50
+
 [[ $? == 0 ]] && shutdown -h now
