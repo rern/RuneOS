@@ -11,7 +11,7 @@ yesno() {
 }
 
 devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
-[[ -z $devmount ]] && echo No ROOT mounted. && exit
+[[ -z $devmount ]] && echo No \e[36mROOT\e[m partiton mounted. && exit
 
 yesno "Confirm partition: $devmount"
 
