@@ -8,7 +8,6 @@ yesno() {
 	echo
 	echo -e '\e[36m0\e[m / 1 ? '
 	read -n 1 answer
-	echo
 }
 
 devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
