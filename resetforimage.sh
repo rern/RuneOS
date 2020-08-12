@@ -51,8 +51,6 @@ systemctl disable systemd-networkd-wait-online
 fsck.fat -traw /dev/mmcblk0p1
 rm -f /boot/FSCK*
 
-e2fsck -fy /dev/mmcblk0p2
-
 wget https://github.com/rern/RuneOS/raw/master/x.sh -P /boot
 
 dialog --colors --yesno "\Z1Finish.\Z0\n\n                  Shutdown?" 8 50
