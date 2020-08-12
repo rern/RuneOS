@@ -16,7 +16,9 @@ select=$( dialog --colors \
 			3 "Clear package cache" on \
 			4 "Clear system log" on \
 			5 "Clear Wi-Fi connection" on )
-[[ $? == 1 ]] && clear && exit
+
+clear
+[[ $? == 1 ]] && exit
 
 select=" $select "
 
@@ -27,7 +29,7 @@ if [[ $select == *' 1 '* ]]; then
 fi
 if [[ $select == *' 2 '* ]]; then
 	rm -rf /root/.cache/* /srv/http/data/tmp/*
-	rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/*
+	rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/* /srv/http/data/system/gpio
 	wget -qO - https://github.com/rern/RuneOS/raw/master/radioparadise.tar.xz | bsdtar xvf - -C /srv/http/data/webradios
 	chown http:http /srv/http/data/webradios/*
 	echo '{
