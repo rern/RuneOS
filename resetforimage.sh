@@ -2,6 +2,11 @@
 
 rm -f $0
 
+if [[ ! -e /sev/http/data/addons ]]; then
+	echo This is not RuneAudio+R
+	exit
+fi
+
 select=$( dialog --colors \
 	   --output-fd 1 \
 	   --checklist '\n\Z1Select features:\n
@@ -45,6 +50,8 @@ systemctl disable systemd-networkd-wait-online
 
 fsck.fat -traw /dev/mmcblk0p1
 rm -f /boot/FSCK*
+
+e2fsck -fy /dev/mmcblk0p2
 
 wget https://github.com/rern/RuneOS/raw/master/x.sh -P /boot
 
