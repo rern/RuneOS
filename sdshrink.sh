@@ -1,21 +1,17 @@
 #!/bin/bash
 
-yesno() {
-	echo
-	echo -e "$1"
-	echo -e '  \e[36m0\e[m No'
-	echo -e '  \e[36m1\e[m Yes'
-	echo
-	echo -e '\e[36m0\e[m / 1 ? '
-	read -n 1 answer
-}
-
 devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 [[ -z $devmount ]] && echo No \e[36mROOT\e[m partiton mounted. && exit
 
 yesno "Confirm partition: $devmount"
 
-[[ $answer != 1 ]] && exit
+dialog --colors --yesno "\n
+Confirm partition:\n
+\n
+\Z1$devmount\Z0\n
+" 9 50
+
+[[ $? == 0 ]] && exit
 
 part=$( cut -d' ' -f1 <<< $devmount )
 dev=${part:0:-1}
