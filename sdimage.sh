@@ -1,47 +1,4 @@
-#!/bin/bash
-
-yesno() {
-	echo
-	echo -e "$1"
-	echo -e '  \e[36m0\e[m No'
-	echo -e '  \e[36m1\e[m Yes'
-	echo
-	echo -e '\e[36m0\e[m / 1 ? '
-	read -n 1 answer
-}
-
-devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
-[[ -z $devmount ]] && echo No \e[36mROOT\e[m partition mounted. && exit
-
-yesno "Confirm partition: \e[36m$devmount\e[m"
-[[ $yesno != 1 ]] && exit
-
-targetpart=$( cut -d' ' -f1 <<< $devmount )
-dev=${targetpart:0:-1}
-
-umount -l -v $targetpart
-e2fsck -fy $targetpart
-
-partinfo=$( tune2fs -l $targetpart )
-myblockcount=$( awk '/Block count/ {print $NF}' <<< "$partinfo" )
-myfreeblocks=$( awk '/Free blocks/ {print $NF}' <<< "$partinfo" )
-myblocksize=$( awk '/Block size/ {print $NF}' <<< "$partinfo" )
-mysectorsize=$( sfdisk -l $dev | awk '/Units/ {print $8}' )
-mystartsector=$( fdisk -l $dev | grep $targetpart | awk '{print $2}' )
-
-myusedblocks=$(( $myblockcount - $myfreeblocks ))
-mytargetblocks=$(( $myusedblocks * 108 / 100 ))
-KBperblock=$(( $myblocksize / 1024 ))
-mynewpartsize=$(( ( $mytargetblocks + $KBperblock - 1 ) / $KBperblock * $KBperblock ))
-
-sectorsperblock=$(( $myblocksize / $mysectorsize  ))
-mynewendpoint=$(( $mystartsector + $mynewpartsize * $sectorsperblock ))
-
-resize2fs -fp $targetpart $(( $mynewpartsize * $KBperblock ))K
-# NB, the -s switch does not work, putting Yes after the command is the work around.
-parted $dev unit s resizepart ${targetpart: -1} ${mynewendpoint} yes
-sync
-
+#!/bin/bash -e
 #------------------------------------------------------------------------------
 #  June 2016 raspi-img
 #
