@@ -183,7 +183,7 @@ create-rune.sh
 - Reset for image
 ```sh
 ssh root@<RPI IP>
-wget https://github.com/rern/RuneOS/raw/master/resetforimage.sh -O - | sh
+wget -qO - https://github.com/rern/RuneOS/raw/master/resetforimage.sh | sh
 ```
 - Power off
 
