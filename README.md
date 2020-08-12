@@ -189,11 +189,11 @@ wget -qO - https://github.com/rern/RuneOS/raw/master/resetforimage.sh | sh
 
 - Move micro SD card (and the USB drive, if `ROOT` partition is in USB drive) to PC
 - Resize `ROOT` partition to smallest size possible
-	- Command line:
+	- Defragment:
 		```sh
 		wget -qO - https://github.com/rern/RuneOS/raw/master/sdshrink.sh | sh
 		```
-	- OR with **GParted** app (smaller the size = smaller image file and less time to flash SD card)
+	- Shrink: **GParted** app (smaller the size = smaller image file and less time to flash SD card)
 		- menu: GParted > Devices > /dev/sd?
 		- right-click `ROOT` partiton > Unmount
 		- right-click `ROOT` partiton > Resize/Move
