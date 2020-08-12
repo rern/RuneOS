@@ -29,6 +29,19 @@ myblocksize=$( awk '/Block size/ {print $NF}' <<< "$partinfo" )
 mysectorsize=$( sfdisk -l $dev | awk '/Units/ {print $8}' )
 mystartsector=$( fdisk -l $dev | grep $targetpart | awk '{print $2}' )
 
+myusedblocks=$(( $myblockcount - $myfreeblocks ))
+mytargetblocks=$(( $myusedblocks * 108 / 100 ))
+KBperblock=$(( $myblocksize / 1024 ))
+mynewpartsize=$(( ( $mytargetblocks + $KBperblock - 1 ) / $KBperblock * $KBperblock ))
+
+sectorsperblock=$(( $myblocksize / $mysectorsize  ))
+mynewendpoint=$(( $mystartsector + $mynewpartsize * $sectorsperblock ))
+
+resize2fs -fp $targetpart $(( $mynewpartsize * $KBperblock ))K
+# NB, the -s switch does not work, putting Yes after the command is the work around.
+parted $dev unit s resizepart ${targetpart: -1} ${mynewendpoint} yes
+sync
+
 #------------------------------------------------------------------------------
 #  June 2016 raspi-img
 #
