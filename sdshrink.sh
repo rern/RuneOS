@@ -14,7 +14,7 @@ devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 [[ -z $devmount ]] && echo No ROOT mounted. && exit
 
 yesno "Confirm partition: $devmount"
-[[ $yesno != 1 ]] && exit
+[[ $answer != 1 ]] && exit
 
 part=$( cut -d' ' -f1 <<< $devmount )
 dev=${part:0:-1}
@@ -31,7 +31,7 @@ sectorsize=$( sfdisk -l $dev | awk '/Units/ {print $8}' )
 startsector=$( fdisk -l $dev | grep $part | awk '{print $2}' )
 
 usedblocks=$(( blockcount - freeblocks ))
-targetblocks=$(( usedblocks * 108 / 100 ))
+targetblocks=$(( usedblocks * 105 / 100 ))
 Kblock=$(( blocksize / 1024 ))
 newsize=$(( ( targetblocks + Kblock - 1 ) / Kblock * Kblock ))
 sectorsperblock=$(( blocksize / sectorsize  ))
