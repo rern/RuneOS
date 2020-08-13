@@ -34,6 +34,12 @@ endsector=$(( startsector + newsize * sectorsperblock ))
 
 resize2fs -fp $part $(( newsize * Kblock ))K
 
-parted $dev unit s resizepart $partnum $endsector yes
-
-sync
+parted $dev ---pretend-input-tty <<EOF
+unit
+s
+resizepart
+$partnum
+$endsector
+Yes
+quit
+EOF
