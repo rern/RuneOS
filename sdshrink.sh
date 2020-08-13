@@ -1,7 +1,15 @@
 #!/bin/bash
 
 devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
-[[ -z $devmount ]] && echo No \e[36mROOT\e[m partiton mounted. && exit
+if [[ -z $devmount ]]; then
+	dialog --colors --msgbox "\n
+\Z1Warnings:\Z0\n
+\n
+No \Z1ROOT\Z0 partiton mounted.\n
+\n
+" 0 0
+	exit
+fi
 
 dialog --colors --yesno "\n
 Confirm partition:\n
