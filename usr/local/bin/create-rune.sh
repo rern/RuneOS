@@ -258,7 +258,7 @@ ln -s /mnt /srv/http/
 # addons
 diraddons=/srv/http/data/addons
 wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.json -P $diraddons
-jq -r .rre4.version /srv/http/data/addons/addons-list.json > $diraddons/$addonalias
+jq -r .$addonalias.version /srv/http/data/addons/addons-list.json > $diraddons/$addonalias
 
 # remove cache and files
 rm /root/*.xz /usr/local/bin/create-* /etc/motd
