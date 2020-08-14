@@ -12,7 +12,7 @@ No \Z1ROOT\Z0 partiton mounted.\n
 fi
 
 dialog --colors --yesno "\n
-Shrink partition:\n
+Shrink \Z1ROOT\Z0 partition:\n
 \n
 \Z1$devmount\Z0\n
 " 9 50
