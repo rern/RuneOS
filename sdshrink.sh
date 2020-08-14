@@ -24,6 +24,7 @@ dev=${part:0:-1}
 partnum=${part: -1}
 
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
+used=$( df -k | grep $part | awk '{print $3}' )
 
 umount -l -v $part
 e2fsck -fy $part
@@ -42,7 +43,8 @@ newsize=$(( ( targetblocks + Kblock - 1 ) / Kblock * Kblock ))
 sectorsperblock=$(( blocksize / sectorsize  ))
 endsector=$(( startsector + newsize * sectorsperblock ))
 
-resize2fs -fp $part $(( newsize * Kblock ))K
+# shrink filesystem to minimum
+resize2fs -fMp $part
 
 parted $dev ---pretend-input-tty <<EOF
 unit
