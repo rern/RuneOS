@@ -12,7 +12,7 @@ No \Z1ROOT\Z0 partiton mounted.\n
 fi
 
 dialog --colors --yesno "\n
-Confirm partition:\n
+Shrink partition:\n
 \n
 \Z1$devmount\Z0\n
 " 9 50
@@ -22,6 +22,8 @@ Confirm partition:\n
 part=$( cut -d' ' -f1 <<< $devmount )
 dev=${part:0:-1}
 partnum=${part: -1}
+
+partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
 
 umount -l -v $part
 e2fsck -fy $part
@@ -51,3 +53,11 @@ $endsector
 Yes
 quit
 EOF
+
+partsizenew=$( fdisk -l $part | awk '/^Disk/ {print $3" GB"}' )
+dialog --colors --msgbox "\n
+Shrinked \Z1ROOT\Z0 partition:\n
+\n
+$partsize to \Z1$partsizenew\Z0\n
+\n
+" 0 0
