@@ -185,7 +185,7 @@ create-rune.sh
 ssh root@<RPI IP>
 wget -qO - https://github.com/rern/RuneOS/raw/master/resetforimage.sh | sh
 ```
-- Power off
+- Shutdown
 
 - Move micro SD card (and the USB drive, if `ROOT` partition is in USB drive) to Lunux
 - Shrink `ROOT` partition to smallest size possible (smaller the size = smaller image file and less time to flash SD card)
