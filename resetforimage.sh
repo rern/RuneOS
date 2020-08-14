@@ -84,7 +84,7 @@ wget https://github.com/rern/RuneOS/raw/master/x.sh -P /boot
 
 dialog --colors --yesno "\n
 \Z1Finish.\Z0\n
-\n                  Shutdown?\n
+\n           Shutdown Raspberry Pi?\n
 " 9 50
 
 [[ $? == 0 ]] && shutdown -h now
