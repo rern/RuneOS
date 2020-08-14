@@ -33,6 +33,7 @@ partinfo=$( tune2fs -l $part )
 blockcount=$( awk '/Block count/ {print $NF}' <<< "$partinfo" )
 freeblocks=$( awk '/Free blocks/ {print $NF}' <<< "$partinfo" )
 blocksize=$( awk '/Block size/ {print $NF}' <<< "$partinfo" )
+
 sectorsize=$( sfdisk -l $dev | awk '/Units/ {print $8}' )
 startsector=$( fdisk -l $dev | grep $part | awk '{print $2}' )
 
@@ -44,7 +45,7 @@ sectorsperblock=$(( blocksize / sectorsize  ))
 endsector=$(( startsector + newsize * sectorsperblock ))
 
 # shrink filesystem to minimum
-resize2fs -fMp $part
+resize2fs -fp $part $(( newsize * Kblock ))K
 
 parted $dev ---pretend-input-tty <<EOF
 unit
