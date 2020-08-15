@@ -225,15 +225,7 @@ echo root:rune | chpasswd
 [[ ! -e /usr/bin/snapclient ]] && rm /etc/default/snapclient
 
 # spotifyd
-#ln -s /usr/lib/systemd/{user,system}/spotifyd.service # 0.2.24-2 from community repo
-# skip - 0.2.24-2 from community repo with DBUS bug
-if ! grep -q '^IgnorePkg = spotifyd' /etc/pacman.conf; then
-	sed -i '/^\[RR\]/ i\
-IgnorePkg = spotifyd\
-
-' /etc/pacman.conf
-fi
-
+[[ ! -e /usr/lib/systemd/system/spotifyd.service ]] && ln -s /usr/lib/systemd/{user,system}/spotifyd.service
 
 # user - set expire to none
 users=$( cut -d: -f1 /etc/passwd )
