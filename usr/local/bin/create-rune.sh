@@ -106,7 +106,7 @@ selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=auto
 	[[ $select == *' 6 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 7 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
 	[[ $select == *' 8 '* ]] && features+='snapcast ' && list+="$snapcast\n"
-	[[ $select == *' 9 '* ]] && features+='spotifyd jq ' && list+="$spotify\n"
+	[[ $select == *' 9 '* ]] && features+='spotifyd ' && list+="$spotify\n"
 	[[ $select == *' 10 '* ]] && features+='upmpdcli ' && list+="$upmpdcli\n"
 }
 selectFeatures
@@ -136,7 +136,7 @@ echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
-packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils man mpc mpd mpdscribble '
+packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils jq man mpc mpd mpdscribble '
 packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm python-wheel sshpass sudo udevil wget '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
