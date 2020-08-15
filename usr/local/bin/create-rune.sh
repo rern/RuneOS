@@ -255,11 +255,6 @@ ln -s /mnt /srv/http/
 # data - settings directories
 /srv/http/bash/data-reset.sh "$version"
 
-# addons
-diraddons=/srv/http/data/addons
-wget -qN https://github.com/rern/RuneAudio_Addons/raw/master/addons-list.json -P $diraddons
-jq -r .$addonalias.version /srv/http/data/addons/addons-list.json > $diraddons/$addonalias
-
 # remove cache and files
 rm /root/*.xz /usr/local/bin/create-* /etc/motd
 pacman -Scc --noconfirm
