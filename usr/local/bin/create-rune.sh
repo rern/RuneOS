@@ -29,11 +29,14 @@ pacman-key --populate archlinuxarm
 systemctl start systemd-random-seed
 
 # add private repo
-! grep -q '\[RR\]' /etc/pacman.conf && echo '
-[RR]
-SigLevel = Optional TrustAll
-Server = https://rern.github.io/$arch
-' >> /etc/pacman.conf
+if ! grep -q '^\[RR\]' /etc/pacman.conf; then
+	sed -i '/\[core\]/ i\
+[RR]\
+SigLevel = Optional TrustAll\
+Server = https://rern.github.io/$arch\
+
+' /etc/pacman.conf
+fi
 
 # dialog package
 pacman -Sy --noconfirm --needed dialog
