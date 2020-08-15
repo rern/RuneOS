@@ -24,6 +24,7 @@ dev=${part:0:-1}
 partnum=${part: -1}
 
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
+used=$( df -k | grep $part | awk '{print $3}' )
 
 umount -l -v $part
 e2fsck -fy $part
@@ -32,6 +33,7 @@ partinfo=$( tune2fs -l $part )
 blockcount=$( awk '/Block count/ {print $NF}' <<< "$partinfo" )
 freeblocks=$( awk '/Free blocks/ {print $NF}' <<< "$partinfo" )
 blocksize=$( awk '/Block size/ {print $NF}' <<< "$partinfo" )
+
 sectorsize=$( sfdisk -l $dev | awk '/Units/ {print $8}' )
 startsector=$( fdisk -l $dev | grep $part | awk '{print $2}' )
 
@@ -42,6 +44,7 @@ newsize=$(( ( targetblocks + Kblock - 1 ) / Kblock * Kblock ))
 sectorsperblock=$(( blocksize / sectorsize  ))
 endsector=$(( startsector + newsize * sectorsperblock ))
 
+# shrink filesystem to minimum
 resize2fs -fp $part $(( newsize * Kblock ))K
 
 parted $dev ---pretend-input-tty <<EOF
@@ -55,8 +58,7 @@ quit
 EOF
 
 partsizenew=$( fdisk -l $part | awk '/^Disk/ {print $3" GB"}' )
-dialog --colors --msgbox "\n
-Shrinked \Z1ROOT\Z0 partition:\n
+\Z1ROOT\Z0 partition shrinked.\n
 \n
 $partsize to \Z1$partsizenew\Z0\n
 \n

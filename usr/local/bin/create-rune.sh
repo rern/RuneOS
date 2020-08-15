@@ -232,6 +232,8 @@ done
 
 # upmpdcli - fix: missing symlink and init RSA key
 if [[ -e /usr/bin/upmpdcli ]]; then
+	# fix - missing symlink
+	[[ $( upmpdcli -v | cut -d' ' -f2 ) == 1.4.12 ]] && ln -s /usr/lib/libjsoncpp.so.{24,22}
 	mpd --no-config &> /dev/null
 	upmpdcli &> /dev/null &
 else
