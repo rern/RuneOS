@@ -209,7 +209,7 @@ fi
 cp /usr/share/mpdscribble/mpdscribble.conf.example /etc/mpdscribble.conf
 
 # disable again after upgrade
-systemctl disabled systemd-networkd-wait-online
+systemctl disable systemd-networkd-wait-online
 
 # password - set default
 echo root:rune | chpasswd
