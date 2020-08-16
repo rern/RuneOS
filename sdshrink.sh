@@ -58,6 +58,7 @@ quit
 EOF
 
 partsizenew=$( fdisk -l $part | awk '/^Disk/ {print $3" GB"}' )
+dialog --colors --msgbox "\n
 \Z1ROOT\Z0 partition shrinked.\n
 \n
 $partsize to \Z1$partsizenew\Z0\n
