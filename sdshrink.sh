@@ -1,5 +1,13 @@
 #!/bin/bash
 
+dialog --colors --no-shadow --infobox "\n
+\n
+                \Z1Shrink ROOT Partition\Z0\n
+\n
+                     RuneAudio+R
+" 9 58
+sleep 3
+
 devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 if [[ -z $devmount ]]; then
 	dialog --colors --msgbox "\n
