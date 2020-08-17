@@ -22,6 +22,7 @@ ssh root@<RPI IP>
 wget -qO - https://github.com/rern/RuneOS/raw/master/resetforimage.sh | sh
 
 # Linux ##################################################
+# after mount
 wget -qO - https://github.com/rern/RuneOS/raw/master/sdshrink.sh | sh
 
 # Windows ##################################################
