@@ -102,22 +102,29 @@ selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=auto
 	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium matchbox-window-manager upower xf86-video-fbdev xf86-video-vesa xorg-server xorg-xinit ' && list+="$chromium\n"
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
 	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid\n"
-	[[ $select == *' 5 '* ]] && features+='python-pip ' && list+="$rpigpio\n" && gpio=1
+	[[ $select == *' 5 '* ]] && features+='python-pip ' && list+="$rpigpio\n"
 	[[ $select == *' 6 '* ]] && features+='samba ' && list+="$samba\n"
 	[[ $select == *' 7 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
 	[[ $select == *' 8 '* ]] && features+='snapcast ' && list+="$snapcast\n"
 	[[ $select == *' 9 '* ]] && features+='spotifyd ' && list+="$spotify\n"
 	[[ $select == *' 10 '* ]] && features+='upmpdcli ' && list+="$upmpdcli\n"
+	echo "$features" > /tmp/features
+	echo -e "$list" > /tmp/list
 }
-selectFeatures
+if [[ ! -e /tmp/features ]]; then
+	selectFeatures
 
-dialog "${opt[@]}" --yesno "\n
+	dialog "${opt[@]}" --yesno "\n
 \Z1Confirm features to install:\Z0\n
 \n
 $list\n
 \n
 " 0 0
-[[ $? == 1 ]] && selectFeatures
+	[[ $? == 1 ]] && selectFeatures
+else
+	features=$( cat /tmp/features )
+	list==$( cat /tmp/list )
+fi
 
 clear
 
@@ -144,7 +151,7 @@ echo -e "\n\e[36mInstall packages ...\e[m\n"
 pacman -S --noconfirm --needed $packages $features
 [[ $? != 0 ]] && pacmanFailed 'Packages download incomplete!'
 
-[[ $gpio ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
+[[ $features =~ python-pip ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
 
 echo -e "\n\e[36mInstall configurations and web interface ...\e[m\n"
 
