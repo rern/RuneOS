@@ -261,8 +261,7 @@ ln -s /mnt /srv/http/
 /srv/http/bash/data-reset.sh "$version"
 
 # remove cache and files
-rm /root/*.xz /usr/local/bin/create-* /etc/motd
-pacman -Scc --noconfirm
+rm /root/*.xz /usr/local/bin/create-* /etc/motd /var/cache/pacman/pkg/*
 
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
