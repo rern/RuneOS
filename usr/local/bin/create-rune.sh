@@ -108,7 +108,7 @@ selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=auto
 	[[ $select == *' 8 '* ]] && features+='snapcast ' && list+="$snapcast\n"
 	[[ $select == *' 9 '* ]] && features+='spotifyd ' && list+="$spotify\n"
 	[[ $select == *' 10 '* ]] && features+='upmpdcli ' && list+="$upmpdcli\n"
-	echo "$features" > /tmp/features
+	echo $features > /tmp/features
 	echo -e "$list" > /tmp/list
 }
 if [[ ! -e /tmp/features ]]; then
