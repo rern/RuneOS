@@ -255,7 +255,6 @@ fi
 echo DNSSEC=no >> $ROOT/etc/systemd/resolved.conf
 # disable wait-online
 rm -r $ROOT/etc/systemd/system/network-online.target.wants
-rm $ROOT/etc/systemd/system/systemd-networkd-wait-online.service
 # ssh - permit root
 sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
 # suppress warnings
