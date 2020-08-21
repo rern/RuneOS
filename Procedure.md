@@ -7,8 +7,6 @@
 
 ```sh
 # Linux ##################################################
-pacman-mirrors -c <COUNTRY>
-
 wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
 
 # after connected to RPi
