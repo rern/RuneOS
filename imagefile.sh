@@ -91,12 +91,6 @@ $partsize to \Z1$partsizenew\Z0\n
 \n
 " 0 0
 
-dialog --colors --yesno "\n
-Create image file?\n
-\n
-" 0 0
-(( $? != 0 )) && exit
-
 dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
 
 dialog --colors --msgbox "\n
