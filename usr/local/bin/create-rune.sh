@@ -228,20 +228,6 @@ echo root:rune | chpasswd
 # no shairport-sync
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/sudoers.d/shairport-sync /etc/systemd/system/shairport-meta.service
 
-# ssh - fix slow login
-echo "
-UseDNS no
-GSSAPIAuthentication no
-GSSAPICleanupCredentials yes
-" >> /etc/ssh/sshd_config
-
-sed -i '/^host/ {
-s/^/#/
-a\
-hosts: files mdns4_minimal [NOTFOUND=return] dns
-}
-' /etc/nsswitch.conf
-
 # no snapcast
 [[ ! -e /usr/bin/snapclient ]] && rm /etc/default/snapclient
 
