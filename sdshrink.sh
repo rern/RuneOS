@@ -11,15 +11,15 @@ sleep 3
 devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 dirboot=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
 
-[[ -z $dirboot ]] && notmount+=BOOT
+[[ -z $dirboot ]] && notmount+='\Z1BOOT\Z0'
 [[ -n $notmount ]] && notmount+=' and '
-[[ -z $devmount ]] && notmount+=ROOT
+[[ -z $devmount ]] && notmount+='\Z1ROOT\Z0'
 
 if [[ -n $notmount ]]; then
 	dialog --colors --msgbox "\n
-\Z1Warnings:\Z0\n
+\Z1Warning:\Z0\n
 \n
-\Z1$notmount\Z0 not mounted.\n
+$notmount not mounted.\n
 \n
 " 0 0
 	exit
