@@ -91,7 +91,7 @@ echo "
 
 dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
 
-byte=$( stat --printf="%s" xRuneAudio+R_e5-RPi4.img.xz )
+byte=$( stat --printf="%s" RuneAudio+R_$version-RPi$model.img.xz )
 gb=$( awk "BEGIN { printf \"%.1f\n\", $byte / 1024 / 1024 }" )
 dialog --colors --msgbox "\n
 Image file created:\n
