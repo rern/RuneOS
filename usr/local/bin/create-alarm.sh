@@ -141,8 +141,8 @@ fi
 # download
 if [[ -e $file ]]; then
 	dialog "${opt[@]}" --msgbox "\n
-Existing \Z1$file\Z0\n
-is the latest.\n
+Existing is the latest:\n
+\Z1$file\Z0\n
 No download required.\n
 \n
 " 0 0
