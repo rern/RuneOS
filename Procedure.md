@@ -23,7 +23,7 @@ wget -qO - https://github.com/rern/RuneOS/raw/master/resetforimage.sh | sh
 
 # Linux ##################################################
 # after mount
-wget -qO - https://github.com/rern/RuneOS/raw/master/sdshrink.sh | sh
+wget -qO - https://github.com/rern/RuneOS/raw/master/imagefile.sh | sh
 
 # Windows ##################################################
 # Win32 Disk Imager - Read only allocated partitions > Read
