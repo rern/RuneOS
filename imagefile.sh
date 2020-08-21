@@ -86,7 +86,8 @@ EOF
 echo "
 ---------------------------------------
  Compress Partitions to Image file ...
----------------------------------------"
+---------------------------------------
+"
 
 dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
 
