@@ -7,7 +7,7 @@
 
 ```sh
 # Linux ##################################################
-wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
+wget -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh | sh
 
 # after connected to RPi
 sed -i '/^Server/ s/\(mirror\)/sg.\1/' /etc/pacman.d/mirrorlist
