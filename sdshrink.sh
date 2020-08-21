@@ -15,7 +15,7 @@ dirboot=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
 [[ -z $notmount ]] && notmount+=' and '
 [[ -z $devmount ]] && notmount+=ROOT
 
-if [[ -z $notmount ]]; then
+if [[ -n $notmount ]]; then
 	dialog --colors --msgbox "\n
 \Z1Warnings:\Z0\n
 \n
