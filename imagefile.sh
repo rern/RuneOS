@@ -83,13 +83,10 @@ Yes
 quit
 EOF
 
-partsizenew=$( fdisk -l $part | awk '/^Disk/ {print $3" GB"}' )
-dialog --colors --msgbox "\n
-\Z1ROOT\Z0 partition shrinked.\n
-\n
-$partsize to \Z1$partsizenew\Z0\n
-\n
-" 0 0
+echo "
+---------------------------------------
+ Compress Partitions to Image file ...
+---------------------------------------"
 
 dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
 
