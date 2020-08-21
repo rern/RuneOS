@@ -12,7 +12,7 @@ devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 dirboot=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
 
 [[ -z $dirboot ]] && notmount+=BOOT
-[[ -z $notmount ]] && notmount+=' and '
+[[ -n $notmount ]] && notmount+=' and '
 [[ -z $devmount ]] && notmount+=ROOT
 
 if [[ -n $notmount ]]; then
