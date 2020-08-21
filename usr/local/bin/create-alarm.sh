@@ -38,8 +38,8 @@ ROOT=$( df | grep 'ROOT$' | awk '{print $NF}' )
 [[ -z $ROOT ]] && warnings+='ROOT not mounted\n'
 if [[ -n $BOOT && -n $ROOT  ]]; then
 	# check duplicate names
-	(( ${#[BOOT[@]} > 1 )) && warnings+='BOOT has more than 1\n'
-	(( ${#[ROOT[@]} > 1 )) && warnings+='ROOT has more than 1\n'
+	(( ${#BOOT[@]} > 1 )) && warnings+='BOOT has more than 1\n'
+	(( ${#ROOT[@]} > 1 )) && warnings+='ROOT has more than 1\n'
 	# check empty to prevent wrong partitions
 	[[ -n $( ls $BOOT | grep -v 'System Volume Information' ) ]] && warnings+='BOOT not empty\n'
 	[[ -n $( ls $ROOT | grep -v 'lost+found' ) ]] && warnings+='ROOT not empty\n'
