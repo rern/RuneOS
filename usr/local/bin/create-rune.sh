@@ -229,13 +229,13 @@ echo root:rune | chpasswd
 [[ ! -e /usr/bin/shairport-sync ]] && rm /etc/sudoers.d/shairport-sync /etc/systemd/system/shairport-meta.service
 
 # ssh - fix slow login
-grep -q '^GSSAPI' /etc/ssh/sshd_config || echo "
+echo "
 UseDNS no
 GSSAPIAuthentication no
 GSSAPICleanupCredentials yes
 " >> /etc/ssh/sshd_config
 
-grep -q '^host.*UNAVAIL=return' /etc/nsswitch.conf && sed -i '/^host/ {
+sed -i '/^host/ {
 s/^/#/
 a\
 hosts: files mdns4_minimal [NOTFOUND=return] dns
