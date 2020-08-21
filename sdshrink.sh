@@ -1,13 +1,5 @@
 #!/bin/bash
 
-dialog --colors --no-shadow --infobox "\n
-\n
-                \Z1Shrink ROOT Partition\Z0\n
-\n
-                     RuneAudio+R
-" 9 58
-sleep 3
-
 devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 dirboot=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
 
@@ -25,8 +17,28 @@ $notmount not mounted.\n
 	exit
 fi
 
+dialog --colors --no-shadow --infobox "\n
+\n
+                  \Z1Create Image File\Z0\n
+\n
+                     RuneAudio+R
+" 9 58
+sleep 3
+
+mountpoint=$( cut -d' ' -f3 <<< $devmount )
+version=$( cat $mountpoint/srv/http/data/system/version )
+configfile=${mountpoint/ROOT/BOOT}/config.txt
+if ! grep -q force_turbo $configfile; then
+	model=4
+elif ! grep -q hdmi_drive $configfile; then
+	model=0-1
+else
+	model=2-3
+fi
+imagefile=RuneAudio+R_$version-RPi$model.img.xz
+
 dialog --colors --yesno "\n
-Shrink \Z1ROOT\Z0 partition:\n
+Confirm \Z1ROOT\Z0 partition:\n
 \n
 \Z1$devmount\Z0\n
 " 9 50
@@ -85,17 +97,6 @@ Create image file?\n
 " 0 0
 (( $? != 0 )) && exit
 
-mountpoint=$( cut -d' ' -f3 <<< $devmount )
-version=$( cat $mountpoint/srv/http/data/system/version )
-configfile=${mountpoint/ROOT/BOOT}/config.txt
-if ! grep -q force_turbo $configfile; then
-	model=4
-elif ! grep -q hdmi_drive $configfile; then
-	model=0-1
-else
-	model=2-3
-fi
-imagefile=RuneAudio+R_$version-RPi$model.img.xz
 dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
 
 dialog --colors --msgbox "\n
