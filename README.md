@@ -9,7 +9,7 @@ Audio player and renderer for Raspberry Pi
 - Interactive interface by only 2 command lines:
 ```sh
 #1
-wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
+wget -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh | sh
 #2
 create-rune.sh
 ```
@@ -178,47 +178,18 @@ create-rune.sh
 - Move micro SD card to Raspberry Pi
 - Power on
 	
-**Create image file**
+**Create image file** (Micro SD card mode only)
+
 - Once started RuneAudio+R successfully
-- Reset for image
+
+- On RPi - Reset for image
 ```sh
 ssh root@<RPI IP>
 wget -qO - https://github.com/rern/RuneOS/raw/master/resetforimage.sh | sh
 ```
-- Shutdown
+- Shutdown and move micro SD card to Lunux
 
-- Move micro SD card (and the USB drive, if `ROOT` partition is in USB drive) to Lunux
-- Shrink `ROOT` partition to smallest size possible (smaller the size = smaller image file and less time to flash SD card)
-	- **Parted** (much smaller)
-		- **Files** - Click `ROOT` to mount
-		```sh
-		wget -qO - https://github.com/rern/RuneOS/raw/master/sdshrink.sh | sh
-		```
-	- OR **GParted** (GUI Parted)
-		- menu: GParted > Devices > /dev/sd?
-		- right-click `ROOT` partiton > Unmount
-		- right-click `ROOT` partiton > Resize/Move
-		- drag rigth triangle to fit minimum size
-		- menu: Edit > Apply all operations
-- Create image - **SD card mode**
-	- on Windows (much faster): [Win32 Disk Imager](https://sourceforge.net/projects/win32diskimager/) > Read only allocated partitions
-	- OR
-		```sh
-		# get device and verify
-		part=$( df | grep BOOT | awk '{print $1}' )
-		dev=${part:0:-1}
-		df | grep BOOT
-		echo device = $dev
-
-		# get partition end and verify
-		fdisk -u -l $dev
-		end=$( fdisk -u -l $dev | tail -1 | awk '{print $3}' )
-		echo end = $end
-
-		# create image
-		dd if=$dev of=RuneAudio+Re2.img count=$(( end + 1 )) status=progress  # remove status=progress if errors
-		```
-- Create image - **USB drive mode**
-	- Open **Disks** app - select drive > select partition > cogs button > Create Partition Image
-		- Micro SD card
-		- USB drive
+- On Linux - Click `BOOT` and `ROOT` to mount
+```sh
+wget -qO - https://github.com/rern/RuneOS/raw/master/imagefile.sh | sh
+```
