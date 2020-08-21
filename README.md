@@ -181,15 +181,15 @@ create-rune.sh
 **Create image file** (Micro SD card mode only)
 
 - Once started RuneAudio+R successfully
-
-- On RPi - Reset for image
+- SSH to RPi
+- Reset for image
 ```sh
 ssh root@<RPI IP>
 wget -qO - https://github.com/rern/RuneOS/raw/master/resetforimage.sh | sh
 ```
-- Shutdown and move micro SD card to Lunux
-
-- On Linux - Click `BOOT` and `ROOT` to mount
+- Shutdown
+- Move micro SD card to Lunux
+- Click `BOOT` and `ROOT` to mount
 ```sh
 wget -qO - https://github.com/rern/RuneOS/raw/master/imagefile.sh | sh
 ```
