@@ -271,7 +271,7 @@ SystemCallErrorNumber=EPERM
 fi
 
 # get create-rune.sh
-curl -L https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -o $ROOT/usr/local/bin/create-rune.sh
+wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
 chmod 755 $ROOT/usr/local/bin/*.sh
 
 dialog --colors --no-shadow --msgbox "\n
