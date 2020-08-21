@@ -1,17 +1,17 @@
 #!/bin/bash
 
-devmount=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 dirboot=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
+dirroot=$( mount | awk '/dev\/sd.*\/ROOT/ {print $3}' )
 
-[[ -z $dirboot ]] && notmount+='\Z1BOOT\Z0'
-[[ -n $notmount ]] && notmount+=' and '
-[[ -z $devmount ]] && notmount+='\Z1ROOT\Z0'
+[[ -z $dirboot ]] && notmounted+='\Z1BOOT\Z0'
+[[ -n $notmounted ]] && notmounted+=' and '
+[[ -z $dirroot ]] && notmounted+='\Z1ROOT\Z0'
 
 if [[ -n $notmount ]]; then
 	dialog --colors --msgbox "\n
 \Z1Warning:\Z0\n
 \n
-$notmount not mounted.\n
+$notmounted not mounted.\n
 \n
 " 0 0
 	exit
@@ -25,9 +25,8 @@ dialog --colors --no-shadow --infobox "\n
 " 9 58
 sleep 3
 
-mountpoint=$( cut -d' ' -f3 <<< $devmount )
-version=$( cat $mountpoint/srv/http/data/system/version )
-configfile=${mountpoint/ROOT/BOOT}/config.txt
+version=$( cat $dirroot/srv/http/data/system/version )
+configfile=$dirboot/config.txt
 if ! grep -q force_turbo $configfile; then
 	model=4
 elif ! grep -q hdmi_drive $configfile; then
@@ -38,21 +37,22 @@ fi
 imagefile=RuneAudio+R_$version-RPi$model.img.xz
 
 dialog --colors --yesno "\n
-Confirm \Z1ROOT\Z0 partition:\n
+Confirm partitions:\n
 \n
-\Z1$devmount\Z0\n
-" 9 50
+$( mount | awk '/dev\/sd.*\/BOOT/ {print "\\Z1"$1"\\Z0 "$2" \\Z1"$3"\\Z0"}' )\n
+$( mount | awk '/dev\/sd.*\/ROOT/ {print "\\Z1"$1"\\Z0 "$2" \\Z1"$3"\\Z0"}' )\n
+" 10 50
 
-[[ $? == 1 ]] && exit
+(( $? == 1 )) && exit
 
-part=$( cut -d' ' -f1 <<< $devmount )
+part=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1}' )
 dev=${part:0:-1}
 partnum=${part: -1}
 
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
 used=$( df -k | grep $part | awk '{print $3}' )
 
-umount -l -v $part
+umount -l -v  $dirboot $dirroot
 e2fsck -fy $part
 
 partinfo=$( tune2fs -l $part )
@@ -98,4 +98,5 @@ Image file created:\n
 \n
 \Z1$imagefile\Z0\n
 \n
-" 0 0
+BOOT and ROOT unmounted.
+" 11 50
