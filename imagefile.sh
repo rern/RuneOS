@@ -30,9 +30,9 @@ configfile=$dirboot/config.txt
 if ! grep -q force_turbo $configfile; then
 	model=4
 elif ! grep -q hdmi_drive $configfile; then
-	model=0-1
-else
 	model=2-3
+else
+	model=0-1
 fi
 imagefile=RuneAudio+R_$version-RPi$model.img.xz
 
