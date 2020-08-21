@@ -72,3 +72,29 @@ dialog --colors --msgbox "\n
 $partsize to \Z1$partsizenew\Z0\n
 \n
 " 0 0
+
+dialog --colors --yesno "\n
+Create image file?\n
+\n
+" 0 0
+(( $? != 0 )) && exit
+
+mountpoint=$( cut -d' ' -f3 <<< $devmount )
+version=$( cat $mountpoint/srv/http/data/system/version )
+configfile=${mountpoint/ROOT/BOOT}/config.txt
+if ! grep -q force_turbo $configfile; then
+	model=4
+elif ! grep -q hdmi_drive $configfile; then
+	model=0-1
+else
+	model=2-3
+fi
+imagefile=RuneAudio+R_$version-RPi$model.img.xz
+dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
+
+dialog --colors --msgbox "\n
+Image file created:\n
+\n
+\Z1$imagefile\Z0\n
+\n
+" 0 0
