@@ -91,10 +91,13 @@ echo "
 
 dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
 
+byte=$( stat --printf="%s" xRuneAudio+R_e5-RPi4.img.xz )
+gb=$( awk "BEGIN { printf \"%.1f\n\", $byte / 1024 / 1024 }" )
 dialog --colors --msgbox "\n
 Image file created:\n
 \n
 \Z1$imagefile\Z0\n
+$gb GB\n
 \n
 BOOT and ROOT unmounted.
-" 11 50
+" 12 50
