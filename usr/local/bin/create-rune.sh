@@ -140,8 +140,8 @@ Run \Z1create-rune.sh\Z0 again.\n
 }
 echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 
-pacman -Syu --noconfirm --needed
-[[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
+#pacman -Syu --noconfirm --needed
+#[[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
 packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils jq man mpc mpd mpdscribble '
 packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm python-wheel sshpass sudo udevil wget '
