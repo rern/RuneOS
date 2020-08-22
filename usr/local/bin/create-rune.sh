@@ -138,9 +138,22 @@ Run \Z1create-rune.sh\Z0 again.\n
 " 0 0
 	exit
 }
+
+dialog "${opt[@]}" --yesno "\n
+Specify package mirror server?\n
+\n
+" 0 0
+if [[ $? == 0 ]]; then
+	country=$( dialog "${opt[@]}" --output-fd 1 --inputbox "\n
+Mirror server \Z1country code\Z0:\n
+\n
+" 0 0 $country )
+	[[ -n $country ]] && sed -i '/^Server/ s|//.*mirror|'$country'.mirror|' /etc/pacman.d/mirrorlist
+fi
+
 echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 
-pacman -Syu --noconfirm --needed
+#pacman -Syu --noconfirm --needed
 #[[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
 packages='alsa-utils cronie dosfstools gcc hfsprogs ifplugd imagemagick inetutils jq man mpc mpd mpdscribble '
