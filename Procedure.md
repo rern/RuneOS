@@ -10,7 +10,6 @@
 wget -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh | sh
 
 # after connected to RPi
-sed -i '/^Server/ s/\(mirror\)/sg.\1/' /etc/pacman.d/mirrorlist
 create-rune.sh
 
 # after reboot
