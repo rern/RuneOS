@@ -45,6 +45,8 @@ $( mount | awk '/dev\/sd.*\/ROOT/ {print "\\Z1"$1"\\Z0 "$2" \\Z1"$3"\\Z0"}' )\n
 
 (( $? == 1 )) && exit
 
+clear
+
 part=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1}' )
 dev=${part:0:-1}
 partnum=${part: -1}
