@@ -281,8 +281,6 @@ dialog --colors --no-shadow --msgbox "\n
                 Created successfully.
 " 10 58
 
-rm create-alarm.sh
-
 #----------------------------------------------------------------------------
 umount -l $BOOT
 umount -l $ROOT
