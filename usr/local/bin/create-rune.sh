@@ -140,9 +140,10 @@ Run \Z1create-rune.sh\Z0 again.\n
 }
 
 # mirror server
-readarray -t lines <<< "$( grep . /etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria.*//' )"
-list=( 'Auto - By Geo-IP' )
+readarray -t lines <<< "$( grep . /etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria\!)//' )"
+list=( 0 'Auto - By Geo-IP' )
 url=( '' )
+i=0
 for line in "${lines[@]}"; do
 	if [[ ${line:0:4} == '### ' ]];then
 		country=${line:4}
@@ -150,20 +151,16 @@ for line in "${lines[@]}"; do
 		city=${line:3}
 	else
 		[[ -n $city ]] && cc="$country - $city" || cc=$country
-		list+=( "$cc" )
+		(( i++ ))
+		list+=( $i "$cc" )
 		url+=( $( sed 's|.*//\(.*\).mirror.*|\1|' <<< $line ) )
 		city=
 	fi
 done
 
-listL=${#list[@]}
-for (( i=0; i < listL; i++ )); do
-	clist+=( $i "${list[$i]}" )
-done
-
 code=$( dialog "${opt[@]}" --output-fd 1 --menu "\n
 \Z1Package mirror server:\Z0
-" 0 0 0 "${clist[@]}" )
+" 0 0 0 "${list[@]}" )
 
 [[ -n $code ]] && sed -i '/^Server/ s|//.*mirror|//'${url[$code]}'.mirror|' /etc/pacman.d/mirrorlist
 
