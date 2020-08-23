@@ -140,14 +140,14 @@ Run \Z1create-rune.sh\Z0 again.\n
 }
 
 # mirror server
-readarray lines <<< "$( grep . /etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria.*//' )"
+readarray -t lines <<< "$( grep . /etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria.*//' )"
 list=( 'Auto - By Geo-IP' )
 url=( '' )
 for line in "${lines[@]}"; do
 	if [[ ${line:0:4} == '### ' ]];then
-		country=${line:4:-1}
+		country=${line:4}
 	elif [[ ${line:0:3} == '## ' ]];then
-		city=${line:3:-1}
+		city=${line:3}
 	else
 		[[ -n $city ]] && cc="$country - $city" || cc=$country
 		list+=( "$cc" )
