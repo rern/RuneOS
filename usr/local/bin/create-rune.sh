@@ -50,7 +50,7 @@ fi
 
 title="Create RuneAudio+R $version"
 optbox=( --colors --no-shadow --no-collapse )
-opt=( --backtitle "$title" --colors --no-shadow --no-collapse )
+opt=( --backtitle "$title" ${optbox[@]} )
 
 dialog "${optbox[@]}" --sleep 3 --infobox "
 
