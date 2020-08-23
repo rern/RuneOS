@@ -148,7 +148,7 @@ if [[ $? == 0 ]]; then
 Mirror server \Z1country code\Z0:\n
 \n
 " 0 0 $country )
-	[[ -n $country ]] && sed -i '/^Server/ s|//.*mirror|'$country'.mirror|' /etc/pacman.d/mirrorlist
+	[[ -n $country ]] && sed -i '/^Server/ s|//.*mirror|//'$country'.mirror|' /etc/pacman.d/mirrorlist
 fi
 
 echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
