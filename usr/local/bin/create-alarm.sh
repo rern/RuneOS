@@ -20,7 +20,7 @@ fi
 #----------------------------------------------------------------------------
 title='Create Arch Linux Arm'
 optbox=( --colors --no-shadow --no-collapse )
-opt=( --backtitle "$title" --colors --no-shadow --no-collapse )
+opt=( --backtitle "$title" ${optbox[@]} )
 
 dialog "${optbox[@]}" --sleep 3 --infobox "
 
