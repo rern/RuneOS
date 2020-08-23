@@ -160,7 +160,8 @@ done
 
 code=$( dialog "${opt[@]}" --output-fd 1 --menu "\n
 \Z1Package mirror server:\Z0
-" 0 0 0 "${list[@]}" )
+" 0 0 0 \
+"${list[@]}" )
 
 [[ -n $code ]] && sed -i '/^Server/ s|//.*mirror|//'${url[$code]}'.mirror|' /etc/pacman.d/mirrorlist
 
