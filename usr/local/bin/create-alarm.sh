@@ -19,16 +19,15 @@ fi
 
 #----------------------------------------------------------------------------
 title='Create Arch Linux Arm'
-opt=( --backtitle "$title" --colors --no-shadow )
+optbox=( --colors --no-shadow --no-collapse )
+opt=( --backtitle "$title" --colors --no-shadow --no-collapse )
 
-dialog --colors --no-shadow --infobox "\n
-\n
-                    \Z1Arch Linux Arm\Z0\n
-                          for\n
+dialog "${optbox[@]}" --sleep 3 --infobox "
+
+                    \Z1Arch Linux Arm\Z0
+                          for
                      Raspberry Pi
 " 9 58
-
-sleep 3
 
 BOOT=$( df | grep 'BOOT$' | awk '{print $NF}' )
 ROOT=$( df | grep 'ROOT$' | awk '{print $NF}' )
@@ -49,27 +48,27 @@ if [[ -n $BOOT && -n $ROOT  ]]; then
 fi
 # partition warnings
 if [[ -n $warnings ]]; then
-	dialog "${opt[@]}" --msgbox "\n
-\Z1Warnings:\Z0\n
-\n
-$warnings\n
-\n
+	dialog "${opt[@]}" --msgbox "
+\Z1Warnings:\Z0
+
+$warnings
+
 " 0 0
 	clear && exit
 fi
 
 # get build data
 getData() { # --menu <message> <lines exclude menu box> <0=autoW dialog> <0=autoH menu>
-	dialog "${opt[@]}" --yesno "\n
-\Z1Confirm path:\Z0\n
-\n
-BOOT: \Z1$BOOT\Z0\n
-ROOT: \Z1$ROOT\Z0\n
-\n
+	dialog "${opt[@]}" --yesno "
+\Z1Confirm path:\Z0
+
+BOOT: \Z1$BOOT\Z0
+ROOT: \Z1$ROOT\Z0
+
 " 0 0
 	[[ $? == 1 ]] && clear && exit
 
-	rpi=$( dialog "${opt[@]}" --output-fd 1 --menu "\n
+	rpi=$( dialog "${opt[@]}" --output-fd 1 --menu "
 \Z1Target:\Z0
 " 0 0 0 \
 0 'Raspberry Pi Zero' \
@@ -86,20 +85,20 @@ ROOT: \Z1$ROOT\Z0\n
 	
 	[[ $rpi != 0 ]] && rpiname=$rpi || rpiname=Zero
 	
-	dialog "${opt[@]}" --yesno "\n
-Connect \Z1Wi-Fi\Z0 on boot?\n
-\n
+	dialog "${opt[@]}" --yesno "
+Connect \Z1Wi-Fi\Z0 on boot?
+
 " 0 0
 	if [[ $? == 0 ]]; then
-		ssid=$( dialog "${opt[@]}" --output-fd 1 --inputbox "\n
-\Z1Wi-Fi\Z0 - SSID:\n
-\n
+		ssid=$( dialog "${opt[@]}" --output-fd 1 --inputbox "
+\Z1Wi-Fi\Z0 - SSID:
+
 " 0 0 $ssid )
-		password=$( dialog "${opt[@]}" --output-fd 1 --inputbox "\n
-\Z1Wi-Fi\Z0 - Password:\n
-\n
+		password=$( dialog "${opt[@]}" --output-fd 1 --inputbox "
+\Z1Wi-Fi\Z0 - Password:
+
 " 0 0 $password )
-		wpa=$( dialog "${opt[@]}" --output-fd 1 --menu "\n
+		wpa=$( dialog "${opt[@]}" --output-fd 1 --menu "
 \Z1Wi-Fi\Z0 -Security:
 " 0 0 0 \
 1 WPA \
@@ -112,21 +111,21 @@ Connect \Z1Wi-Fi\Z0 on boot?\n
 		else
 			wpa=
 		fi
-		wifi="Wi-Fi settings\n\
- SSID     : \Z1$ssid\Z0\n\
- Password : \Z1$password\Z0\n\
- Security : \Z1${wpa^^}\Z0\n"
+		wifi="Wi-Fi settings
+ SSID     : \Z1$ssid\Z0
+ Password : \Z1$password\Z0
+ Security : \Z1${wpa^^}\Z0"
 	fi
 
-	dialog "${opt[@]}" --yesno "\n
-\Z1Confirm data:\Z0\n
-\n
-BOOT path : \Z1$BOOT\Z0\n
-ROOT path : \Z1$ROOT\Z0\n
-Target    : \Z1Raspberry Pi $rpiname\Z0\n
-\n
-$wifi\n
-\n
+	dialog "${opt[@]}" --yesno "
+\Z1Confirm data:\Z0
+
+BOOT path : \Z1$BOOT\Z0
+ROOT path : \Z1$ROOT\Z0
+Target    : \Z1Raspberry Pi $rpiname\Z0
+
+$wifi
+
 " 0 0
 	[[ $? == 1 ]] && getData
 }
@@ -140,11 +139,11 @@ fi
 
 # download
 if [[ -e $file ]]; then
-	dialog "${opt[@]}" --msgbox "\n
-Existing is the latest:\n
-\Z1$file\Z0\n
-No download required.\n
-\n
+	dialog "${opt[@]}" --msgbox "
+Existing is the latest:
+\Z1$file\Z0
+No download required.
+
 " 0 0
 	sleep 2
 else
@@ -153,18 +152,18 @@ else
 			print "XXX\n"substr($0,63,3)
 			print "\\nDownload \\Z1Arch Linux Arm\\Z0\\n"
 			print "Time left: "substr($0,74,5)"\nXXX" }' ) \
-		| dialog "${opt[@]}" --gauge "\n
+		| dialog "${opt[@]}" --gauge "
 Connecting ...
 " 9 50
 	# checksum
 	wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5
 	if ! md5sum -c $file.md5; then
 		rm $file
-		dialog "${opt[@]}" --msgbox "\n
-\Z1Download incomplete!\Z0\n
-\n
-Run \Z1./create-alarm.sh\Z0 again.\n
-\n
+		dialog "${opt[@]}" --msgbox "
+\Z1Download incomplete!\Z0
+
+Run \Z1./create-alarm.sh\Z0 again.
+
 " 0 0
 		exit
 	fi
@@ -173,12 +172,12 @@ fi
 # expand
 ( pv -n $file \
 	| bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 \
-	| dialog "${opt[@]}" --gauge "\n
+	| dialog "${opt[@]}" --gauge "
 Expand to \Z1BOOT\Z0 ...
 " 9 50
 ( pv -n $file \
 	| bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 \
-	| dialog "${opt[@]}" --gauge "\n
+	| dialog "${opt[@]}" --gauge "
 Expand to \Z1ROOT\Z0 ...
 " 9 50
 
@@ -197,7 +196,7 @@ XXX
 EOF
 	sleep 2
 done ) \
-| dialog "${opt[@]}" --gauge "\n
+| dialog "${opt[@]}" --gauge "
 Write remaining cache to \Z1ROOT\Z0 ...
 " 9 50
 
@@ -274,10 +273,10 @@ fi
 wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-rune.sh -P $ROOT/usr/local/bin
 chmod 755 $ROOT/usr/local/bin/*.sh
 
-dialog --colors --no-shadow --msgbox "\n
-\n
-                   Arch Linux Arm\n
-                   \Z1Raspberry Pi $rpiname\Z0\n
+dialog "${optbox[@]}" --msgbox "
+
+                   Arch Linux Arm
+                   \Z1Raspberry Pi $rpiname\Z0
                 Created successfully.
 " 10 58
 
@@ -287,16 +286,16 @@ umount -l $ROOT
 
 [[ ${partuuidBOOT:0:-3} != ${partuuidROOT:0:-3} ]] && usb=' and USB drive'
 [[ $rpi == 0 ]] && wait=60 || wait=30
-dialog --colors --no-shadow --msgbox "\n
-\Z1Finish.\Z0\n
-\n
-\Z1BOOT\Z0 and \Z1ROOT\Z0 were unmounted.\n
-\n
-1. Move micro SD card$usb to RPi.\n
-2. Power on.\n
-3. \Z1Wait $wait seconds\Z0\n
-4. Press \Z1Enter\Z0 to continue.\n
-\n
+dialog "${optbox[@]}" --msgbox "
+\Z1Finish.\Z0
+
+\Z1BOOT\Z0 and \Z1ROOT\Z0 were unmounted.
+
+1. Move micro SD card$usb to RPi
+2. Power on
+3. \Z1Wait $wait seconds\Z0
+4. Press \Z1Enter\Z0 to continue
+
 " 14 55
 
 #----------------------------------------------------------------------------
@@ -306,18 +305,18 @@ opt=( --backtitle "$title" --colors --no-shadow )
 routerip=$( ip r get 1 | head -1 | cut -d' ' -f3 )
 subip=${routerip%.*}.
 scanIP() {
-	dialog "${opt[@]}" --infobox "\n
-Scan IP address ...\n
-\n
+	dialog "${opt[@]}" --infobox "
+Scan IP address ...
+
 " 5 50
 	nmap=$( nmap -sn $subip* | grep -v 'Starting\|Host is up\|Nmap done' | head -n -1 | tac | sed 's/$/\\n/; s/Nmap.*for/IP :/; s/MAC Address/\\nMAC/' | tr -d '\n' )
-	dialog "${opt[@]}" --msgbox "\n
-\Z1Find IP address of Raspberry Pi:\Z0\n
-(Raspberri Pi 4 may listed as Unknown)\n
-\Z4[arrowdown] = scrolldown\Z0\n
-\n
-$nmap\n
-\n
+	dialog "${opt[@]}" --msgbox "
+\Z1Find IP address of Raspberry Pi:\Z0
+(Raspberri Pi 4 may listed as Unknown)
+\Z4[arrowdown] = scrolldown\Z0
+
+$nmap
+
 " 50 100
 
 	dialog "${opt[@]}" --ok-label Yes --extra-button --extra-label Rescan --cancel-label No --yesno "\n
@@ -327,9 +326,9 @@ $nmap\n
 	if [[ $ans == 3 ]]; then
 		scanIP
 	elif [[ $ans == 1 && -n $rescan ]]; then
-		dialog "${opt[@]}" --msgbox "\n
-Try starting over again.\n
-\n
+		dialog "${opt[@]}" --msgbox "
+Try starting over again.
+
 " 0 0
 		clear && exit
 	fi
@@ -337,37 +336,37 @@ Try starting over again.\n
 scanIP
 
 if [[ $ans == 1 ]]; then
-	dialog "${opt[@]}" --yesno "\n
-\Z1Connect with Wi-Fi?\Z0\n
-\n
+	dialog "${opt[@]}" --yesno "
+\Z1Connect with Wi-Fi?\Z0
+
 " 0 0
 	if [[ $? == 0 ]]; then
 		rescan=1
-		dialog "${opt[@]}" --msgbox "\n
-- Power off\n
-- Connect wired LAN\n
-- Power on\n
-- Wait 30 seconds\n
-- Press Enter to rescan\n
-\n
+		dialog "${opt[@]}" --msgbox "
+- Power off
+- Connect wired LAN
+- Power on
+- Wait 30 seconds
+- Press Enter to rescan
+
 " 0 0
 		scanIP
 	else
-		dialog "${opt[@]}" --msgbox "\n
-- Power off\n
-- Connect a monitor/TV\n
-- Power on and observe errors\n
-- Try starting over again\n
-\n
+		dialog "${opt[@]}" --msgbox "
+- Power off
+- Connect a monitor/TV
+- Power on and observe errors
+- Try starting over again
+
 " 0 0
 		clear && exit
 	fi
 fi
 
 # connect RPi
-rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "\n
-\Z1Raspberry Pi IP:\Z0\n
-\n
+rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
+\Z1Raspberry Pi IP:\Z0
+
 " 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
