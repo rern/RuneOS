@@ -276,9 +276,10 @@ chmod 755 $ROOT/usr/local/bin/*.sh
 dialog "${optbox[@]}" --msgbox "
 
                    Arch Linux Arm
+				         for
                    \Z1Raspberry Pi $rpiname\Z0
                 Created successfully.
-" 10 58
+" 11 58
 
 #----------------------------------------------------------------------------
 umount -l $BOOT
