@@ -139,17 +139,33 @@ Run \Z1create-rune.sh\Z0 again.\n
 	exit
 }
 
-dialog "${opt[@]}" --yesno "\n
-Specify package mirror server?\n
-\n
-" 0 0
-if [[ $? == 0 ]]; then
-	country=$( dialog "${opt[@]}" --output-fd 1 --inputbox "\n
-Mirror server \Z1country code\Z0:\n
-\n
-" 0 0 $country )
-	[[ -n $country ]] && sed -i '/^Server/ s|//.*mirror|//'$country'.mirror|' /etc/pacman.d/mirrorlist
-fi
+# mirror server
+readarray lines <<< "$( grep . /etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria.*//' )"
+list=( 'Auto - By Geo-IP' )
+url=( '' )
+for line in "${lines[@]}"; do
+	if [[ ${line:0:4} == '### ' ]];then
+		country=${line:4:-1}
+	elif [[ ${line:0:3} == '## ' ]];then
+		city=${line:3:-1}
+	else
+		[[ -n $city ]] && cc="$country - $city" || cc=$country
+		list+=( "$cc" )
+		url+=( $( sed 's|.*//\(.*\).mirror.*|\1|' <<< $line ) )
+		city=
+	fi
+done
+
+listL=${#list[@]}
+for (( i=0; i < listL; i++ )); do
+	clist+=( $i "${list[$i]}" )
+done
+
+code=$( dialog "${opt[@]}" --output-fd 1 --menu "\n
+\Z1Package mirror server:\Z0
+" 0 0 0 "${clist[@]}" )
+
+[[ -n $code ]] && sed -i '/^Server/ s|//.*mirror|//'${url[$code]}'.mirror|' /etc/pacman.d/mirrorlist
 
 echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 
