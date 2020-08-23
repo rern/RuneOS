@@ -232,7 +232,7 @@ cp /usr/share/mpdscribble/mpdscribble.conf.example /etc/mpdscribble.conf
 systemctl disable systemd-networkd-wait-online
 
 # fix: pam ssh login bug (wrong comment - not #)
-sed -i '/pam_systemd/ s/^/#/' /etc/pam.d/system-login
+sed -i '/^-.*pam_systemd/ s/^-/#/' /etc/pam.d/system-login
 
 # password - set default
 echo root:rune | chpasswd
