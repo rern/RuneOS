@@ -146,6 +146,7 @@ url=( '' )
 i=0
 for line in "${lines[@]}"; do
 	if [[ ${line:0:4} == '### ' ]];then
+		city=
 		country=${line:4}
 	elif [[ ${line:0:3} == '## ' ]];then
 		city=${line:3}
@@ -154,7 +155,6 @@ for line in "${lines[@]}"; do
 		(( i++ ))
 		list+=( $i "$cc" )
 		url+=( $( sed 's|.*//\(.*\).mirror.*|\1|' <<< $line ) )
-		city=
 	fi
 done
 
