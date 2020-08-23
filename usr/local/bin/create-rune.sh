@@ -49,12 +49,13 @@ if (( $# > 0 )); then
 fi
 
 title="Create RuneAudio+R $version"
-opt=( --backtitle "$title" --colors --no-shadow )
-dialog --colors --no-shadow --infobox "\n
-\n
+optbox=( --colors --no-shadow --no-collapse )
+opt=( --backtitle "$title" --colors --no-shadow --no-collapse )
+
+dialog "${optbox[@]}" --sleep 3 --infobox "
+
                 \Z1RuneAudio+R $version\Z0
 " 7 50
-sleep 3
 
     bluez='\Z1Bluez\Z0     - Bluetooth supports'
  chromium='\Z1Chromium\Z0  - Browser on RPi'
@@ -114,11 +115,11 @@ selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=auto
 if [[ ! -e /tmp/features ]]; then
 	selectFeatures
 
-	dialog "${opt[@]}" --yesno "\n
-\Z1Confirm features to install:\Z0\n
-\n
-$list\n
-\n
+	dialog "${opt[@]}" --yesno "
+\Z1Confirm features to install:\Z0
+
+$list
+
 " 0 0
 	[[ $? == 1 ]] && selectFeatures
 else
@@ -130,11 +131,11 @@ clear
 
 #----------------------------------------------------------------------------
 pacmanFailed() {
-	dialog "${opt[@]}" --msgbox "\n
-$1\n
-\n
-Run \Z1create-rune.sh\Z0 again.\n
-\n
+	dialog "${opt[@]}" --msgbox "
+$1
+
+Run \Z1create-rune.sh\Z0 again.
+
 " 0 0
 	exit
 }
@@ -158,7 +159,7 @@ for line in "${lines[@]}"; do
 	fi
 done
 
-code=$( dialog "${opt[@]}" --output-fd 1 --menu "\n
+code=$( dialog "${opt[@]}" --output-fd 1 --menu "
 \Z1Package mirror server:\Z0
 " 0 0 0 \
 "${list[@]}" )
@@ -303,10 +304,10 @@ rm /usr/local/bin/create-* /etc/motd /var/cache/pacman/pkg/*
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
-dialog --colors --no-shadow --msgbox "\n
-\n
-    \Z1RuneAudio+R $version\Z0 created successfully.\n
-\n
+dialog "${optbox[@]}" --msgbox "
+
+    \Z1RuneAudio+R $version\Z0 created successfully.
+
             Press \Z1Enter\Z0 to reboot
 " 10 50
 
