@@ -38,6 +38,32 @@ Server = https://rern.github.io/$arch\
 ' /etc/pacman.conf
 fi
 
+# package mirror server
+readarray -t lines <<< "$( grep . /etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria\!)//' )"
+list=( 0 'Auto - By Geo-IP' )
+url=( '' )
+i=0
+for line in "${lines[@]}"; do
+	if [[ ${line:0:4} == '### ' ]];then
+		city=
+		country=${line:4}
+	elif [[ ${line:0:3} == '## ' ]];then
+		city=${line:3}
+	else
+		[[ -n $city ]] && cc="$country - $city" || cc=$country
+		(( i++ ))
+		list+=( $i "$cc" )
+		url+=( $( sed 's|.*//\(.*\).mirror.*|\1|' <<< $line ) )
+	fi
+done
+
+code=$( dialog "${opt[@]}" --output-fd 1 --menu "
+\Z1Package mirror server:\Z0
+" 0 0 0 \
+"${list[@]}" )
+
+[[ -n $code ]] && sed -i '/^Server/ s|//.*mirror|//'${url[$code]}'.mirror|' /etc/pacman.d/mirrorlist
+
 # dialog package
 pacman -Sy --noconfirm --needed dialog
 
@@ -139,34 +165,6 @@ Run \Z1create-rune.sh\Z0 again.
 " 0 0
 	exit
 }
-
-# mirror server
-readarray -t lines <<< "$( grep . /etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria\!)//' )"
-list=( 0 'Auto - By Geo-IP' )
-url=( '' )
-i=0
-for line in "${lines[@]}"; do
-	if [[ ${line:0:4} == '### ' ]];then
-		city=
-		country=${line:4}
-	elif [[ ${line:0:3} == '## ' ]];then
-		city=${line:3}
-	else
-		[[ -n $city ]] && cc="$country - $city" || cc=$country
-		(( i++ ))
-		list+=( $i "$cc" )
-		url+=( $( sed 's|.*//\(.*\).mirror.*|\1|' <<< $line ) )
-	fi
-done
-
-code=$( dialog "${opt[@]}" --output-fd 1 --menu "
-\Z1Package mirror server:\Z0
-" 0 0 0 \
-"${list[@]}" )
-
-[[ -n $code ]] && sed -i '/^Server/ s|//.*mirror|//'${url[$code]}'.mirror|' /etc/pacman.d/mirrorlist
-
-clear
 
 echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 
