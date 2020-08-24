@@ -30,7 +30,7 @@ fi
 if [[ $select == *' 2 '* ]]; then
 	rm -rf /root/.cache/* /srv/http/data/tmp/*
 	rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/* /srv/http/data/system/gpio
-	wget -qO - https://github.com/rern/RuneOS/raw/master/radioparadise.tar.xz | bsdtar xvf - -C /srv/http/data/webradios
+	wget -qO - https://github.com/rern/RuneOS/raw/master/radioparadise.tar.xz | bsdtar xvf - -C /
 	chown http:http /srv/http/data/webradios/*
 	echo '{
   "name": {
