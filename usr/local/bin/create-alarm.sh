@@ -33,24 +33,30 @@ BOOT=$( df | grep 'BOOT$' | awk '{print $NF}' )
 ROOT=$( df | grep 'ROOT$' | awk '{print $NF}' )
 
 # check mounts
-[[ -z $BOOT ]] && warnings+='BOOT not mounted\n'
-[[ -z $ROOT ]] && warnings+='ROOT not mounted\n'
+[[ -z $BOOT ]] && warnings+="
+BOOT not mounted"
+[[ -z $ROOT ]] && warnings+="
+ROOT not mounted"
 if [[ -n $BOOT && -n $ROOT  ]]; then
 	# check duplicate names
-	(( ${#BOOT[@]} > 1 )) && warnings+='BOOT has more than 1\n'
-	(( ${#ROOT[@]} > 1 )) && warnings+='ROOT has more than 1\n'
+	(( ${#BOOT[@]} > 1 )) && wget --no-check-certificate -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh | sh
+	(( ${#ROOT[@]} > 1 )) && warnings+="
+ROOT has more than 1"
 	# check empty to prevent wrong partitions
-	[[ -n $( ls $BOOT | grep -v 'System Volume Information' ) ]] && warnings+='BOOT not empty\n'
-	[[ -n $( ls $ROOT | grep -v 'lost+found' ) ]] && warnings+='ROOT not empty\n'
+	[[ -n $( ls $BOOT | grep -v 'System Volume Information' ) ]] && warnings+="
+BOOT not empty"
+	[[ -n $( ls $ROOT | grep -v 'lost+found' ) ]] && warnings+="
+ROOT not empty"
 	# check fstype
-	[[ $( df --output=fstype $BOOT | tail -1 ) != vfat ]] && warnings+='BOOT not fat32\n'
-	[[ $( df --output=fstype $ROOT | tail -1 ) != ext4 ]] && warnings+='ROOT not ext4\n'
+	[[ $( df --output=fstype $BOOT | tail -1 ) != vfat ]] && warnings+="
+BOOT not fat32"
+	[[ $( df --output=fstype $ROOT | tail -1 ) != ext4 ]] && warnings+="\
+ROOT not ext4"
 fi
 # partition warnings
 if [[ -n $warnings ]]; then
 	dialog "${opt[@]}" --msgbox "
 \Z1Warnings:\Z0
-
 $warnings
 
 " 0 0
