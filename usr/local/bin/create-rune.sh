@@ -78,10 +78,11 @@ title="Create RuneAudio+R $version"
 optbox=( --colors --no-shadow --no-collapse )
 opt=( --backtitle "$title" ${optbox[@]} )
 
-dialog "${optbox[@]}" --sleep 3 --infobox "
+dialog "${optbox[@]}" --infobox "
 
                 \Z1RuneAudio+R $version\Z0
 " 7 50
+sleep 3
 
     bluez='\Z1Bluez\Z0     - Bluetooth supports'
  chromium='\Z1Chromium\Z0  - Browser on RPi'
