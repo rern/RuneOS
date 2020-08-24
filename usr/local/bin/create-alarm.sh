@@ -22,12 +22,13 @@ title='Create Arch Linux Arm'
 optbox=( --colors --no-shadow --no-collapse )
 opt=( --backtitle "$title" ${optbox[@]} )
 
-dialog "${optbox[@]}" --sleep 3 --infobox "
+dialog "${optbox[@]}" --infobox "
 
                     \Z1Arch Linux Arm\Z0
                           for
                      Raspberry Pi
 " 9 58
+sleep 3
 
 BOOT=$( df | grep 'BOOT$' | awk '{print $NF}' )
 ROOT=$( df | grep 'ROOT$' | awk '{print $NF}' )
