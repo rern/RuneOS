@@ -381,4 +381,4 @@ clear
 
 cat /dev/zero | ssh-keygen -q -N "" &> /dev/null
 ssh-keygen -R $rpiip &> /dev/null
-sshpass -p root ssh -T -o StrictHostKeyChecking=no root@$rpiip
+sshpass -p root ssh root@$rpiip
