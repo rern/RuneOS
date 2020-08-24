@@ -143,7 +143,7 @@ if [[ ! -e /tmp/features ]]; then
 	selectFeatures
 
 	dialog "${opt[@]}" --yesno "
-\Z1Confirm features to install:\Z0
+Confirm features to install:
 
 $list
 
