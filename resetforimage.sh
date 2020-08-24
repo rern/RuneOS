@@ -24,14 +24,12 @@ select=" $select "
 
 if [[ $select == *' 1 '* ]]; then
 	systemctl stop mpd
-	echo 0 0 0 > /srv/http/data/system/mpddb
 	rm -f /srv/http/data/mpd/*
 fi
 if [[ $select == *' 2 '* ]]; then
 	rm -rf /root/.cache/* /srv/http/data/tmp/*
 	rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/* /srv/http/data/system/gpio
 	wget -qO - https://github.com/rern/RuneOS/raw/master/radioparadise.tar.xz | bsdtar xvf - -C /
-	chown http:http /srv/http/data/webradios/*
 	echo '{
   "name": {
     "11": "DAC",
@@ -59,6 +57,7 @@ if [[ $select == *' 2 '* ]]; then
   },
   "timer": 5
 }' > /srv/http/data/system/gpio.json
+	chown http:http /srv/http/data/system/gpio.json
 fi
 if [[ $select == *' 3 '* ]]; then
 	rm -f /var/cache/pacman/pkg/*
