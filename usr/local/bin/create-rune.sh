@@ -141,18 +141,17 @@ selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=auto
 }
 if [[ ! -e /tmp/features ]]; then
 	selectFeatures
+else
+	features=$( cat /tmp/features )
+	list=$( cat /tmp/list )
+fi
 
-	dialog "${opt[@]}" --yesno "
+dialog "${opt[@]}" --yesno "
 Confirm features to install:
 
 $list
 
 " 0 0
-	[[ $? == 1 ]] && selectFeatures
-else
-	features=$( cat /tmp/features )
-	list==$( cat /tmp/list )
-fi
 
 clear
 
