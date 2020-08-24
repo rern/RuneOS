@@ -305,6 +305,11 @@ rm /usr/local/bin/create-* /etc/motd /var/cache/pacman/pkg/*
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
+if [[ $rpi01 && $features =~ upmpdcli ]]; then
+	echo Wait for upmpdcli to finish RSA key ...
+	sleep 30
+fi
+
 dialog "${optbox[@]}" --msgbox "
 
     \Z1RuneAudio+R $version\Z0 created successfully.
