@@ -129,6 +129,7 @@ Connect \Z1Wi-Fi\Z0 on boot?
 
 BOOT path : \Z1$BOOT\Z0
 ROOT path : \Z1$ROOT\Z0
+
 Target    : \Z1Raspberry Pi $rpiname\Z0
 
 $wifi
