@@ -38,6 +38,16 @@ Server = https://rern.github.io/$arch\
 ' /etc/pacman.conf
 fi
 
+title="Create RuneAudio+R $version"
+optbox=( --colors --no-shadow --no-collapse )
+opt=( --backtitle "$title" ${optbox[@]} )
+
+dialog "${optbox[@]}" --infobox "
+
+                \Z1RuneAudio+R $version\Z0
+" 7 50
+sleep 3
+
 # package mirror server
 readarray -t lines <<< "$( grep . /etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria\!)//' )"
 list=( 0 'Auto - By Geo-IP' )
@@ -73,16 +83,6 @@ if (( $# > 0 )); then
 	uibranch=$( dialog --colors --output-fd 1 --inputbox "\n\Z1UI branch:\Z0" 0 0 $uibranch )
 	addonalias=rr$version
 fi
-
-title="Create RuneAudio+R $version"
-optbox=( --colors --no-shadow --no-collapse )
-opt=( --backtitle "$title" ${optbox[@]} )
-
-dialog "${optbox[@]}" --infobox "
-
-                \Z1RuneAudio+R $version\Z0
-" 7 50
-sleep 3
 
     bluez='\Z1Bluez\Z0     - Bluetooth supports'
  chromium='\Z1Chromium\Z0  - Browser on RPi'
