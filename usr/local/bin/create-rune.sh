@@ -166,6 +166,8 @@ code=$( dialog "${opt[@]}" --output-fd 1 --menu "
 
 [[ -n $code ]] && sed -i '/^Server/ s|//.*mirror|//'${url[$code]}'.mirror|' /etc/pacman.d/mirrorlist
 
+clear
+
 echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 
 pacman -Syu --noconfirm --needed
