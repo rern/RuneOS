@@ -99,16 +99,16 @@ selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=auto
 10 "$upmpdcli" on )
 	
 	select=" $select "
-	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-alsa-git bluez-utils ' && list+="$bluez\n"
-	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium matchbox-window-manager upower xf86-video-fbdev xf86-video-vesa xorg-server xorg-xinit ' && list+="$chromium\n"
-	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd\n"
-	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid\n"
-	[[ $select == *' 5 '* ]] && features+='python-pip ' && list+="$rpigpio\n"
-	[[ $select == *' 6 '* ]] && features+='samba ' && list+="$samba\n"
-	[[ $select == *' 7 '* ]] && features+='shairport-sync ' && list+="$shairport\n"
-	[[ $select == *' 8 '* ]] && features+='snapcast ' && list+="$snapcast\n"
-	[[ $select == *' 9 '* ]] && features+='spotifyd ' && list+="$spotify\n"
-	[[ $select == *' 10 '* ]] && features+='upmpdcli ' && list+="$upmpdcli\n"
+	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-alsa-git bluez-utils ' && list+="$bluez"$'\n'
+	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium matchbox-window-manager upower xf86-video-fbdev xf86-video-vesa xorg-server xorg-xinit ' && list+="$chromium"$'\n'
+	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd"$'\n'
+	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid"$'\n'
+	[[ $select == *' 5 '* ]] && features+='python-pip ' && list+="$rpigpio"$'\n'
+	[[ $select == *' 6 '* ]] && features+='samba ' && list+="$samba"$'\n'
+	[[ $select == *' 7 '* ]] && features+='shairport-sync ' && list+="$shairport"$'\n'
+	[[ $select == *' 8 '* ]] && features+='snapcast ' && list+="$snapcast"$'\n'
+	[[ $select == *' 9 '* ]] && features+='spotifyd ' && list+="$spotify"$'\n'
+	[[ $select == *' 10 '* ]] && features+='upmpdcli ' && list+="$upmpdcli"$'\n'
 	echo $features > /tmp/features
 	echo -e "$list" > /tmp/list
 }
