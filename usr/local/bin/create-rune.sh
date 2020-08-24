@@ -50,7 +50,7 @@ sleep 3
 
 # package mirror server
 readarray -t lines <<< "$( grep . /etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria\!)//' )"
-list=( 0 'Auto - By Geo-IP' )
+clist=( 0 'Auto - By Geo-IP' )
 url=( '' )
 i=0
 for line in "${lines[@]}"; do
@@ -62,7 +62,7 @@ for line in "${lines[@]}"; do
 	else
 		[[ -n $city ]] && cc="$country - $city" || cc=$country
 		(( i++ ))
-		list+=( $i "$cc" )
+		clist+=( $i "$cc" )
 		url+=( $( sed 's|.*//\(.*\).mirror.*|\1|' <<< $line ) )
 	fi
 done
@@ -70,7 +70,7 @@ done
 code=$( dialog "${opt[@]}" --output-fd 1 --menu "
 \Z1Package mirror server:\Z0
 " 0 0 0 \
-"${list[@]}" )
+"${clist[@]}" )
 
 [[ -n $code ]] && sed -i '/^Server/ s|//.*mirror|//'${url[$code]}'.mirror|' /etc/pacman.d/mirrorlist
 
