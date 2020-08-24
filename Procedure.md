@@ -7,7 +7,7 @@
 
 ```sh
 # Linux ##################################################
-wget -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh | sh
+wget -qO - https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh | sh
 
 # after connected to RPi
 create-rune.sh
