@@ -5,9 +5,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/srv/http/bash/wsdd.py -4 --shortlog --preserve-case --hostname RuneAudio
-User=nobody
-Group=nobody
+ExecStart=/srv/http/bash/wsdd.py --shortlog
 
 [Install]
 WantedBy=multi-user.target
