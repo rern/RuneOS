@@ -211,9 +211,6 @@ alsactl store
 cp /{usr/lib,etc}/udev/rules.d/90-alsa-restore.rules
 sed -i '/^TEST/ s/^/#/' /etc/udev/rules.d/90-alsa-restore.rules
 
-# avahi
-sed -i 's/\(use-ipv6=\).*/\1no/' /etc/avahi/avahi-daemon.conf
-
 # bluetooth
 if [[ -e /usr/bin/bluetoothctl ]]; then
 	sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
