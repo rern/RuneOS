@@ -4,8 +4,6 @@ After=network.target redis.target shairport-sync.service
 
 [Service]
 ExecStart=/srv/http/bash/shairport-meta.sh
-User=http
-Group=http
 
 [Install]
 WantedBy=multi-user.target
