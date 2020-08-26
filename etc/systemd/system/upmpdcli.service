@@ -4,7 +4,7 @@ After=network-online.target mpd.service mpd.service
 Wants=network-online.target
 
 [Service]
-User=upmpdcli
+User=http
 Type=simple
 ExecStart=/usr/bin/taskset -c 3 /usr/bin/upmpdcli -c /etc/upmpdcli.conf
 Restart=always
