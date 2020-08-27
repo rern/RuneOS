@@ -289,9 +289,6 @@ startup='avahi-daemon cronie devmon@mpd nginx php-fpm startup'
 systemctl enable $startup
 
 #---------------------------------------------------------------------------------
-# symlink /mnt for coverart files
-ln -s /mnt /srv/http/
-
 # data - settings directories
 /srv/http/bash/data-reset.sh "$version"
 
