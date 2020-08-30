@@ -393,4 +393,13 @@ Password: \Z1root\Z0
 
 " 0 0
 
+clear
+
+echo "Connect To Raspberry Pi
+
+Command : ssh root@$rpiip
+Confirm : yes
+Password: root
+"
+
 #sshpass -p root ssh -t -t -o StrictHostKeyChecking=no root@$rpiip
