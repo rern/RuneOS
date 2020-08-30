@@ -88,8 +88,6 @@ fi
  chromium='\Z1Chromium\Z0  - Browser on RPi'
   hostapd='\Z1hostapd\Z0   - RPi access point'
       kid='\Z1Kid3\Z0      - Metadata tag editor'
-   python='\Z1Python\Z0    - Programming language'
-  rpigpio='\Z1RPi.GPIO\Z0  - Python RPi.GPIO module'
     samba='\Z1Samba\Z0     - File sharing'
 shairport='\Z1Shairport\Z0 - AirPlay renderer'
  snapcast='\Z1Snapcast\Z0  - Synchronous multiroom player'
@@ -118,24 +116,22 @@ selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=auto
 2 "$chromium" $onoffchromium \
 3 "$hostapd" on \
 4 "$kid" on \
-5 "$rpigpio" on \
-6 "$samba" on \
-7 "$shairport" on \
-8 "$snapcast" on \
-9 "$spotify" on \
-10 "$upmpdcli" on )
+5 "$samba" on \
+6 "$shairport" on \
+7 "$snapcast" on \
+8 "$spotify" on \
+9 "$upmpdcli" on )
 	
 	select=" $select "
 	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-alsa-git bluez-utils ' && list+="$bluez"$'\n'
 	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium matchbox-window-manager upower xf86-video-fbdev xf86-video-vesa xorg-server xorg-xinit ' && list+="$chromium"$'\n'
 	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd"$'\n'
 	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid"$'\n'
-	[[ $select == *' 5 '* ]] && features+='python-pip ' && list+="$rpigpio"$'\n'
-	[[ $select == *' 6 '* ]] && features+='samba ' && list+="$samba"$'\n'
-	[[ $select == *' 7 '* ]] && features+='shairport-sync ' && list+="$shairport"$'\n'
-	[[ $select == *' 8 '* ]] && features+='snapcast ' && list+="$snapcast"$'\n'
-	[[ $select == *' 9 '* ]] && features+='spotifyd ' && list+="$spotify"$'\n'
-	[[ $select == *' 10 '* ]] && features+='upmpdcli ' && list+="$upmpdcli"$'\n'
+	[[ $select == *' 5 '* ]] && features+='samba ' && list+="$samba"$'\n'
+	[[ $select == *' 6 '* ]] && features+='shairport-sync ' && list+="$shairport"$'\n'
+	[[ $select == *' 7 '* ]] && features+='snapcast ' && list+="$snapcast"$'\n'
+	[[ $select == *' 8 '* ]] && features+='spotifyd ' && list+="$spotify"$'\n'
+	[[ $select == *' 9 '* ]] && features+='upmpdcli ' && list+="$upmpdcli"$'\n'
 	echo $features > /tmp/features
 	echo -e "$list" > /tmp/list
 }
@@ -172,14 +168,12 @@ pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
 
 packages='alsa-utils cronie dosfstools fd gcc hfsprogs ifplugd imagemagick inetutils jq man mpc mpd mpdscribble '
-packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm python-wheel sshpass sudo udevil wget '
+packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm sshpass sudo udevil wget '
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
 pacman -S --noconfirm --needed $packages $features
 [[ $? != 0 ]] && pacmanFailed 'Packages download incomplete!'
-
-[[ $features =~ python-pip ]] && yes 2> /dev/null | pip --no-cache-dir install RPi.GPIO
 
 echo -e "\n\e[36mInstall configurations and web interface ...\e[m\n"
 
