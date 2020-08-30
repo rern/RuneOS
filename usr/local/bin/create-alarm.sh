@@ -383,4 +383,11 @@ clear
 
 cat /dev/zero | ssh-keygen -q -N "" &> /dev/null
 ssh-keygen -R $rpiip &> /dev/null
-sshpass -p root ssh -t -t -o StrictHostKeyChecking=no root@$rpiip
+
+dialog "${opt[@]}" --msgbox "
+Type \Z1root\Z0 for password
+
+" 0 0
+
+#sshpass -p root ssh -t -t -o StrictHostKeyChecking=no root@$rpiip
+ssh root@$rpiip
