@@ -77,7 +77,7 @@ ROOT: \Z1$ROOT\Z0
 
 	rpi=$( dialog "${opt[@]}" --output-fd 1 --menu "
 \Z1Target:\Z0
-" 0 0 0 \
+" 8 0 0 \
 0 'Raspberry Pi Zero' \
 1 'Raspberry Pi 1' \
 2 'Raspberry Pi 2' \
