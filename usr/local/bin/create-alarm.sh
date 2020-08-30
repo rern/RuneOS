@@ -389,5 +389,6 @@ Type \Z1root\Z0 for password
 
 " 0 0
 
+clear
 #sshpass -p root ssh -t -t -o StrictHostKeyChecking=no root@$rpiip
-ssh root@$rpiip
+ssh -t root@$rpiip
