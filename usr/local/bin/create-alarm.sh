@@ -6,14 +6,12 @@ if [[ -e /usr/bin/pacman ]]; then
 	[[ ! -e /usr/bin/dialog ]] && packages+='dialog '
 	[[ ! -e /usr/bin/nmap ]] && packages+='nmap '
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
-	[[ ! -e /usr/bin/sshpass ]] && packages+='sshpass '
 	[[ -n $packages ]] && pacman -Sy --noconfirm --needed $packages
 else
 	[[ ! -e /usr/bin/bsdtar ]] && packages+='bsdtar libarchive-tools '
 	[[ ! -e /usr/bin/dialog ]] && packages+='dialog '
 	[[ ! -e /usr/bin/nmap ]] && packages+='nmap '
 	[[ ! -e /usr/bin/pv ]] && packages+='pv '
-	[[ ! -e /usr/bin/sshpass ]] && packages+='sshpass '
 	[[ -n $packages ]] && apt install -y $packages
 fi
 
@@ -386,6 +384,6 @@ clear
 echo "
 Connect To Raspberry Pi
 
-Command : ssh root@$rpiip
 Password: root
 "
+ssh root@$rpiip
