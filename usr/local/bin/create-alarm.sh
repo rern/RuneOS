@@ -402,4 +402,4 @@ Confirm : yes
 Password: root
 "
 
-#sshpass -p root ssh -t -t -o StrictHostKeyChecking=no root@$rpiip
+#sshpass -p root ssh root@$rpiip
