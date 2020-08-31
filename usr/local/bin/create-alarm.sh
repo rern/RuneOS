@@ -384,15 +384,3 @@ clear
 ssh-keyscan -H $rpiip >> ~/.ssh/known_hosts
 
 sshpass -p root ssh -tt root@$rpiip
-
-[[ $? == 0 ]] && exit
-
-clear
-
-echo "
-Connect To Raspberry Pi
-
-Command : ssh root@$rpiip
-          (confirm yes if any)
-Password: root
-"
