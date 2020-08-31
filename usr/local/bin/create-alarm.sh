@@ -383,7 +383,7 @@ clear
 
 ssh-keyscan -H $rpiip >> ~/.ssh/known_hosts
 
-sshpass -p root ssh root@$rpiip
+sshpass -p root ssh -tt root@$rpiip
 
 [[ $? == 0 ]] && exit
 
