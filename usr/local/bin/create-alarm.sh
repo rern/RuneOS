@@ -381,8 +381,7 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 
 clear
 
-cat /dev/zero | ssh-keygen -q -N "" &> /dev/null
-ssh-keygen -R $rpiip &> /dev/null
+ssh-keyscan -H $rpiip >> ~/.ssh/known_hosts
 
 sshpass -p root ssh root@$rpiip
 
