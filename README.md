@@ -6,13 +6,7 @@ Audio player and renderer for Raspberry Pi
 
 - For all **Raspberry Pi**s: Zero, 1, 2, 3 and 4
 - Create **RuneAudio+R** from latest releases of [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads)
-- Interactive interface by only 2 command lines:
-```sh
-#1
-wget -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh | sh
-#2
-create-rune.sh
-```
+- Interactive interface by oa few command lines:
 - Options:
 	- Run `ROOT` partition on USB drive
 	- Run on USB only - no SD card ([boot from USB](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md))
