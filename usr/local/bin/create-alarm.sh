@@ -384,22 +384,16 @@ clear
 cat /dev/zero | ssh-keygen -q -N "" &> /dev/null
 ssh-keygen -R $rpiip &> /dev/null
 
-dialog "${opt[@]}" --msgbox "
-Connect To Raspberry Pi
+sshpass -p root ssh root@$rpiip
 
-Command : \Z1ssh root@$rpiip\Z0
-Confirm : \Z1yes\Z0
-Password: \Z1root\Z0
-
-" 0 0
+[[ $? == 0 ]] && exit
 
 clear
 
-echo "Connect To Raspberry Pi
+echo "
+Connect To Raspberry Pi
 
 Command : ssh root@$rpiip
-Confirm : yes
+          (confirm yes if any)
 Password: root
 "
-
-#sshpass -p root ssh root@$rpiip
