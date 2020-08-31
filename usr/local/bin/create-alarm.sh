@@ -379,8 +379,13 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 " 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
+ssh-keyscan -H $rpiip >> ~/.ssh/known_hosts &> /dev/null
+
 clear
 
-ssh-keyscan -H $rpiip >> ~/.ssh/known_hosts
+echo "
+Connect To Raspberry Pi
 
-sshpass -p root ssh -tt root@$rpiip
+Command : ssh root@$rpiip
+Password: root
+"
