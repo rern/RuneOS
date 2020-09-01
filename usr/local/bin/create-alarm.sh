@@ -263,9 +263,7 @@ echo DNSSEC=no >> $ROOT/etc/systemd/resolved.conf
 rm -r $ROOT/etc/systemd/system/network-online.target.wants
 
 # ssh - root login, blank password, suppress warnings
-sed -i -e 's/#\(PermitRootLogin \).*/\1yes/
-' -e '$ a\StrictHostKeyChecking no
-' $ROOT/etc/ssh/sshd_config
+sed -i 's/#\(PermitRootLogin \).*/\1yes/' $ROOT/etc/ssh/sshd_config
 
 # root password - rune
 #sed -i 's/^root.*/root:$6$d8Oc/fby3idtyjbl$.XnEusw3MJ2tMoH3CZt53qgl89FrD2a0jRjaFHIbE8FvvUiBv/Ias/fTmFUWznBDPF2ad1M5JEGC.VoM1HW3D1:18504::::::/' $ROOT/etc/shadow
