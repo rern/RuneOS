@@ -6,7 +6,7 @@ Audio player and renderer for Raspberry Pi
 
 - For all **Raspberry Pi**s: Zero, 1, 2, 3 and 4
 - Create **RuneAudio+R** from latest releases of [**Arch Linux Arm**](https://archlinuxarm.org/about/downloads)
-- Interactive interface by oa few command lines:
+- Interactive interface
 - Options:
 	- Run `ROOT` partition on USB drive
 	- Run on USB only - no SD card ([boot from USB](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md))
@@ -137,11 +137,9 @@ pacman-mirrors -c COUNRTY
 wget -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/create-alarm.sh | sh
 ```
 - Errors or too slow download: press `Ctrl+C` and run `# create script` again
-- Follow instructions until PC to Raspberry Pi connection is up.
-### Create RuneAudio
-- run script
+- If SSH connection failed, reconnect:
 ```sh
-./create-rune.sh
+ssh root@<RPi IP>
 ```
 - Errors or too slow download: press `Ctrl+C` and run `./create-rune.sh` again
 - Notification shows when finished.
