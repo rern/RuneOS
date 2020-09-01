@@ -389,8 +389,17 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 " 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
-sed -i "/$rpiip/ d" ~/.ssh/known_hosts
+file=~/.ssh/known_hosts
+sed -i "/$rpiip/ d" $file
+ssh-keyscan -t ecdsa -H $rpiip | sed 's/.*ecdsa/'$rpiip' ecdsa/' >> $file
 
 clear
 
-ssh -t -o StrictHostKeyChecking=no root@$rpiip echo 'Create RuneAudio+R'
+echo "
+Create RuneAudio+R
+--------------------
+Connect to RPi with:
+
+ssh root@$rpiip
+"
+
