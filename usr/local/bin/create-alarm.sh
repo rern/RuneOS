@@ -258,15 +258,19 @@ fi
 
 # fix dns errors
 echo DNSSEC=no >> $ROOT/etc/systemd/resolved.conf
+
 # disable wait-online
 rm -r $ROOT/etc/systemd/system/network-online.target.wants
-# ssh - root login no password
+
+# ssh - root login, blank password, suppress warnings
 sed -i -e 's/#\(PermitRootLogin \).*/\1yes/
 ' -e 's/#\(PermitEmptyPasswords \).*/\1yes/
+' -e '$ a\StrictHostKeyChecking no
 ' $ROOT/etc/ssh/sshd_config
+
+# passwd blank
 sed -i 's/root:x/root:/' $ROOT/etc/passwd
-# suppress warnings
-echo 'StrictHostKeyChecking no' >> $ROOT/etc/ssh/ssh_config
+
 # fix - haveged coredump error
 file=$ROOT/usr/lib/systemd/system/haveged.service
 if ! grep -q SystemCallErrorNumber=EPERM $file; then
