@@ -137,7 +137,9 @@ pacman-mirrors -c COUNRTY
 wget -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/create-alarm.sh | sh
 ```
 - Errors or too slow download: press `Ctrl+C` and run `# create script` again
-- If SSH connection failed, reconnect:
+
+### Create RuneAudio+R
+- Connect to RPi
 ```sh
 ssh root@<RPi IP>
 ```
