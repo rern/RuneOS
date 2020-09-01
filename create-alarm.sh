@@ -286,8 +286,9 @@ SystemCallErrorNumber=EPERM
 fi
 
 # get create-rune.sh
-wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/create-rune.sh -P $ROOT/root
+wget -qO https://github.com/rern/RuneOS/raw/master/create-rune.sh $ROOT/root/create-rune.sh
 chmod 755 $ROOT/root/create-rune.sh
+echo /root/create-rune.sh >> $ROOT/etc/bash.bashrc
 
 dialog "${optbox[@]}" --msgbox "
 
