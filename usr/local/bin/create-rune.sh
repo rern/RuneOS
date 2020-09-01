@@ -287,8 +287,8 @@ systemctl enable $startup
 # data - settings directories
 /srv/http/bash/data-reset.sh "$version"
 
-# remove cache and files
-rm /usr/local/bin/create-* /etc/motd /var/cache/pacman/pkg/*
+# remove files and package cache
+rm /etc/motd /root/create-rune.sh /var/cache/pacman/pkg/*
 
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
