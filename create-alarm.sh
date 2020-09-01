@@ -396,6 +396,7 @@ sed -i '$ s/.*ecdsa/'$rpiip' ecdsa/' $file
 
 dialog "${opt[@]}" --msgbox "
 Connect command:
+
 \Z1ssh root@$rpiip\Z0
 
 " 0 0
