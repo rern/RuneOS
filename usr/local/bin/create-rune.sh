@@ -243,6 +243,7 @@ sed -i '/^-.*pam_systemd/ s/^-/#/' /etc/pam.d/system-login
 # password
 echo root:rune | chpasswd
 [[ -e /usr/bin/smbd ]] && ( echo rune; echo rune ) | smbpasswd -s -a root
+sed -i 's/\(PermitEmptyPasswords \).*/#\1no' /etc/ssh/sshd_config
 
 # no samba
 [[ ! -e /usr/bin/samba ]] && rm -rf /etc/samba /etc/systemd/system/wsdd.service /usr/local/bin/wsdd.py
