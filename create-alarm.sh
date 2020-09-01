@@ -143,7 +143,7 @@ if [[ -e $file ]]; then
 		| dialog "${opt[@]}" --gauge "
 Verify already downloaded file ...
 " 9 50
-	md5sum -c $file.md5 || rm $file
+	md5sum --quiet -c $file.md5 || rm $file
 fi
 
 # download
