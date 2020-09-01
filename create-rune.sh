@@ -72,6 +72,8 @@ code=$( dialog "${opt[@]}" --output-fd 1 --menu "
 " 0 0 0 \
 "${clist[@]}" )
 
+clear
+
 [[ -n $code ]] && sed -i '/^Server/ s|//.*mirror|//'${url[$code]}'.mirror|' /etc/pacman.d/mirrorlist
 
 # dialog package
