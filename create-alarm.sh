@@ -318,7 +318,8 @@ dialog "${optbox[@]}" --msgbox "
 
 #----------------------------------------------------------------------------
 title='Connect to Raspberry Pi'
-opt=( --backtitle "$title" --colors --no-shadow )
+opt=( --backtitle "$title" ${optbox[@]} )
+
 # scan ip
 routerip=$( ip r get 1 | head -1 | cut -d' ' -f3 )
 subip=${routerip%.*}.
