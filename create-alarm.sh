@@ -105,7 +105,7 @@ Connect \Z1Wi-Fi\Z0 on boot?
 " 0 0 $password )
 		wpa=$( dialog "${opt[@]}" --output-fd 1 --menu "
 \Z1Wi-Fi\Z0 -Security:
-" 0 0 0 \
+" 8 0 0 \
 1 WPA \
 2 WEP \
 3 None )
