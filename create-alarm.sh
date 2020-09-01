@@ -393,8 +393,12 @@ sed -i "/$rpiip/ d" $file
 ssh-keyscan -t ecdsa -H $rpiip >> $file
 sed -i '$ s/.*ecdsa/'$rpiip' ecdsa/' $file
 
+dialog "${opt[@]}" --msgbox "
+Connect command:
+\Z1ssh root@$rpiip\Z0
+
+" 0 0
+
 clear
 
-ssh root@$rpiip
-
-[[ $? != 0 ]] && ssh root@$rpiip
+echo "Connect command: ssh root@$rpiip"
