@@ -240,7 +240,8 @@ systemctl disable systemd-networkd-wait-online
 # fix: pam ssh login bug (wrong comment - not #)
 sed -i '/^-.*pam_systemd/ s/^-/#/' /etc/pam.d/system-login
 
-# samba password
+# password
+echo root:rune | chpasswd
 [[ -e /usr/bin/smbd ]] && ( echo rune; echo rune ) | smbpasswd -s -a root
 
 # no samba
