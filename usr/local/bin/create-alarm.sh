@@ -264,13 +264,11 @@ rm -r $ROOT/etc/systemd/system/network-online.target.wants
 
 # ssh - root login, blank password, suppress warnings
 sed -i -e 's/#\(PermitRootLogin \).*/\1yes/
-' -e 's/#\(PermitEmptyPasswords \).*/\1yes/
 ' -e '$ a\StrictHostKeyChecking no
 ' $ROOT/etc/ssh/sshd_config
 
-# set root password
-id=$( awk -F':' '/^root/ {print $3}' $ROOT/etc/shadow )
-sed -i "s/^root.*/root::$id::::::/" $ROOT/etc/shadow
+# root password - rune
+sed -i "s/^root.*/root:$6$d8Oc/fby3idtyjbl$.XnEusw3MJ2tMoH3CZt53qgl89FrD2a0jRjaFHIbE8FvvUiBv/Ias/fTmFUWznBDPF2ad1M5JEGC.VoM1HW3D1:18504::::::/" $ROOT/etc/shadow
 
 # fix - haveged coredump error
 file=$ROOT/usr/lib/systemd/system/haveged.service
