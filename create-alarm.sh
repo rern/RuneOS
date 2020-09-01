@@ -143,7 +143,7 @@ if [[ -e $file ]]; then
 		| dialog "${opt[@]}" --gauge "
 Verify already downloaded file ...
 " 9 50
-	md5sum --quiet -c $file.md5 || rm $file
+	md5sum -c $file.md5 || rm $file
 fi
 
 # download
@@ -288,7 +288,6 @@ fi
 # get create-rune.sh
 wget -qN https://github.com/rern/RuneOS/raw/master/create-rune.sh -P $ROOT/root
 chmod 755 $ROOT/root/create-rune.sh
-echo /root/create-rune.sh >> $ROOT/etc/bash.bashrc
 
 dialog "${optbox[@]}" --msgbox "
 
@@ -389,17 +388,8 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 " 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
-file=~/.ssh/known_hosts
-sed -i "/$rpiip/ d" $file
-ssh-keyscan -t ecdsa -H $rpiip | sed 's/.*ecdsa/'$rpiip' ecdsa/' >> $file
+sed -i "/$rpiip/ d" ~/.ssh/known_hosts
 
 clear
 
-echo "
-Create RuneAudio+R
---------------------
-Connect to RPi with:
-
-ssh root@$rpiip
-"
-
+ssh -t -o StrictHostKeyChecking=no root@$rpiip /root/create-rune.sh
