@@ -298,6 +298,9 @@ if [[ $rpi01 && $features =~ upmpdcli ]]; then
 	sleep 30
 fi
 
+# remove autorun
+sed -i '/create-rune.sh/ d' /etc/bash.bashrc
+
 dialog "${optbox[@]}" --msgbox "
 
     \Z1RuneAudio+R $version\Z0 created successfully.
