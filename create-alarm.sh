@@ -387,7 +387,10 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 " 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
-ssh-keyscan -t ecdsa -H $rpiip >> ~/.ssh/known_hosts
+file=~/.ssh/known_hosts
+sed -i "/$rpiip/ d" $file
+ssh-keyscan -t ecdsa -H $rpiip >> $file
+sed -i '$ s/.*ecdsa/'$rpiip' ecdsa/' $file
 
 clear
 
