@@ -386,4 +386,6 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 
 ssh-keyscan -t ecdsa -H $rpiip >> ~/.ssh/known_hosts
 
+clear
+
 ssh root@$rpiip
