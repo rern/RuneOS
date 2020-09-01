@@ -393,4 +393,4 @@ ssh-keyscan -t ecdsa -H $rpiip >> ~/.ssh/known_hosts
 
 clear
 
-ssh root@$rpiip
+ssh -tt root@$rpiip
