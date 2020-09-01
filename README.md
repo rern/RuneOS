@@ -138,7 +138,7 @@ pacman-mirrors -c COUNRTY
 # ssh - no pipe | sh
 wget -qN https://github.com/rern/RuneOS/raw/master/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
 ```
-- Errors or too slow download: press `Ctrl+C` and run `# create script` again
+- Errors or too slow download: press `Ctrl+C` and run `./create-alarm.sh` again
 
 **RuneAudio+R**
 - Errors or too slow download: press `Ctrl+C` and run `./create-rune.sh`
