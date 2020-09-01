@@ -381,6 +381,6 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 " 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
-ssh-keyscan -H $rpiip >> ~/.ssh/known_hosts &> /dev/null
+ssh-keyscan -t ecdsa -H $rpiip >> ~/.ssh/known_hosts &> /dev/null
 
 ssh -T root@$rpiip
