@@ -402,4 +402,6 @@ Connect command:
 
 clear
 
-echo "Connect command: ssh root@$rpiip"
+echo "
+Connect command: ssh root@$rpiip
+"
