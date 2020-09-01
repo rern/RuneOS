@@ -260,8 +260,11 @@ fi
 echo DNSSEC=no >> $ROOT/etc/systemd/resolved.conf
 # disable wait-online
 rm -r $ROOT/etc/systemd/system/network-online.target.wants
-# ssh - permit root
-sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' $ROOT/etc/ssh/sshd_config
+# ssh - root login no password
+sed -i -e 's/#\(PermitRootLogin \).*/\1yes/
+' -e 's/#\(PermitEmptyPasswords \).*/\1yes/
+' $ROOT/etc/ssh/sshd_config
+sed -i 's/root:x/root:/' $ROOT/etc/passwd
 # suppress warnings
 echo 'StrictHostKeyChecking no' >> $ROOT/etc/ssh/ssh_config
 # fix - haveged coredump error
@@ -379,11 +382,4 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 
 ssh-keyscan -H $rpiip >> ~/.ssh/known_hosts &> /dev/null
 
-clear
-
-echo "
-Connect To Raspberry Pi
-
-Password: root
-"
 ssh root@$rpiip
