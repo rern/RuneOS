@@ -140,6 +140,10 @@ getData
 # if already downloaded, verify latest
 if [[ -e $file ]]; then
 	wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5
+	wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5 \
+		| dialog "${opt[@]}" --gauge "
+Verify already downloaded file ...
+" 9 50
 	md5sum -c $file.md5 || rm $file
 fi
 
