@@ -268,8 +268,9 @@ sed -i -e 's/#\(PermitRootLogin \).*/\1yes/
 ' -e '$ a\StrictHostKeyChecking no
 ' $ROOT/etc/ssh/sshd_config
 
-# passwd blank
-sed -i 's/root:x/root:/' $ROOT/etc/passwd
+# set root password
+id=$( awk -F':' '/^root/ {print $3}' $ROOT/etc/shadow )
+sed -i "s/^root.*/root::$id::::::/" $ROOT/etc/shadow
 
 # fix - haveged coredump error
 file=$ROOT/usr/lib/systemd/system/haveged.service
@@ -386,4 +387,4 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 
 ssh-keyscan -H $rpiip >> ~/.ssh/known_hosts &> /dev/null
 
-ssh root@$rpiip
+ssh -T root@$rpiip
