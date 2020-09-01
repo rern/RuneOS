@@ -140,8 +140,7 @@ wget -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/create-alar
 - Errors or too slow download: press `Ctrl+C` and run `# create script` again
 
 **RuneAudio+R**
-- SSH connect to RPi with on-screen command
-- Errors or too slow download: press `Ctrl+C` and run `./create-rune.sh` again
+- Errors or too slow download: press `Ctrl+C` and run `./create-rune.sh`
 
 ---
 
