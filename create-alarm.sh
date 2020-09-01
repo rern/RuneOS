@@ -390,6 +390,8 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 
 sed -i "/$rpiip/ d" ~/.ssh/known_hosts
 
+rm $0
+
 clear
 
 ssh -t -o StrictHostKeyChecking=no root@$rpiip /root/create-rune.sh
