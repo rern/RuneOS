@@ -47,9 +47,9 @@ BOOT not empty"
 	[[ -n $( ls $ROOT | grep -v 'lost+found' ) ]] && warnings+="
 ROOT not empty"
 	# check fstype
-	[[ $( df --output $BOOT | tail -1 | awk '{print $2}' ) != vfat ]] && warnings+="
+	[[ $( df --output=fstype $BOOT | tail -1 ) != vfat ]] && warnings+="
 BOOT not fat32"
-	[[ $( df --output $ROOT | tail -1 | awk '{print $2}' ) != ext4 ]] && warnings+="\
+	[[ $( df --output=fstype $ROOT | tail -1 ) != ext4 ]] && warnings+="\
 ROOT not ext4"
 fi
 # partition warnings
