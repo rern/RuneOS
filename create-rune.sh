@@ -290,6 +290,9 @@ systemctl enable $startup
 # remove files and package cache
 rm /etc/motd /root/create-rune.sh /var/cache/pacman/pkg/*
 
+# remove autorun
+sed -i '/create-rune.sh/ d' /etc/bash.bashrc
+
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
