@@ -395,5 +395,5 @@ sed -i '$ s/.*ecdsa/'$rpiip' ecdsa/' $file
 
 clear
 
-ssh root@$rpiip
+ssh -tt root@$rpiip
 [[ $? != 0 ]] && ssh root@$rpiip
