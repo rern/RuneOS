@@ -120,30 +120,32 @@ Audio player and renderer for Raspberry Pi
 
 ---
 	
-### Create
+### Create Arch Linux Arm
 - Open **Files** app (**File Manager** on Manjaro)
 - Click `BOOT` and `ROOT` to mount
 - Note each path in location bar or hover mouse over `BOOT` and `ROOT` for confirmation
+- switch user to root
 ```sh
-# switch user to root
 su
-
-# on Manjaro only - update package list
-# specific servers by country (list: grep -i COUNTRY /etc/pacman.d/mirrorlist)
+```
+- On Manjaro only - update package list
+```sh
 pacman-mirrors -c COUNRTY
-# if not listed, rank all servers: pacman-mirrors -f
-
-# create script
+```
+- create script
+```sh
 wget -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/create-alarm.sh | sh
 ```
 - Errors or too slow download: press `Ctrl+C` and run `# create script` again
 - Follow instructions until PC to Raspberry Pi connection is up.
+### Create RuneAudio
+- run script
+```sh
+./create-rune.sh
+```
 - Errors or too slow download: press `Ctrl+C` and run `./create-rune.sh` again
 - Notification shows when finished.
 
-### Known errors in boot log `journalctl -b`
-- `Error: Driver 'sdhost-bcm2835' already registered` - not error just information
-- `Error: bcm2708_fb soc:fb: ...` - on RPi 4 when no connected screen
 ---
 
 ### Optionals
