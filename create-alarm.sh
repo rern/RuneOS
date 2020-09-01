@@ -288,7 +288,6 @@ fi
 # get create-rune.sh
 wget -qN --no-check-certificate https://github.com/rern/RuneOS/raw/master/create-rune.sh -P $ROOT/root
 chmod 755 $ROOT/root/create-rune.sh
-echo /root/create-rune.sh >> $ROOT/etc/bash.bashrc
 
 dialog "${optbox[@]}" --msgbox "
 
