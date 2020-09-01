@@ -288,7 +288,6 @@ fi
 # get create-rune.sh
 wget -qN https://github.com/rern/RuneOS/raw/master/create-rune.sh -P $ROOT/root
 chmod 755 $ROOT/root/create-rune.sh
-echo /root/create-rune.sh >> $ROOT/etc/bash.bashrc
 
 dialog "${optbox[@]}" --msgbox "
 
@@ -389,20 +388,8 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 " 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
-file=~/.ssh/known_hosts
-sed -i "/$rpiip/ d" $file
-ssh-keyscan -t ecdsa -H $rpiip >> $file
-sed -i '$ s/.*ecdsa/'$rpiip' ecdsa/' $file
-
-dialog "${opt[@]}" --msgbox "
-Connect command:
-
-\Z1ssh root@$rpiip\Z0
-
-" 0 0
+sed -i "/$rpiip/ d" ~/.ssh/known_hosts
 
 clear
 
-echo "
-Connect command: ssh root@$rpiip
-"
+ssh -t -o StrictHostKeyChecking=no root@$rpiip /root/create-rune.sh
