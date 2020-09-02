@@ -105,7 +105,7 @@ Connect \Z1Wi-Fi\Z0 on boot?
 " 0 0 $password )
 		wpa=$( dialog "${opt[@]}" --output-fd 1 --menu "
 \Z1Wi-Fi\Z0 -Security:
-" 8 0 0 \
+" 0 0 0 \
 1 WPA \
 2 WEP \
 3 None )
@@ -137,13 +137,101 @@ $wifi
 }
 getData
 
+# package mirror server
+readarray -t lines <<< "$( grep . $ROOT/etc/pacman.d/mirrorlist | sed -n '/### A/,$ p' | sed 's/ (not Austria\!)//' )"
+clist=( 0 'Auto - By Geo-IP' )
+url=( '' )
+i=0
+for line in "${lines[@]}"; do
+	if [[ ${line:0:4} == '### ' ]];then
+		city=
+		country=${line:4}
+	elif [[ ${line:0:3} == '## ' ]];then
+		city=${line:3}
+	else
+		[[ -n $city ]] && cc="$country - $city" || cc=$country
+		(( i++ ))
+		clist+=( $i "$cc" )
+		url+=( $( sed 's|.*//\(.*\).mirror.*|\1|' <<< $line ) )
+	fi
+done
+
+code=$( dialog "${opt[@]}" --output-fd 1 --menu "
+\Z1Package mirror server:\Z0
+" 0 0 0 \
+"${clist[@]}" )
+
+clear
+
+[[ -n $code ]] && sed -i '/^Server/ s|//.*mirror|//'${url[$code]}'.mirror|' $ROOT/etc/pacman.d/mirrorlist
+
+# features
+    bluez='\Z1Bluez\Z0     - Bluetooth supports'
+ chromium='\Z1Chromium\Z0  - Browser on RPi'
+  hostapd='\Z1hostapd\Z0   - RPi access point'
+      kid='\Z1Kid3\Z0      - Metadata tag editor'
+    samba='\Z1Samba\Z0     - File sharing'
+shairport='\Z1Shairport\Z0 - AirPlay renderer'
+ snapcast='\Z1Snapcast\Z0  - Synchronous multiroom player'
+  spotify='\Z1Spotifyd\Z0  - Spotify renderer'
+ upmpdcli='\Z1upmpdcli\Z0  - UPnP renderer'
+
+if [[ $rpi == 0 || $rpi == 1 ]]; then
+	chromium='Chromium  - (not for RPi Zero, 1)'
+	onoffchromium=off
+else
+	onoffchromium=on
+fi
+
+selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=autoW dialog> <0=autoH checklist>
+	select=$( dialog "${opt[@]}" --output-fd 1 --checklist "
+\Z1Select features to install:
+\Z4[space] = Select / Deselect\Z0
+" 9 0 0 \
+1 "$bluez" on \
+2 "$chromium" $onoffchromium \
+3 "$hostapd" on \
+4 "$kid" on \
+5 "$samba" on \
+6 "$shairport" on \
+7 "$snapcast" on \
+8 "$spotify" on \
+9 "$upmpdcli" on )
+	
+	select=" $select "
+	features=
+	list=
+	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-alsa-git bluez-utils ' && list+="$bluez"$'\n'
+	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium matchbox-window-manager upower xf86-video-fbdev xf86-video-vesa xorg-server xorg-xinit ' && list+="$chromium"$'\n'
+	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd"$'\n'
+	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid"$'\n'
+	[[ $select == *' 5 '* ]] && features+='samba ' && list+="$samba"$'\n'
+	[[ $select == *' 6 '* ]] && features+='shairport-sync ' && list+="$shairport"$'\n'
+	[[ $select == *' 7 '* ]] && features+='snapcast ' && list+="$snapcast"$'\n'
+	[[ $select == *' 8 '* ]] && features+='spotifyd ' && list+="$spotify"$'\n'
+	[[ $select == *' 9 '* ]] && features+='upmpdcli ' && list+="$upmpdcli"$'\n'
+}
+
+dialog "${opt[@]}" --yesno "
+Confirm features to install:
+
+$list
+
+" 0 0
+
+if [[ $? == 0 ]]; then
+	echo $features > $ROOT/root/features
+else
+	selectFeatures
+fi
+
 # if already downloaded, verify latest
 if [[ -e $file ]]; then
 	wget -qO $file.md5 http://os.archlinuxarm.org/os/$file.md5 \
 		| dialog "${opt[@]}" --gauge "
 Verify already downloaded file ...
 " 9 50
-	md5sum --quiet -c $file.md5 || rm $file
+	md5sum -c $file.md5 || rm $file
 fi
 
 # download
@@ -389,8 +477,6 @@ rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 [[ $? == 1 ]] && scanIP
 
 sed -i "/$rpiip/ d" ~/.ssh/known_hosts
-
-rm $0
 
 clear
 
