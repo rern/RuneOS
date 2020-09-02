@@ -36,10 +36,11 @@ ROOT=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
 BOOT not mounted"
 [[ -z $ROOT ]] && warnings+="
 ROOT not mounted"
-if [[ -n $BOOT && -n $ROOT  ]]; then
+if [[ -z $warnings  ]]; then
 	# check duplicate names
-	(( ${#BOOT[@]} > 1 )) && wget --no-check-certificate -qO - create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh | sh
-	(( ${#ROOT[@]} > 1 )) && warnings+="
+	(( $( echo $BOOT | wc -l ) > 1 )) && warnings+="
+BOOT has more than 1"
+	(( $( echo $ROOT | wc -l ) > 1 )) && warnings+="
 ROOT has more than 1"
 	# check empty to prevent wrong partitions
 	[[ -n $( ls $BOOT | grep -v 'System Volume Information\|features' ) ]] && warnings+="
