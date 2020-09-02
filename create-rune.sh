@@ -20,11 +20,15 @@ fi
 features=$( cat /boot/features )
 
 cols=$( tput cols )
-hr() { printf "\e[36m%*s\e[m\n" $cols | tr ' ' -; }
+banner() {
+	fg='\e[0m'
+	[[ -z $2 ]] && bg='\e[44m' || bg="\e[4$2m"
+    printf "$bg%*s$fg\n" $col
+    printf "$bg%-${col}s$fg\n" "  $1"
+    printf "$bg%*s$fg\n" $col
+}
 
-hr
-echo -e "\n\e[36mInitialize Arch Linux Arm ...\e[m\n"
-hr
+banner 'Initialize Arch Linux Arm ...'
 
 pacman-key --init
 pacman-key --populate archlinuxarm
@@ -38,7 +42,6 @@ if ! grep -q '^\[RR\]' /etc/pacman.conf; then
 [RR]\
 SigLevel = Optional TrustAll\
 Server = https://rern.github.io/$arch\
-
 ' /etc/pacman.conf
 fi
 
@@ -47,7 +50,6 @@ optbox=( --colors --no-shadow --no-collapse )
 opt=( --backtitle "$title" ${optbox[@]} )
 
 dialog "${optbox[@]}" --infobox "
-
                 \Z1RuneAudio+R $version\Z0
 " 7 50
 sleep 3
@@ -56,7 +58,7 @@ sleep 3
 pacman -Sy --noconfirm --needed dialog
 
 #----------------------------------------------------------------------------
-echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
+banner 'Upgrade kernel and default packages ...'
 
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacman -Syu --noconfirm --needed
@@ -64,12 +66,12 @@ pacman -Syu --noconfirm --needed
 packages='alsa-utils cronie dosfstools hfsprogs ifplugd imagemagick inetutils jq man mpc mpd mpdscribble '
 packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm sshpass sudo udevil wget '
 
-echo -e "\n\e[36mInstall packages ...\e[m\n"
+banner 'Install packages ...'
 
 pacman -S --noconfirm --needed $packages $features
 [[ $? != 0 ]] && pacman -S --noconfirm --needed $packages $features
 
-echo -e "\n\e[36mInstall configurations and web interface ...\e[m\n"
+banner 'Get configurations and user interface ...'
 
 wget -q --show-progress https://github.com/rern/RuneOS/archive/master.zip -O config.zip
 wget -q --show-progress https://github.com/rern/RuneAudio-R$version/archive/$uibranch.zip -O ui.zip
@@ -82,7 +84,7 @@ chmod -R u+rwX,go+rX /tmp/config
 cp -r /tmp/config/* /
 
 #---------------------------------------------------------------------------------
-echo -e "\n\e[36mConfigure ...\e[m\n"
+banner 'Configure ...'
 
 # RPi 4 - rename bluetooth file
 [[ $hwcode == 11 ]] && mv /usr/lib/firmware/updates/brcm/BCM{4345C0,}.hcd
@@ -191,9 +193,7 @@ if [[ $rpi01 && $features =~ upmpdcli ]]; then
 fi
 
 dialog "${optbox[@]}" --msgbox "
-
     \Z1RuneAudio+R $version\Z0 created successfully.
-
             Press \Z1Enter\Z0 to reboot
 " 10 50
 
