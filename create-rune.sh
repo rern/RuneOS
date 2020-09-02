@@ -7,6 +7,8 @@ version=e5
 uibranch=master
 addonalias=rr$version
 
+features=$( cat /root/features )
+
 trap 'rm -f /var/lib/pacman/db.lck; exit' INT
 
 hardwarecode=$( grep Revision /proc/cpuinfo )
@@ -75,8 +77,8 @@ packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm s
 
 echo -e "\n\e[36mInstall packages ...\e[m\n"
 
-pacman -S --noconfirm --needed $packages $( cat /root/features )
-[[ $? != 0 ]] && pacmanFailed 'Packages download incomplete!'
+pacman -S --noconfirm --needed $packages $features
+[[ $? != 0 ]] && pacman -S --noconfirm --needed $packages $features
 
 echo -e "\n\e[36mInstall configurations and web interface ...\e[m\n"
 
