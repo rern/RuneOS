@@ -8,7 +8,7 @@ version=e5
 uibranch=master
 addonalias=rr$version
 
-trap 'rm -f /var/lib/pacman/db.lck; clear; exit' INT
+trap 'rm -f /var/lib/pacman/db.lck; exit' INT
 
 hardwarecode=$( grep Revision /proc/cpuinfo )
 hwcode=${hardwarecode: -3:2}
