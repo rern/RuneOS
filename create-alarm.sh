@@ -200,7 +200,7 @@ else
 fi
 
 # package mirror server
-wget -qN mirrorlist https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist \
+wget -qO mirrorlist https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist \
 	| dialog "${opt[@]}" --gauge "
 Get package mirror list ...
 " 9 50
