@@ -19,7 +19,7 @@ fi
 [[ ${hardwarecode: -4:1} == 0 ]] && rpi01=1
 features=$( cat /boot/features )
 
-cols=$( tput cols )
+col=$( tput cols )
 banner() {
 	fg='\e[0m'
 	[[ -z $2 ]] && bg='\e[44m' || bg="\e[4$2m"
