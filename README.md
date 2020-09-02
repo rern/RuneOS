@@ -16,14 +16,13 @@ Audio player and renderer for Raspberry Pi
 
 **Procedure**
 - [Prepare partitions](#prepare-partitions)
-- [Create **Arch Linux Arm**](#create-arch-linux-arm)
+- Create **Arch Linux Arm** + **RuneAudio+R**
 	- Verify partitions
 	- Optional - pre-configure Wi-Fi (For reliable connection, use wired LAN if possible)
-	- Download and verify
+	- Select features
+	- Download Arch Linux Arm
 	- Write `BOOT` and `ROOT` partitions
 	- Connect PC to Raspberry Pi
-- [Create **RuneAudio**](#create-runeaudio)
-	- Select features
 	- Upgrade kernel and default packages
 	- Install feature packages (from official and [RR](https://rern.github.io) repo) 
 	- Install web interface
