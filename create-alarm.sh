@@ -21,14 +21,15 @@ optbox=( --colors --no-shadow --no-collapse )
 opt=( --backtitle "$title" ${optbox[@]} )
 
 dialog "${optbox[@]}" --infobox "
+
                     \Z1Arch Linux Arm\Z0
                           for
                      Raspberry Pi
 " 9 58
 sleep 3
 
-BOOT=$( df | grep 'BOOT$' | awk '{print $NF}' )
-ROOT=$( df | grep 'ROOT$' | awk '{print $NF}' )
+BOOT=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
+ROOT=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
 
 # check mounts
 [[ -z $BOOT ]] && warnings+="
@@ -41,7 +42,7 @@ if [[ -n $BOOT && -n $ROOT  ]]; then
 	(( ${#ROOT[@]} > 1 )) && warnings+="
 ROOT has more than 1"
 	# check empty to prevent wrong partitions
-	[[ -n $( ls $BOOT | grep -v 'System Volume Information' ) ]] && warnings+="
+	[[ -n $( ls $BOOT | grep -v 'System Volume Information\|features' ) ]] && warnings+="
 BOOT not empty"
 	[[ -n $( ls $ROOT | grep -v 'lost+found' ) ]] && warnings+="
 ROOT not empty"
@@ -56,6 +57,7 @@ if [[ -n $warnings ]]; then
 	dialog "${opt[@]}" --msgbox "
 \Z1Warnings:\Z0
 $warnings
+
 " 0 0
 	clear && exit
 fi
@@ -64,8 +66,10 @@ fi
 getData() { # --menu <message> <lines exclude menu box> <0=autoW dialog> <0=autoH menu>
 	dialog "${opt[@]}" --yesno "
 \Z1Confirm path:\Z0
+
 BOOT: \Z1$BOOT\Z0
 ROOT: \Z1$ROOT\Z0
+
 " 0 0
 	[[ $? == 1 ]] && clear && exit
 
@@ -88,13 +92,16 @@ ROOT: \Z1$ROOT\Z0
 	
 	dialog "${opt[@]}" --yesno "
 Connect \Z1Wi-Fi\Z0 on boot?
+
 " 0 0
 	if [[ $? == 0 ]]; then
 		ssid=$( dialog "${opt[@]}" --output-fd 1 --inputbox "
 \Z1Wi-Fi\Z0 - SSID:
+
 " 0 0 $ssid )
 		password=$( dialog "${opt[@]}" --output-fd 1 --inputbox "
 \Z1Wi-Fi\Z0 - Password:
+
 " 0 0 $password )
 		wpa=$( dialog "${opt[@]}" --output-fd 1 --menu "
 \Z1Wi-Fi\Z0 -Security:
@@ -117,14 +124,111 @@ Connect \Z1Wi-Fi\Z0 on boot?
 
 	dialog "${opt[@]}" --yesno "
 \Z1Confirm data:\Z0
+
 BOOT path : \Z1$BOOT\Z0
 ROOT path : \Z1$ROOT\Z0
+
 Target    : \Z1Raspberry Pi $rpiname\Z0
+
 $wifi
+
 " 0 0
 	[[ $? == 1 ]] && getData
 }
 getData
+
+# features
+    bluez='\Z1Bluez\Z0     - Bluetooth supports'
+ chromium='\Z1Chromium\Z0  - Browser on RPi'
+  hostapd='\Z1hostapd\Z0   - RPi access point'
+      kid='\Z1Kid3\Z0      - Metadata tag editor'
+    samba='\Z1Samba\Z0     - File sharing'
+shairport='\Z1Shairport\Z0 - AirPlay renderer'
+ snapcast='\Z1Snapcast\Z0  - Synchronous multiroom player'
+  spotify='\Z1Spotifyd\Z0  - Spotify renderer'
+ upmpdcli='\Z1upmpdcli\Z0  - UPnP renderer'
+
+if [[ $rpi == 0 || $rpi == 1 ]]; then
+	chromium='Chromium  - (not for RPi Zero, 1)'
+	onoffchromium=off
+else
+	onoffchromium=on
+fi
+
+selectFeatures() { # --checklist <message> <lines exclude checklist box> <0=autoW dialog> <0=autoH checklist>
+	select=$( dialog "${opt[@]}" --output-fd 1 --checklist "
+\Z1Select features to install:
+\Z4[space] = Select / Deselect\Z0
+" 9 0 0 \
+1 "$bluez" on \
+2 "$chromium" $onoffchromium \
+3 "$hostapd" on \
+4 "$kid" on \
+5 "$samba" on \
+6 "$shairport" on \
+7 "$snapcast" on \
+8 "$spotify" on \
+9 "$upmpdcli" on )
+	
+	select=" $select "
+	features=
+	list=
+	[[ $select == *' 1 '* && ! $nowireless ]] && features+='bluez bluez-alsa-git bluez-utils ' && list+="$bluez"$'\n'
+	[[ $select == *' 2 '* && ! $rpi01 ]] && features+='chromium matchbox-window-manager upower xf86-video-fbdev xf86-video-vesa xorg-server xorg-xinit ' && list+="$chromium"$'\n'
+	[[ $select == *' 3 '* ]] && features+='dnsmasq hostapd ' && list+="$hostapd"$'\n'
+	[[ $select == *' 4 '* ]] && features+='kid3-cli ' && list+="$kid"$'\n'
+	[[ $select == *' 5 '* ]] && features+='samba ' && list+="$samba"$'\n'
+	[[ $select == *' 6 '* ]] && features+='shairport-sync ' && list+="$shairport"$'\n'
+	[[ $select == *' 7 '* ]] && features+='snapcast ' && list+="$snapcast"$'\n'
+	[[ $select == *' 8 '* ]] && features+='spotifyd ' && list+="$spotify"$'\n'
+	[[ $select == *' 9 '* ]] && features+='upmpdcli ' && list+="$upmpdcli"$'\n'
+}
+selectFeatures
+
+dialog "${opt[@]}" --yesno "
+Confirm features to install:
+
+$list
+
+" 0 0
+
+if [[ $? == 0 ]]; then
+	echo $features > $BOOT/features
+else
+	selectFeatures
+fi
+
+# package mirror server
+wget -qN mirrorlist https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist \
+	| dialog "${opt[@]}" --gauge "
+Get package mirror list ...
+" 9 50
+mirrorlist=$( grep . mirrorlist \
+	| sed -n '/### A/,$ p' \
+	| sed 's/ (not Austria\!)//' )
+readarray -t lines <<< "$mirrorlist"
+clist=( 0 'Auto - By Geo-IP' )
+url=( '' )
+i=0
+for line in "${lines[@]}"; do
+	if [[ ${line:0:4} == '### ' ]];then
+		city=
+		country=${line:4}
+	elif [[ ${line:0:3} == '## ' ]];then
+		city=${line:3}
+	else
+		[[ -n $city ]] && cc="$country - $city" || cc=$country
+		(( i++ ))
+		clist+=( $i "$cc" )
+		url+=( $( sed 's|.*//\(.*\).mirror.*|\1|' <<< $line ) )
+	fi
+done
+
+code=$( dialog "${opt[@]}" --output-fd 1 --menu "
+\Z1Package mirror server:\Z0
+" 0 0 0 \
+"${clist[@]}" )
+ccode=${url[$code]}
 
 # if already downloaded, verify latest
 if [[ -e $file ]]; then
@@ -141,6 +245,7 @@ if [[ -e $file ]]; then
 Existing is the latest:
 \Z1$file\Z0
 No download required.
+
 " 0 0
 	sleep 2
 else
@@ -158,7 +263,9 @@ Connecting ...
 		rm $file
 		dialog "${opt[@]}" --msgbox "
 \Z1Download incomplete!\Z0
+
 Run \Z1./create-alarm.sh\Z0 again.
+
 " 0 0
 		exit
 	fi
@@ -198,8 +305,8 @@ Write remaining cache to \Z1ROOT\Z0 ...
 #----------------------------------------------------------------------------
 # fstab and cmdline.txt
 PATH=$PATH:/sbin  # Debian not include /sbin in PATH
-partuuidBOOT=$( blkid | grep $( df | grep BOOT | awk '{print $1}' ) | awk '{print $NF}' | tr -d '"' )
-partuuidROOT=$( blkid | grep $( df | grep ROOT | awk '{print $1}' ) | awk '{print $NF}' | tr -d '"' )
+partuuidBOOT=$( blkid | grep $( df $BOOT | tail -1 | awk '{print $1}' ) | awk '{print $NF}' | tr -d '"' )
+partuuidROOT=$( blkid | grep $( df $ROOT | tail -1 | awk '{print $1}' ) | awk '{print $NF}' | tr -d '"' )
 echo "$partuuidBOOT  /boot  vfat  defaults  0  0
 $partuuidROOT  /      ext4  defaults  0  0" > $ROOT/etc/fstab
 [[ $rpi > 1 ]] && isolcpus=' isolcpus=3'
@@ -275,7 +382,11 @@ fi
 wget -qN https://github.com/rern/RuneOS/raw/master/create-rune.sh -P $ROOT/root
 chmod 755 $ROOT/root/create-rune.sh
 
+# packages mirror
+[[ -n $ccode ]] && sed -i '/^Server/ s|//.*mirror|//'$ccode'.mirror|' $ROOT/etc/pacman.d/mirrorlist
+
 dialog "${optbox[@]}" --msgbox "
+
                    Arch Linux Arm
                          for
                    \Z1Raspberry Pi $rpiname\Z0
@@ -290,11 +401,14 @@ umount -l $ROOT
 [[ $rpi == 0 ]] && wait=60 || wait=30
 dialog "${optbox[@]}" --msgbox "
 \Z1Finish.\Z0
+
 \Z1BOOT\Z0 and \Z1ROOT\Z0 were unmounted.
+
 1. Move micro SD card$usb to RPi
 2. Power on
 3. \Z1Wait $wait seconds\Z0
 4. Press \Z1Enter\Z0 to continue
+
 " 14 55
 
 #----------------------------------------------------------------------------
@@ -307,13 +421,16 @@ subip=${routerip%.*}.
 scanIP() {
 	dialog "${opt[@]}" --infobox "
 Scan IP address ...
+
 " 5 50
 	nmap=$( nmap -sn $subip* | grep -v 'Starting\|Host is up\|Nmap done' | head -n -1 | tac | sed 's/$/\\n/; s/Nmap.*for/IP :/; s/MAC Address/\\nMAC/' | tr -d '\n' )
 	dialog "${opt[@]}" --msgbox "
 \Z1Find IP address of Raspberry Pi:\Z0
 (Raspberri Pi 4 may listed as Unknown)
 \Z4[arrowdown] = scrolldown\Z0
+
 $nmap
+
 " 50 100
 
 	dialog "${opt[@]}" --ok-label Yes --extra-button --extra-label Rescan --cancel-label No --yesno "\n
@@ -325,6 +442,7 @@ $nmap
 	elif [[ $ans == 1 && -n $rescan ]]; then
 		dialog "${opt[@]}" --msgbox "
 Try starting over again.
+
 " 0 0
 		clear && exit
 	fi
@@ -334,6 +452,7 @@ scanIP
 if [[ $ans == 1 ]]; then
 	dialog "${opt[@]}" --yesno "
 \Z1Connect with Wi-Fi?\Z0
+
 " 0 0
 	if [[ $? == 0 ]]; then
 		rescan=1
@@ -343,6 +462,7 @@ if [[ $ans == 1 ]]; then
 - Power on
 - Wait 30 seconds
 - Press Enter to rescan
+
 " 0 0
 		scanIP
 	else
@@ -351,6 +471,7 @@ if [[ $ans == 1 ]]; then
 - Connect a monitor/TV
 - Power on and observe errors
 - Try starting over again
+
 " 0 0
 		clear && exit
 	fi
@@ -359,12 +480,11 @@ fi
 # connect RPi
 rpiip=$( dialog "${opt[@]}" --output-fd 1 --cancel-label Rescan --inputbox "
 \Z1Raspberry Pi IP:\Z0
+
 " 0 0 $subip )
 [[ $? == 1 ]] && scanIP
 
 sed -i "/$rpiip/ d" ~/.ssh/known_hosts
-
-rm $0
 
 clear
 
