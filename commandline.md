@@ -17,5 +17,5 @@ mount /dev/sdX1 /mnt/BOOT
 mount /dev/sdX2 /mnt/ROOT
 
 # create arch linux arm
-wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/usr/local/bin/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
+wget -qN https://github.com/rern/RuneOS/raw/master/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
 ```
