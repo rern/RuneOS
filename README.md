@@ -127,7 +127,7 @@ Audio player and renderer for Raspberry Pi
 ```sh
 su
 ```
-- On Manjaro only - update package list
+- (Manjaro only) - update package mirror list
 ```sh
 pacman-mirrors -c COUNRTY
 ```
