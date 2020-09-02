@@ -50,8 +50,10 @@ optbox=( --colors --no-shadow --no-collapse )
 opt=( --backtitle "$title" ${optbox[@]} )
 
 dialog "${optbox[@]}" --infobox "
-                \Z1RuneAudio+R $version\Z0
-" 7 50
+
+
+                    \Z1RuneAudio+R $version\Z0
+" 9 58
 sleep 3
 
 # dialog package
@@ -193,8 +195,10 @@ if [[ $rpi01 && $features =~ upmpdcli ]]; then
 fi
 
 dialog "${optbox[@]}" --msgbox "
-    \Z1RuneAudio+R $version\Z0 created successfully.
-            Press \Z1Enter\Z0 to reboot
-" 10 50
+
+        \Z1RuneAudio+R $version\Z0 created successfully.
+		
+                Press \Z1Enter\Z0 to reboot
+" 9 58
 
 shutdown -r now
