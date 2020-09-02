@@ -57,20 +57,10 @@ sleep 3
 pacman -Sy --noconfirm --needed dialog
 
 #----------------------------------------------------------------------------
-pacmanFailed() {
-	dialog "${opt[@]}" --msgbox "
-$1
-
-Run \Z1create-rune.sh\Z0 again.
-
-" 0 0
-	exit
-}
-
 echo -e "\n\e[36mSystem-wide kernel and packages upgrade ...\e[m\n"
 
 pacman -Syu --noconfirm --needed
-[[ $? != 0 ]] && pacmanFailed 'System-wide upgrades download incomplete!'
+[[ $? != 0 ]] && pacman -Syu --noconfirm --needed
 
 packages='alsa-utils cronie dosfstools hfsprogs ifplugd imagemagick inetutils jq man mpc mpd mpdscribble '
 packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm sshpass sudo udevil wget '
