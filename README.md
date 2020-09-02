@@ -134,7 +134,7 @@ pacman-mirrors -c COUNRTY
 - Create script
 ```sh
 # ssh - no pipe | sh
-wget -qN https://github.com/rern/RuneOS/raw/master/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
+wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
 ```
 - Errors or too slow download: press `Ctrl+C` and run `./create-alarm.sh` again (while in `Create Arch Linux Arm` mode only)
 
