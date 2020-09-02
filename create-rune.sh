@@ -7,8 +7,6 @@ version=e5
 uibranch=master
 addonalias=rr$version
 
-features=$( cat /root/features )
-
 trap 'rm -f /var/lib/pacman/db.lck; exit' INT
 
 hardwarecode=$( grep Revision /proc/cpuinfo )
@@ -19,6 +17,7 @@ if [[ $hwcode =~ ^(00|01|02|03|04|09)$ ]]; then
 	sed -i 's/bluez bluez-alsa-git bluez-utils //' /boot/features
 fi
 [[ ${hardwarecode: -4:1} == 0 ]] && rpi01=1
+features=$( cat /boot/features )
 
 cols=$( tput cols )
 hr() { printf "\e[36m%*s\e[m\n" $cols | tr ' ' -; }
