@@ -120,12 +120,11 @@ Audio player and renderer for Raspberry Pi
 
 ---
 	
-### Create
-**Arch Linux Arm**
+### Create Arch Linux Arm + RuneAudio+R
 - Open **Files** app (**File Manager** on Manjaro)
 - Click `BOOT` and `ROOT` to mount
 - Note each path in location bar or hover mouse over `BOOT` and `ROOT` for confirmation
-- switch user to root
+- Switch user to root
 ```sh
 su
 ```
@@ -133,15 +132,12 @@ su
 ```sh
 pacman-mirrors -c COUNRTY
 ```
-- create script
+- Create script
 ```sh
 # ssh - no pipe | sh
 wget -qN https://github.com/rern/RuneOS/raw/master/create-alarm.sh; chmod +x create-alarm.sh; ./create-alarm.sh
 ```
-- Errors or too slow download: press `Ctrl+C` and run `./create-alarm.sh` again
-
-**RuneAudio+R**
-- Errors or too slow download: press `Ctrl+C` and run `./create-rune.sh`
+- Errors or too slow download: press `Ctrl+C` and run `./create-alarm.sh` again (while in `Create Arch Linux Arm` mode only)
 
 ---
 
