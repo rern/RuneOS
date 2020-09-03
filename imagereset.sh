@@ -9,6 +9,7 @@ fi
 
 col=$( tput cols )
 banner() {
+	echo
 	def='\e[0m'
 	bg='\e[44m'
     printf "$bg%*s$def\n" $col
@@ -34,7 +35,7 @@ select=" $select "
 if [[ $select == *' 1 '* ]]; then
 	banner 'Reset MPD database ...'
 	systemctl stop mpd
-	rm /srv/http/data/mpd/*
+	rm -f /srv/http/data/mpd/*
 fi
 if [[ $select == *' 2 '* ]]; then
 	banner 'Reset user data directory ...'
@@ -72,7 +73,7 @@ if [[ $select == *' 2 '* ]]; then
 fi
 if [[ $select == *' 3 '* ]]; then
 	banner 'Clear package cache ...'
-	rm /var/cache/pacman/pkg/*
+	rm -f /var/cache/pacman/pkg/*
 fi
 if [[ $select == *' 4 '* ]]; then
 	banner 'Clear system log ...'
