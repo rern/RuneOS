@@ -1,5 +1,14 @@
 #!/bin/bash
 
+col=$( tput cols )
+banner() {
+	fg='\e[0m'
+	[[ -z $2 ]] && bg='\e[44m' || bg="\e[4$2m"
+    printf "$bg%*s$fg\n" $col
+    printf "$bg%-${col}s$fg\n" "  $1"
+    printf "$bg%*s$fg\n" $col
+}
+
 dirboot=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
 dirroot=$( mount | awk '/dev\/sd.*\/ROOT/ {print $3}' )
 
@@ -47,6 +56,8 @@ $( mount | awk '/dev\/sd.*\/ROOT/ {print "\\Z1"$1"\\Z0 "$2" \\Z1"$3"\\Z0"}' )\n
 
 clear
 
+banner 'Shrink ROOT partition ...'
+
 part=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1}' )
 dev=${part:0:-1}
 partnum=${part: -1}
@@ -85,16 +96,13 @@ Yes
 quit
 EOF
 
-echo "
-------------------------------------------
- Compress BOOT and ROOT to Image file ...
-------------------------------------------
-"
+banner 'Compress BOOT and ROOT to Image file ...'
 
 dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
 
 byte=$( stat --printf="%s" RuneAudio+R_$version-RPi$model.img.xz )
 gb=$( awk "BEGIN { printf \"%.1f\n\", $byte / 1024 / 1024 }" )
+
 dialog --colors --msgbox "\n
 Image file created:\n
 \n
