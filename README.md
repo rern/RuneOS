@@ -165,7 +165,7 @@ wget -qO create-alarm.sh https://github.com/rern/RuneOS/raw/master/create-alarm.
 - Reset for image
 ```sh
 ssh root@<RPI IP>
-wget -qO - https://github.com/rern/RuneOS/raw/master/resetforimage.sh | sh
+wget -qO - https://github.com/rern/RuneOS/raw/master/imagereset.sh | sh
 ```
 - Shutdown
 - Move micro SD card to Lunux
