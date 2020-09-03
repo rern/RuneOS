@@ -96,7 +96,7 @@ Yes
 quit
 EOF
 
-banner 'Compress BOOT and ROOT to Image file ...'
+banner 'Create compressed image file ...'
 
 dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
 
