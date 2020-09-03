@@ -170,6 +170,7 @@ wget -qO - https://github.com/rern/RuneOS/raw/master/imagereset.sh | sh
 - Shutdown
 - Move micro SD card to Lunux
 - Click `BOOT` and `ROOT` to mount
+- Create compressed image file
 ```sh
 wget -qO - https://github.com/rern/RuneOS/raw/master/imagefile.sh | sh
 ```
