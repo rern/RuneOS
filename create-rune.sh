@@ -22,7 +22,7 @@ features=$( cat /boot/features )
 col=$( tput cols )
 banner() {
 	fg='\e[0m'
-	[[ -z $2 ]] && bg='\e[44m' || bg="\e[4$2m"
+	bg='\e[44m'
     printf "$bg%*s$fg\n" $col
     printf "$bg%-${col}s$fg\n" "  $1"
     printf "$bg%*s$fg\n" $col
