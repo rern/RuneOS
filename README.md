@@ -15,9 +15,9 @@ Audio player and renderer for Raspberry Pi
 - More details: [Forum](https://www.runeaudio.com/forum/runeaudio-r-e3-t7014.html)
 
 **Procedure**
-- Prepare partitions
+- [Prepare partitions](#prepare-partitions)
 	- Create `BOOT` and `ROOT` partitions
-- Create **Arch Linux Arm** + **RuneAudio+R**
+- [Create Arch Linux Arm + RuneAudio+R](#create-arch-linux-arm--runeaudior)
 	- Optional - Pre-configure Wi-Fi (For reliable connection, use wired LAN if possible)
 	- Select features
 	- Download Arch Linux Arm
@@ -28,7 +28,7 @@ Audio player and renderer for Raspberry Pi
 	- Install web user interface
 	- Configure
 	- Set defaults
-- Optionals
+- [Optionals](#optionals)
 	- Setup Wi-Fi auto-connect
 	- Create image file
 
