@@ -2,6 +2,7 @@
 
 col=$( tput cols )
 banner() {
+	echo
 	def='\e[0m'
 	bg='\e[44m'
     printf "$bg%*s$def\n" $col
