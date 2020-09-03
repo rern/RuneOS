@@ -7,6 +7,15 @@ if [[ ! -e /srv/http/data/addons ]]; then
 	exit
 fi
 
+col=$( tput cols )
+banner() {
+	fg='\e[0m'
+	[[ -z $2 ]] && bg='\e[44m' || bg="\e[4$2m"
+    printf "$bg%*s$fg\n" $col
+    printf "$bg%-${col}s$fg\n" "  $1"
+    printf "$bg%*s$fg\n" $col
+}
+
 select=$( dialog --colors \
 	   --output-fd 1 \
 	   --checklist '\n\Z1Select features:\n
@@ -23,11 +32,13 @@ clear
 select=" $select "
 
 if [[ $select == *' 1 '* ]]; then
+	banner 'Reset MPD database ...'
 	systemctl stop mpd
 	rm -f /srv/http/data/mpd/*
 fi
 if [[ $select == *' 2 '* ]]; then
-	rm -rf /root/.cache/* /srv/http/data/tmp/*
+	banner 'Reset user data directory ...'
+	rm -rf /root/.cache/* /srv/http/data/tmp/* /mnt/MPD/USB/*/ /mnt/MPD/NAS/*/
 	rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/* /srv/http/data/system/gpio
 	wget -qO - https://github.com/rern/RuneOS/raw/master/radioparadise.tar.xz | bsdtar xvf - -C /
 	echo '{
@@ -60,13 +71,16 @@ if [[ $select == *' 2 '* ]]; then
 	chown http:http /srv/http/data/system/gpio.json
 fi
 if [[ $select == *' 3 '* ]]; then
+	banner 'Clear package cache ...'
 	rm -f /var/cache/pacman/pkg/*
 fi
 if [[ $select == *' 4 '* ]]; then
+	banner 'Clear system log ...'
 	journalctl --rotate
 	journalctl --vacuum-time=1s
 fi
 if [[ $select == *' 5 '* ]]; then
+	banner 'Clear Wi-Fi connection ...'
 	systemctl disable netctl-auto@wlan0
 	rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 fi
