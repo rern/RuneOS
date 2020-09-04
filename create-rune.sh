@@ -86,6 +86,10 @@ chmod -R go-wx /tmp/config
 chmod -R u+rwX,go+rX /tmp/config
 cp -r /tmp/config/* /
 
+if [[ -n $rpi01 ]]; then
+	sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
+	rm /etc/systems/system/{shairport-sync,spotifyd,upmpdcli}.service
+fi
 #---------------------------------------------------------------------------------
 banner 'Configure ...'
 
@@ -128,7 +132,6 @@ fi
 [[ ! -e /usr/bin/hostapd ]] && rm -rf /etc/{hostapd,dnsmasq.conf}
 
 # mpd
-[[ $rpi01 ]] && sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
 cp /usr/share/mpdscribble/mpdscribble.conf.example /etc/mpdscribble.conf
 
 # disable again after upgrade
@@ -190,7 +193,7 @@ rm /boot/features /etc/motd /root/create-rune.sh /var/cache/pacman/pkg/*
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
-if [[ $rpi01 && $features =~ upmpdcli ]]; then
+if [[ -n $rpi01 && $features =~ upmpdcli ]]; then
 	echo Wait for upmpdcli to finish RSA key ...
 	sleep 30
 fi
