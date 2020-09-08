@@ -32,14 +32,17 @@ clear
 
 select=" $select "
 
+systemctl stop mpd
+
 if [[ $select == *' 1 '* ]]; then
 	banner 'Reset MPD database ...'
-	systemctl stop mpd
 	rm -f /srv/http/data/mpd/*
 fi
 if [[ $select == *' 2 '* ]]; then
 	banner 'Reset user data directory ...'
-	rm -rf /root/.cache/* /srv/http/data/tmp/* /mnt/MPD/USB/*/ /mnt/MPD/NAS/*/
+	mount | grep /mnt/MPD/NAS && umount -l "/mnt/MPD/NAS/"*
+	mount | grep /mnt/MPD/USB && udevil umount -l "/mnt/MPD/USB/"*
+	rm -rf /root/.cache/* /srv/http/data/tmp/*
 	rm -f /srv/http/data/{bookmarks,coverarts,lyrics,mpd,playlists,webradios}/* /srv/http/data/system/gpio
 	wget -qO - https://github.com/rern/RuneOS/raw/master/radioparadise.tar.xz | bsdtar xvf - -C /
 	echo '{
