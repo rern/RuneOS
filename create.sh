@@ -3,12 +3,16 @@
 # for already partitioned only
 
 col=$( tput cols )
-echo
-def='\e[0m'
-bg='\e[44m'
-printf "$bg%*s$def\n" $col
-printf "$bg%-${col}s$def\n" '  Device list'
-printf "$bg%*s$def\n" $col
+banner() {
+	echo
+	def='\e[0m'
+	bg='\e[44m'
+    printf "$bg%*s$def\n" $col
+    printf "$bg%-${col}s$def\n" "  $1"
+    printf "$bg%*s$def\n" $col
+}
+
+banner 'Device list'
 
 fdisk -l | grep 'Disk /dev' | cut -d, -f1  | cut -d' ' -f2-
 
@@ -26,6 +30,8 @@ if [[ $( df -Th /mnt/BOOT | tail -1 | awk '{print $2$3}' ) != vfat100M ]]; then
         echo ${dev}1 not BOOT partition
         exit
 fi
+
+banner 'Format partitions'
 
 umount -l ${dev}*
 mkfs -t vfat ${dev}1
