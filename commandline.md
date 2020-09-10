@@ -1,22 +1,21 @@
+### Existing partitions
 ```sh
-# find sd card
-fdisk -l | grep 'Disk /dev'
+su
 
-sdx=sdX
+setdev() {
+    fdisk -l | grep 'Disk /dev' | cut -d, -f1
+    read -p 'Select SD card: ' x
+    dev=/dev/sd$x
+}
 
-# existing partition
-mkfs -t vfat /dev/${sdx}1
-mkfs -t ext4 /dev/${sdx}2
+mkfs -t vfat ${dev}1
+mkfs -t ext4 ${dev}2
+fatlabel ${dev}1 BOOT
+e2label ${dev}2 ROOT
 
-# set label
-fatlabel /dev/${sdx}1 BOOT
-e2label /dev/${sdx}2 ROOT
-
-# mount
 mkdir -p /mnt/{BOOT,ROOT}
-mount /dev/${sdx}1 /mnt/BOOT
-mount /dev/${sdx}2 /mnt/ROOT
+mount ${dev}1 /mnt/BOOT
+mount ${dev}2 /mnt/ROOT
 
-# create arch linux arm
 bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create-alarm.sh )
 ```
