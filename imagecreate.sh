@@ -67,7 +67,7 @@ banner 'Shrink ROOT partition ...'
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
 used=$( df -k | grep $part | awk '{print $3}' )
 
-umount -l -v  $dirboot $dirroot
+umount -l -v ${dev}*
 e2fsck -fy $part
 
 partinfo=$( tune2fs -l $part )
