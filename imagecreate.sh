@@ -18,7 +18,6 @@ echo
 read -p 'Select SD card: /dev/sd' x
 dev=/dev/sd$x
 part=${dev}2
-partnum=2
 dirboot=/mnt/BOOT
 dirroot=/mnt/ROOT
 
@@ -92,7 +91,7 @@ parted $dev ---pretend-input-tty <<EOF
 unit
 s
 resizepart
-$partnum
+2
 $endsector
 Yes
 quit
