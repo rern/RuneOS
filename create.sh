@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Existing partitions
+# for already partitioned only
 echo
 echo Device list:
 echo --------------------------------------
