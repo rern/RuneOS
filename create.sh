@@ -4,7 +4,7 @@
 echo
 echo Device list:
 echo --------------------------------------
-fdisk -l | grep 'Disk /dev' | cut -d, -f1
+fdisk -l | grep 'Disk /dev' | cut -d, -f1  | cut -d' ' -f2-
 echo --------------------------------------
 echo
 read -p 'Select SD card: /dev/sd' x
