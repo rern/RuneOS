@@ -14,8 +14,8 @@ mkdir -p /mnt/{BOOT,ROOT}
 mount ${dev}1 /mnt/BOOT
 mount ${dev}2 /mnt/ROOT
 
-if [[ $( df --output=fstype,size ${dev}1 | tail -1 | tr -d ' ' ) != vfat100M ]]; then
-	echo 'BOOT not "vfat  100M"'
+if [[ $( df -Th ${dev}1 | tail -1 | awk '{print $2$3}' ) != vfat100M ]]; then
+	echo ${dev}1 not BOOT partition
 	exit
 fi
 
