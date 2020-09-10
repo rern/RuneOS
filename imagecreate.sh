@@ -27,15 +27,16 @@ $notmounted not mounted.\n
 	exit
 fi
 
+version=$( cat $dirroot/srv/http/data/system/version )
+
 dialog --colors --no-shadow --infobox "\n
 \n
                   \Z1Create Image File\Z0\n
 \n
-                     RuneAudio+R
+                     RuneAudio+R $version
 " 9 58
 sleep 3
 
-version=$( cat $dirroot/srv/http/data/system/version )
 configfile=$dirboot/config.txt
 if ! grep -q force_turbo $configfile; then
 	model=4
