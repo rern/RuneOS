@@ -20,6 +20,8 @@ read -p 'Select SD card: /dev/sd' -n1 x
 
 dev=/dev/sd$x
 
+banner 'Target SD card'
+fdisk -l $dev | grep /dev
 echo
 read -p "Confirm SD card: $dev"$'\n[y/n]' -n1 yn
 [[ $yn != y ]] && exit
