@@ -34,7 +34,7 @@ dialog --colors --no-shadow --infobox "\n
 \n
                   \Z1Create Image File\Z0\n
 \n
-                     RuneAudio+R $version
+                    RuneAudio+R $version
 " 9 58
 sleep 3
 
