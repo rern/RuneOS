@@ -1,8 +1,12 @@
 #!/bin/bash
 
 # Existing partitions
-
+echo
+echo Device list:
+echo --------------------------------------
 fdisk -l | grep 'Disk /dev' | cut -d, -f1
+echo --------------------------------------
+echo
 read -p 'Select SD card: ' x
 dev=/dev/sd$x
 
