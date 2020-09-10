@@ -3,16 +3,12 @@
 # for already partitioned only
 
 col=$( tput cols )
-banner() {
-	echo
-	def='\e[0m'
-	bg='\e[44m'
-    printf "$bg%*s$def\n" $col
-    printf "$bg%-${col}s$def\n" "  $1"
-    printf "$bg%*s$def\n" $col
-}
-
-banner 'Device list'
+echo
+def='\e[0m'
+bg='\e[44m'
+printf "$bg%*s$def\n" $col
+printf "$bg%-${col}s$def\n" '  Device list'
+printf "$bg%*s$def\n" $col
 
 fdisk -l | grep 'Disk /dev' | cut -d, -f1  | cut -d' ' -f2-
 
