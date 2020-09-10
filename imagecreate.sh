@@ -22,7 +22,7 @@ dirboot=/mnt/BOOT
 dirroot=/mnt/ROOT
 
 mount ${dev}1 $dirboot
-mount ${dev}2 $dirroot
+mount $part $dirroot
 
 if [[ $( df -Th $dirboot | tail -1 | awk '{print $2$3}' ) != vfat100M ]]; then
         echo ${dev}1 not BOOT partition
