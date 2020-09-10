@@ -172,5 +172,5 @@ bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/imagereset.sh )
 - Click `BOOT` and `ROOT` to mount
 - Create compressed image file
 ```sh
-bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/imagefile.sh )
+bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/imagecreate.sh )
 ```
