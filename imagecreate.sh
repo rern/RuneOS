@@ -10,21 +10,25 @@ banner() {
     printf "$bg%*s$def\n" $col
 }
 
-dirboot=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
-dirroot=$( mount | awk '/dev\/sd.*\/ROOT/ {print $3}' )
+banner 'Device list'
 
-[[ -z $dirboot ]] && notmounted+='\Z1BOOT\Z0'
-[[ -n $notmounted ]] && notmounted+=' and '
-[[ -z $dirroot ]] && notmounted+='\Z1ROOT\Z0'
+fdisk -l | grep 'Disk /dev' | cut -d, -f1  | cut -d' ' -f2-
 
-if [[ -n $notmounted ]]; then
-	dialog --colors --msgbox "\n
-\Z1Warning:\Z0\n
-\n
-$notmounted not mounted.\n
-\n
-" 0 0
-	exit
+echo
+read -p 'Select SD card: /dev/sd' x
+dev=/dev/sd$x
+part=${dev}2
+partnum=2
+dirboot=/mnt/BOOT
+dirroot=/mnt/ROOT
+
+mount ${dev}1 $dirboot
+mount ${dev}2 $dirroot
+
+if [[ $( df -Th $dirboot | tail -1 | awk '{print $2$3}' ) != vfat100M ]]; then
+        echo ${dev}1 not BOOT partition
+		umount -l ${dev}*
+        exit
 fi
 
 version=$( cat $dirroot/srv/http/data/system/version )
@@ -59,10 +63,6 @@ $( mount | awk '/dev\/sd.*\/ROOT/ {print "\\Z1"$1"\\Z0 "$2" \\Z1"$3"\\Z0"}' )\n
 clear
 
 banner 'Shrink ROOT partition ...'
-
-part=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1}' )
-dev=${part:0:-1}
-partnum=${part: -1}
 
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
 used=$( df -k | grep $part | awk '{print $3}' )
