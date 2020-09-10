@@ -15,10 +15,14 @@ banner 'Device list'
 fdisk -l | grep 'Disk /dev' | cut -d, -f1  | cut -d' ' -f2-
 
 echo
-read -p 'Select SD card: /dev/sd' x
+read -p 'Select SD card: /dev/sd' -n1 x
 [[ -z $x ]] && echo No device selected. && exit
 
 dev=/dev/sd$x
+
+echo
+read -p "Confirm SD card: $dev"$'\n[y/n]' -n1 yn
+[[ $yn != y ]] && exit
 
 # 1. create partitions: gparted
 # 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > runepartitions
