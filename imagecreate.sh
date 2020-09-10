@@ -12,6 +12,8 @@ fdisk -l | grep 'Disk /dev' | cut -d, -f1  | cut -d' ' -f2-
 
 echo
 read -p 'Select SD card: /dev/sd' x
+[[ -z $x ]] && echo No device selected. && exit
+
 dev=/dev/sd$x
 part=${dev}2
 dirboot=/mnt/BOOT
