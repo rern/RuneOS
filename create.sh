@@ -22,6 +22,9 @@ read -p 'Select SD card: /dev/sd' x
 
 dev=/dev/sd$x
 
+# set partitions (dump partitions data: sfdisk -d $dev > runepartitions)
+sfdisk $dev < runepartitions
+
 mkdir -p /mnt/{BOOT,ROOT}
 mount ${dev}1 /mnt/BOOT
 mount ${dev}2 /mnt/ROOT
