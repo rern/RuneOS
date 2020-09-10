@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# for already partitioned only
-
 col=$( tput cols )
 banner() {
 	echo
@@ -22,26 +20,13 @@ read -p 'Select SD card: /dev/sd' x
 
 dev=/dev/sd$x
 
-# set partitions (dump partitions data: sfdisk -d $dev > runepartitions)
+# 1. create partitions: gparted
+# 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > runepartitions
+# setup partitions
+umount -l ${dev}*
 sfdisk $dev < runepartitions
 
 mkdir -p /mnt/{BOOT,ROOT}
-mount ${dev}1 /mnt/BOOT
-mount ${dev}2 /mnt/ROOT
-
-if [[ $( df -Th /mnt/BOOT | tail -1 | awk '{print $2$3}' ) != vfat100M ]]; then
-        echo ${dev}1 not BOOT partition
-        exit
-fi
-
-banner 'Format partitions'
-
-umount -l ${dev}*
-mkfs -t vfat ${dev}1
-mkfs -t ext4 ${dev}2
-fatlabel ${dev}1 BOOT
-e2label ${dev}2 ROOT
-
 mount ${dev}1 /mnt/BOOT
 mount ${dev}2 /mnt/ROOT
 
