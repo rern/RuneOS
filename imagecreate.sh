@@ -17,7 +17,7 @@ dirroot=$( mount | awk '/dev\/sd.*\/ROOT/ {print $3}' )
 [[ -n $notmounted ]] && notmounted+=' and '
 [[ -z $dirroot ]] && notmounted+='\Z1ROOT\Z0'
 
-if [[ -n $notmount ]]; then
+if [[ -n $notmounted ]]; then
 	dialog --colors --msgbox "\n
 \Z1Warning:\Z0\n
 \n
