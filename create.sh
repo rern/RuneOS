@@ -15,8 +15,8 @@ mount ${dev}1 /mnt/BOOT
 mount ${dev}2 /mnt/ROOT
 
 if [[ $( df -Th /mnt/BOOT | tail -1 | awk '{print $2$3}' ) != vfat100M ]]; then
-	echo ${dev}1 not BOOT partition
-	exit
+        echo ${dev}1 not BOOT partition
+        exit
 fi
 
 umount -l ${dev}*
