@@ -7,7 +7,7 @@ echo --------------------------------------
 fdisk -l | grep 'Disk /dev' | cut -d, -f1
 echo --------------------------------------
 echo
-read -p 'Select SD card: ' x
+read -p 'Select SD card: /dev/sd' x
 dev=/dev/sd$x
 
 mkdir -p /mnt/{BOOT,ROOT}
