@@ -43,7 +43,7 @@ BOOT has more than 1"
 	(( $( echo "$ROOT" | wc -l ) > 1 )) && warnings+="
 ROOT has more than 1"
 	# check empty to prevent wrong partitions
-	[[ -n $( ls $BOOT | grep -v 'System Volume Information\|features' ) ]] && warnings+="
+	[[ -n $( ls $BOOT | grep -v 'System Volume Information\|lost+found\|features' ) ]] && warnings+="
 BOOT not empty"
 	[[ -n $( ls $ROOT | grep -v 'lost+found' ) ]] && warnings+="
 ROOT not empty"
