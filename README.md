@@ -31,7 +31,7 @@ Audio player and renderer for Raspberry Pi
 - [Optionals](#optionals)
 	- Setup Wi-Fi auto-connect
 	- Create image file
-- Expert mode (Micro SD card only)
+- Expert mode (1 command line - micro SD card only)
 ```sh
 bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create.sh )
 ```
