@@ -54,6 +54,8 @@ $detail
 umount -l ${dev}*
 sfdisk $dev < runepartitions
 
+sleep 3
+
 mkdir -p /mnt/{BOOT,ROOT}
 mount ${dev}1 /mnt/BOOT
 mount ${dev}2 /mnt/ROOT
