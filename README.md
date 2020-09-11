@@ -49,16 +49,16 @@ bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create.sh )
 	- Wired LAN
 	- Optional: Wi-Fi (if necessary)
 - Media:
-	- Option 1: Micro SD card: 4GB+ for `BOOT` + `ROOT` partitions
+	- Option 1: Micro SD card: 8GB+ for `BOOT` + `ROOT` partitions
 	- Option 2: Micro SD card + USB drive (`ROOT` partition on USB drive)
 		- Micro SD card: 100MB+ for `BOOT` partition only
-		- USB drive: 4GB+ for `ROOT` partition (or USB hard drive with existing data)
+		- USB drive: 8GB+ for `ROOT` partition (or USB hard drive with existing data)
 	- Option 3: USB drive only - no SD card (Boot from USB drive)
 		- Raspberry Pi 3 and 2 v1.2 only (4 not yet supported)
-		- USB drive: 4GB+ for `BOOT` + `ROOT` partition
+		- USB drive: 8GB+ for `BOOT` + `ROOT` partition
 	- Note for USB drive:
 		- Suitable for hard drives or faster-than-SD-card thumb drives.
-		- It takes less than 20 minutes for the whole process with a decent download speed.
+		- It takes less than 15 minutes for the whole process with a decent download speed.
 		- Boot from USB drive:
 			- Suitable for solid state drives.
 			- Normal hard drive needs external power, e.g., powered USB hub, to have it spin up 5+ seconds before boot.
