@@ -67,6 +67,9 @@ banner 'Shrink ROOT partition ...'
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
 used=$( df -k | grep $part | awk '{print $3}' )
 
+# auto expand root partition
+wget https://github.com/rern/RuneOS/raw/master/x.sh -O /boot/x.sh
+
 umount -l -v ${dev}*
 e2fsck -fy $part
 
