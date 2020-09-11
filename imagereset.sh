@@ -95,7 +95,7 @@ fsck.fat -traw /dev/mmcblk0p1
 rm -f /boot/FSCK*
 
 dialog --colors --yesno "\n
-\Z1Finish.\Z0\n
+\Z1Finish\Z0\n
 \n           Shutdown Raspberry Pi?\n
 " 9 50
 
