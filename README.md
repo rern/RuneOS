@@ -31,6 +31,10 @@ Audio player and renderer for Raspberry Pi
 - [Optionals](#optionals)
 	- Setup Wi-Fi auto-connect
 	- Create image file
+- Expert mode (Micro SD card only)
+```sh
+bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create.sh )
+```
 
 ![dialog1](https://github.com/rern/_assets/raw/master/RuneOS/select-hw.jpg)
 ![dialog2](https://github.com/rern/_assets/raw/master/RuneOS/select-features.jpg)  
@@ -68,10 +72,7 @@ Audio player and renderer for Raspberry Pi
 	- Micro SD card only
 	- Micro SD card + USB drive
 	- USB drive only
-- OR Expert mode (Micro SD card only)
-```sh
-bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create.sh )
-```
+	
 **Alternative 1: Micro SD card only**
 - `Unmount` > `Delete` all partitions (make sure it's the micro SD card)
 - Create partitions:
