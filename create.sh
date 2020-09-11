@@ -58,12 +58,11 @@ Make sure this is the target SD card.
 
 [[ $? != 0 ]] && exit
 
-# 1. create partitions: gparted
+# 1. create default partitions: gparted
 # 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > alarm.sfdisk
-wget -q https://github.com/rern/RuneOS/raw/master/alarm.sfdisk -O alarm.sfdisk
 # setup partitions
 umount -l ${dev}*
-sfdisk $dev < alarm.sfdisk
+sfdisk $dev <( wget -qO - https://github.com/rern/RuneOS/raw/master/alarm.sfdisk )
 
 devboot=${dev}1
 devroot=${dev}2
