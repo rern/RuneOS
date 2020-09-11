@@ -94,8 +94,6 @@ wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist
 fsck.fat -traw /dev/mmcblk0p1
 rm -f /boot/FSCK*
 
-wget https://github.com/rern/RuneOS/raw/master/x.sh -O /boot/x.sh
-
 dialog --colors --yesno "\n
 \Z1Finish.\Z0\n
 \n           Shutdown Raspberry Pi?\n
