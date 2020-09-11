@@ -83,7 +83,7 @@ clear
 banner 'Shrink ROOT partition ...'
 
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
-used=$( df -k | grep $part | awk '{print $3}' )
+used=$( df -k 2> /dev/null | grep $part | awk '{print $3}' )
 
 umount -l -v ${dev}*
 e2fsck -fy $part
