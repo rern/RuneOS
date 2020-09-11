@@ -193,6 +193,11 @@ rm /boot/features /etc/motd /root/create-rune.sh /var/cache/pacman/pkg/*
 # usb boot - disable sd card polling
 ! df | grep -q /dev/mmcblk0 && echo 'dtoverlay=sdtweak,poll_once' >> /boot/config.txt
 
+# expand partition
+if (( $( sfdisk -F /dev/mmcblk0 | head -n1 | awk '{print $6}' ) )); then
+	wget https://github.com/rern/RuneOS/raw/master/x.sh -O /boot/x.sh
+fi
+
 if [[ -n $rpi01 && $features =~ upmpdcli ]]; then
 	echo Wait for upmpdcli to finish RSA key ...
 	sleep 30
