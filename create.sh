@@ -33,6 +33,14 @@ dialog "${optbox[@]}" --msgbox "
 " 0 0
 
 sd=$( dmesg -T | tail | grep ' sd .*GB' )
+if [[ -z $ds ]]; then
+	dialog "${optbox[@]}" --infobox "
+\Z1No micro SD card found.\Z0
+
+" 0 0
+	exit
+fi
+
 dev=/dev/$( echo $sd | awk -F'[][]' '{print $4}' )
 detail=$( echo $sd | sed 's/ sd /\nsd /; s/\(\[sd.\]\) /\1\n/; s/\(blocks\): /\1\n/' )
 
