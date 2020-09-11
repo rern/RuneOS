@@ -88,33 +88,37 @@ used=$( df -k | grep $part | awk '{print $3}' )
 umount -l -v ${dev}*
 e2fsck -fy $part
 
-partinfo=$( tune2fs -l $part )
-blockcount=$( awk '/Block count/ {print $NF}' <<< "$partinfo" )
-freeblocks=$( awk '/Free blocks/ {print $NF}' <<< "$partinfo" )
-blocksize=$( awk '/Block size/ {print $NF}' <<< "$partinfo" )
+shrink() {
+	partinfo=$( tune2fs -l $part )
+	blockcount=$( awk '/Block count/ {print $NF}' <<< "$partinfo" )
+	freeblocks=$( awk '/Free blocks/ {print $NF}' <<< "$partinfo" )
+	blocksize=$( awk '/Block size/ {print $NF}' <<< "$partinfo" )
 
-sectorsize=$( sfdisk -l $dev | awk '/Units/ {print $8}' )
-startsector=$( fdisk -l $dev | grep $part | awk '{print $2}' )
+	sectorsize=$( sfdisk -l $dev | awk '/Units/ {print $8}' )
+	startsector=$( fdisk -l $dev | grep $part | awk '{print $2}' )
 
-usedblocks=$(( blockcount - freeblocks ))
-targetblocks=$(( usedblocks * 105 / 100 ))
-Kblock=$(( blocksize / 1024 ))
-newsize=$(( ( targetblocks + Kblock - 1 ) / Kblock * Kblock ))
-sectorsperblock=$(( blocksize / sectorsize  ))
-endsector=$(( startsector + newsize * sectorsperblock ))
+	usedblocks=$(( blockcount - freeblocks ))
+	targetblocks=$(( usedblocks * 105 / 100 ))
+	Kblock=$(( blocksize / 1024 ))
+	newsize=$(( ( targetblocks + Kblock - 1 ) / Kblock * Kblock ))
+	sectorsperblock=$(( blocksize / sectorsize  ))
+	endsector=$(( startsector + newsize * sectorsperblock ))
 
-# shrink filesystem to minimum
-resize2fs -fp $part $(( newsize * Kblock ))K
+	# shrink filesystem to minimum
+	resize2fs -fp $part $(( newsize * Kblock ))K
 
-parted $dev ---pretend-input-tty <<EOF
-unit
-s
-resizepart
-2
-$endsector
-Yes
-quit
-EOF
+	parted $dev ---pretend-input-tty <<EOF
+	unit
+	s
+	resizepart
+	2
+	$endsector
+	Yes
+	quit
+	EOF
+}
+shrink
+shrink # 2nd run for smallest possible
 
 banner 'Create compressed image file ...'
 
