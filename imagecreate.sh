@@ -72,6 +72,7 @@ elif ! grep -q hdmi_drive $configfile; then
 else
 	model=0-1
 fi
+version=$( cat $dirroot/srv/http/data/system/version )
 imagefile=RuneAudio+R_$version-RPi$model.img.xz
 
 # auto expand root partition
