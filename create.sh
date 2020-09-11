@@ -65,8 +65,6 @@ wget -q https://github.com/rern/RuneOS/raw/master/alarm.sfdisk -O alarm.sfdisk
 umount -l ${dev}*
 sfdisk $dev < alarm.sfdisk
 
-sleep 3
-
 devboot=${dev}1
 devroot=${dev}2
 
