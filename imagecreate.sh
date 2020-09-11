@@ -76,7 +76,7 @@ version=$( cat $dirroot/srv/http/data/system/version )
 imagefile=RuneAudio+R_$version-RPi$model.img.xz
 
 # auto expand root partition
-wget -q https://github.com/rern/RuneOS/raw/master/x.sh -O $dirboot/boot/x.sh
+wget -q https://github.com/rern/RuneOS/raw/master/x.sh -O $dirboot/x.sh
 
 clear
 
