@@ -4,16 +4,16 @@ title='Create Arch Linux Arm'
 optbox=( --colors --no-shadow --no-collapse )
 opt=( --backtitle "$title" ${optbox[@]} )
 
-exist=$( mount | awk '/dev\/sd.*\/BOOT/ || /dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
-if [[ -n $exist ]]; then
+mounts=$( mount | awk '/dev\/sd.*\/BOOT/ || /dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
+if [[ -n $mounts ]]; then
 	dialog "${optbox[@]}" --yesno "
 \Z1Unmount partitions?\Z0
-$exist
+$mounts
 
 " 0 0
 	[[ $? != 0 ]] && exit
 	
-	mounts=( $( echo "$exist" | cut -d' ' -f1 ) )
+	mounts=( $( echo "$mounts" | cut -d' ' -f1 ) )
 	for mnt in "${mounts[@]}"; do
 		umount -l $mnt
 	done
