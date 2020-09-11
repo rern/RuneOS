@@ -1,11 +1,19 @@
 #!/bin/bash
 
-rm -f $0
-
 if [[ ! -e /srv/http/data/addons ]]; then
 	echo This is not RuneAudio+R
 	exit
 fi
+
+optbox=( --colors --no-shadow --no-collapse )
+
+dialog "${optbox[@]}" --infobox "
+
+                   \Z1Reset RuneAudio+R\Z0
+                           for
+                       Image File				   
+" 9 58
+sleep 3
 
 col=$( tput cols )
 banner() {
@@ -17,7 +25,7 @@ banner() {
     printf "$bg%*s$def\n" $col
 }
 
-select=$( dialog --colors \
+select=$( dialog "${optbox[@]}" \
 	   --output-fd 1 \
 	   --checklist '\n\Z1Select features:\n
 \Z4[space] = Select / Deselect\Z0' 9 50 0 \
@@ -94,9 +102,9 @@ wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist
 fsck.fat -traw /dev/mmcblk0p1
 rm -f /boot/FSCK*
 
-dialog --colors --yesno "\n
-\Z1Finish\Z0\n
-\n           Shutdown Raspberry Pi?\n
+dialog "${optbox[@]}" --yesno "
+\Z1Finish\Z0
+          Shutdown Raspberry Pi?
 " 9 50
 
 [[ $? == 0 ]] && shutdown -h now
