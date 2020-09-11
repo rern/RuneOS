@@ -4,8 +4,8 @@ title='Create Arch Linux Arm'
 optbox=( --colors --no-shadow --no-collapse )
 opt=( --backtitle "$title" ${optbox[@]} )
 
-BOOT=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
-ROOT=$( mount | awk '/dev\/sd.*\/ROOT/ {print $3}' )
+BOOT=$( mount | awk '/dev\/sd.*\/BOOT/ {print $1" "$2" "$3}' )
+ROOT=$( mount | awk '/dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 [[ -n $BOOT ]] && exist="$BOOT"$'\n'
 [[ -n $ROOT ]] && exist+="$ROOT"
 if [[ -n $exist ]]; then
@@ -16,7 +16,8 @@ $exist
 " 0 0
 	[[ $? != 0 ]] && exit
 	
-	mounts=( $( echo "$exist" | sort -u ) )
+	mounts=( $( mount | awk '/dev\/sd.*\/BOOT/ {print $1}' ) )
+	mounts=( $( echo "$exist" | cut -d' ' -f1 ) )
 	for mnt in "${mounts[@]}"; do
 		umount -l $mnt
 	done
