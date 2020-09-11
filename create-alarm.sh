@@ -200,11 +200,12 @@ else
 fi
 
 # package mirror server
-wget -qO mirrorlist https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist \
+mirrorfile=$ROOT/etc/pacman.d/mirrorlist
+wget -qO $mirrorfile https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist \
 	| dialog "${opt[@]}" --gauge "
 Get package mirror list ...
 " 9 50
-mirrorlist=$( grep . mirrorlist \
+mirrorlist=$( grep . $mirrorfile \
 	| sed -n '/### A/,$ p' \
 	| sed 's/ (not Austria\!)//' )
 readarray -t lines <<< "$mirrorlist"
