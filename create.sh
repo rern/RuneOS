@@ -43,6 +43,7 @@ Detail:
 $detail
 
 Caution:
+Make sure this is the target SD card.
 \Z1All data on this device will be deleted.\Z0
 
 " 0 0
