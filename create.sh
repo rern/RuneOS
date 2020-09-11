@@ -1,8 +1,14 @@
 #!/bin/bash
 
-title='Create Arch Linux Arm'
 optbox=( --colors --no-shadow --no-collapse )
-opt=( --backtitle "$title" ${optbox[@]} )
+
+dialog "${optbox[@]}" --infobox "
+
+               \Z1Partition Micro SD Card\Z0
+                          for
+                    Arch Linux Arm
+" 9 58
+sleep 3
 
 mounts=$( mount | awk '/dev\/sd.*\/BOOT/ || /dev\/sd.*\/ROOT/ {print $1" "$2" "$3}' )
 if [[ -n $mounts ]]; then
