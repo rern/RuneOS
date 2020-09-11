@@ -50,10 +50,10 @@ Caution:
 [[ $? != 0 ]] && exit
 
 # 1. create partitions: gparted
-# 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > runepartitions
+# 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > alarm.sfdisk
 # setup partitions
 umount -l ${dev}*
-sfdisk $dev < runepartitions
+sfdisk $dev < alarm.sfdisk
 
 sleep 3
 
