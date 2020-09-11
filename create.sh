@@ -16,7 +16,6 @@ $exist
 " 0 0
 	[[ $? != 0 ]] && exit
 	
-	mounts=( $( mount | awk '/dev\/sd.*\/BOOT/ {print $1}' ) )
 	mounts=( $( echo "$exist" | cut -d' ' -f1 ) )
 	for mnt in "${mounts[@]}"; do
 		umount -l $mnt
