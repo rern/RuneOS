@@ -63,6 +63,7 @@ Make sure this is the target SD card.
 [[ ! -e alarm.sfdisk ]] && wget -q https://github.com/rern/RuneOS/raw/master/alarm.sfdisk
 # setup partitions
 umount -l ${dev}*
+wipefs -a $dev
 sfdisk $dev < alarm.sfdisk
 
 sleep 3
