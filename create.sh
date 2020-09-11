@@ -6,9 +6,9 @@ opt=( --backtitle "$title" ${optbox[@]} )
 
 BOOT=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
 ROOT=$( mount | awk '/dev\/sd.*\/ROOT/ {print $3}' )
-(( $( echo "$BOOT" | wc -l ) > 1 )) && exist+="
+[[ -n $BOOT ]] && exist+="
 $BOOT"
-(( $( echo "$ROOT" | wc -l ) > 1 )) && exist+="
+[[ -n $ROOT]] && exist+="
 $ROOT"
 if [[ -n $exist ]]; then
 	dialog "${optbox[@]}" --msgbox "
