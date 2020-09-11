@@ -38,9 +38,9 @@ BOOT not mounted"
 ROOT not mounted"
 if [[ -z $warnings  ]]; then
 	# check duplicate names
-	(( $( echo $BOOT | wc -l ) > 1 )) && warnings+="
+	(( $( echo "$BOOT" | wc -l ) > 1 )) && warnings+="
 BOOT has more than 1"
-	(( $( echo $ROOT | wc -l ) > 1 )) && warnings+="
+	(( $( echo "$ROOT" | wc -l ) > 1 )) && warnings+="
 ROOT has more than 1"
 	# check empty to prevent wrong partitions
 	[[ -n $( ls $BOOT | grep -v 'System Volume Information\|features' ) ]] && warnings+="
