@@ -55,7 +55,7 @@ dirroot=/mnt/ROOT
 mount ${dev}1 $dirboot
 mount $part $dirroot
 
-if [[ $( fdisk -l /dev/sdd | grep ${dev}1 | awk '{print $5$6}' ) != 100Mb ]]; then
+if [[ $( fdisk -l /dev/$dev | grep ${dev}1 | awk '{print $5$6}' ) != 100Mb ]]; then
 	dialog "${optbox[@]}" --infobox "
 \Z1$dev\Z0 is not RuneAudio+R
 
