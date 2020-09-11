@@ -60,6 +60,7 @@ Make sure this is the target SD card.
 
 # 1. create partitions: gparted
 # 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > alarm.sfdisk
+[[ ! -e alarm.sfdisk ]] && wget -q https://github.com/rern/RuneOS/raw/master/alarm.sfdisk
 # setup partitions
 umount -l ${dev}*
 sfdisk $dev < alarm.sfdisk
