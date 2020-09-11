@@ -1,5 +1,14 @@
 #!/bin/bash
 
+optbox=( --colors --no-shadow --no-collapse )
+
+dialog "${optbox[@]}" --infobox "
+                  \Z1Create Image File\Z0\n
+
+                      RuneAudio+R
+" 9 58
+sleep 3
+
 col=$( tput cols )
 banner() {
 	echo
@@ -10,14 +19,34 @@ banner() {
     printf "$bg%*s$def\n" $col
 }
 
-banner 'Device list'
-fdisk -l | grep 'Disk /dev' | cut -d, -f1  | cut -d' ' -f2-
+dialog "${optbox[@]}" --msgbox "
+\Z1Insert micro SD card\Z0
 
-echo
-read -p 'Select SD card: /dev/sd' x
-[[ -z $x ]] && echo No device selected. && exit
+(Re-insert if already inserted.)
 
-dev=/dev/sd$x
+" 0 0
+
+sd=$( dmesg -T | tail | grep ' sd .*GB' )
+if [[ -z $sd ]]; then
+	dialog "${optbox[@]}" --infobox "
+\Z1No SD card found.\Z0
+" 0 0
+	exit
+fi
+
+dev=/dev/$( echo $sd | awk -F'[][]' '{print $4}' )
+detail=$( echo $sd | sed 's/ sd /\nsd /; s/\(\[sd.\]\) /\1\n/; s/\(blocks\): /\1\n/' )
+
+dialog "${optbox[@]}" --yesno "
+Confirm micro SD card: \Z1$dev\Z0
+
+Detail:
+$detail
+
+" 0 0
+
+[[ $? != 0 ]] && exit
+
 part=${dev}2
 dirboot=/mnt/BOOT
 dirroot=/mnt/ROOT
@@ -26,20 +55,10 @@ mount ${dev}1 $dirboot
 mount $part $dirroot
 
 if [[ $( df -Th $dirboot | tail -1 | awk '{print $2$3}' ) != vfat100M ]]; then
-        echo ${dev}1 not BOOT partition
-		umount -l ${dev}*
-        exit
+	echo $dev not RuneAudio+R
+	umount -l ${dev}*
+	exit
 fi
-
-version=$( cat $dirroot/srv/http/data/system/version )
-
-dialog --colors --no-shadow --infobox "\n
-\n
-                  \Z1Create Image File\Z0\n
-\n
-                    RuneAudio+R $version
-" 9 58
-sleep 3
 
 configfile=$dirboot/config.txt
 if ! grep -q force_turbo $configfile; then
@@ -50,17 +69,6 @@ else
 	model=0-1
 fi
 imagefile=RuneAudio+R_$version-RPi$model.img.xz
-
-dialog --colors --yesno "\n
-Confirm partitions:\n
-\n
-$( mount | awk '/dev\/sd.*\/BOOT/ {print "\\Z1"$1"\\Z0 "$2" \\Z1"$3"\\Z0"}' )\n
-$( mount | awk '/dev\/sd.*\/ROOT/ {print "\\Z1"$1"\\Z0 "$2" \\Z1"$3"\\Z0"}' )\n
-" 10 50
-
-(( $? == 1 )) && exit
-
-clear
 
 banner 'Shrink ROOT partition ...'
 
@@ -108,11 +116,11 @@ dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose 
 byte=$( stat --printf="%s" RuneAudio+R_$version-RPi$model.img.xz )
 gb=$( awk "BEGIN { printf \"%.1f\n\", $byte / 1024 / 1024 }" )
 
-dialog --colors --msgbox "\n
-Image file created:\n
-\n
-\Z1$imagefile\Z0\n
-$gb GB\n
-\n
+dialog "${optbox[@]}" --msgbox "
+Image file created:
+
+\Z1$imagefile\Z0
+$gb GB
+
 BOOT and ROOT unmounted.
 " 12 50
