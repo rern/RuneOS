@@ -108,14 +108,14 @@ shrink() {
 	resize2fs -fp $part $(( newsize * Kblock ))K
 
 	parted $dev ---pretend-input-tty <<EOF
-	unit
-	s
-	resizepart
-	2
-	$endsector
-	Yes
-	quit
-	EOF
+unit
+s
+resizepart
+2
+$endsector
+Yes
+quit
+EOF
 }
 banner 'Shrink #1 run ...'
 shrink
