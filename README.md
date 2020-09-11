@@ -12,6 +12,7 @@ Audio player and renderer for Raspberry Pi
 	- Run on USB only - no SD card ([boot from USB](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md))
 	- Pre-configure Wi-Fi connection (headless mode)
 	- Exclude features (can be as light as possible in terms of build time and disk space)
+- Take less than 15 minutes for the whole process with a decent download speed.
 - More details: [Forum](https://www.runeaudio.com/forum/runeaudio-r-e3-t7014.html)
 
 **Procedure**
@@ -58,7 +59,6 @@ bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create.sh )
 		- USB drive: 8GB+ for `BOOT` + `ROOT` partition
 	- Note for USB drive:
 		- Suitable for hard drives or faster-than-SD-card thumb drives.
-		- It takes less than 15 minutes for the whole process with a decent download speed.
 		- Boot from USB drive:
 			- Suitable for solid state drives.
 			- Normal hard drive needs external power, e.g., powered USB hub, to have it spin up 5+ seconds before boot.
