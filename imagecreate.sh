@@ -117,8 +117,11 @@ shrink() {
 	quit
 	EOF
 }
+banner 'Shrink #1 run ...'
 shrink
-shrink # 2nd run for smallest possible
+
+banner 'Shrink #2 run ...'
+shrink
 
 banner 'Create compressed image file ...'
 
