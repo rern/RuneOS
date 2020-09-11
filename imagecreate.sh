@@ -55,8 +55,11 @@ dirroot=/mnt/ROOT
 mount ${dev}1 $dirboot
 mount $part $dirroot
 
-if [[ $( df -Th $dirboot | tail -1 | awk '{print $2$3}' ) != vfat100M ]]; then
-	echo $dev not RuneAudio+R
+if [[ $( fdisk -l /dev/sdd | grep ${dev}1 | awk '{print $5$6}' ) != 100Mb ]]; then
+	dialog "${optbox[@]}" --infobox "
+\Z1$dev\Z0 is not RuneAudio+R
+
+" 0 0
 	umount -l ${dev}*
 	exit
 fi
