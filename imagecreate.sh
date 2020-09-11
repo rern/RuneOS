@@ -74,14 +74,14 @@ else
 fi
 imagefile=RuneAudio+R_$version-RPi$model.img.xz
 
+# auto expand root partition
+wget -q https://github.com/rern/RuneOS/raw/master/x.sh -O $dirboot/boot/x.sh
+
 echo
 banner 'Shrink ROOT partition ...'
 
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
 used=$( df -k | grep $part | awk '{print $3}' )
-
-# auto expand root partition
-wget -q https://github.com/rern/RuneOS/raw/master/x.sh -O /boot/x.sh
 
 umount -l -v ${dev}*
 e2fsck -fy $part
