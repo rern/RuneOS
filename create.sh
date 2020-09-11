@@ -66,6 +66,9 @@ sfdisk $dev < alarm.sfdisk
 
 sleep 3
 
+fatlabel ${dev}1 BOOT
+e2label ${dev}2 ROOT
+
 mkdir -p /mnt/{BOOT,ROOT}
 mount ${dev}1 /mnt/BOOT
 mount ${dev}2 /mnt/ROOT
