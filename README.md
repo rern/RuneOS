@@ -70,7 +70,6 @@ Audio player and renderer for Raspberry Pi
 	- USB drive only
 - OR Expert mode (Micro SD card only)
 ```sh
-# ssh - no stdout | sh
 bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create.sh )
 ```
 **Alternative 1: Micro SD card only**
