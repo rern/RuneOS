@@ -74,6 +74,7 @@ else
 fi
 imagefile=RuneAudio+R_$version-RPi$model.img.xz
 
+echo
 banner 'Shrink ROOT partition ...'
 
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
