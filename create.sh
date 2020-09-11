@@ -21,6 +21,8 @@ Confirm micro SD card: \Z1$dev\Z0
 Detail:
 $detail
 
+\Z1All data on this device will be deleted.\Z0
+
 " 0 0
 
 [[ $? != 0 ]] && exit
