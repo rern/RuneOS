@@ -10,7 +10,7 @@ ROOT=$( mount | awk '/dev\/sd.*\/ROOT/ {print $3}' )
 $BOOT"
 (( $( echo "$ROOT" | wc -l ) > 1 )) && exist+="
 $ROOT"
-if [[ -n $warnings ]]; then
+if [[ -n $exist ]]; then
 	dialog "${optbox[@]}" --msgbox "
 \Z1Partition names exist:\Z0
 $exist
