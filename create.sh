@@ -6,17 +6,17 @@ opt=( --backtitle "$title" ${optbox[@]} )
 
 BOOT=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
 ROOT=$( mount | awk '/dev\/sd.*\/ROOT/ {print $3}' )
-[[ -n $BOOT ]] && exist+="
+[[ -n $BOOT ]] && exist="
 $BOOT"
-[[ -n $ROOT]] && exist+="
+[[ -n $ROOT ]] && exist+="
 $ROOT"
 if [[ -n $exist ]]; then
-	dialog "${optbox[@]}" --msgbox "
-\Z1Partition names exist:\Z0
+	dialog "${optbox[@]}" --yesno "
+\Z1Unmount partitions?\Z0
 $exist
 
 " 0 0
-	exit
+	[[ $? != 0 ]] && exit
 fi
 
 dialog "${optbox[@]}" --msgbox "
