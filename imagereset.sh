@@ -10,8 +10,8 @@ optbox=( --colors --no-shadow --no-collapse )
 dialog "${optbox[@]}" --infobox "
 
                    \Z1Reset RuneAudio+R\Z0
-                           for
-                       Image File				   
+                          for
+                      Image File				   
 " 9 58
 sleep 3
 
