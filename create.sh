@@ -1,30 +1,29 @@
 #!/bin/bash
 
-col=$( tput cols )
-banner() {
-	echo
-	def='\e[0m'
-	bg='\e[44m'
-    printf "$bg%*s$def\n" $col
-    printf "$bg%-${col}s$def\n" "  $1"
-    printf "$bg%*s$def\n" $col
-}
+title='Create Arch Linux Arm'
+optbox=( --colors --no-shadow --no-collapse )
+opt=( --backtitle "$title" ${optbox[@]} )
 
-banner 'Device list'
+dialog "${optbox[@]}" --msgbox "
+\Z1Insert micro SD card\Z0
 
-fdisk -l | grep 'Disk /dev' | cut -d, -f1  | cut -d' ' -f2-
+(Re-insert if already inserted.)
 
-echo
-read -p 'Select SD card: /dev/sd' -n1 x
-[[ -z $x ]] && echo No device selected. && exit
+" 0 0
 
-dev=/dev/sd$x
+sd=$( dmesg -T | tail | grep ' sd .*GB' )
+dev=/dev/$( echo $sd | awk -F'[][]' '{print $4}' )
+detail=$( echo $sd | sed 's/ sd /\nsd /; s/\(\[sd.\]\) /\1\n/; s/\(blocks\): /\1\n/' )
 
-banner 'Target SD card'
-fdisk -l $dev | grep /dev
-echo
-read -p "Confirm SD card: $dev"$'\n[y/n]' -n1 yn
-[[ $yn != y ]] && exit
+dialog "${optbox[@]}" --yesno "
+Confirm micro SD card: \Z1$dev\Z0
+
+Detail:
+$detail
+
+" 0 0
+
+[[ $? != 0 ]] && exit
 
 # 1. create partitions: gparted
 # 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > runepartitions
