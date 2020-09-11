@@ -4,6 +4,21 @@ title='Create Arch Linux Arm'
 optbox=( --colors --no-shadow --no-collapse )
 opt=( --backtitle "$title" ${optbox[@]} )
 
+BOOT=$( mount | awk '/dev\/sd.*\/BOOT/ {print $3}' )
+ROOT=$( mount | awk '/dev\/sd.*\/ROOT/ {print $3}' )
+(( $( echo "$BOOT" | wc -l ) > 1 )) && exist+="
+$BOOT"
+(( $( echo "$ROOT" | wc -l ) > 1 )) && exist+="
+$ROOT"
+if [[ -n $warnings ]]; then
+	dialog "${optbox[@]}" --msgbox "
+\Z1Partition names exist:\Z0
+$exist
+
+" 0 0
+	exit
+fi
+
 dialog "${optbox[@]}" --msgbox "
 \Z1Insert micro SD card\Z0
 
