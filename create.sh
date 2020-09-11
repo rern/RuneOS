@@ -67,7 +67,7 @@ wget -qO - https://github.com/rern/RuneOS/raw/master/alarm.sfdisk | sfdisk $dev
 devboot=${dev}1
 devroot=${dev}2
 
-mkfs -F -t vfat $devboot
+mkfs -t vfat $devboot
 mkfs -F -t ext4 $devroot
 fatlabel $devboot BOOT
 e2label $devroot ROOT
