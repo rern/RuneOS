@@ -35,7 +35,7 @@ dialog "${optbox[@]}" --msgbox "
 sd=$( dmesg -T | tail | grep ' sd .*GB' )
 if [[ -z $ds ]]; then
 	dialog "${optbox[@]}" --infobox "
-\Z1No micro SD card found.\Z0
+\Z1No SD card found.\Z0
 
 " 0 0
 	exit
