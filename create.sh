@@ -17,6 +17,10 @@ $exist
 
 " 0 0
 	[[ $? != 0 ]] && exit
+	
+	for mnt in "${exist[@]}"; do
+		umount -l "$mnt"
+	done
 fi
 
 dialog "${optbox[@]}" --msgbox "
