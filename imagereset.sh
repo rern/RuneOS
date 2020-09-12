@@ -95,4 +95,4 @@ dialog "${optbox[@]}" --yesno "
           Shutdown Raspberry Pi?
 " 9 50
 
-[[ $? == 0 ]] && shutdown -h now & exit
+[[ $? == 0 ]] && ( sleep 1 && shutdown -h now & ) && exit
