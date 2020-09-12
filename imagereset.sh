@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [[ ! -e /srv/http/data/addons ]]; then
-	echo This is not RuneAudio+R
-	exit
-fi
-
 optbox=( --colors --no-shadow --no-collapse )
 
 dialog "${optbox[@]}" --infobox "
