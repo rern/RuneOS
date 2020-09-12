@@ -208,6 +208,6 @@ dialog "${optbox[@]}" --msgbox "
         \Z1RuneAudio+R $version\Z0 created successfully.
 		
                 Press \Z1Enter\Z0 to reboot
-" 9 58
+" 10 58
 
 shutdown -r now
