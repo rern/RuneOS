@@ -29,8 +29,9 @@ dialog "${optbox[@]}" --msgbox "
 \Z1Insert micro SD card\Z0
 
 Already inserted?
-- Remove and insert again
-- Wait a few seconds
+For correct detection:
+  - Remove and insert again
+  - Wait a few seconds
 
 " 0 0
 
