@@ -96,6 +96,6 @@ dialog "${optbox[@]}" --yesno "
 " 9 50
 
 if [[ $? == 0 ]]; then
-	shutdown -h 0
+	shutdown -h now
 	exit
 fi
