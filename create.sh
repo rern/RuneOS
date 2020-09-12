@@ -32,7 +32,7 @@ dialog "${optbox[@]}" --msgbox "
 
 " 0 0
 
-sd=$( dmesg -T | tail | grep ' sd .*GB' )
+sd=$( dmesg -T | tail | grep ' sd .* logical blocks' )
 if [[ -z $sd ]]; then
 	dialog "${optbox[@]}" --infobox "
 \Z1No SD card found.\Z0
