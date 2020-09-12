@@ -169,7 +169,7 @@ bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create-alarm.sh )
 - Reset for image
 ```sh
 ssh root@<RPI IP>
-bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/imagereset.sh )
+bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/reset.sh )
 ```
 - Shutdown
 - Move micro SD card to Lunux
