@@ -13,7 +13,7 @@ Audio player and renderer for Raspberry Pi
 	- Pre-configure Wi-Fi connection (headless mode)
 	- Exclude features (can be as light as possible in terms of build time and disk space)
 - Take less than 15 minutes for the whole process with a decent download speed.
-- More details: [Forum](https://www.runeaudio.com/forum/runeaudio-r-e3-t7014.html)
+- More details: [Forum](https://www.runeaudio.com/forum/runeaudio-r-e5-t7105.html)
 
 **Procedure**
 - [Prepare partitions](#prepare-partitions)
