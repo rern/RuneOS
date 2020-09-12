@@ -13,7 +13,7 @@ sleep 3
 routerip=$( ip r get 1 | head -1 | cut -d' ' -f3 )
 subip=${routerip%.*}.
 
-rpiip=$( dialog "${opt[@]}" --output-fd 1 --inputbox "
+rpiip=$( dialog "${optbox[@]}" --output-fd 1 --inputbox "
 \Z1Raspberry Pi IP:\Z0
 " 0 0 $subip )
 
