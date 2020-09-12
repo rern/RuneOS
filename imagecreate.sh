@@ -23,7 +23,10 @@ banner() {
 dialog "${optbox[@]}" --msgbox "
 \Z1Insert micro SD card\Z0
 
-(Re-insert if already inserted.)
+Already inserted?
+For correct detection:
+  - Remove and insert again
+  - Wait a few seconds
 
 " 0 0
 
@@ -36,7 +39,7 @@ if [[ -z $sd ]]; then
 fi
 
 dev=/dev/$( echo $sd | awk -F'[][]' '{print $4}' )
-detail=$( echo $sd | sed 's/ sd /\nsd /; s/\(\[sd.\]\) /\1\n/; s/\(blocks\): /\1\n/' )
+detail=$( echo $sd | sed 's/ sd /\nsd /; s/\(\[sd.\]\) /\1\n/; s/\(blocks\): \(.*\)/\1\n\\Z1\2\\Z0/' )
 
 dialog "${optbox[@]}" --yesno "
 Confirm micro SD card: \Z1$dev\Z0
