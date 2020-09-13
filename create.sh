@@ -14,6 +14,7 @@ mounts=$( mount | awk '/dev\/sd.*\/BOOT/ || /dev\/sd.*\/ROOT/ {print $1" "$2" "$
 if [[ -n $mounts ]]; then
 	dialog "${optbox[@]}" --yesno "
 \Z1Unmount partitions?\Z0
+
 $mounts
 
 " 0 0
@@ -28,14 +29,14 @@ fi
 dialog "${optbox[@]}" --msgbox "
 \Z1Insert micro SD card\Z0
 
-Already inserted?
 For correct detection:
-  - Remove and insert again
-  - Wait a few seconds
+Remove and insert again if inserted.
 
 " 0 0
 
 sd=$( dmesg -T | tail | grep ' sd .* logical blocks' )
+[[ -z $sd ]] && sleep 2 && sd=$( dmesg -T | tail | grep ' sd .* logical blocks' )
+
 if [[ -z $sd ]]; then
 	dialog "${optbox[@]}" --infobox "
 \Z1No SD card found.\Z0
@@ -45,7 +46,7 @@ if [[ -z $sd ]]; then
 fi
 
 dev=/dev/$( echo $sd | awk -F'[][]' '{print $4}' )
-detail=$( echo $sd | sed 's/ sd /\nsd /; s/\(\[sd.\]\) /\1\n/; s/\(blocks\): \(.*\)/\1\n\\Z1\2\\Z0/' )
+detail=$( echo $sd | sed 's/ sd /\nsd /; s/\(\[sd.\]\) /\1\n/; s/\(blocks\): (\(.*\))/\1\n\\Z1\2\\Z0/' )
 
 dialog "${optbox[@]}" --yesno "
 Confirm micro SD card: \Z1$dev\Z0
