@@ -68,7 +68,8 @@ clear -x
 # 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > alarm.sfdisk
 # setup partitions
 umount -l ${dev}*
-wget -qO - https://github.com/rern/RuneOS/raw/master/alarm.sfdisk | sfdisk -w $dev
+wipefs -a $dev
+wget -qO - https://github.com/rern/RuneOS/raw/master/alarm.sfdisk | sfdisk $dev
 
 devboot=${dev}1
 devroot=${dev}2
