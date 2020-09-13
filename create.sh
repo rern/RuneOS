@@ -62,6 +62,8 @@ Make sure this is the target SD card.
 
 [[ $? != 0 ]] && exit
 
+clear -x
+
 # 1. create default partitions: gparted
 # 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > alarm.sfdisk
 # setup partitions
