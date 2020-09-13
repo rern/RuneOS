@@ -23,10 +23,8 @@ banner() {
 dialog "${optbox[@]}" --msgbox "
 \Z1Insert micro SD card\Z0
 
-Already inserted?
-For correct detection:
-  - Remove and insert again
-  - Wait a few seconds
+If already inserted:
+For proper detection, remove and reinsert again.
 
 " 0 0
 
