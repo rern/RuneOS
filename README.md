@@ -50,6 +50,7 @@ bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create.sh )
 	- Wired LAN
 	- Optional: Wi-Fi (if necessary)
 - Media:
+	- Micro SD card shoule be at least class 10 or U1.
 	- Option 1: Micro SD card: 8GB+ for `BOOT` + `ROOT` partitions
 	- Option 2: Micro SD card + USB drive (`ROOT` partition on USB drive)
 		- Micro SD card: 100MB+ for `BOOT` partition only
