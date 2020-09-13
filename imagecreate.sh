@@ -29,6 +29,8 @@ For proper detection, remove and reinsert again.
 " 0 0
 
 sd=$( dmesg -T | tail | grep ' sd .*GB' )
+[[ -z $sd ]] && sleep 2 && sd=$( dmesg -T | tail | grep ' sd .* logical blocks' )
+
 if [[ -z $sd ]]; then
 	dialog "${optbox[@]}" --infobox "
 \Z1No SD card found.\Z0
