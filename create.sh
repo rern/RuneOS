@@ -29,8 +29,8 @@ fi
 dialog "${optbox[@]}" --msgbox "
 \Z1Insert micro SD card\Z0
 
-For proper detection:
-Remove and reinsert again if inserted.
+If already inserted:
+For proper detection, remove and reinsert again.
 
 " 0 0
 
