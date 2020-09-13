@@ -140,4 +140,4 @@ Image file created:
 $gb GB
 
 BOOT and ROOT unmounted.
-" 12 50
+" 12 58
