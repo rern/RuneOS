@@ -69,7 +69,7 @@ clear -x
 # setup partitions
 umount -l ${dev}*
 wipefs -a $dev
-wget -qO - https://github.com/rern/RuneOS/raw/master/alarm.sfdisk | sfdisk $dev
+wget -qO - https://github.com/rern/RuneOS/raw/master/alarm.sfdisk | sfdisk -w $dev
 
 devboot=${dev}1
 devroot=${dev}2
