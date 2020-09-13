@@ -92,8 +92,8 @@ rm -f /boot/FSCK*
 dialog "${optbox[@]}" --yesno "
 \Z1Finish\Z0
 
-           Shutdown Raspberry Pi?
-" 9 50
+               Shutdown Raspberry Pi?
+" 9 58
 
 if [[ $? == 0 ]]; then
 	shutdown -h now
