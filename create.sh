@@ -75,7 +75,7 @@ devboot=${dev}1
 devroot=${dev}2
 
 mkfs.fat -F 32 $devboot
-mkfs.ext4 $devroot
+mkfs.ext4 -F $devroot
 fatlabel $devboot BOOT
 e2label $devroot ROOT
 
