@@ -67,7 +67,7 @@ clear -x
 # 1. create default partitions: gparted
 # 2. dump partitions table for script: sfdisk -d /dev/sdx | grep '^/dev' > alarm.sfdisk
 # setup partitions
-umount -l ${dev}*
+umount -l ${dev}1 ${dev}2
 wipefs -a $dev
 wget -qO - https://github.com/rern/RuneOS/raw/master/alarm.sfdisk | sfdisk $dev
 
