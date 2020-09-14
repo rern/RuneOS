@@ -63,7 +63,7 @@ if [[ $( fdisk -l $dev | grep ${dev}1 | awk '{print $5$6}' ) != 100Mb ]]; then
 \Z1$dev\Z0 is not RuneAudio+R
 
 " 0 0
-	umount -l ${dev}*
+	umount -l ${dev}1 ${dev}2
 	exit
 fi
 
@@ -88,7 +88,7 @@ banner 'Shrink ROOT partition ...'
 partsize=$( fdisk -l $part | awk '/^Disk/ {print $2" "$3}' )
 used=$( df -k 2> /dev/null | grep $part | awk '{print $3}' )
 
-umount -l -v ${dev}*
+umount -l -v ${dev}1 ${dev}2
 e2fsck -fy $part
 
 shrink() {
