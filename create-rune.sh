@@ -195,7 +195,7 @@ rm /boot/features /etc/motd /root/create-rune.sh /var/cache/pacman/pkg/*
 
 # expand partition
 if (( $( sfdisk -F /dev/mmcblk0 | head -n1 | awk '{print $6}' ) )); then
-	wget https://github.com/rern/RuneOS/raw/master/x.sh -O /boot/x.sh
+	wget -q --show-progress https://github.com/rern/RuneOS/raw/master/x.sh -O /boot/x.sh
 fi
 
 if [[ -n $rpi01 && $features =~ upmpdcli ]]; then
