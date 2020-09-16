@@ -20,7 +20,8 @@ select=$( dialog "${optbox[@]}" \
 			2 "Reset user data directory" on \
 			3 "Clear package cache" on \
 			4 "Clear system log" on \
-			5 "Clear Wi-Fi connection" on )
+			5 "Clear Wi-Fi connection" on
+			6 "UPDATE branch UI" off )
 
 clear
 [[ $? == 1 ]] && exit
@@ -83,8 +84,10 @@ if [[ $select == *' 5 '* ]]; then
 	systemctl disable netctl-auto@wlan0
 	rm /etc/netctl/* /srv/http/data/system/netctl-* 2> /dev/null
 fi
-
-wget https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist -O /etc/pacman.d/mirrorlist
+if [[ $select == *' 6 '* ]]; then
+	bash <( wget -qO - https://github.com/rern/RuneAudio-Re5/raw/UPDATE/install.sh )
+fi
+wget -q --show-progress https://github.com/archlinuxarm/PKGBUILDs/raw/master/core/pacman-mirrorlist/mirrorlist -O /etc/pacman.d/mirrorlist
 
 fsck.fat -traw /dev/mmcblk0p1
 rm -f /boot/FSCK*
