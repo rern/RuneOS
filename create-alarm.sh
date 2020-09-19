@@ -427,7 +427,12 @@ scanIP() {
 Scan IP address ...
 
 " 5 50
-	nmap=$( nmap -sn $subip* | grep -v 'Starting\|Host is up\|Nmap done' | head -n -1 | tac | sed 's/$/\\n/; s/Nmap.*for/IP :/; s/MAC Address/\\nMAC/' | tr -d '\n' )
+	nmap=$( nmap -sn $subip* \
+		| grep -v 'Starting\|Host is up\|Nmap done' \
+		| head -n -1 \
+		| tac \
+		| sed 's/$/\\n/; s/Nmap.*for/IP :/; s/MAC Address/\\nMAC/; s/\(Raspberry Pi\)/\\Z1\1\\Z0/' \
+		| tr -d '\n' )
 	dialog "${opt[@]}" --msgbox "
 \Z1Find IP address of Raspberry Pi:\Z0
 (Raspberri Pi 4 may listed as Unknown)
