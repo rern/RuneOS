@@ -17,4 +17,4 @@ rpiip=$( dialog "${optbox[@]}" --output-fd 1 --inputbox "
 \Z1Raspberry Pi IP:\Z0
 " 0 0 $subip )
 
-sshpass -p rune ssh -t root@$rpiip 'bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/imagereset.sh )'
+sshpass -p rune ssh -t -o StrictHostKeyChecking=no root@$rpiip 'bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/imagereset.sh )'
