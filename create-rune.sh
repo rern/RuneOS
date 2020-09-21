@@ -137,8 +137,8 @@ cp /usr/share/mpdscribble/mpdscribble.conf.example /etc/mpdscribble.conf
 # disable again after upgrade
 systemctl disable systemd-networkd-wait-online
 
-# fix: pam ssh login bug (wrong comment - not #)
-sed -i '/^-.*pam_systemd/ s/^-/#/' /etc/pam.d/system-login
+# fix: pam ssh login halt
+sed -i '/^-.*pam_systemd/ s/^/#/' /etc/pam.d/system-login
 
 # password
 echo root:rune | chpasswd
