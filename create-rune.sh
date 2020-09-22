@@ -66,7 +66,7 @@ banner 'Upgrade kernel and default packages ...'
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacman -Syu --noconfirm --needed
 
-packages='alsa-utils cronie dosfstools hfsprogs ifplugd imagemagick inetutils jq man mpc mpd mpdscribble '
+packages='alsa-utils cronie dosfstools gifsicle hfsprogs ifplugd imagemagick inetutils jq man mpc mpd mpdscribble '
 packages+='nfs-utils nginx-mainline-pushstream nss-mdns ntfs-3g parted php-fpm sshpass sudo udevil wget '
 
 banner 'Install packages ...'
