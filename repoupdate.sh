@@ -3,8 +3,11 @@
 rm $0
 
 updateRepo() {
+	# recreate database
 	cd /mnt/Git/rern.github.io/$1
-
+	rm RR*
+	repo-add -R RR.db.tar.xz *.xz
+	
 	# index.html
 	html='<!DOCTYPE html>
 <html>
@@ -33,10 +36,6 @@ updateRepo() {
 </html>'
 
 	echo -e "$html" > ../$1.html
-
-	# recreate database
-	rm RR*
-	repo-add -R RR.db.tar.xz *.xz
 }
 
 arch=$( dialog --colors --output-fd 1 --checklist '\n\Z1Arch:\Z0' 8 30 0 \
