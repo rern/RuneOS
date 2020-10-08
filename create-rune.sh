@@ -157,6 +157,11 @@ sed -i 's/\(PermitEmptyPasswords \).*/#\1no/' /etc/ssh/sshd_config
 # spotifyd
 [[ ! -e /usr/lib/systemd/system/spotifyd.service ]] && ln -s /usr/lib/systemd/{user,system}/spotifyd.service
 
+# udevil
+cat << EOF > /etc/conf.d/devmon
+ARGS='--exec-on-drive "/srv/http/bash/sources-update.sh \"%d\""'
+EOF
+
 # user - set expire to none
 users=$( cut -d: -f1 /etc/passwd )
 for user in $users; do
@@ -178,7 +183,7 @@ echo 'WIRELESS_REGDOM="00"' > /etc/conf.d/wireless-regdom
 
 # startup services
 systemctl daemon-reload
-startup='avahi-daemon cronie devmon@mpd nginx php-fpm startup'
+startup='avahi-daemon cronie devmon@http nginx php-fpm startup'
 [[ -e /usr/bin/chromium ]] && startup+=' bootsplash localbrowser'
 
 systemctl enable $startup
