@@ -10,11 +10,11 @@ dialog "${optbox[@]}" --infobox "
 sleep 1
 
 cmd=$( dialog "${optbox[@]}" --output-fd 1 --menu "
-\Z1Command:\Z0
+\Z1RuneAudio+R:\Z0
 " 8 0 0 \
-1 'Create RuneAudio+R' \
-2 'Reset RuneAudio+R' \
-3 'Image RuneAudio+R' )
+1 'Create' \
+2 'Reset' \
+3 'Image' )
 
 case $cmd in
 
