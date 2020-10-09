@@ -14,8 +14,7 @@ cmd=$( dialog "${optbox[@]}" --output-fd 1 --menu "
 " 8 0 0 \
 1 'Create RuneAudio+R' \
 2 'Reset RuneAudio+R' \
-3 'Image RuneAudio+R' \
-4 'Package Repo Update' )
+3 'Image RuneAudio+R' )
 
 case $cmd in
 
@@ -27,9 +26,6 @@ case $cmd in
 	;;
 3 )
 	bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/imagecreate.sh )
-	;;
-4 )
-	bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/repoupdate.sh )
 	;;
 
 esac
