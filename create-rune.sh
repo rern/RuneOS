@@ -13,7 +13,6 @@ hardwarecode=$( grep Revision /proc/cpuinfo )
 hwcode=${hardwarecode: -3:2}
 if [[ $hwcode =~ ^(00|01|02|03|04|09)$ ]]; then
 	nowireless=1
-	sed -i '/disable-wifi\|disable-bt\|bcmbt/ d' /boot/config.txt
 	sed -i 's/bluez bluez-alsa-git bluez-utils //' /boot/features
 fi
 [[ ${hardwarecode: -4:1} == 0 ]] && rpi01=1
@@ -110,7 +109,7 @@ sed -i '/^TEST/ s/^/#/' /etc/udev/rules.d/90-alsa-restore.rules
 if [[ -e /usr/bin/bluetoothctl ]]; then
 	sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
 else
-	rm -rf /boot/overlays/bcmbt.dtbo /etc/systemd/system/bluetooth.service.d /srv/http/bash/system-bluetooth.sh /root/bluez*
+	rm -rf /etc/systemd/system/bluetooth.service.d
 fi
 
 # chromium
