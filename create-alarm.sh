@@ -327,12 +327,11 @@ initramfs initramfs-linux.img followkernel
 max_usb_current=1
 disable_splash=1
 disable_overscan=1
-dtparam=audio=on
-"
+dtparam=audio=on"
 [[ $rpi == 4 ]] && config=$( sed '/force_turbo/ d' <<<"$config" )
 [[ $rpi != 0 ]] && config=$( sed '/over_voltage\|hdmi_drive/ d' <<<"$config" )
 
-echo -n "$config" > $BOOT/config.txt
+echo "$config" > $BOOT/config.txt
 
 # wifi
 if [[ $ssid ]]; then
