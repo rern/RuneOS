@@ -1,0 +1,7 @@
+[Unit]
+Description=Bluetooth Audio ALSA Backend
+Requires=bluetooth.service
+After=bluetooth.service
+
+[Service]
+ExecStart=/usr/bin/bluealsa
