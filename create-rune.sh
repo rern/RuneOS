@@ -11,10 +11,6 @@ trap 'rm -f /var/lib/pacman/db.lck; exit' INT
 
 hardwarecode=$( grep Revision /proc/cpuinfo )
 hwcode=${hardwarecode: -3:2}
-if [[ $hwcode =~ ^(00|01|02|03|04|09)$ ]]; then
-	nowireless=1
-	sed -i 's/bluez bluez-utils //' /boot/features
-fi
 [[ ${hardwarecode: -4:1} == 0 ]] && rpi01=1
 features=$( cat /boot/features )
 
