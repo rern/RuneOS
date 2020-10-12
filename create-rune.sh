@@ -89,9 +89,6 @@ fi
 #---------------------------------------------------------------------------------
 banner 'Configure ...'
 
-# RPi 4 - rename bluetooth file
-[[ $hwcode == 11 ]] && mv /usr/lib/firmware/updates/brcm/BCM{4345C0,}.hcd
-
 chown http:http /etc/fstab
 chown -R http:http /etc/netctl /etc/systemd/network /srv/http
 chmod 755 /srv/http/* /srv/http/bash/* /srv/http/settings/*
@@ -103,11 +100,7 @@ cp /{usr/lib,etc}/udev/rules.d/90-alsa-restore.rules
 sed -i '/^TEST/ s/^/#/' /etc/udev/rules.d/90-alsa-restore.rules
 
 # bluetooth
-if [[ -e /usr/bin/bluetoothctl ]]; then
-	sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
-else
-	rm -rf /etc/systemd/system/bluetooth.service.d
-fi
+[[ -e /usr/bin/bluetoothctl ]] && sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
 
 # chromium
 if [[ -e /usr/bin/chromium ]]; then
