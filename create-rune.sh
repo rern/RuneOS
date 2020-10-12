@@ -4,7 +4,7 @@
 #1   - https://github.com/rern/RuneAudio_Addons/blob/master/addons-list.json > new item with key > "rreN": {
 #2   - this file > version=eN
 version=e6
-uibranch=master
+uibranch=main
 addonalias=rr$version
 
 trap 'rm -f /var/lib/pacman/db.lck; exit' INT
