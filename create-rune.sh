@@ -82,8 +82,9 @@ chmod -R u+rwX,go+rX /tmp/config
 cp -r /tmp/config/* /
 
 if [[ -n $rpi01 ]]; then
-	sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/mpd.service
-	rm /etc/systemd/system/{shairport-sync,spotifyd,upmpdcli}.service
+	for service in mpd shairport-sync spotifyd upmpdcli; do
+		sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/$service.service
+	done
 fi
 #---------------------------------------------------------------------------------
 banner 'Configure ...'
