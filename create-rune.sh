@@ -3,7 +3,7 @@
 # new version:
 #1   - https://github.com/rern/RuneAudio_Addons/blob/master/addons-list.json > new item with key > "rreN": {
 #2   - this file > version=eN
-version=e5
+version=e6
 uibranch=master
 addonalias=rr$version
 
