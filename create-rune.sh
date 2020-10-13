@@ -82,8 +82,9 @@ chmod -R u+rwX,go+rX /tmp/config
 cp -r /tmp/config/* /
 
 if [[ -n $rpi01 ]]; then
-	rm -rf /etc/systemd/system/{mpd,shairport-sync,upmpdcli}.service.d
+	sed -i '/^.Service/,$ d' /etc/systemd/system/mpd.service.d/override.conf
 	sed -i '/ExecStart=/ d' /etc/systemd/system/spotifyd.service.d/override.conf
+	rm -rf /etc/systemd/system/{shairport-sync,upmpdcli}.service.d
 fi
 #---------------------------------------------------------------------------------
 banner 'Configure ...'

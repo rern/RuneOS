@@ -137,7 +137,7 @@ dialog "${optbox[@]}" --msgbox "
 Image file created:
 
 \Z1$imagefile\Z0
-$gb GB
+$gb GiB
 
 BOOT and ROOT unmounted.
 " 12 58
