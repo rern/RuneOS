@@ -82,9 +82,8 @@ chmod -R u+rwX,go+rX /tmp/config
 cp -r /tmp/config/* /
 
 if [[ -n $rpi01 ]]; then
-	for service in mpd shairport-sync spotifyd upmpdcli; do
-		sed -i 's|/usr/bin/taskset -c 3 ||' /etc/systemd/system/$service.service
-	done
+	rm -rf /etc/systemd/system/{mpd,shairport-sync,upmpdcli}.service.d
+	sed -i '/ExecStart=/ d' /etc/systemd/system/spotifyd.service.d/override.conf
 fi
 #---------------------------------------------------------------------------------
 banner 'Configure ...'
