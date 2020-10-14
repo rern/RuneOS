@@ -102,8 +102,10 @@ sed -i '/^TEST/ s/^/#/' /etc/udev/rules.d/90-alsa-restore.rules
 # bluetooth
 [[ -e /usr/bin/bluetoothctl ]] && sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
 # fix: failed 1st start
-#    1. enable > start without 'discoverable yes' and 'discoverable-timeout 0'
-#    2. stop on open System page and uncomment /etc/systemd/system/bluetooth.service.d/override.conf
+#    1. enable
+#    2. boot > failed
+#    3. systemctl disable bluetooth bluealsa
+#    4. systemctl enable --now bluetooth bluealsa
 sed -i '$ a\dtparam=krnbt=on' /boot/config.txt
 systemctl enable bluetooth bluealsa
 
