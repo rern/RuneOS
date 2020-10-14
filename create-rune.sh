@@ -107,6 +107,7 @@ sed -i '/^TEST/ s/^/#/' /etc/udev/rules.d/90-alsa-restore.rules
 #    3. systemctl disable bluetooth bluealsa
 #    4. systemctl enable --now bluetooth bluealsa > privacy rejected
 #    5. systemctl disable --now bluetooth bluealsa > next start > ok
+#    6. sed -i '/dtparam=krnbt=on/ d' /boot/config.txt
 sed -i '$ a\dtparam=krnbt=on' /boot/config.txt
 systemctl enable bluetooth bluealsa
 
