@@ -106,6 +106,7 @@ sed -i '/^TEST/ s/^/#/' /etc/udev/rules.d/90-alsa-restore.rules
 #   2. add 'discoverable yes' and 'discoverable-timeout 0'
 #   3. restart - fix 'privacy key'
 #   4. disable > stop
+sed -i '$ a\dtparam=krnbt=on' /boot/config.txt
 systemctl enable bluetooth bluealsa
 
 # chromium
