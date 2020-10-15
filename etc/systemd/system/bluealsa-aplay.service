@@ -1,0 +1,11 @@
+[Unit]
+Description=RPi as Bluetooth audio receiver
+After==bluealsa.service
+Requires=bluealsa.service
+
+[Service]
+Type=Idle
+ExecStart=bluealsa-aplay 00:00:00:00:00:00
+
+[Install]
+WantedBy=bluetooth.target
