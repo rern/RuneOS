@@ -131,13 +131,13 @@ banner 'Create compressed image file ...'
 dd if=$dev bs=512 iflag=fullblock count=$endsector | nice -n 10 xz -9 --verbose --threads=0 > $imagefile
 
 byte=$( stat --printf="%s" RuneAudio+R_$version-RPi$model.img.xz )
-gb=$( awk "BEGIN { printf \"%.1f\n\", $byte / 1024 / 1024 }" )
+mb=$( awk "BEGIN { printf \"%.1f\n\", $byte / 1024 / 1024 }" )
 
 dialog "${optbox[@]}" --msgbox "
 Image file created:
 
 \Z1$imagefile\Z0
-$gb GiB
+$mb MiB
 
 BOOT and ROOT unmounted.
 " 12 58
