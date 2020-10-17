@@ -46,6 +46,7 @@ fi
 # setup fancy prompt
 #motdexport PS1='\[\033[01;32m\]\u@\h${fs_mode:+($fs_mode)}\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 #0motd0
-version="+R $( cat /srv/http/data/system/version )"
-PS1='\[\e[38;5;242m\]\u@\h\[\e[38;5;45m\]'$version'\[\e[0m\]:\[\e[38;5;45m\]\w \$\[\e[0m\] '
+name=$( cat /srv/http/data/system/hostname )
+version="R+R $( cat /srv/http/data/system/version )"
+PS1='\[\e[38;5;242m\]\u@'$name'-\e[38;5;45m\]'$version'\[\e[0m\]:\[\e[38;5;45m\]\w \$\[\e[0m\] '
 #1motd1
