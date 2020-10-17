@@ -100,14 +100,8 @@ cp /{usr/lib,etc}/udev/rules.d/90-alsa-restore.rules
 sed -i '/^TEST/ s/^/#/' /etc/udev/rules.d/90-alsa-restore.rules
 
 # bluetooth
-# fix: failed 1st start
-#    1. default to enable
-#    2. boot > failed
-#    3. System > disable > enable
 if [[ -e /usr/bin/bluetoothctl ]]; then
 	sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
-	sed -i '$ a\dtparam=krnbt=on' /boot/config.txt
-	systemctl enable bluetooth
 else
 	rm -rf /etc/systemd/system/{bluealsa,bluetooth}.service.d
 	rm f /etc/systemd/system/bluealsa-aplay.service
