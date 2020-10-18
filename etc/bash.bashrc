@@ -48,5 +48,5 @@ fi
 #0motd0
 name=$( cat /srv/http/data/system/hostname )
 version="R+R $( cat /srv/http/data/system/version )"
-PS1='\[\e[38;5;242m\]\u@'$name'-\e[38;5;45m\]'$version'\[\e[0m\]:\[\e[38;5;45m\]\w \$\[\e[0m\] '
+PS1='\[\e[38;5;242m\]\u@'$name':\[\e[38;5;45m\]\w \$\[\e[0m\] '
 #1motd1
