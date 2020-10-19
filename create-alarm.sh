@@ -139,8 +139,8 @@ $wifi
 getData
 
 # features
-    bluez='\Z1Bluez\Z0     - Bluetooth supports'
- chromium='\Z1Chromium\Z0  - Browser on RPi'
+    bluez='\Z1Bluez\Z0     - Bluetooth audio'
+ chromium='\Z1Chromium\Z0  - Browser on RPi screen'
   hostapd='\Z1hostapd\Z0   - RPi access point'
       kid='\Z1Kid3\Z0      - Metadata tag editor'
     samba='\Z1Samba\Z0     - File sharing'
