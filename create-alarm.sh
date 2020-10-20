@@ -1,5 +1,7 @@
 #!/bin/bash
 
+trap exit INT
+
 # required packages
 if [[ -e /usr/bin/pacman ]]; then
 	[[ ! -e /usr/bin/bsdtar ]] && packages+='bsdtar '
