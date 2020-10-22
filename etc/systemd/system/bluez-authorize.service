@@ -1,0 +1,8 @@
+[Unit]
+Description=Bluetooth auto authorization
+After=bluetooth.service
+Requires=bluetooth.service
+
+[Service]
+Type=Idle
+ExecStart=/srv/http/bash/bluez_authorize.py
