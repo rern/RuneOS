@@ -360,6 +360,9 @@ fi
 # disable arp
 echo noarp >> $ROOT/etc/dhcpcd.conf
 
+# skip - version 9.3.1-1 bug 
+sed -i 's/#\(IgnorePkg\s*=\)/\1 dhcpcd/' /etc/pacman.conf
+
 # fix dns errors
 echo DNSSEC=no >> $ROOT/etc/systemd/resolved.conf
 
