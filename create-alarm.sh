@@ -358,7 +358,7 @@ Key=\"$password\"
 fi
 
 # disable arp
-echo noarp >> /etc/dhcpcd.conf
+echo noarp >> $ROOT/etc/dhcpcd.conf
 
 # fix dns errors
 echo DNSSEC=no >> $ROOT/etc/systemd/resolved.conf
