@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 export XDG_CACHE_HOME="/tmp/.cache" &
 export DISPLAY=":0" &
@@ -9,3 +9,6 @@ xset -dpms &
 
 matchbox-window-manager -use_cursor no &
 chromium --app=http://localhost --kiosk --incognito --disable-gpu --no-sandbox --force-device-scale-factor=1
+#xinput_calibrator | sed -n '/Section/,/EndSection/' > /etc/X11/xorg.conf.d/99-calibration.conf
+#sed -i -e 's/^#//' -e '/xinput\|^sed\|systemctl/ s/^/#/' /etc/X11/xinit/xinitrc
+#systemctl restart localbrowser
