@@ -176,6 +176,9 @@ fi
 # wireless-regdom
 echo 'WIRELESS_REGDOM="00"' > /etc/conf.d/wireless-regdom
 
+# xorg
+cp /usr/share/X11/xorg.conf.d/{10,45}-evdev.conf
+
 # startup services
 systemctl daemon-reload
 startup='avahi-daemon cronie devmon@http nginx php-fpm startup wlan0-powersaveoff'
