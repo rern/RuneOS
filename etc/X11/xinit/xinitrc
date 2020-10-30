@@ -13,8 +13,10 @@ calibrate=/srv/http/data/shm/calibrate
 if [[ -e $calibrate ]]; then
 	rm $calibrate
 	calibrate=$( xinput_calibrator | sed -n '/Section/,/EndSection/ p' )
-	[[ -n $calibrate ]] && echo "$calibrate" > /etc/X11/xorg.conf.d/99-calibration.conf
-	systemctl restart localbrowser
+	if [[ -n $calibrate ]]; then
+		echo "$calibrate" > /etc/X11/xorg.conf.d/99-calibration.conf
+		systemctl restart localbrowser
+	fi
 else
 	chromium --app=http://localhost --kiosk --incognito --no-sandbox --force-device-scale-factor=1
 fi
