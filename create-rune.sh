@@ -177,7 +177,7 @@ fi
 echo 'WIRELESS_REGDOM="00"' > /etc/conf.d/wireless-regdom
 
 # xorg
-cp /usr/share/X11/xorg.conf.d/{10,45}-evdev.conf
+mv /usr/share/X11/xorg.conf.d/{10,45}-evdev.conf
 
 # startup services
 systemctl daemon-reload
