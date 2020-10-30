@@ -1,11 +1,11 @@
 !/bin/bash
 
-export XDG_CACHE_HOME="/tmp/.cache" &
-export DISPLAY=":0" &
+export XDG_CACHE_HOME="/tmp/.cache"
+export DISPLAY=:0
 
-xset dpms 0 0 0 &
-xset s off &
-xset -dpms &
+xset dpms 0 0 0
+xset s off
+xset -dpms
 
 matchbox-window-manager -use_cursor no &
 
@@ -16,5 +16,5 @@ if [[ -e $calibrate ]]; then
 	[[ -n $calibrate ]] && echo "$calibrate" > /etc/X11/xorg.conf.d/99-calibration.conf
 	systemctl restart localbrowser
 else
-	chromium --app=http://localhost --kiosk --incognito --disable-gpu --no-sandbox --force-device-scale-factor=1
+	chromium --app=http://localhost --kiosk --incognito --no-sandbox --force-device-scale-factor=1
 fi
