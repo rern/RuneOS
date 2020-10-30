@@ -12,9 +12,9 @@ matchbox-window-manager -use_cursor no &
 calibrate=/srv/http/data/shm/calibrate
 if [[ -e $calibrate ]]; then
 	rm $calibrate
-	calibrate=$( xinput_calibrator | sed -n '/Section/,/EndSection/ p' )
-	if [[ -n $calibrate ]]; then
-		echo "$calibrate" > /etc/X11/xorg.conf.d/99-calibration.conf
+	value=$( DISPLAY=:0 xinput_calibrator | grep Calibration | cut -d'"' -f4 )
+	if [[ -n $value ]]; then
+		sed -i "s/\(Calibration\"  \"\).*/\1$value\"/" /etc/X11/xorg.conf.d/99-calibration.conf
 		systemctl restart localbrowser
 	fi
 else
