@@ -114,8 +114,10 @@ if [[ -e /usr/bin/chromium ]]; then
 	systemctl disable getty@tty1
 	# fix permission for rotate file
 	chmod 775 /etc/X11/xorg.conf.d
+	# xorg
+	mv /usr/share/X11/xorg.conf.d/{10,45}-evdev.conf
 else
-	rm -f /etc/systemd/system/{bootsplash,localbrowser}* /etc/X11/xinit/xinitrc /srv/http/assets/img/{CW,CCW,NORMAL,UD}* /root/*matchbox* /usr/local/bin/ply-image
+	rm -f /etc/systemd/system/{bootsplash,localbrowser}* /etc/X11/* /etc/X11/xinit/xinitrc /srv/http/assets/img/{CW,CCW,NORMAL,UD}* /usr/local/bin/ply-image
 fi
 
 # cron - for addons updates
@@ -175,9 +177,6 @@ fi
 
 # wireless-regdom
 echo 'WIRELESS_REGDOM="00"' > /etc/conf.d/wireless-regdom
-
-# xorg
-mv /usr/share/X11/xorg.conf.d/{10,45}-evdev.conf
 
 # startup services
 systemctl daemon-reload
