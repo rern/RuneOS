@@ -357,9 +357,6 @@ Key=\"$password\"
 	cd "$pwd"
 fi
 
-# dhcpd - skip - version 9.3.1-1 bug 
-sed -i -e 's/#\(IgnorePkg\s*=\)/\1 dhcpcd/' $ROOT/etc/pacman.conf
-
 # dhcpd - disable arp
 echo noarp >> $ROOT/etc/dhcpcd.conf
 
