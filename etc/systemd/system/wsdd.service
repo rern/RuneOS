@@ -1,7 +1,8 @@
 [Unit]
 Description=Web Services Dynamic Discovery host daemon
-After=network-online.target
+After=network-online.target smb.service
 Wants=network-online.target
+Requires=smb.service
 
 [Service]
 Type=simple
