@@ -64,7 +64,7 @@ if [[ -n $rpi01 ]]; then
 	echo Get kernel 5.4.72 ...
 	file=linux-raspberrypi-5.4.72-1-armv6h.pkg.tar.xz
 	curl -LJO https://github.com/rern/RuneOS/raw/master/$file
-	pacman -U $file
+	pacman -U --noconfirm $file
 	rm $file
 	sed -i '/#IgnorePkg/ a\IgnorePkg   = linux-raspberrypi' $ROOT/etc/pacman.conf
 fi
