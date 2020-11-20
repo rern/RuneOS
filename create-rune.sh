@@ -129,7 +129,7 @@ if [[ -e /usr/bin/chromium ]]; then
 	# xorg
 	mv /usr/share/X11/xorg.conf.d/{10,45}-evdev.conf
 else
-	rm -f /etc/systemd/system/{bootsplash,localbrowser}* /etc/X11/* /etc/X11/xinit/xinitrc /srv/http/assets/img/{CW,CCW,NORMAL,UD}* /usr/local/bin/ply-image
+	rm -f /etc/systemd/system/{bootsplash,localbrowser}* /etc/X11/* /etc/X11/xinit/xinitrc /srv/http/assets/img/{CW,CCW,NORMAL,UD}* /usr/local/bin/ply-image 2> /dev/null
 fi
 
 # cron - for addons updates
