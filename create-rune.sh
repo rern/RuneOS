@@ -32,17 +32,6 @@ pacman-key --populate archlinuxarm
 # fill entropy pool (fix - Kernel entropy pool is not initialized)
 systemctl start systemd-random-seed
 
-###############################################################################
-# temp - RPi 0-1 onboard sound driver on kernel > 5.4.72
-if [[ -n $rpi01 ]]; then
-	file=linux-raspberrypi-5.4.72-1-armv6h.pkg.tar.xz
-	wget -q https://github.com/rern/RuneOS/raw/master/$file -P $ROOT/root
-	pacman -U $file
-	rm $file
-	sed -i '/#IgnorePkg/ a\IgnorePkg   = linux-raspberrypi' $ROOT/etc/pacman.conf
-fi
-###############################################################################
-
 # add private repo
 if ! grep -q '^\[RR\]' /etc/pacman.conf; then
 	sed -i '/\[core\]/ i\
@@ -68,6 +57,18 @@ pacman -Sy --noconfirm --needed dialog
 
 #----------------------------------------------------------------------------
 banner 'Upgrade kernel and default packages ...'
+
+###############################################################################
+# temp - RPi 0-1 onboard sound driver on kernel > 5.4.72
+if [[ -n $rpi01 ]]; then
+	echo Get kernel 5.4.72 ...
+	file=linux-raspberrypi-5.4.72-1-armv6h.pkg.tar.xz
+	wget -q --show-progress https://github.com/rern/RuneOS/raw/master/$file -P $ROOT/root
+	pacman -U $file
+	rm $file
+	sed -i '/#IgnorePkg/ a\IgnorePkg   = linux-raspberrypi' $ROOT/etc/pacman.conf
+fi
+###############################################################################
 
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacman -Syu --noconfirm --needed
