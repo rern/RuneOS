@@ -1,6 +1,7 @@
 [Unit]
 Description=Shairport Sync Metadata 
 After=network.target redis.target shairport-sync.service
+Requires=shairport-sync.service
 
 [Service]
 ExecStart=/srv/http/bash/shairport-meta.sh
