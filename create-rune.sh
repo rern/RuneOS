@@ -58,18 +58,6 @@ pacman -Sy --noconfirm --needed dialog
 #----------------------------------------------------------------------------
 banner 'Upgrade kernel and default packages ...'
 
-###############################################################################
-# temp - RPi 0-1 onboard sound driver on kernel > 5.4.72
-if [[ -n $rpi01 ]]; then
-	echo Get kernel 5.4.72 ...
-	file=linux-raspberrypi-5.4.72-1-armv6h.pkg.tar.xz
-	curl -LJO https://github.com/rern/RuneOS/raw/master/$file
-	pacman -U --noconfirm $file
-	rm $file
-	sed -i '/#IgnorePkg/ a\IgnorePkg   = linux-raspberrypi' $ROOT/etc/pacman.conf
-fi
-###############################################################################
-
 pacman -Syu --noconfirm --needed
 [[ $? != 0 ]] && pacman -Syu --noconfirm --needed
 
