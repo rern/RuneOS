@@ -299,7 +299,7 @@ dirty=$( awk '/Dirty:/{print $2}' /proc/meminfo )
 	cat <<EOF
 XXX
 $percent
-\n  Write to SD card ...
+\n  Write to \Z1SD card\Z0 ...
 XXX
 EOF
 	sleep 2
