@@ -238,7 +238,7 @@ ccode=${url[$code]}
 if [[ -e $file ]]; then
 	wget -q http://os.archlinuxarm.org/os/$file.md5 \
 		| dialog "${opt[@]}" --gauge "
-Verify already downloaded file ...
+  Verify already downloaded file ...
 " 9 50
 	md5sum --quiet -c $file.md5 || rm $file
 fi
