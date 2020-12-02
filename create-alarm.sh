@@ -281,12 +281,12 @@ fi
 ( pv -n $file \
 	| bsdtar -C $BOOT --strip-components=2 --no-same-permissions --no-same-owner -xf - boot ) 2>&1 \
 	| dialog "${opt[@]}" --gauge "
-Expand \Z1BOOT\Z0 ...
+  Expand \Z1BOOT\Z0 ...
 " 9 50
 ( pv -n $file \
 	| bsdtar -C $ROOT --exclude='boot' -xpf - ) 2>&1 \
 	| dialog "${opt[@]}" --gauge "
-Expand \Z1ROOT\Z0 ...
+  Expand \Z1ROOT\Z0 ...
 " 9 50
 
 sync &
@@ -299,13 +299,13 @@ dirty=$( awk '/Dirty:/{print $2}' /proc/meminfo )
 	cat <<EOF
 XXX
 $percent
-\nWrite remaining cache to SD card ...
+\n  Write to SD card ...
 XXX
 EOF
 	sleep 2
 done ) \
 | dialog "${opt[@]}" --gauge "
-Write remaining cache to \Z1ROOT\Z0 ...
+  Write to SD card ...
 " 9 50
 
 #----------------------------------------------------------------------------
@@ -428,7 +428,7 @@ routerip=$( ip r get 1 | head -1 | cut -d' ' -f3 )
 subip=${routerip%.*}.
 scanIP() {
 	dialog "${opt[@]}" --infobox "
-Scan IP address ...
+  Scan IP address ...
 
 " 5 50
 	nmap=$( nmap -sn $subip* \
