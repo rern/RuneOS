@@ -1,1 +1,1 @@
-PATH+=:/opt/vc/bin:/srv/http/bash
+PATH+=:/srv/http/bash:/opt/vc/bin
