@@ -1,17 +1,9 @@
 #!/bin/bash
 clear
-echo -e "\e[36m\e[48;5;236m\
- .:kXWMMMWKkdolcclkMMMM:   
-;WMMMXx?'''        KMMM:   
-:MMN'              xMMM.   
-.WMMc             :0MMM    
- dMMW;      ,     :WMMM    
- .NMMWxdxkK0;     'NMMM.   
-  cMMMMWKx;:      'kMMM.   
-   :lNNl''   ,     oMMM:   
-          .oK;     xMMM,   
-      .unWMNc     .NMMd    
-       ':do:'     kMMk'    
-                .kMMx'     \
-\e[0m
-"
+def='\e[0m'
+bg='\e[30m\e[46m'
+col=$( tput cols )
+version=$( cat /srv/http/data/system/version )
+printf "$bg%*s$def\n" $col
+printf "$bg%-${col}s$def\n" "  R  +  R    e  ${version: -1}"
+printf "$bg%*s$def\n\n" $col
