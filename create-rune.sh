@@ -129,6 +129,9 @@ fi
 # mpd
 cp /usr/share/mpdscribble/mpdscribble.conf.example /etc/mpdscribble.conf
 
+#motd
+ln -sf /srv/http/bash/motd.sh /etc/profile.d/
+
 # disable again after upgrade
 systemctl disable systemd-networkd-wait-online
 
