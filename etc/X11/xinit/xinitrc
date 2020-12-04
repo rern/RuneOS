@@ -3,14 +3,18 @@
 export XDG_CACHE_HOME="/tmp/.cache"
 export DISPLAY=:0
 
-sec=$( cat /srv/http/data/system/screenoff 2> /dev/null || echo 0 )
+localset=( $( cat $dirsystem/localbrowserset ) )
+sec=${localset[1]}
+cursor=${localset[2]}
+zoom=${localset[3]}
+
 xset dpms $sec $sec $sec
 if (( $sec == 0 )); then
 	xset s off
 	xset -dpms
 fi
 
-if [[ ! -e /srv/http/data/system/cursor ]] && ifconfig | grep -A1 'eth0\|wlan0' | grep -q inet; then
+if [[ $cursor == false ]] && ifconfig | grep -A1 'eth0\|wlan0' | grep -q inet; then
 	cursor=no
 else 
 	cursor=yes
