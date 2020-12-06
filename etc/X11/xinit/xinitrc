@@ -3,13 +3,16 @@
 export XDG_CACHE_HOME="/tmp/.cache"
 export DISPLAY=:0
 
-localset=( $( cat $dirsystem/localbrowserset ) )
-sec=${localset[1]}
-cursor=${localset[2]}
-zoom=${localset[3]}
+if [[ -e /etc/localbrowser.conf ]]; then
+	. /etc/localbrowser.conf
+else
+	screenoff=0
+	cursor=false
+	zoom=1
+fi
 
-xset dpms $sec $sec $sec
-if (( $sec == 0 )); then
+xset dpms $screenoff $screenoff $screenoff
+if (( $screenoff == 0 )); then
 	xset s off
 	xset -dpms
 fi

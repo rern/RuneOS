@@ -115,6 +115,7 @@ if [[ -e /usr/bin/chromium ]]; then
 	# fix permission for rotate file
 	chmod 775 /etc/X11/xorg.conf.d
 	# xorg
+	ln -sf /srv/http/bash/xinitrc /etc/X11/xinit
 	mv /usr/share/X11/xorg.conf.d/{10,45}-evdev.conf
 	ln -sf /srv/http/bash/xinitrc /etc/X11/xinit
 else
