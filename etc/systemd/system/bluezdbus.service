@@ -5,4 +5,4 @@ Requires=bluetooth.service
 
 [Service]
 Type=Idle
-ExecStart=/srv/http/bash/bluez-authorize.py
+ExecStart=/srv/http/bash/bluezdbus.py
