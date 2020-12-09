@@ -34,11 +34,11 @@ Audio player and renderer for Raspberry Pi
 	- Create image file
 - Expert mode (1 command line - micro SD card only)
 ```sh
-bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create.sh )
+bash <( wget -qO - https://github.com/rern/R_OS/raw/master/create.sh )
 ```
 
-![dialog1](https://github.com/rern/_assets/raw/master/RuneOS/select-hw.jpg)
-![dialog2](https://github.com/rern/_assets/raw/master/RuneOS/select-features.jpg)  
+![dialog1](https://github.com/rern/_assets/raw/master/R_OS/select-hw.jpg)
+![dialog2](https://github.com/rern/_assets/raw/master/R_OS/select-features.jpg)  
 
 **Need**
 - PC - Linux - any distro
@@ -139,7 +139,7 @@ pacman-mirrors -c COUNRTY
 - Create script
 ```sh
 # ssh - no stdout | sh
-bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create-alarm.sh )
+bash <( wget -qO - https://github.com/rern/R_OS/raw/master/create-alarm.sh )
 ```
 - Errors or too slow download: press `Ctrl+C` and run `./create-alarm.sh` again (while in `Create Arch Linux Arm` mode only)
 
@@ -170,12 +170,12 @@ bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create-alarm.sh )
 - Reset for image
 ```sh
 ssh root@<RPI IP>
-bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/reset.sh )
+bash <( wget -qO - https://github.com/rern/R_OS/raw/master/reset.sh )
 ```
 - Shutdown
 - Move micro SD card to Lunux
 - Click `BOOT` and `ROOT` to mount
 - Create compressed image file
 ```sh
-bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/imagecreate.sh )
+bash <( wget -qO - https://github.com/rern/R_OS/raw/master/imagecreate.sh )
 ```
