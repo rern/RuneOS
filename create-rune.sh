@@ -109,7 +109,6 @@ fi
 # chromium
 if [[ -e /usr/bin/chromium ]]; then
 	# boot splash
-	ln -sf /srv/http/assets/img/{NORMAL,splash}.png
 	sed -i 's/\(console=\).*/\1tty3 quiet loglevel=0 logo.nologo vt.global_cursor_default=0/' /boot/cmdline.txt
 	# login prompt
 	systemctl disable getty@tty1
