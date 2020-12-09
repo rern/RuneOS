@@ -191,7 +191,7 @@ systemctl enable $startup
 
 #---------------------------------------------------------------------------------
 # data - settings directories
-/srv/http/bash/datareset.sh $version
+/srv/http/bash/datareset.sh $version $revision
 
 # remove files and package cache
 rm /boot/features /etc/motd /root/create-rune.sh /var/cache/pacman/pkg/*
