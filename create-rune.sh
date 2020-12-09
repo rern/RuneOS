@@ -1,10 +1,9 @@
 #!/bin/bash
 
-# new version:
-#1   - https://github.com/rern/RuneAudio_Addons/blob/master/addons-list.json > new item with key > "rreN": {
-#2   - this file > version=eN
-version=e6
-uibranch=master
+versions=( $( cat /boot/versions ) )
+version=$versions[0]}
+revision=$versions[1]}
+uibranch=$versions[2]}
 addonalias=rr$version
 
 trap 'rm -f /var/lib/pacman/db.lck; exit' INT
@@ -104,7 +103,7 @@ if [[ -e /usr/bin/bluetoothctl ]]; then
 	sed -i 's/#*\(AutoEnable=\).*/\1true/' /etc/bluetooth/main.conf
 else
 	rm -rf /etc/systemd/system/{bluealsa,bluetooth}.service.d
-	rm f /etc/systemd/system/bluealsa-aplay.service
+	rm f /etc/systemd/system/{bluealsa-aplay,bluezdbus}.service
 fi
 # chromium
 if [[ -e /usr/bin/chromium ]]; then
@@ -119,7 +118,7 @@ if [[ -e /usr/bin/chromium ]]; then
 	mv /usr/share/X11/xorg.conf.d/{10,45}-evdev.conf
 	ln -sf /srv/http/bash/xinitrc /etc/X11/xinit
 else
-	rm -f /etc/systemd/system/{bootsplash,localbrowser}* /etc/X11/* /srv/http/assets/img/{CW,CCW,NORMAL,UD}* /usr/local/bin/ply-image 2> /dev/null
+	rm -f /etc/systemd/system/{bootsplash,localbrowser}* /etc/X11/* /srv/http/assets/img/{splah,CW,CCW,NORMAL,UD}* /usr/local/bin/ply-image 2> /dev/null
 fi
 
 # cron - for addons updates
