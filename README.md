@@ -37,8 +37,8 @@ Audio player and renderer for Raspberry Pi
 bash <( wget -qO - https://github.com/rern/RuneOS/raw/master/create.sh )
 ```
 
-![dialog1](https://github.com/rern/_assets/raw/master/R_OS/select-hw.jpg)
-![dialog2](https://github.com/rern/_assets/raw/master/R_OS/select-features.jpg)  
+![dialog1](https://github.com/rern/_assets/raw/master/RuneOS/select-hw.jpg)
+![dialog2](https://github.com/rern/_assets/raw/master/RuneOS/select-features.jpg)  
 
 **Need**
 - PC - Linux - any distro
