@@ -2,7 +2,7 @@ RuneAudio+R - DIY RuneOS
 ---
 Audio player and renderer for Raspberry Pi
 
-As of 20201224, this has been upgraded to a [rOS](https://github.com/rern/rOS).
+As of 20201224, this has been upgraded to a [**rOS**](https://github.com/rern/rOS).  
 
 ![guide](https://github.com/rern/_assets/raw/master/guide/guide.gif)
 
