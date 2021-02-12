@@ -137,7 +137,7 @@ ln -sf /srv/http/bash/motd.sh /etc/profile.d/
 systemctl disable systemd-networkd-wait-online
 
 # fix: pam ssh login halt
-sed -i '/^-.*pam_systemd/ s/^/#/' /etc/pam.d/system-login
+#sed -i '/^-.*pam_systemd/ s/^/#/' /etc/pam.d/system-login
 
 # password
 echo root:rune | chpasswd
